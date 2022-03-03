@@ -17,6 +17,7 @@
 #include "FbxObject3d.h"
 #include "FbxModel.h"
 #include "FbxLoader.h"
+#include "PlayerObject.h"
 
 #include <vector>
 #include <memory>
@@ -69,11 +70,7 @@ private: // ƒƒ“ƒo•Ï”
 
 	std::unique_ptr<Object3d> objSkydome;
 	std::unique_ptr<Object3d> objGround;
-	std::unique_ptr<Object3d> objFighter;
-	std::unique_ptr<Object3d> objSphere;
-
-	std::unique_ptr<FbxObject3d> fbxObject3d;
-	std::unique_ptr<FbxModel> fbxModel;
+	std::unique_ptr<PlayerObject> playerObject;
 
 	//ƒ‰ƒCƒg
 	std::unique_ptr<LightGroup> light;

@@ -72,18 +72,7 @@ void GameScene::Initialize()
 	// 3Dオブジェクト生成
 	objSkydome = Object3d::Create(modelSkydome.get());
 	objGround = Object3d::Create(modelGround.get());
-	objFighter = Object3d::Create(modelFighter.get());
-	objSphere = Object3d::Create(modelSphere.get());
-
-	objFighter->SetPosition(XMFLOAT3(fighterPos));
-	objSphere->SetPosition({ -1, 1, 0 });
-
-	//.fbxの名前を指定してモデルを読み込む
-	fbxModel = FbxLoader::GetInstance()->LoadModelFromFile("uma");
-	// FBXオブジェクト生成
-	fbxObject3d = FbxObject3d::Create(fbxModel.get());
-	//アニメーション
-	fbxObject3d->PlayAnimation();
+	playerObject = std::make_unique<PlayerObject>(modelFighter.get(), modelSphere.get());
 
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
@@ -136,25 +125,10 @@ void GameScene::Update()
 		SceneManager::GetInstance()->ChangeScene("GameOverScene");
 	}
 
-	XMFLOAT3 rot = objSphere->GetRotation();
-	rot.y += 1.0f;
-	objSphere->SetRotation(rot);
-	objFighter->SetRotation(rot);
-
-	light->SetCircleShadowDir(0, XMVECTOR({ circleShadowDir[0], circleShadowDir[1], circleShadowDir[2], 0 }));
-	light->SetCircleShadowCasterPos(0, XMFLOAT3({ fighterPos[0], fighterPos[1], fighterPos[2] }));
-	light->SetCircleShadowAtten(0, XMFLOAT3(circleShadowAtten));
-	light->SetCircleShadowFactorAngle(0, XMFLOAT2(circleShadowFactorAngle));
-
-	objFighter->SetPosition(XMFLOAT3({ fighterPos[0], fighterPos[1], fighterPos[2] }));
-
 
 	objSkydome->Update();
 	objGround->Update();
-	objFighter->Update();
-	objSphere->Update();
-
-	fbxObject3d->Update();
+	playerObject->Update();
 	// 全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 }
@@ -178,12 +152,11 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 	objSkydome->Draw();
 	objGround->Draw();
-	objFighter->Draw();
-	objSphere->Draw();
+	playerObject->Draw();
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
 #pragma region 3Dオブジェクト(FBX)描画
-	fbxObject3d->Draw(cmdList);
+
 #pragma endregion 3Dオブジェクト(FBX)描画
 #pragma region パーティクル
 	// パーティクルの描画
