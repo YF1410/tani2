@@ -18,6 +18,7 @@
 #include "FbxModel.h"
 #include "FbxLoader.h"
 #include "PlayerObject.h"
+#include "MapChip.h"
 
 #include <vector>
 #include <memory>
@@ -63,14 +64,13 @@ private: // メンバ変数
 	//パーティクル
 	std::unique_ptr<ParticleManager> particleMan;
 	//オブジェクト
-	std::unique_ptr<Model> modelSkydome;
-	std::unique_ptr<Model> modelGround;
 	std::unique_ptr<Model> modelFighter;
 	std::unique_ptr<Model> modelSphere;
 
-	std::unique_ptr<Object3d> objSkydome;
-	std::unique_ptr<Object3d> objGround;
 	std::unique_ptr<PlayerObject> playerObject;
+
+	std::unique_ptr<Model> modelPlane;
+	std::vector<std::unique_ptr<Object3d>> objects;
 
 	//ライト
 	std::unique_ptr<LightGroup> light;

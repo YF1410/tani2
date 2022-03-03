@@ -38,3 +38,18 @@ int MapChip::GetChipNum(int x, int y, int mapChipSize, int mapNumber)
 
 	return map[Y * mapChipMaxX[mapNumber] + X];
 }
+
+MapChip::MapChip()
+{
+
+}
+
+MapChip::~MapChip()
+{
+}
+
+MapChip* MapChip::GetInstance()
+{
+	static MapChip instance;
+	return &instance;
+}

@@ -64,22 +64,38 @@ void GameScene::Initialize()
 	light->SetCircleShadowActive(0, true);
 
 	// モデル読み込み
-	modelSkydome = Model::CreateFromObject("skydome");
-	modelGround = Model::CreateFromObject("ground");
 	modelFighter = Model::CreateFromObject("chr_sword");
 	modelSphere = Model::CreateFromObject("sphere", true);
 
 	// 3Dオブジェクト生成
-	objSkydome = Object3d::Create(modelSkydome.get());
-	objGround = Object3d::Create(modelGround.get());
 	playerObject = std::make_unique<PlayerObject>(modelFighter.get(), modelSphere.get());
+
+	//モデルテーブル
+	modelPlane = Model::CreateFromObject("cube");
+	Model* modeltable = modelPlane.get();
+
+	MapChip::GetInstance()->CsvLoad(26, 20, "Resources/map.csv");
+
+	const float LAND_SCALE = 3.0f;
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 26; j++) {
+
+			if (MapChip::GetInstance()->GetChipNum(j, i, 1, 0))
+			{
+				ContactableObject* object = ContactableObject::Create(modeltable);
+				object->SetScale({ LAND_SCALE, LAND_SCALE, LAND_SCALE });
+				object->SetPosition({ j * LAND_SCALE,  (i * -LAND_SCALE) + 45, 0 });
+				objects.push_back(std::unique_ptr<Object3d>(object));
+			}
+		}
+	}
 
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
-	camera->SetEye({ 0,10,-1 });
+	camera->SetEye({ 0,1,-15 });
 }
 
 void GameScene::Finalize()
@@ -126,8 +142,9 @@ void GameScene::Update()
 	}
 
 
-	objSkydome->Update();
-	objGround->Update();
+	for (auto& object : objects) {
+		object->Update();
+	}
 	playerObject->Update();
 	// 全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
@@ -150,8 +167,9 @@ void GameScene::Draw()
 #pragma region 3Dオブジェクト描画
 	// 3Dオブクジェクトの描画
 	Object3d::PreDraw(cmdList);
-	objSkydome->Draw();
-	objGround->Draw();
+	for (auto& object : objects) {
+		object->Draw();
+	}
 	playerObject->Draw();
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
