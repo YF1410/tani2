@@ -1,5 +1,6 @@
 #pragma once
 #include "Object3d.h"
+#include "Input.h"
 
 class Slime : public Object3d
 {

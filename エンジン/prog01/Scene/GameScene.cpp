@@ -76,7 +76,7 @@ void GameScene::Initialize()
 
 	MapChip::GetInstance()->CsvLoad(26, 20, "Resources/map.csv");
 
-	const float LAND_SCALE = 3.0f;
+	const float LAND_SCALE = 2.0f;
 	for (int i = 0; i < 20; i++) {
 		for (int j = 0; j < 26; j++) {
 
@@ -84,7 +84,7 @@ void GameScene::Initialize()
 			{
 				ContactableObject* object = ContactableObject::Create(modeltable);
 				object->SetScale({ LAND_SCALE, LAND_SCALE, LAND_SCALE });
-				object->SetPosition({ j * LAND_SCALE,  (i * -LAND_SCALE) + 45, 0 });
+				object->SetPosition({ j * LAND_SCALE, (i * -LAND_SCALE) + 30, 0 });
 				objects.push_back(std::unique_ptr<Object3d>(object));
 			}
 		}
