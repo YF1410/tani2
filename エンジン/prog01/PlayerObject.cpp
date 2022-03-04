@@ -1,4 +1,5 @@
 #include "PlayerObject.h"
+#include "Input.h"
 
 using namespace DirectX;
 
@@ -21,9 +22,65 @@ PlayerObject::~PlayerObject()
 
 void PlayerObject::Update()
 {
+	Input* input = Input::GetInstance();
 
-	XMFLOAT3 pos = slime->GetPosition();
-	sphereOBJ->SetPosition({ pos.x, pos.y + 0.6f, pos.z });
+	if (input->PushKey(DIK_A))
+	{
+		angle -= 2.0f;
+	}
+	//”½ŽžŒv‰ñ‚è‚É’nã‚ðˆÚ“®
+	else if (input->PushKey(DIK_D))
+	{
+		angle += 2.0f;
+	}
+
+	//‰ñ“]‚Ì•
+	if (input->PushKey(DIK_S) && len >= 2.0f)
+	{
+		len -= 0.2f;
+	}
+	//”½ŽžŒv‰ñ‚è‚É’nã‚ðˆÚ“®
+	else if (input->PushKey(DIK_W) && len <= 8.0f)
+	{
+		len += 0.2f;
+	}
+
+	if (input->TriggerKey(DIK_SPACE))
+	{
+		if (!flag)
+		{
+			flag = true;
+		}
+		else
+		{
+			flag = false;
+		}
+	}
+
+	XMFLOAT3 pPos = slime->GetPosition();
+	sphereOBJ->SetPosition({ pPos.x, pPos.y + 0.6f, pPos.z });
+
+	//‰ñ“]
+	if (!flag)
+	{
+		float rad = angle * 3.14159265359f / 180.0f;
+		float aroundX = cos(rad) * len / 1.0f;
+		float aroundY = sin(rad) * len / 1.0f;
+		XMFLOAT3 wPos = weapon->GetPosition();
+		wPos.x = aroundX + pPos.x;
+		wPos.y = aroundY + pPos.y + 0.5f;
+		weapon->SetPosition(wPos);
+	}
+	else if(flag)
+	{
+		float rad = -angle * 3.14159265359f / 180.0f;
+		float aroundX = cos(rad) * len / 1.0f;
+		float aroundY = sin(rad) * len / 1.0f;
+		XMFLOAT3 wPos = weapon->GetPosition();
+		pPos.x = aroundX + wPos.x;
+		pPos.y = aroundY + wPos.y - 0.5f;
+		slime->SetPosition(pPos);
+	}
 
 	slime->Update();
 	weapon->Update();

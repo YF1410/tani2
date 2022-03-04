@@ -29,5 +29,11 @@ private: // ƒƒ“ƒo•Ï”
 
 	std::unique_ptr<Object3d> sphereOBJ;
 	std::unique_ptr<Model> sphereModel;
+
+	float angle = 90.0f;
+	float len = 1.5f;
+	float speed = 4.0f;
+
+	bool flag = false;
 };
 

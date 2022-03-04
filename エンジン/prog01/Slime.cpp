@@ -37,24 +37,6 @@ bool Slime::Initialize()
 void Slime::Update()
 {
 	Input* input = Input::GetInstance();
-	//‹““®«««
-	if (input->PushKey(DIK_A))
-	{
-		position.x -= 0.2f;
-	}
-	else if (input->PushKey(DIK_D))
-	{
-		position.x += 0.2f;
-	}
-
-	if (input->PushKey(DIK_W))
-	{
-		position.y -= 0.2f;
-	}
-	else if (input->PushKey(DIK_S))
-	{
-		position.y += 0.2f;
-	}
 
 	// s—ñ‚ÌXV‚È‚Ç
 	Object3d::Update();
