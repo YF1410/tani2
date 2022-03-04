@@ -55,17 +55,23 @@ void PlayerObject::Update()
 		{
 			flag = false;
 		}
+		angle += 180;
+	}
+
+	if (angle > 360 || angle < -360)
+	{
+		angle = 0;
 	}
 
 	XMFLOAT3 pPos = slime->GetPosition();
 	sphereOBJ->SetPosition({ pPos.x, pPos.y + 0.6f, pPos.z });
 
 	//‰ñ“]
+	float rad = (angle * 3.14159265359f / 180.0f) * -1;
+	float aroundX = cos(rad) * len / 1.0f;
+	float aroundY = sin(rad) * len / 1.0f;
 	if (!flag)
 	{
-		float rad = angle * 3.14159265359f / 180.0f;
-		float aroundX = cos(rad) * len / 1.0f;
-		float aroundY = sin(rad) * len / 1.0f;
 		XMFLOAT3 wPos = weapon->GetPosition();
 		wPos.x = aroundX + pPos.x;
 		wPos.y = aroundY + pPos.y + 0.5f;
@@ -73,9 +79,6 @@ void PlayerObject::Update()
 	}
 	else if(flag)
 	{
-		float rad = -angle * 3.14159265359f / 180.0f;
-		float aroundX = cos(rad) * len / 1.0f;
-		float aroundY = sin(rad) * len / 1.0f;
 		XMFLOAT3 wPos = weapon->GetPosition();
 		pPos.x = aroundX + wPos.x;
 		pPos.y = aroundY + wPos.y - 0.5f;
