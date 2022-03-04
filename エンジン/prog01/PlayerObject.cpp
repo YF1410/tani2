@@ -24,6 +24,19 @@ void PlayerObject::Update()
 {
 	Input* input = Input::GetInstance();
 
+	if (input->TriggerKey(DIK_SPACE))
+	{
+		if (!flag)
+		{
+			flag = true;
+		}
+		else
+		{
+			flag = false;
+		}
+		angle += 180;
+	}
+
 	if (input->PushKey(DIK_A))
 	{
 		angle -= 2.0f;
@@ -43,19 +56,6 @@ void PlayerObject::Update()
 	else if (input->PushKey(DIK_W) && len <= 8.0f)
 	{
 		len += 0.2f;
-	}
-
-	if (input->TriggerKey(DIK_SPACE))
-	{
-		if (!flag)
-		{
-			flag = true;
-		}
-		else
-		{
-			flag = false;
-		}
-		angle += 180;
 	}
 
 	XMFLOAT3 pPos = slime->GetPosition();
