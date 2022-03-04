@@ -58,11 +58,6 @@ void PlayerObject::Update()
 		angle += 180;
 	}
 
-	if (angle > 360 || angle < -360)
-	{
-		angle = 0;
-	}
-
 	XMFLOAT3 pPos = slime->GetPosition();
 	sphereOBJ->SetPosition({ pPos.x, pPos.y + 0.6f, pPos.z });
 
