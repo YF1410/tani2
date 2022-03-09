@@ -139,6 +139,8 @@ void GameScene::Update()
 		}
 	}
 
+	DebugText::GetInstance()->VariablePrint(0, 0, "angle", input->PushPadStickAngle(), 3);
+
 	XMFLOAT3 rot = fbxObject3d->GetRotation();
 	rot.y += 1.0f;
 	fbxObject3d->SetRotation(rot);
