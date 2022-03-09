@@ -38,6 +38,8 @@ private:
 	FbxManager* fbxManager = nullptr;
 	// FBXインポータ
 	FbxImporter* fbxImporter = nullptr;
+	// コントロールポイントのデータ
+	std::vector<std::vector<int>> controlPointsData;
 
 private:
 	// privateなコンストラクタ（シングルトンパターン）

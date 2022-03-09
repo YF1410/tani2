@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <wrl.h>
+#include <DirectXMath.h>
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
@@ -29,6 +30,11 @@ class Input final
 private:
 	//namespace省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::を省略
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
 
 public: // サブクラス
 	struct MouseMove
@@ -55,6 +61,9 @@ public: //メンバ関数
 	bool PushPadStickDown();
 	bool PushPadStickRight();
 	bool PushPadStickLeft();
+
+	XMFLOAT2& PushPadStickAngle();
+
 	// キーの左ボタントリガーをチェック
 	bool TriggerPadLeft();
 	// キーの右ボタントリガーをチェック

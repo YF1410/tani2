@@ -72,6 +72,9 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelPlane;
 	std::vector<std::unique_ptr<Object3d>> objects;
 
+	std::unique_ptr<FbxObject3d> fbxObject3d;
+	std::unique_ptr<FbxModel> fbxModel;
+
 	//ライト
 	std::unique_ptr<LightGroup> light;
 	//光線方向初期値

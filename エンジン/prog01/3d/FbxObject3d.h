@@ -78,6 +78,8 @@ public: // メンバ関数
 	//アニメーション開始
 	void PlayAnimation();
 
+	// 座標の取得
+	const XMFLOAT3& GetPosition() { return position; }
 	// 座標の設定
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 	// X,Y,Z軸回りの取得

@@ -90,6 +90,13 @@ void GameScene::Initialize()
 		}
 	}
 
+	//.fbxの名前を指定してモデルを読み込む
+	fbxModel = FbxLoader::GetInstance()->LoadModelFromFile("uma");
+	// FBXオブジェクト生成
+	fbxObject3d = FbxObject3d::Create(fbxModel.get());
+	//アニメーション
+	fbxObject3d->PlayAnimation();
+
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
 
@@ -132,6 +139,10 @@ void GameScene::Update()
 		}
 	}
 
+	XMFLOAT3 rot = fbxObject3d->GetRotation();
+	rot.y += 1.0f;
+	fbxObject3d->SetRotation(rot);
+
 	if (input->TriggerKey(DIK_C))
 	{
 		SceneManager::GetInstance()->ChangeScene("ClearScene");
@@ -146,6 +157,7 @@ void GameScene::Update()
 		object->Update();
 	}
 	playerObject->Update();
+	fbxObject3d->Update();
 	// 全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 }
@@ -158,7 +170,7 @@ void GameScene::Draw()
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
 	// 背景スプライト描画
-	sprite->Draw();
+	//sprite->Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
 	// 深度バッファクリア
@@ -167,14 +179,14 @@ void GameScene::Draw()
 #pragma region 3Dオブジェクト描画
 	// 3Dオブクジェクトの描画
 	Object3d::PreDraw(cmdList);
-	for (auto& object : objects) {
+	/*for (auto& object : objects) {
 		object->Draw();
 	}
-	playerObject->Draw();
+	playerObject->Draw();*/
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
 #pragma region 3Dオブジェクト(FBX)描画
-
+	fbxObject3d->Draw(cmdList);
 #pragma endregion 3Dオブジェクト(FBX)描画
 #pragma region パーティクル
 	// パーティクルの描画

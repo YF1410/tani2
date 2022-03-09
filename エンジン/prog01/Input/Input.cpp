@@ -4,6 +4,8 @@
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 
+using namespace DirectX;
+
 bool Input::Initialize(HINSTANCE hInstance, HWND hwnd)
 {
 	HRESULT result = S_FALSE;
@@ -291,6 +293,11 @@ bool Input::PushPadStickLeft()
 	}
 
 	return false;
+}
+
+XMFLOAT2& Input::PushPadStickAngle()
+{
+	return XMFLOAT2(padData.lX, padData.lY);
 }
 
 bool Input::TriggerPadLeft()
