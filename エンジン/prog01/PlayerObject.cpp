@@ -37,35 +37,45 @@ void PlayerObject::Update()
 		angle += 180;
 	}
 
-	if (input->PushKey(DIK_A))
-	{
-		angle -= 2.0f;
-	}
-	//反時計回りに地上を移動
-	else if (input->PushKey(DIK_D))
-	{
-		angle += 2.0f;
-	}
+	//if (input->PushKey(DIK_A))
+	//{
+	//	angle -= 2.0f;
+	//}
+	////反時計回りに地上を移動
+	//else if (input->PushKey(DIK_D))
+	//{
+	//	angle += 2.0f;
+	//}
 
-	//回転の幅
-	if (input->PushKey(DIK_S) && len >= 2.0f)
-	{
-		len -= 0.2f;
-	}
-	//反時計回りに地上を移動
-	else if (input->PushKey(DIK_W) && len <= 8.0f)
-	{
-		len += 0.2f;
-	}
+	////回転の幅
+	//if (input->PushKey(DIK_S) && len >= 2.0f)
+	//{
+	//	len -= 0.2f;
+	//}
+	////反時計回りに地上を移動
+	//else if (input->PushKey(DIK_W) && len <= 8.0f)
+	//{
+	//	len += 0.2f;
+	//}
 
 	XMFLOAT3 pPos = slime->GetPosition();
 	sphereOBJ->SetPosition({ pPos.x, pPos.y + 0.6f, pPos.z });
 
+	if (input->PushPadStickUp() || input->PushPadStickDown() || input->PushPadStickLeft() || input->PushPadStickRight()) {
+		angle = input->PushPadStickAngle();
+	}
 	//回転
 	float rad = (angle * 3.14159265359f / 180.0f) * -1;
 	float aroundX = cos(rad) * len / 1.0f;
 	float aroundY = sin(rad) * len / 1.0f;
-	if (!flag)
+
+	speed += 0.001f;
+
+	pPos.x += cos(rad) * speed;
+	pPos.y += sin(rad) * speed;
+	slime->SetPosition(pPos);
+
+	/*if (!flag)
 	{
 		XMFLOAT3 wPos = weapon->GetPosition();
 		wPos.x = aroundX + pPos.x;
@@ -78,7 +88,7 @@ void PlayerObject::Update()
 		pPos.x = aroundX + wPos.x;
 		pPos.y = aroundY + wPos.y - 0.5f;
 		slime->SetPosition(pPos);
-	}
+	}*/
 
 	slime->Update();
 	weapon->Update();

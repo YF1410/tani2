@@ -74,7 +74,7 @@ void GameScene::Initialize()
 	modelPlane = Model::CreateFromObject("cube");
 	Model* modeltable = modelPlane.get();
 
-	MapChip::GetInstance()->CsvLoad(26, 20, "Resources/map.csv");
+	/*MapChip::GetInstance()->CsvLoad(26, 20, "Resources/map.csv");
 
 	const float LAND_SCALE = 2.0f;
 	for (int i = 0; i < 20; i++) {
@@ -88,7 +88,7 @@ void GameScene::Initialize()
 				objects.push_back(std::unique_ptr<Object3d>(object));
 			}
 		}
-	}
+	}*/
 
 	//.fbxの名前を指定してモデルを読み込む
 	fbxModel = FbxLoader::GetInstance()->LoadModelFromFile("uma");
@@ -141,7 +141,7 @@ void GameScene::Update()
 
 	DebugText::GetInstance()->VariablePrint(0, 0, "angle", input->PushPadStickAngle(), 3);
 
-	XMFLOAT3 rot = fbxObject3d->GetRotation();
+	/*XMFLOAT3 rot = fbxObject3d->GetRotation();
 	rot.y += 1.0f;
 	fbxObject3d->SetRotation(rot);
 
@@ -157,7 +157,7 @@ void GameScene::Update()
 
 	for (auto& object : objects) {
 		object->Update();
-	}
+	}*/
 	playerObject->Update();
 	fbxObject3d->Update();
 	// 全ての衝突をチェック
@@ -181,6 +181,7 @@ void GameScene::Draw()
 #pragma region 3Dオブジェクト描画
 	// 3Dオブクジェクトの描画
 	Object3d::PreDraw(cmdList);
+	playerObject->Draw();
 	/*for (auto& object : objects) {
 		object->Draw();
 	}

@@ -32,7 +32,7 @@ private: // ƒƒ“ƒo•Ï”
 
 	float angle = 0.0f;
 	float len = 1.5f;
-	float speed = 4.0f;
+	float speed = 0.01f;
 
 	bool flag = false;
 };
