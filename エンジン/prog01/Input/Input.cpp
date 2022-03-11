@@ -295,7 +295,14 @@ bool Input::PushPadStickLeft()
 	return false;
 }
 
-double Input::PushPadStickAngle()
+XMFLOAT2& Input::PadStickGradient()
+{
+	float x = padData.lX / 1000;
+	float y = padData.lY / 1000;
+	return XMFLOAT2(x, y);
+}
+
+double Input::PadStickAngle()
 {
 	double radian = atan2(padData.lY - 0, padData.lX - 0);
 	return radian * (180.0f / 3.14159265359f);

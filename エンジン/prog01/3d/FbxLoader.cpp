@@ -480,32 +480,34 @@ void FbxLoader::ParseSkin(FbxModel* model, FbxMesh* fbxMesh)
 			//weightList[0] = 1.0f - (weightList[1] + weightList[2] + weightList[3]);
 		}
 
-		int weightArrayIndex = 0;
+		
 		//降順ソート済みのウェイトリストから
-		for (auto& weightSet : weightList)
+		for (int j = 0; j < controlPointsData[i].size(); j++)
 		{
-			for (int j = 0; j < controlPointsData[i].size(); j++)
+			int weightArrayIndex = 0;
+
+			for (auto& weightSet : weightList)
 			{
 				std::vector<int>& controlPoint = controlPointsData[i];
 				int indexCount = controlPoint[j];
 
 				vertices[indexCount].boneIndex[weightArrayIndex] = weightSet.index;
 				vertices[indexCount].boneWeight[weightArrayIndex] = weightSet.weight;
-			}
 
-			//4つに達したら終了
-			if (++weightArrayIndex >= FbxModel::MAX_BONE_INDICES)
-			{
-				float weight = 0.0f;
-				//2つ番以降のウェイトを合計
-				for (int j = 1; j < FbxModel::MAX_BONE_INDICES; j++)
+				//4つに達したら終了
+				if (++weightArrayIndex >= FbxModel::MAX_BONE_INDICES)
 				{
-					weight += vertices[i].boneWeight[j];
-				}
+					float weight = 0.0f;
+					//2つ番以降のウェイトを合計
+					for (int j = 1; j < FbxModel::MAX_BONE_INDICES; j++)
+					{
+						weight += vertices[indexCount].boneWeight[j];
+					}
 
-				//合計で1.0f(100%)になるように調整
-				vertices[i].boneWeight[0] = 1.0f - weight;
-				break;
+					//合計で1.0f(100%)になるように調整
+					vertices[indexCount].boneWeight[0] = 1.0f - weight;
+					break;
+				}
 			}
 		}
 	}

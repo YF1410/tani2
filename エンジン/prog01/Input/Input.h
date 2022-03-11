@@ -62,7 +62,8 @@ public: //メンバ関数
 	bool PushPadStickRight();
 	bool PushPadStickLeft();
 
-	double PushPadStickAngle();
+	XMFLOAT2& PadStickGradient();
+	double PadStickAngle();
 
 	// キーの左ボタントリガーをチェック
 	bool TriggerPadLeft();
