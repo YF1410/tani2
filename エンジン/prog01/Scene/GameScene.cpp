@@ -69,26 +69,11 @@ void GameScene::Initialize()
 
 	// 3Dオブジェクト生成
 	playerObject = std::make_unique<PlayerObject>(modelFighter.get(), modelSphere.get());
+	enemyObject = std::make_unique<Enemy>();
 
 	//モデルテーブル
 	modelPlane = Model::CreateFromObject("cube");
 	Model* modeltable = modelPlane.get();
-
-	MapChip::GetInstance()->CsvLoad(26, 20, "Resources/map.csv");
-
-	const float LAND_SCALE = 2.0f;
-	for (int i = 0; i < 20; i++) {
-		for (int j = 0; j < 26; j++) {
-
-			if (MapChip::GetInstance()->GetChipNum(j, i, 1, 0))
-			{
-				ContactableObject* object = ContactableObject::Create(modeltable);
-				object->SetScale({ LAND_SCALE, LAND_SCALE, LAND_SCALE });
-				object->SetPosition({ j * LAND_SCALE, (i * -LAND_SCALE) + 30, 0 });
-				objects.push_back(std::unique_ptr<Object3d>(object));
-			}
-		}
-	}
 
 	//.fbxの名前を指定してモデルを読み込む
 	fbxModel = FbxLoader::GetInstance()->LoadModelFromFile("uma");
@@ -139,11 +124,7 @@ void GameScene::Update()
 		}
 	}
 
-	DebugText::GetInstance()->VariablePrint(0, 0, "angle", input->PushPadStickAngle(), 3);
-
-	XMFLOAT3 rot = fbxObject3d->GetRotation();
-	rot.y += 1.0f;
-	fbxObject3d->SetRotation(rot);
+	DebugText::GetInstance()->VariablePrint(0, 0, "angle", enemyObject->GetAngle(), 3);
 
 	if (input->TriggerKey(DIK_C))
 	{
@@ -154,12 +135,7 @@ void GameScene::Update()
 		SceneManager::GetInstance()->ChangeScene("GameOverScene");
 	}
 
-
-	for (auto& object : objects) {
-		object->Update();
-	}
-	playerObject->Update();
-	fbxObject3d->Update();
+	enemyObject->Update();
 	// 全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 }
@@ -183,12 +159,12 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 	/*for (auto& object : objects) {
 		object->Draw();
-	}
-	playerObject->Draw();*/
+	}*/
+	enemyObject->Draw();
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
 #pragma region 3Dオブジェクト(FBX)描画
-	fbxObject3d->Draw(cmdList);
+
 #pragma endregion 3Dオブジェクト(FBX)描画
 #pragma region パーティクル
 	// パーティクルの描画

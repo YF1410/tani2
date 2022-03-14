@@ -18,6 +18,7 @@
 #include "FbxModel.h"
 #include "FbxLoader.h"
 #include "PlayerObject.h"
+#include "Enemy.h"
 #include "MapChip.h"
 
 #include <vector>
@@ -68,6 +69,7 @@ private: // ƒƒ“ƒo•Ï”
 	std::unique_ptr<Model> modelSphere;
 
 	std::unique_ptr<PlayerObject> playerObject;
+	std::unique_ptr<Enemy> enemyObject;
 
 	std::unique_ptr<Model> modelPlane;
 	std::vector<std::unique_ptr<Object3d>> objects;
