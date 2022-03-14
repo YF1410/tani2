@@ -6,9 +6,9 @@
 #include "SphereCollider.h"
 #include "MeshCollider.h"
 #include "CollisionManager.h"
-#include "Player.h"
 #include "ContactableObject.h"
 #include "SceneManager.h"
+
 
 using namespace DirectX;
 
@@ -64,7 +64,9 @@ void GameScene::Initialize()
 	light->SetCircleShadowActive(0, true);
 
 	// モデル読み込み
-	modelFighter = Model::CreateFromObject("chr_sword");
+	slimeModel = Model::CreateFromObject("slime",true);
+	slimeModel->SetAlpha(0.8f);
+
 	modelSphere = Model::CreateFromObject("sphere", true);
 
 	// 3Dオブジェクト生成
@@ -74,20 +76,17 @@ void GameScene::Initialize()
 	//モデルテーブル
 	modelPlane = Model::CreateFromObject("cube");
 	Model* modeltable = modelPlane.get();
-
-	//.fbxの名前を指定してモデルを読み込む
-	fbxModel = FbxLoader::GetInstance()->LoadModelFromFile("uma");
-	// FBXオブジェクト生成
-	fbxObject3d = FbxObject3d::Create(fbxModel.get());
-	//アニメーション
-	fbxObject3d->PlayAnimation();
+	playerObject = std::make_unique<PlayerObject>(slimeModel.get(), modelSphere.get());
 
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
-	camera->SetEye({ 0,1,-15 });
+	camera->SetEye({ 0,50,-50 });
+
+	//Debris::StaticInit();
+	playerObject->Init();
 }
 
 void GameScene::Finalize()
@@ -101,18 +100,6 @@ void GameScene::Update()
 	camera->Update();
 	particleMan->Update();
 
-	// オブジェクト移動
-	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A))
-	{
-		// 移動後の座標を計算
-		if (input->PushKey(DIK_W))
-		{
-			fighterPos[1] += 0.1f;
-		}
-		else if (input->PushKey(DIK_S))
-		{
-			fighterPos[1] -= 0.1f;
-		}
 
 		if (input->PushKey(DIK_D))
 		{
@@ -135,6 +122,16 @@ void GameScene::Update()
 		SceneManager::GetInstance()->ChangeScene("GameOverScene");
 	}
 
+
+	for (auto& object : objects) {
+		object->Update();
+	}
+	//プレイヤー更新
+	playerObject->Update();
+	//破片更新
+	//Debris::StaticUpdate();
+	
+	//fbxObject3d->Update();
 	enemyObject->Update();
 	// 全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
@@ -154,15 +151,21 @@ void GameScene::Draw()
 	// 深度バッファクリア
 	DirectXCommon::GetInstance()->ClearDepthBuffer();
 #pragma endregion 背景スプライト描画
+
 #pragma region 3Dオブジェクト描画
 	// 3Dオブクジェクトの描画
 	Object3d::PreDraw(cmdList);
+
+	playerObject->Draw();
+	//Debris::StaticDraw();
+
 	/*for (auto& object : objects) {
 		object->Draw();
 	}*/
 	enemyObject->Draw();
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
+
 #pragma region 3Dオブジェクト(FBX)描画
 
 #pragma endregion 3Dオブジェクト(FBX)描画

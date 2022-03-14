@@ -26,6 +26,7 @@
 
 #include "BaseScene.h"
 
+
 class CollisionManager;
 class Player;
 class ContactableObject;
@@ -65,7 +66,7 @@ private: // メンバ変数
 	//パーティクル
 	std::unique_ptr<ParticleManager> particleMan;
 	//オブジェクト
-	std::unique_ptr<Model> modelFighter;
+	std::unique_ptr<Model> slimeModel;
 	std::unique_ptr<Model> modelSphere;
 
 	std::unique_ptr<PlayerObject> playerObject;
