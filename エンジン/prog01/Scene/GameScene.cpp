@@ -6,9 +6,9 @@
 #include "SphereCollider.h"
 #include "MeshCollider.h"
 #include "CollisionManager.h"
-#include "Player.h"
 #include "ContactableObject.h"
 #include "SceneManager.h"
+
 
 using namespace DirectX;
 
@@ -64,45 +64,23 @@ void GameScene::Initialize()
 	light->SetCircleShadowActive(0, true);
 
 	// モデル読み込み
-	modelFighter = Model::CreateFromObject("chr_sword");
+	slimeModel = Model::CreateFromObject("slime",true);
+	slimeModel->SetAlpha(0.8f);
+
 	modelSphere = Model::CreateFromObject("sphere", true);
 
 	// 3Dオブジェクト生成
-	playerObject = std::make_unique<PlayerObject>(modelFighter.get(), modelSphere.get());
-
-	//モデルテーブル
-	modelPlane = Model::CreateFromObject("cube");
-	Model* modeltable = modelPlane.get();
-
-	MapChip::GetInstance()->CsvLoad(26, 20, "Resources/map.csv");
-
-	const float LAND_SCALE = 2.0f;
-	for (int i = 0; i < 20; i++) {
-		for (int j = 0; j < 26; j++) {
-
-			if (MapChip::GetInstance()->GetChipNum(j, i, 1, 0))
-			{
-				ContactableObject* object = ContactableObject::Create(modeltable);
-				object->SetScale({ LAND_SCALE, LAND_SCALE, LAND_SCALE });
-				object->SetPosition({ j * LAND_SCALE, (i * -LAND_SCALE) + 30, 0 });
-				objects.push_back(std::unique_ptr<Object3d>(object));
-			}
-		}
-	}
-
-	//.fbxの名前を指定してモデルを読み込む
-	fbxModel = FbxLoader::GetInstance()->LoadModelFromFile("uma");
-	// FBXオブジェクト生成
-	fbxObject3d = FbxObject3d::Create(fbxModel.get());
-	//アニメーション
-	fbxObject3d->PlayAnimation();
+	playerObject = std::make_unique<PlayerObject>(slimeModel.get(), modelSphere.get());
 
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
-	camera->SetEye({ 0,1,-15 });
+	camera->SetEye({ 0,50,-50 });
+
+	//Debris::StaticInit();
+	playerObject->Init();
 }
 
 void GameScene::Finalize()
@@ -116,34 +94,9 @@ void GameScene::Update()
 	camera->Update();
 	particleMan->Update();
 
-	// オブジェクト移動
-	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A))
-	{
-		// 移動後の座標を計算
-		if (input->PushKey(DIK_W))
-		{
-			fighterPos[1] += 0.1f;
-		}
-		else if (input->PushKey(DIK_S))
-		{
-			fighterPos[1] -= 0.1f;
-		}
 
-		if (input->PushKey(DIK_D))
-		{
-			fighterPos[0] += 0.1f;
-		}
-		else if (input->PushKey(DIK_A))
-		{
-			fighterPos[0] -= 0.1f;
-		}
-	}
+	DebugText::GetInstance()->VariablePrint(0, 0, "angle", input->PadStickAngle(), 3);
 
-	DebugText::GetInstance()->VariablePrint(0, 0, "angle", input->PushPadStickAngle(), 3);
-
-	XMFLOAT3 rot = fbxObject3d->GetRotation();
-	rot.y += 1.0f;
-	fbxObject3d->SetRotation(rot);
 
 	if (input->TriggerKey(DIK_C))
 	{
@@ -158,8 +111,12 @@ void GameScene::Update()
 	for (auto& object : objects) {
 		object->Update();
 	}
+	//プレイヤー更新
 	playerObject->Update();
-	fbxObject3d->Update();
+	//破片更新
+	//Debris::StaticUpdate();
+	
+	//fbxObject3d->Update();
 	// 全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 }
@@ -178,17 +135,19 @@ void GameScene::Draw()
 	// 深度バッファクリア
 	DirectXCommon::GetInstance()->ClearDepthBuffer();
 #pragma endregion 背景スプライト描画
+
 #pragma region 3Dオブジェクト描画
 	// 3Dオブクジェクトの描画
 	Object3d::PreDraw(cmdList);
-	/*for (auto& object : objects) {
-		object->Draw();
-	}
-	playerObject->Draw();*/
+
+	playerObject->Draw();
+	//Debris::StaticDraw();
+
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
+
 #pragma region 3Dオブジェクト(FBX)描画
-	fbxObject3d->Draw(cmdList);
+	//fbxObject3d->Draw(cmdList);
 #pragma endregion 3Dオブジェクト(FBX)描画
 #pragma region パーティクル
 	// パーティクルの描画

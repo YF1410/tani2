@@ -224,9 +224,8 @@
     <ClCompile Include="Scene\ClearScene.cpp">
       <Filter>ゲームシステム\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Slime.cpp" />
-    <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
+    <ClCompile Include="Slime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -367,8 +366,8 @@
     <ClInclude Include="Scene\ClearScene.h">
       <Filter>ゲームシステム\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Slime.h" />
-    <ClInclude Include="Weapon.h" />
     <ClInclude Include="PlayerObject.h" />
+    <ClInclude Include="Slime.h" />
+    <ClInclude Include="Vector3.h" />
   </ItemGroup>
 </Project>
