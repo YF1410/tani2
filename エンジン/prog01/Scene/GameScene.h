@@ -74,6 +74,7 @@ private: // ƒƒ“ƒo•Ï”
 
 	std::unique_ptr<FbxObject3d> fbxObject3d;
 	std::unique_ptr<FbxModel> fbxModel;
+	bool flag = false;
 
 	//ƒ‰ƒCƒg
 	std::unique_ptr<LightGroup> light;

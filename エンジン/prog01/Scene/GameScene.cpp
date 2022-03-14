@@ -91,18 +91,20 @@ void GameScene::Initialize()
 	}
 
 	//.fbxの名前を指定してモデルを読み込む
-	fbxModel = FbxLoader::GetInstance()->LoadModelFromFile("uma");
+	fbxModel = FbxLoader::GetInstance()->LoadModelFromFile("prin");
 	// FBXオブジェクト生成
-	fbxObject3d = FbxObject3d::Create(fbxModel.get());
+	fbxObject3d = FbxObject3d::Create(fbxModel.get(), true);
 	//アニメーション
-	fbxObject3d->PlayAnimation();
+	fbxObject3d->PlayAnimation(0);
+
+	fbxObject3d->SetScale({ 0.1f, 0.1f, 0.1f });
 
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
-	camera->SetEye({ 0,1,-15 });
+	camera->SetEye({ 0,1,-150 });
 }
 
 void GameScene::Finalize()
@@ -139,11 +141,25 @@ void GameScene::Update()
 		}
 	}
 
-	DebugText::GetInstance()->VariablePrint(0, 0, "angle", input->PushPadStickAngle(), 3);
+	if (input->TriggerKey(DIK_SPACE))
+	{
+		if (flag)
+		{
+			fbxObject3d->PlayAnimation(0);
+			flag = false;
+		}
+		else if (!flag)
+		{
+			fbxObject3d->PlayAnimation(1);
+			flag = true;
+		}
+	}
 
-	XMFLOAT3 rot = fbxObject3d->GetRotation();
+	DebugText::GetInstance()->VariablePrint(0, 0, "angle", input->PadStickAngle(), 3);
+
+	/*XMFLOAT3 rot = fbxObject3d->GetRotation();
 	rot.y += 1.0f;
-	fbxObject3d->SetRotation(rot);
+	fbxObject3d->SetRotation(rot);*/
 
 	if (input->TriggerKey(DIK_C))
 	{

@@ -41,6 +41,12 @@ public: // サブクラス
 		XMMATRIX bones[MAX_BONES];
 	};
 
+	struct Animation
+	{
+		FbxAnimStack* animstack;
+		FbxTakeInfo* takeinfo;
+	};
+
 public: // 静的メンバ関数
 	// 静的初期化
 	static void StaticInitialize(ID3D12Device* device, Camera* camera = nullptr);
@@ -49,7 +55,7 @@ public: // 静的メンバ関数
 	// グラフィックパイプラインの生成
 	static void CreateGraphicsPipeline();
 	// 3Dオブジェクト生成
-	static std::unique_ptr<FbxObject3d> Create(FbxModel* model = nullptr);
+	static std::unique_ptr<FbxObject3d> Create(FbxModel* model = nullptr, bool isAnimation = false);
 	// setter
 	static void SetDevice(ID3D12Device* device) { FbxObject3d::device = device; }
 	static void SetCamera(Camera* camera) { FbxObject3d::camera = camera; }
@@ -75,8 +81,10 @@ public: // メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//モデルを設定
 	void SetModel(FbxModel* model) { this->model = model; }
+	//アニメーションのロード
+	void LoadAnimation();
 	//アニメーション開始
-	void PlayAnimation();
+	void PlayAnimation(int animationNumber = 0);
 
 	// 座標の取得
 	const XMFLOAT3& GetPosition() { return position; }
@@ -116,4 +124,6 @@ protected: // メンバ変数
 	FbxTime currentTime;
 	//アニメーション再生中
 	bool isPlay = false;
+	//アニメーションの保存
+	std::vector<Animation> animationData;
 };
