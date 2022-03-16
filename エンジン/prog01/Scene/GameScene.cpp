@@ -154,19 +154,18 @@ void GameScene::Draw()
 #pragma region 3Dオブジェクト描画
 	// 3Dオブクジェクトの描画
 	Object3d::PreDraw(cmdList);
-
-	playerObject->Draw();
-	Debris::StaticDraw();
-
 	/*for (auto& object : objects) {
 		object->Draw();
 	}*/
+	playerObject->Draw();
+	Debris::StaticDraw();
 	enemyObject->Draw();
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
 
 #pragma region 3Dオブジェクト(FBX)描画
-
+	playerObject->Draw();
+	Debris::StaticDraw();
 #pragma endregion 3Dオブジェクト(FBX)描画
 #pragma region パーティクル
 	// パーティクルの描画
