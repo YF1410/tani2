@@ -237,12 +237,7 @@
       <Filter>ゲームシステム\Player</Filter>
     </ClCompile>
     <ClCompile Include="Debris.cpp" />
-    <ClCompile Include="PlayerObject.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="Enemy.cpp" />
-=======
-    <ClCompile Include="Slime.cpp" />
->>>>>>> 500a3bbad26e653cdb79b872b53d1a55a12b0916
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -383,11 +378,6 @@
     <ClInclude Include="Scene\ClearScene.h">
       <Filter>ゲームシステム\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerObject.h" />
-<<<<<<< HEAD
-    <ClInclude Include="Enemy.h" />
-=======
-    <ClInclude Include="Slime.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="3d\ModelManager.h">
       <Filter>エンジンシステム\3d</Filter>
@@ -399,5 +389,6 @@
       <Filter>ゲームシステム\Player</Filter>
     </ClInclude>
     <ClInclude Include="Debris.h" />
+    <ClInclude Include="Enemy.h" />
   </ItemGroup>
 </Project>
