@@ -8,9 +8,16 @@
 #include "CollisionManager.h"
 #include "ContactableObject.h"
 #include "SceneManager.h"
-
+#include "ModelManager.h"
+#include "Debris.h"
 
 using namespace DirectX;
+
+GameScene::GameScene()
+{
+	//モデルマネージャーに全モデルロード
+	ModelManager::GetIns()->Initialize();
+}
 
 GameScene::~GameScene()
 {
@@ -19,6 +26,8 @@ GameScene::~GameScene()
 
 void GameScene::Initialize()
 {
+
+
 	collisionManager = CollisionManager::GetInstance();
 
 	// カメラ生成
@@ -70,13 +79,12 @@ void GameScene::Initialize()
 	modelSphere = Model::CreateFromObject("sphere", true);
 
 	// 3Dオブジェクト生成
-	playerObject = std::make_unique<PlayerObject>(modelFighter.get(), modelSphere.get());
 	enemyObject = std::make_unique<Enemy>();
 
 	//モデルテーブル
 	modelPlane = Model::CreateFromObject("cube");
 	Model* modeltable = modelPlane.get();
-	playerObject = std::make_unique<PlayerObject>(slimeModel.get(), modelSphere.get());
+	playerObject = std::make_unique<PlayerObject>(modelSphere.get());
 
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
@@ -84,6 +92,7 @@ void GameScene::Initialize()
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
 	camera->SetEye({ 0,50,-50 });
+	camera->SetUp({ 0,1,0 });
 
 	//Debris::StaticInit();
 	playerObject->Init();
@@ -100,16 +109,6 @@ void GameScene::Update()
 	camera->Update();
 	particleMan->Update();
 
-
-		if (input->PushKey(DIK_D))
-		{
-			fighterPos[0] += 0.1f;
-		}
-		else if (input->PushKey(DIK_A))
-		{
-			fighterPos[0] -= 0.1f;
-		}
-	}
 
 	DebugText::GetInstance()->VariablePrint(0, 0, "angle", enemyObject->GetAngle(), 3);
 
@@ -129,7 +128,7 @@ void GameScene::Update()
 	//プレイヤー更新
 	playerObject->Update();
 	//破片更新
-	//Debris::StaticUpdate();
+	Debris::StaticUpdate();
 	
 	//fbxObject3d->Update();
 	enemyObject->Update();
@@ -157,7 +156,7 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 
 	playerObject->Draw();
-	//Debris::StaticDraw();
+	Debris::StaticDraw();
 
 	/*for (auto& object : objects) {
 		object->Draw();

@@ -47,6 +47,8 @@ private: // 静的メンバ変数
 	static const int debugTextTexNumber = 0;
 
 public: // メンバ関数
+	//コンストラクタ
+	GameScene();
 	// デストラクタ
 	~GameScene();
 	// 初期化

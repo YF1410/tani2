@@ -26,7 +26,7 @@ private: // エイリアス
 	using XMVECTOR = DirectX::XMVECTOR;
 
 public:
-	PlayerObject(Model* model = nullptr, Model* model2 = nullptr);
+	PlayerObject(Model* model2 = nullptr);
 	~PlayerObject();
 	//初期化
 	void Init();

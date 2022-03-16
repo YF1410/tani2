@@ -74,6 +74,9 @@
     <Filter Include="ゲームシステム\Besa\Scene">
       <UniqueIdentifier>{83995099-a486-4534-b18a-6d55403c3d00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ゲームシステム\Player">
+      <UniqueIdentifier>{a359c129-ca52-48cf-b6fb-b485197304f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -224,6 +227,16 @@
     <ClCompile Include="Scene\ClearScene.cpp">
       <Filter>ゲームシステム\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="3d\ModelManager.cpp">
+      <Filter>エンジンシステム\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerObject.cpp">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Slime.cpp">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Debris.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
 <<<<<<< HEAD
     <ClCompile Include="Enemy.cpp" />
@@ -376,6 +389,15 @@
 =======
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Vector3.h" />
->>>>>>> 500a3bbad26e653cdb79b872b53d1a55a12b0916
+    <ClInclude Include="3d\ModelManager.h">
+      <Filter>エンジンシステム\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerObject.h">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Slime.h">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Debris.h" />
   </ItemGroup>
 </Project>
