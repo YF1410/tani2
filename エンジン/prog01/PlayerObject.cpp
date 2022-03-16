@@ -13,8 +13,8 @@ PlayerObject::PlayerObject(FbxModel *coreModel)
 	slime = FbxObject3d::Create(ModelManager::GetIns()->GetModel(SLIME));
 	slime->SetScale(1.0f);
 	pos = { 0,0,0 };
-	//サイズ初期化
-	size = 1.0f;
+	
+
 
 	srand(time(NULL));
 }
@@ -28,6 +28,9 @@ void PlayerObject::Init()
 	destructFlag = false;
 	destructType = CIRCLE;
 	destructPow = WEAK;
+	//サイズ初期化
+	size = 100.0f;
+	scale = 1.0f;
 }
 
 void PlayerObject::Update()
@@ -83,14 +86,18 @@ void PlayerObject::Update()
 
 	//爆破処理
 	if (destructFlag) {
-
+		//ショットに使う総合サイズ
+		float maxSize = size * shotPercentage;
 
 		//爆発威力と爆発方向から破片の数を計算
 		for (int i = 0; i < destructPow; i++) {
 			Vector3 startVec;		//速度*向きベクトル
 			float shotRad;			//角度決定用
-			float speed = rand() % 40 / 10.0f + destructPow / 2.0f;		//発射速度
-			float size = 1.0f;		//残骸のサイズ
+			float shotSpeed = rand() % destructPow + size * 0.5f;		//発射速度
+			float shotSize;		//残骸のサイズ
+			
+				shotSize = maxSize / destructPow;
+			
 			switch (destructType)
 			{
 			case CIRCLE:		//円形爆発
@@ -113,20 +120,24 @@ void PlayerObject::Update()
 			default:
 				break;
 			}
+
+
 			//Debrisのコンテナに追加
-			Debris::debris.push_back(new Debris(pos, startVec.Normalize() * speed, size));
+			Debris::debris.push_back(new Debris(pos, startVec.Normalize() * shotSpeed, shotSize));
 		}
 		//爆発終了
+		size -= maxSize;
+
 		destructFlag = false;
 	}
 
 
-
+	scale = size / 100.0f;
 
 	//スライムの移動適応
 	pos += moveVec;
 	slime->SetPosition(pos);
-	slime->SetScale(size);
+	slime->SetScale(scale);
 
 	slime->Update();
 }

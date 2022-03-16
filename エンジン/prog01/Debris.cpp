@@ -7,19 +7,28 @@ std::vector<Debris *> Debris::debris;
 Debris::Debris(XMFLOAT3 startPos, Vector3 startVec, float size):
 	pos(startPos),
 	moveVec(startVec),
-	size(size)
+	size(size),
+	isAttack(true)
 {
 	// 初期化
 	FbxObject3d::Initialize();
 	//モデルのセット
 	SetModel(ModelManager::GetIns()->GetModel(SLIME));
-
+	SetScale(size * 0.2f);
 }
 
 void Debris::Update()
 {
 	pos += moveVec;
-	moveVec = moveVec * 0.9f;
+	//停止処理
+	if (moveVec.Length() <= 0.5f) {
+		isAttack = false;
+		moveVec = { 0,0,0 };
+	}
+	//原則処理
+	else {
+		moveVec = moveVec * 0.9f;
+	}
 	
 	
 	SetPosition(pos);

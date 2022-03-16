@@ -37,17 +37,21 @@ public:
 private: // メンバ変数
 	std::unique_ptr<FbxObject3d> slime;
 	//キーボード移動用
-	float moveSpead = 4.0f;
+	float moveSpead = 30.0f;
 	
 	//プレイヤーの基準座標
 	Vector3 pos;
 	//総移動量
 	Vector3 moveVec;
 	//移動量
-	float speed = 1.0f;
+	float speed = 4.0f;
 
 	//サイズ
-	float size;
+	float size;	//数値的なもの
+	float scale;//大きさ
+
+	//ショットで使う割合
+	const float shotPercentage = 0.2f;
 
 	//自爆タイプ
 	DESTRUCT_TYPE destructType;

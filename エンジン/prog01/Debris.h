@@ -18,6 +18,10 @@ public:
 private:
 	Vector3 pos;
 	Vector3 moveVec;
+	//”’l“I‚È‘å‚«‚³
 	float size;
+
+	//UŒ‚ó‘Ô
+	bool isAttack;
 };
 
