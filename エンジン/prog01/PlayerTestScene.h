@@ -18,20 +18,21 @@
 #include "FbxModel.h"
 #include "FbxLoader.h"
 #include "PlayerObject.h"
-#include "Enemy.h"
 #include "MapChip.h"
 
 #include <vector>
 #include <memory>
 
 #include "BaseScene.h"
+
+
 class CollisionManager;
 class Player;
 class ContactableObject;
 
 class PlayerTestScene : public BaseScene {
 private: // エイリアス
-// Microsoft::WRL::を省略
+	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -69,7 +70,6 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelSphere;
 
 	std::unique_ptr<PlayerObject> playerObject;
-	std::unique_ptr<Enemy> enemyObject;
 
 	std::unique_ptr<Model> modelPlane;
 	std::vector<std::unique_ptr<Object3d>> objects;

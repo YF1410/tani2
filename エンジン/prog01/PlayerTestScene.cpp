@@ -67,15 +67,9 @@ void PlayerTestScene::Initialize() {
 	light->SetPointLightActive(2, false);
 	light->SetCircleShadowActive(0, true);
 
-	// モデル読み込み
-	modelSphere = Model::CreateFromObject("sphere", true);
 
 	// 3Dオブジェクト生成
-	enemyObject = std::make_unique<Enemy>();
-
-	//モデルテーブル
-	modelPlane = Model::CreateFromObject("cube");
-	Model* modeltable = modelPlane.get();
+	playerObject = std::make_unique<PlayerObject>();
 
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
@@ -86,7 +80,7 @@ void PlayerTestScene::Initialize() {
 	camera->SetUp({ 0,1,0 });
 
 	//Debris::StaticInit();
-	//playerObject->Init();
+	playerObject->Init();
 }
 
 void PlayerTestScene::Finalize() {
@@ -99,10 +93,11 @@ void PlayerTestScene::Update() {
 	particleMan->Update();
 
 
-	DebugText::GetInstance()->VariablePrint(0, 0, "angle", enemyObject->GetAngle(), 3);
+	DebugText::GetInstance()->VariablePrint(0, 0, "angle", input->PadStickAngle(), 3);
+
 
 	if (input->TriggerKey(DIK_C)) 	{
-		SceneManager::GetInstance()->ChangeScene("EnemyTestScene");
+		SceneManager::GetInstance()->ChangeScene("ClearScene");
 	}
 	else if (input->TriggerKey(DIK_B)) 	{
 		SceneManager::GetInstance()->ChangeScene("GameOverScene");
@@ -113,12 +108,11 @@ void PlayerTestScene::Update() {
 		object->Update();
 	}
 	//プレイヤー更新
-	//playerObject->Update();
+	playerObject->Update();
 	//破片更新
 	Debris::StaticUpdate();
 
 	//fbxObject3d->Update();
-	enemyObject->Update();
 	// 全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 }
@@ -140,17 +134,17 @@ void PlayerTestScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	// 3Dオブクジェクトの描画
 	Object3d::PreDraw(cmdList);
-	/*for (auto& object : objects) {
-		object->Draw();
-	}*/
-	enemyObject->Draw();
+
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
 
+
 #pragma region 3Dオブジェクト(FBX)描画
-	//playerObject->Draw();
+	playerObject->Draw();
 	Debris::StaticDraw();
 #pragma endregion 3Dオブジェクト(FBX)描画
+
+
 #pragma region パーティクル
 	// パーティクルの描画
 	particleMan->Draw(cmdList);
