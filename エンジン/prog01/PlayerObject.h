@@ -46,6 +46,9 @@ private: // メンバ変数
 	//移動量
 	float speed = 1.0f;
 
+	//サイズ
+	float size;
+
 	//自爆タイプ
 	DESTRUCT_TYPE destructType;
 	//自爆力

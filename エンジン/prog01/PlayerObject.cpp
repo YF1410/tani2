@@ -11,8 +11,11 @@ using namespace DirectX;
 PlayerObject::PlayerObject(FbxModel *coreModel)
 {
 	slime = FbxObject3d::Create(ModelManager::GetIns()->GetModel(SLIME));
-
+	slime->SetScale(1.0f);
 	pos = { 0,0,0 };
+	//サイズ初期化
+	size = 1.0f;
+
 	srand(time(NULL));
 }
 
@@ -61,6 +64,15 @@ void PlayerObject::Update()
 		destructPow = WEAK;
 	}
 
+	//デバッグ用サイズ変更
+	if (input->PushKey(DIK_Q)) {
+		size += 0.1f;
+	}
+	if (input->PushKey(DIK_E)) {
+		size -= 0.1f;
+	}
+
+
 	//自爆
 	if (input->TriggerKey(DIK_SPACE) && !destructFlag)
 	{
@@ -68,10 +80,6 @@ void PlayerObject::Update()
 	}
 	
 	
-	//スライムの移動適応
-	pos += moveVec;
-	slime->SetPosition(pos);
-	slime->Update();
 
 	//爆破処理
 	if (destructFlag) {
@@ -114,6 +122,13 @@ void PlayerObject::Update()
 
 
 
+
+	//スライムの移動適応
+	pos += moveVec;
+	slime->SetPosition(pos);
+	slime->SetScale(size);
+
+	slime->Update();
 }
 
 void PlayerObject::Draw()

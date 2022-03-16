@@ -98,6 +98,7 @@ public: // メンバ関数
 	const XMFLOAT3& GetScale() { return scale; }
 	// スケールの設定
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
+	void SetScale(float scale) { this->scale = { scale,scale,scale }; }
 
 protected: // メンバ変数
 	// 定数バッファ

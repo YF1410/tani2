@@ -72,11 +72,6 @@ void GameScene::Initialize()
 	light->SetPointLightActive(2, false);
 	light->SetCircleShadowActive(0, true);
 
-	// モデル読み込み
-	slimeModel = Model::CreateFromObject("slime",true);
-	slimeModel->SetAlpha(0.8f);
-
-	modelSphere = Model::CreateFromObject("sphere", true);
 
 	// 3Dオブジェクト生成
 	playerObject = std::make_unique<PlayerObject>();
@@ -86,7 +81,7 @@ void GameScene::Initialize()
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
-	camera->SetEye({ 0,50,-50 });
+	camera->SetEye({ 0,500,-500 });
 	camera->SetUp({ 0,1,0 });
 
 	//Debris::StaticInit();
@@ -150,15 +145,16 @@ void GameScene::Draw()
 	// 3Dオブクジェクトの描画
 	Object3d::PreDraw(cmdList);
 
-	playerObject->Draw();
-	Debris::StaticDraw();
-
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
 
+
 #pragma region 3Dオブジェクト(FBX)描画
-	//fbxObject3d->Draw(cmdList);
+	playerObject->Draw();
+	Debris::StaticDraw();
 #pragma endregion 3Dオブジェクト(FBX)描画
+
+
 #pragma region パーティクル
 	// パーティクルの描画
 	particleMan->Draw(cmdList);
