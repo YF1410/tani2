@@ -15,7 +15,6 @@ Debris::Debris(XMFLOAT3 startPos, Vector3 startVec, float size):
 	//モデルのセット
 	SetModel(ModelManager::GetIns()->GetModel(SLIME_BREAK));
 
-	SetScale({ 0.5f ,0.5f ,0.5f });
 }
 
 void Debris::Update()

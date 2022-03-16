@@ -87,6 +87,7 @@ void GameScene::Initialize()
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
 	camera->SetEye({ 0,50,-50 });
+	camera->SetUp({ 0,1,0 });
 
 	//Debris::StaticInit();
 	playerObject->Init();

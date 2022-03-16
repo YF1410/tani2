@@ -11,14 +11,14 @@ using namespace DirectX;
 PlayerObject::PlayerObject(Model* coreModel)
 {
 	slime = Slime::Create(ModelManager::GetIns()->GetModel(SLIME));
-	slime->SetPosition({ 0,0,0 });
-
 	//当たり判定可視化用
-	sphereModel = Model::CreateFromObject("sphere", true);
-	sphereModel->SetAlpha(0.5f);
-	sphereOBJ = Object3d::Create(sphereModel.get());
-	sphereOBJ->SetPosition({ 0, 0.6f, 0 });
+	//sphereModel = Model::CreateFromObject("sphere", true);
+	//sphereModel->SetAlpha(0.5f);
+	//sphereOBJ = Object3d::Create(sphereModel.get());
+	//sphereOBJ->SetPosition({ 0, 0.6f, 0 });
 
+	pos = slime->GetPosition();
+	slime->SetScale({ 0.5,0.5,0.5 });
 	srand(time(NULL));
 }
 
@@ -60,20 +60,35 @@ void PlayerObject::Update()
 
 	}
 
+	//爆破威力変更
+	if (input->PushKey(DIK_1)) {
+		destructPow = STRONG;
+	}
+	if (input->PushKey(DIK_2)) {
+		destructPow = WEAK;
+	}
+
 	//自爆
 	if (input->TriggerKey(DIK_SPACE) && !destructFlag)
 	{
 		destructFlag = true;
 	}
-	//爆発中
+	
+	
+	//スライムの移動適応
+	pos += moveVec;
+	slime->SetPosition(pos);
+	slime->Update();
+
+	//爆破処理
 	if (destructFlag) {
-		
+
 
 		//爆発威力と爆発方向から破片の数を計算
 		for (int i = 0; i < destructPow; i++) {
 			Vector3 startVec;		//速度*向きベクトル
 			float shotRad;			//角度決定用
-			float speed = rand() % 40 / 10.0f + 5;		//発射速度
+			float speed = rand() % 40 / 10.0f + destructPow / 2.0f;		//発射速度
 			float size = 1.0f;		//残骸のサイズ
 			switch (destructType)
 			{
@@ -103,16 +118,12 @@ void PlayerObject::Update()
 		//爆発終了
 		destructFlag = false;
 	}
-	
-	pos += moveVec;
-	slime->SetPosition(pos);
-	slime->Update();
-	sphereOBJ->SetPosition(pos);
-	sphereOBJ->Update();
+
+
+
 }
 
 void PlayerObject::Draw()
 {
 	slime->Draw(DirectXCommon::GetInstance()->GetCommandList());
-	//sphereOBJ->Draw();
 }
