@@ -34,7 +34,7 @@ private: // ƒƒ“ƒo•Ï”
 	float angle = 0.0f;
 	float searchPlayerLen = 5.0f;
 	bool playerContact = false;
-	float speed = 0.03f;
+	float speed = 3.0f;
 	int moveTime = 0;
 	int maxMoveTime = 180;
 };

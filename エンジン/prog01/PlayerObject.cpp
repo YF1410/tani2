@@ -96,9 +96,9 @@ void PlayerObject::Update()
 			case CIRCLE:		//円形爆発
 				shotRad = XMConvertToRadians(rand() % 360);		//360度で計算
 				startVec = {
-					cos(shotRad),
+					static_cast<float>(cos(shotRad)),
 					0,
-					sin(shotRad)
+					static_cast<float>(sin(shotRad))
 				};
 				break;
 			case DIRECTIVITY:	//指向性爆発

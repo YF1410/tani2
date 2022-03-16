@@ -1,4 +1,4 @@
-#include "GameScene.h"
+#include "EnemyTestScene.h"
 #include "Collision.h"
 #include <cassert>
 #include <sstream>
@@ -13,19 +13,16 @@
 
 using namespace DirectX;
 
-GameScene::GameScene()
-{
+EnemyTestScene::EnemyTestScene() {
 	//モデルマネージャーに全モデルロード
 	ModelManager::GetIns()->Initialize();
 }
 
-GameScene::~GameScene()
-{
+EnemyTestScene::~EnemyTestScene() {
 	Finalize();
 }
 
-void GameScene::Initialize()
-{
+void EnemyTestScene::Initialize() {
 
 
 	collisionManager = CollisionManager::GetInstance();
@@ -39,16 +36,14 @@ void GameScene::Initialize()
 	FbxObject3d::SetCamera(camera.get());
 
 	// デバッグテキスト用テクスチャ読み込み
-	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png"))
-	{
+	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) 	{
 		assert(0);
 	}
 	// デバッグテキスト初期化
 	DebugText::GetInstance()->Initialize(debugTextTexNumber);
 
 	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(1, L"Resources/APEX_01.png"))
-	{
+	if (!Sprite::LoadTexture(1, L"Resources/APEX_01.png")) 	{
 		assert(0);
 	}
 
@@ -94,12 +89,10 @@ void GameScene::Initialize()
 	//playerObject->Init();
 }
 
-void GameScene::Finalize()
-{
+void EnemyTestScene::Finalize() {
 }
 
-void GameScene::Update()
-{
+void EnemyTestScene::Update() {
 	Input* input = Input::GetInstance();
 	light->Update();
 	camera->Update();
@@ -108,12 +101,10 @@ void GameScene::Update()
 
 	DebugText::GetInstance()->VariablePrint(0, 0, "angle", enemyObject->GetAngle(), 3);
 
-	if (input->TriggerKey(DIK_C))
-	{
-		SceneManager::GetInstance()->ChangeScene("EnemyTestScene");
+	if (input->TriggerKey(DIK_C)) 	{
+		SceneManager::GetInstance()->ChangeScene("ClearScene");
 	}
-	else if (input->TriggerKey(DIK_B))
-	{
+	else if (input->TriggerKey(DIK_B)) 	{
 		SceneManager::GetInstance()->ChangeScene("GameOverScene");
 	}
 
@@ -125,15 +116,14 @@ void GameScene::Update()
 	//playerObject->Update();
 	//破片更新
 	Debris::StaticUpdate();
-	
+
 	//fbxObject3d->Update();
 	enemyObject->Update();
 	// 全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 }
 
-void GameScene::Draw()
-{
+void EnemyTestScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
 #pragma region 背景スプライト描画

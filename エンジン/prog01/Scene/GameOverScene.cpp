@@ -32,6 +32,9 @@ void GameOverScene::Update()
 	{
 		SceneManager::GetInstance()->ChangeScene("TitleScene");
 	}
+	if (input->TriggerKey(DIK_C)) 	{
+		SceneManager::GetInstance()->ChangeScene("EnemyTestScene");
+	}
 }
 
 void GameOverScene::Draw()

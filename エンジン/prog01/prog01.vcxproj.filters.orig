@@ -237,15 +237,13 @@
       <Filter>ゲームシステム\Player</Filter>
     </ClCompile>
     <ClCompile Include="Debris.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="Enemy.cpp" />
+=======
     <ClCompile Include="Enemy.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyTestScene.cpp">
-      <Filter>ゲームシステム\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerTestScene.cpp">
-      <Filter>ゲームシステム\Scene</Filter>
-    </ClCompile>
+>>>>>>> 668177489f2abee1951198cb55ec7c7c4ffc91ea
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -394,14 +392,12 @@
       <Filter>ゲームシステム\Player</Filter>
     </ClInclude>
     <ClInclude Include="Debris.h" />
+<<<<<<< HEAD
+    <ClInclude Include="Enemy.h" />
+=======
     <ClInclude Include="Enemy.h">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyTestScene.h">
-      <Filter>ゲームシステム\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerTestScene.h">
-      <Filter>ゲームシステム\Scene</Filter>
-    </ClInclude>
+>>>>>>> 668177489f2abee1951198cb55ec7c7c4ffc91ea
   </ItemGroup>
 </Project>
