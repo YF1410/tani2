@@ -114,7 +114,7 @@ void GameScene::Update()
 	}
 	else if (input->TriggerKey(DIK_B))
 	{
-		SceneManager::GetInstance()->ChangeScene("GameOverScene");
+		SceneManager::GetInstance()->ChangeScene("PlayerTestScene");
 	}
 
 

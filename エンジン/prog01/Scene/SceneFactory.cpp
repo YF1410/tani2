@@ -4,6 +4,7 @@
 #include "ClearScene.h"
 #include "GameOverScene.h"
 #include "EnemyTestScene.h"
+#include "PlayerTestScene.h"
 
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 {
