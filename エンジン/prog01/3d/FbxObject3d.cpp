@@ -197,7 +197,7 @@ void FbxObject3d::CreateGraphicsPipeline()
 	if (FAILED(result)) { assert(0); }
 }
 
-std::unique_ptr<FbxObject3d> FbxObject3d::Create(FbxModel* model)
+std::unique_ptr<FbxObject3d> FbxObject3d::Create(FbxModel* model, bool isAnimation)
 {
 	// 3Dオブジェクトのインスタンスを生成
 	FbxObject3d* fbxObject3d = new FbxObject3d();
@@ -216,6 +216,11 @@ std::unique_ptr<FbxObject3d> FbxObject3d::Create(FbxModel* model)
 	if (model)
 	{
 		fbxObject3d->SetModel(model);
+	}
+
+	if (isAnimation)
+	{
+		fbxObject3d->LoadAnimation();
 	}
 
 	return std::unique_ptr<FbxObject3d>(fbxObject3d);
@@ -360,20 +365,35 @@ void FbxObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 	model->Draw(cmdList);
 }
 
-void FbxObject3d::PlayAnimation()
+void FbxObject3d::LoadAnimation()
 {
 	FbxScene* fbxScene = model->GetFbxScene();
-	//0番のアニメーション取得
-	FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(0);
-	//アニメーションの名前を取得
-	const char* animstackname = animstack->GetName();
-	//アニメーションの時間情報
-	FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
+	//アニメーションカウント
+	int sceneCount = fbxScene->GetSrcObjectCount<FbxAnimStack>();
+	for (int i = 0; i < sceneCount; i++)
+	{
+		//仮データ
+		Animation tempData;
+		//0番のアニメーション取得
+		tempData.animstack = fbxScene->GetSrcObject<FbxAnimStack>(i);
+		//アニメーションの名前を取得
+		const char* animstackname = tempData.animstack->GetName();
+		//アニメーションの時間情報
+		tempData.takeinfo = fbxScene->GetTakeInfo(animstackname);
+		//仮データを実データに入れる
+		animationData.push_back(tempData);
+	}
+}
 
+void FbxObject3d::PlayAnimation(int animationNumber)
+{
+	FbxScene* fbxScene = model->GetFbxScene();
+	//アニメーションの変更
+	fbxScene->SetCurrentAnimationStack(animationData[animationNumber].animstack);
 	//開始時間取得
-	startTime = takeinfo->mLocalTimeSpan.GetStart();
+	startTime = animationData[animationNumber].takeinfo->mLocalTimeSpan.GetStart();
 	//終了時間取得
-	endTime = takeinfo->mLocalTimeSpan.GetStop();
+	endTime = animationData[animationNumber].takeinfo->mLocalTimeSpan.GetStop();
 	//開始時間に合わせる
 	currentTime = startTime;
 	//再生中状態にする
