@@ -2,12 +2,15 @@
 #include "Input.h"
 #include <stdlib.h>
 #include <time.h>
+#include "ModelManager.h"
+#include "DirectXCommon.h"
+#include "Debris.h"
 
 using namespace DirectX;
 
-PlayerObject::PlayerObject(Model* slimeModel, Model* coreModel)
+PlayerObject::PlayerObject(Model* coreModel)
 {
-	slime = Slime::Create(slimeModel);
+	slime = Slime::Create(ModelManager::GetIns()->GetModel(SLIME));
 	slime->SetPosition({ 0,0,0 });
 
 	//当たり判定可視化用
@@ -70,7 +73,7 @@ void PlayerObject::Update()
 		for (int i = 0; i < destructPow; i++) {
 			Vector3 startVec;		//速度*向きベクトル
 			float shotRad;			//角度決定用
-			float speed = 1.0f;		//発射速度
+			float speed = rand() % 40 / 10.0f + 5;		//発射速度
 			float size = 1.0f;		//残骸のサイズ
 			switch (destructType)
 			{
@@ -95,7 +98,7 @@ void PlayerObject::Update()
 				break;
 			}
 			//Debrisのコンテナに追加
-			//Debris::debrisContainer.push_back(Debris::Create(pos, startVec.Normalize() * speed, size));
+			Debris::debris.push_back(new Debris(pos, startVec.Normalize() * speed, size));
 		}
 		//爆発終了
 		destructFlag = false;
@@ -110,6 +113,6 @@ void PlayerObject::Update()
 
 void PlayerObject::Draw()
 {
-	slime->Draw();
-	sphereOBJ->Draw();
+	slime->Draw(DirectXCommon::GetInstance()->GetCommandList());
+	//sphereOBJ->Draw();
 }

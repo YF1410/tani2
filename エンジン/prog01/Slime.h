@@ -1,16 +1,16 @@
 #pragma once
-#include "Object3d.h"
+#include "FbxObject3d.h"
 #include "Input.h"
 
-class Slime : public Object3d
+class Slime : public FbxObject3d
 {
 public:
 	// 3Dオブジェクト生成
-	static Slime* Create(Model* model = nullptr);
+	static Slime* Create(FbxModel* model = nullptr);
 
 public:
 	// 初期化
-	bool Initialize() override;
+	bool Initialize();
 	// 毎フレーム処理
-	void Update() override;
+	void Update();
 };

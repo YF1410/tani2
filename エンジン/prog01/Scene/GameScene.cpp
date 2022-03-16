@@ -8,9 +8,16 @@
 #include "CollisionManager.h"
 #include "ContactableObject.h"
 #include "SceneManager.h"
-
+#include "ModelManager.h"
+#include "Debris.h"
 
 using namespace DirectX;
+
+GameScene::GameScene()
+{
+	//モデルマネージャーに全モデルロード
+	ModelManager::GetIns()->Initialize();
+}
 
 GameScene::~GameScene()
 {
@@ -19,6 +26,8 @@ GameScene::~GameScene()
 
 void GameScene::Initialize()
 {
+
+
 	collisionManager = CollisionManager::GetInstance();
 
 	// カメラ生成
@@ -70,7 +79,7 @@ void GameScene::Initialize()
 	modelSphere = Model::CreateFromObject("sphere", true);
 
 	// 3Dオブジェクト生成
-	playerObject = std::make_unique<PlayerObject>(slimeModel.get(), modelSphere.get());
+	playerObject = std::make_unique<PlayerObject>(modelSphere.get());
 
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
@@ -114,7 +123,7 @@ void GameScene::Update()
 	//プレイヤー更新
 	playerObject->Update();
 	//破片更新
-	//Debris::StaticUpdate();
+	Debris::StaticUpdate();
 	
 	//fbxObject3d->Update();
 	// 全ての衝突をチェック
@@ -141,7 +150,7 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 
 	playerObject->Draw();
-	//Debris::StaticDraw();
+	Debris::StaticDraw();
 
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画

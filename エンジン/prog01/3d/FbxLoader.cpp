@@ -332,7 +332,7 @@ void FbxLoader::ParseMaterial(FbxModel* model, FbxNode* fbxNode)
 					string path_str(filepath);
 					string name = ExtractFileName(path_str);
 					// テクスチャ読み込み
-					LoadTexture(model, baseDirectory + model->name + "/" + name);
+					LoadTexture(model, baseDirectory + model->name + "/" + name + ".png");
 					textureLoaded = true;
 				}
 			}

@@ -1,6 +1,6 @@
 #include "Slime.h"
 
-Slime* Slime::Create(Model* model)
+Slime* Slime::Create(FbxModel* model)
 {
 	// 3Dオブジェクトのインスタンスを生成
 	Slime* instance = new Slime();
@@ -26,7 +26,7 @@ Slime* Slime::Create(Model* model)
 
 bool Slime::Initialize()
 {
-	if (!Object3d::Initialize())
+	if (!FbxObject3d::Initialize())
 	{
 		return false;
 	}
@@ -39,5 +39,5 @@ void Slime::Update()
 	Input* input = Input::GetInstance();
 
 	// 行列の更新など
-	Object3d::Update();
+	FbxObject3d::Update();
 }

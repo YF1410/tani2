@@ -256,6 +256,7 @@
     <ClCompile Include="3d\Material.cpp" />
     <ClCompile Include="3d\Mesh.cpp" />
     <ClCompile Include="3d\Model.cpp" />
+    <ClCompile Include="3d\ModelManager.cpp" />
     <ClCompile Include="3d\Object3d.cpp" />
     <ClCompile Include="3d\ParticleEmitter.cpp" />
     <ClCompile Include="3d\ParticleManager.cpp" />
@@ -274,6 +275,7 @@
     <ClCompile Include="Collision\CollisionPrimitive.cpp" />
     <ClCompile Include="Collision\MeshCollider.cpp" />
     <ClCompile Include="Collision\SphereCollider.cpp" />
+    <ClCompile Include="Debris.cpp" />
     <ClCompile Include="GameObject\ContactableObject.cpp" />
     <ClCompile Include="GameObject\Ease.cpp" />
     <ClCompile Include="GameObject\MapChip.cpp" />
@@ -300,6 +302,7 @@
     <ClInclude Include="3d\Material.h" />
     <ClInclude Include="3d\Mesh.h" />
     <ClInclude Include="3d\Model.h" />
+    <ClInclude Include="3d\ModelManager.h" />
     <ClInclude Include="3d\Object3d.h" />
     <ClInclude Include="3d\ParticleEmitter.h" />
     <ClInclude Include="3d\ParticleManager.h" />
@@ -322,6 +325,7 @@
     <ClInclude Include="Collision\QueryCallback.h" />
     <ClInclude Include="Collision\RaycastHit.h" />
     <ClInclude Include="Collision\SphereCollider.h" />
+    <ClInclude Include="Debris.h" />
     <ClInclude Include="GameObject\ContactableObject.h" />
     <ClInclude Include="GameObject\Ease.h" />
     <ClInclude Include="GameObject\MapChip.h" />
