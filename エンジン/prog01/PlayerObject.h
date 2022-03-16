@@ -1,6 +1,5 @@
 #pragma once
-#include "Object3d.h"
-#include "Slime.h"
+#include "FbxObject3d.h"
 #include "Vector3.h"
 
 enum DESTRUCT_TYPE {
@@ -26,7 +25,7 @@ private: // エイリアス
 	using XMVECTOR = DirectX::XMVECTOR;
 
 public:
-	PlayerObject(Model* model2 = nullptr);
+	PlayerObject(FbxModel *coreModel = nullptr);
 	~PlayerObject();
 	//初期化
 	void Init();
@@ -36,11 +35,8 @@ public:
 	void Draw();
 
 private: // メンバ変数
-	Slime* slime = nullptr;
-
-	std::unique_ptr<Object3d> sphereOBJ;
-	std::unique_ptr<Model> sphereModel;
-
+	std::unique_ptr<FbxObject3d> slime;
+	//キーボード移動用
 	float moveSpead = 4.0f;
 	
 	//プレイヤーの基準座標

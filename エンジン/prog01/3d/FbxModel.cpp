@@ -123,7 +123,7 @@ void FbxModel::Draw(ID3D12GraphicsCommandList* cmdList)
 FbxModel::~FbxModel()
 {
     //FBXƒV[ƒ“‰ð•ú
-    fbxScene->Destroy();
+    //fbxScene->Destroy();
 
     vertBuff.Reset();
     indexBuff.Reset();

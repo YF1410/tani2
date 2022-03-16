@@ -79,7 +79,7 @@ void GameScene::Initialize()
 	modelSphere = Model::CreateFromObject("sphere", true);
 
 	// 3Dオブジェクト生成
-	playerObject = std::make_unique<PlayerObject>(modelSphere.get());
+	playerObject = std::make_unique<PlayerObject>();
 
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");

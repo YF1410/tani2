@@ -276,6 +276,7 @@
     <ClCompile Include="Collision\MeshCollider.cpp" />
     <ClCompile Include="Collision\SphereCollider.cpp" />
     <ClCompile Include="Debris.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameObject\ContactableObject.cpp" />
     <ClCompile Include="GameObject\Ease.cpp" />
     <ClCompile Include="GameObject\MapChip.cpp" />
@@ -289,7 +290,6 @@
     <ClCompile Include="Scene\SceneFactory.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
-    <ClCompile Include="Slime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\DebugText.h" />
@@ -326,6 +326,7 @@
     <ClInclude Include="Collision\RaycastHit.h" />
     <ClInclude Include="Collision\SphereCollider.h" />
     <ClInclude Include="Debris.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameObject\ContactableObject.h" />
     <ClInclude Include="GameObject\Ease.h" />
     <ClInclude Include="GameObject\MapChip.h" />
@@ -340,7 +341,6 @@
     <ClInclude Include="Scene\SceneFactory.h" />
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\TitleScene.h" />
-    <ClInclude Include="Slime.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>

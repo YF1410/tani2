@@ -8,23 +8,16 @@
 
 using namespace DirectX;
 
-PlayerObject::PlayerObject(Model* coreModel)
+PlayerObject::PlayerObject(FbxModel *coreModel)
 {
-	slime = Slime::Create(ModelManager::GetIns()->GetModel(SLIME));
-	//“–‚½‚è”»’è‰ÂŽ‹‰»—p
-	//sphereModel = Model::CreateFromObject("sphere", true);
-	//sphereModel->SetAlpha(0.5f);
-	//sphereOBJ = Object3d::Create(sphereModel.get());
-	//sphereOBJ->SetPosition({ 0, 0.6f, 0 });
+	slime = FbxObject3d::Create(ModelManager::GetIns()->GetModel(SLIME));
 
-	pos = slime->GetPosition();
-	slime->SetScale({ 0.5,0.5,0.5 });
+	pos = { 0,0,0 };
 	srand(time(NULL));
 }
 
 PlayerObject::~PlayerObject()
 {
-	delete slime;
 }
 
 void PlayerObject::Init()
