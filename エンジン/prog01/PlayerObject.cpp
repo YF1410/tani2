@@ -8,23 +8,19 @@
 
 using namespace DirectX;
 
-PlayerObject::PlayerObject(Model* coreModel)
+PlayerObject::PlayerObject(FbxModel *coreModel)
 {
-	slime = Slime::Create(ModelManager::GetIns()->GetModel(SLIME));
-	//当たり判定可視化用
-	//sphereModel = Model::CreateFromObject("sphere", true);
-	//sphereModel->SetAlpha(0.5f);
-	//sphereOBJ = Object3d::Create(sphereModel.get());
-	//sphereOBJ->SetPosition({ 0, 0.6f, 0 });
+	slime = FbxObject3d::Create(ModelManager::GetIns()->GetModel(SLIME));
+	slime->SetScale(1.0f);
+	pos = { 0,0,0 };
+	//サイズ初期化
+	size = 1.0f;
 
-	pos = slime->GetPosition();
-	slime->SetScale({ 0.5,0.5,0.5 });
 	srand(time(NULL));
 }
 
 PlayerObject::~PlayerObject()
 {
-	delete slime;
 }
 
 void PlayerObject::Init()
@@ -68,6 +64,15 @@ void PlayerObject::Update()
 		destructPow = WEAK;
 	}
 
+	//デバッグ用サイズ変更
+	if (input->PushKey(DIK_Q)) {
+		size += 0.1f;
+	}
+	if (input->PushKey(DIK_E)) {
+		size -= 0.1f;
+	}
+
+
 	//自爆
 	if (input->TriggerKey(DIK_SPACE) && !destructFlag)
 	{
@@ -75,10 +80,6 @@ void PlayerObject::Update()
 	}
 	
 	
-	//スライムの移動適応
-	pos += moveVec;
-	slime->SetPosition(pos);
-	slime->Update();
 
 	//爆破処理
 	if (destructFlag) {
@@ -121,6 +122,13 @@ void PlayerObject::Update()
 
 
 
+
+	//スライムの移動適応
+	pos += moveVec;
+	slime->SetPosition(pos);
+	slime->SetScale(size);
+
+	slime->Update();
 }
 
 void PlayerObject::Draw()

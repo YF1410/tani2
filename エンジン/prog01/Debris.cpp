@@ -11,9 +11,8 @@ Debris::Debris(XMFLOAT3 startPos, Vector3 startVec, float size):
 {
 	// 初期化
 	FbxObject3d::Initialize();
-	
 	//モデルのセット
-	SetModel(ModelManager::GetIns()->GetModel(SLIME_BREAK));
+	SetModel(ModelManager::GetIns()->GetModel(SLIME));
 
 }
 

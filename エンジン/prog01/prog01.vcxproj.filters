@@ -77,6 +77,9 @@
     <Filter Include="ゲームシステム\Player">
       <UniqueIdentifier>{a359c129-ca52-48cf-b6fb-b485197304f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ゲームシステム\Enemy">
+      <UniqueIdentifier>{4f3ab6b3-ec8b-4fa4-bab6-d8a15099c876}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -233,11 +236,10 @@
     <ClCompile Include="PlayerObject.cpp">
       <Filter>ゲームシステム\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Slime.cpp">
-      <Filter>ゲームシステム\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Debris.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -385,10 +387,9 @@
     <ClInclude Include="PlayerObject.h">
       <Filter>ゲームシステム\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Slime.h">
-      <Filter>ゲームシステム\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Debris.h" />
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Enemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

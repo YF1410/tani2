@@ -1,4 +1,4 @@
-# Blender MTL File: 'None'
+# Blender MTL File: 'untitled.blend'
 # Material Count: 1
 
 newmtl マテリアル
@@ -10,4 +10,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.650000
 d 1.000000
 illum 3
-map_Kd C:\\K020G1219\\デザイン\\blen\\slime.png
+map_Kd slime
