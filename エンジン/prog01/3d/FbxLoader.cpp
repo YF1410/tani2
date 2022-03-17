@@ -110,7 +110,7 @@ void FbxLoader::ParseNodeRecursive(FbxModel* model, FbxNode* fbxNode, Node* pare
 	FbxDouble3 translation = fbxNode->LclTranslation.Get();
 
 	// 形式変換して代入
-	node.rotation = { (float)rotation[0], (float)rotation[1], (float)rotation[2], 0.0f };
+	node.rotation = { (float)rotation[0] * (XM_PI / 180.0f),(float)rotation[1] * (XM_PI / 180.0f),(float)rotation[2] * (XM_PI / 180.0f), 0.0f };
 	node.scaling = { (float)scaling[0], (float)scaling[1], (float)scaling[2], 0.0f };
 	node.translation = { (float)translation[0], (float)translation[1], (float)translation[2], 1.0f };
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "FbxObject3d.h"
 #include "Vector3.h"
+#include "Collision.h"
 
 enum DESTRUCT_TYPE {
 	CIRCLE,			//全方向
@@ -34,6 +35,17 @@ public:
 	// 描画
 	void Draw();
 
+	//残骸を吸収した時
+	void Absorb(float size);
+	
+	//当たり判定
+	struct COLLIDER {
+		Sphere absorbSphere;
+	}collider;
+
+	float size;	//質量
+
+
 private: // メンバ変数
 	std::unique_ptr<FbxObject3d> slime;
 	//キーボード移動用
@@ -43,15 +55,9 @@ private: // メンバ変数
 	Vector3 pos;
 	//総移動量
 	Vector3 moveVec;
-	//移動量
-	float speed = 4.0f;
 
 	//サイズ
-	float size;	//数値的なもの
 	float scale;//大きさ
-
-	//ショットで使う割合
-	const float shotPercentage = 0.2f;
 
 	//自爆タイプ
 	DESTRUCT_TYPE destructType;

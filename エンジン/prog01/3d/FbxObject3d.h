@@ -81,6 +81,8 @@ public: // メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//モデルを設定
 	void SetModel(FbxModel* model) { this->model = model; }
+	//モデルのゲッター
+	FbxModel *GetModel() {return model; }
 	//アニメーションのロード
 	void LoadAnimation();
 	//アニメーション開始
@@ -99,6 +101,8 @@ public: // メンバ関数
 	// スケールの設定
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
 	void SetScale(float scale) { this->scale = { scale,scale,scale }; }
+
+	XMMATRIX GetMatWorld() { return matWorld; }
 
 protected: // メンバ変数
 	// 定数バッファ

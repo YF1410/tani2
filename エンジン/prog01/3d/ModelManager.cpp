@@ -11,6 +11,7 @@ ModelManager *ModelManager::GetIns()
 
 void ModelManager::Initialize()
 {
+	LoadModel(TESTS_TAGE, "stage");
 	LoadModel(SLIME, "slime");
 	LoadModel(SLIME_BREAK, "slime"/*_break"*/ );
 }

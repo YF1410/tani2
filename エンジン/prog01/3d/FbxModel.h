@@ -89,6 +89,10 @@ public:
 	//getrer
 	std::vector<Bone>& GetBones() { return bones; }
 	FbxScene* GetFbxScene() { return fbxScene; }
+	//頂点情報の取得
+	std::vector<VertexPosNormalUvSkin> *GetVertices() { return &vertices; }
+	//インデックスの取得
+	std::vector<unsigned short> *GetIndces() { return &indices; }
 
 	//デストラクタ
 	~FbxModel();

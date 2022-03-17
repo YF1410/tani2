@@ -13,7 +13,6 @@ void FbxModel::CreateBuffers(ID3D12Device* device)
         D3D12_RESOURCE_STATE_GENERIC_READ,
         nullptr,
         IID_PPV_ARGS(&vertBuff));
-
     // 頂点バッファへのデータ転送
     VertexPosNormalUvSkin* vertMap = nullptr;
     result = vertBuff->Map(0, nullptr, (void**)&vertMap);
