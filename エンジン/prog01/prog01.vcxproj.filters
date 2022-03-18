@@ -80,6 +80,9 @@
     <Filter Include="ゲームシステム\Enemy">
       <UniqueIdentifier>{4f3ab6b3-ec8b-4fa4-bab6-d8a15099c876}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ゲームシステム\Stage">
+      <UniqueIdentifier>{f68a34b1-5524-416a-b6dd-c77f8ef6d308}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -402,6 +405,9 @@
     </ClInclude>
     <ClInclude Include="PlayerTestScene.h">
       <Filter>ゲームシステム\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SlimeMath.h">
+      <Filter>ゲームシステム\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,25 +1,31 @@
 #include "Enemy.h"
-#include "Input.h"
+#include "ModelManager.h"
+#include "DirectXCommon.h"
 #include <stdlib.h>
 #include <time.h>
 
 using namespace DirectX;
+std::vector<Enemy*> Enemy::enemys;
 
 Enemy::Enemy() {
-	//エネミーのコア
-	coreModel = Model::CreateFromObject("chr_sword");
-	coreObj = Object3d::Create(coreModel.get());
-	coreObj->SetPosition({ 700,0,200 });
+
+	// 初期化
+	enemyObj = FbxObject3d::Create(ModelManager::GetIns()->GetModel(ENEMY));
+	enemyObj->SetPosition({ 700,100,200 });
+	////エネミーのコア
+	//coreModel = Model::CreateFromObject("chr_sword");
+	//coreObj = Object3d::Create(coreModel.get());
+	//coreObj->SetPosition({ 700,100,200 });
 	//当たり判定可視化
 	sphereModel = Model::CreateFromObject("sphere", true);
-	sphereModel->SetAlpha(0.5f);
+	sphereModel->SetAlpha(0.2f);
 	sphereObj = Object3d::Create(sphereModel.get());
-	sphereObj->SetPosition({ 700,0,200 });
+	sphereObj->SetPosition({ 700,100,200 });
 
-	coreObj->SetScale({ 50.0f ,50.0f,50.0f });
-	sphereObj->SetScale({ 300.0f ,300.0f,300.0f });
+	//coreObj->SetScale({ 50.0f ,50.0f,50.0f });
+	sphereObj->SetScale({ 360.0f ,360.0f,360.0f });
 
-	enemyPos = coreObj->GetPosition();
+	pos = enemyObj->GetPos();
 	//乱数初期化
 	srand(time(NULL));
 }
@@ -28,26 +34,11 @@ Enemy::~Enemy() {
 }
 
 void Enemy::Update() {
-	Input* input = Input::GetInstance();
-
-	//今後time管理
-	//if (input->TriggerKey(DIK_SPACE)) {
-	//	//プレイヤーとの距離より索敵範囲が短ければうろうろする為にangleに乱数代入
-	//	if (playerContact == false) {
-	//	angle = static_cast<float>(rand() % 360);
-	//	moveTime = 0;
-	//	playerContact = false;
-	//	}
-	//	//索敵範囲よりプレイヤーとの距離が短ければそちらに移動するようにangleに値を代入
-	//	else if (playerContact == true) {
-	//		angle = atan2(playerPosy - coreObj->GetPosition().y, playerPosx - coreObj->GetPosition().x);
-	//		playerContact = true;
-	//	}
-	//}
 
 	//うろうろする時間を加算してカウント
 	if (isPlayerContact == false) {
 		if (wanderingCount == 0) {
+			sphereObj->SetScale({ 360.0f ,360.0f,360.0f });
 			isWandering = true;
 			wanderingCount += 1;
 			angle = static_cast<float>(rand() % 360);
@@ -64,6 +55,7 @@ void Enemy::Update() {
 	}
 	//見つけていれば時間関係無しに追いかけ続ける
 	if (isPlayerContact == true) {
+		sphereObj->SetScale({ 580.0f ,580.0f,580.0f });
 		isWandering = false;
 		wanderingCount = 0;
 		moveTime = maxMoveTime + 1;
@@ -75,27 +67,63 @@ void Enemy::Update() {
 		wanderingCount = 0;
 	}
 
-	coreObj->Update();
+	enemyObj->Update();
 	sphereObj->Update();
 }
 
+void Enemy::Reflection() {
+	//描画位置決定
+	pos = afterPos;
+	enemyObj->SetPosition(pos);
+	enemyObj->SetScale({ 50.0f ,50.0f,50.0f });
+	//全て適応
+	enemyObj->Update();
+}
+
 void Enemy::Draw() {
-	coreObj->Draw();
-	sphereObj->Draw();
+	enemyObj->Draw((DirectXCommon::GetInstance()->GetCommandList()));
+	//sphereObj->Draw();
+}
+
+void Enemy::StaticUpdate() {
+
+	//削除
+	for (int i = enemys.size() - 1; i >= 0; i--) {
+		if (!enemys[i]->isAlive) {
+			delete enemys[i];
+			enemys.erase(enemys.begin() + i);
+		}
+	}
+	//更新
+	for (int i = 0; i < enemys.size(); i++) {
+		enemys[i]->Update();
+	}
+}
+
+void Enemy::StaticReflection() {
+	for (int i = 0; i < enemys.size(); i++) {
+		enemys[i]->Reflection();
+	}
+}
+
+void Enemy::StaticDraw() {
+	for (int i = 0; i < enemys.size(); i++) {
+		enemys[i]->Draw();
+	}
 }
 
 void Enemy::enemyMove() {
 	float rad = XMConvertToRadians(angle);
 
 	if (isPlayerContact == false) {
-		enemyPos.x += cos(rad) * speed;
-		enemyPos.z += sin(rad) * speed;
+		pos.x += cos(rad) * speed;
+		pos.z += sin(rad) * speed;
 	}
 	else if (isPlayerContact == true) {
-		enemyPos.x += cos(angle) * speed;
-		enemyPos.z += sin(angle) * speed;
+		pos.x += cos(angle) * speed;
+		pos.z += sin(angle) * speed;
 	}
 
-	coreObj->SetPosition(enemyPos);
-	sphereObj->SetPosition({ enemyPos.x, enemyPos.y + 30, enemyPos.z });
+	enemyObj->SetPosition(pos);
+	sphereObj->SetPosition({ pos.x, pos.y, pos.z });
 }

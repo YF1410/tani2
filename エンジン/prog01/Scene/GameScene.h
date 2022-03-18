@@ -80,6 +80,7 @@ private: // メンバ変数
 	std::unique_ptr<FbxModel> fbxModel;
 	bool flag = false;
 
+
 	//ライト
 	std::unique_ptr<LightGroup> light;
 	//光線方向初期値

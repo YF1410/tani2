@@ -5,14 +5,13 @@
 #include "ModelManager.h"
 #include "DirectXCommon.h"
 #include "Debris.h"
+#include "SlimeMath.h"
 
 using namespace DirectX;
 
 PlayerObject::PlayerObject(FbxModel *coreModel)
 {
-	slime = FbxObject3d::Create(ModelManager::GetIns()->GetModel(SLIME));
-	slime->SetScale(1.0f);
-	pos = { 0,0,0 };
+	slimeObj = FbxObject3d::Create(ModelManager::GetIns()->GetModel(SLIME));
 	
 
 
@@ -25,37 +24,62 @@ PlayerObject::~PlayerObject()
 
 void PlayerObject::Init()
 {
+	//自爆フラグ
 	destructFlag = false;
 	destructType = CIRCLE;
 	destructPow = WEAK;
+	//吸引範囲
+	suction = scale * suctionRatio;
+	//ポジション初期化
+	pos = { 0,100,0 };
 	//サイズ初期化
 	size = 100.0f;
-	scale = 1.0f;
+	scale = ConvertSizeToScale(size);
+	slimeObj->SetScale(scale);
+	//当たり判定初期化
+	collider.absorbSphere.radius = 100.0f;
 }
 
 void PlayerObject::Update()
 {
 	Input* input = Input::GetInstance();
+	//スケールから移動量決定
+	moveSpead = scale * 20;
 
 	//移動量減衰処理
 	moveVec = {0,0,0};
 
+	//リセット
+	if (input->PushKey(DIK_R)) {
+		Init();
+	}
+
 	//キーボード移動
 	if (input->PushKey(DIK_A))	//左
 	{
-		moveVec.x -= speed;
+		moveVec.x -= moveSpead;
 	}
 	else if (input->PushKey(DIK_D))	//右
 	{
-		moveVec.x += speed;
+		moveVec.x += moveSpead;
 	}
 	if (input->PushKey(DIK_S))	//後ろ
 	{
-		moveVec.z -= speed;
+		moveVec.z -= moveSpead;
 	}
 	else if (input->PushKey(DIK_W))	//前
 	{
-		moveVec.z += speed;
+		moveVec.z += moveSpead;
+
+	}
+	//debug用飛翔
+	if (input->PushKey(DIK_Z))	//上
+	{
+		moveVec.y -= moveSpead;
+	}
+	else if (input->PushKey(DIK_X))	//下
+	{
+		moveVec.y+= moveSpead;
 
 	}
 
@@ -69,10 +93,10 @@ void PlayerObject::Update()
 
 	//デバッグ用サイズ変更
 	if (input->PushKey(DIK_Q)) {
-		size += 0.1f;
+		size += 10.0f;
 	}
 	if (input->PushKey(DIK_E)) {
-		size -= 0.1f;
+		size -= 10.0f;
 	}
 
 
@@ -87,17 +111,29 @@ void PlayerObject::Update()
 	//爆破処理
 	if (destructFlag) {
 		//ショットに使う総合サイズ
-		float maxSize = size * shotPercentage;
+		float maxSize;
+		if (destructPow == WEAK) {
+			maxSize = size * 0.2f;
+		}
+		else if (destructPow == STRONG ){
+			maxSize = size * 0.4f;
+		}
 
 		//爆発威力と爆発方向から破片の数を計算
 		for (int i = 0; i < destructPow; i++) {
 			Vector3 startVec;		//速度*向きベクトル
 			float shotRad;			//角度決定用
-			float shotSpeed = rand() % destructPow + size * 0.5f;		//発射速度
+			float shotSpeed ;		//発射速度
 			float shotSize;		//残骸のサイズ
-			
-				shotSize = maxSize / destructPow;
-			
+
+			if (destructPow == WEAK) {
+				shotSpeed = rand() % 10 + scale * 100;
+			}
+			else if (destructPow == STRONG) {
+				shotSpeed = rand() % 10 + scale * 150;
+			}
+			shotSize = maxSize / destructPow;
+
 			switch (destructType)
 			{
 			case CIRCLE:		//円形爆発
@@ -131,18 +167,60 @@ void PlayerObject::Update()
 		destructFlag = false;
 	}
 
+	//サイズからスケールへ変換
+	scale = ConvertSizeToScale(size);
 
-	scale = size / 100.0f;
+	//コライダー更新
+	UpdateCollider();
+}
 
-	//スライムの移動適応
-	pos += moveVec;
-	slime->SetPosition(pos);
-	slime->SetScale(scale);
+void PlayerObject::Reflection()
+{
+	//描画位置決定
+	pos = afterPos;
 
-	slime->Update();
+
+	slimeObj->SetPosition(pos);
+	slimeObj->SetScale(scale);
+
+	slimeObj->Update();
 }
 
 void PlayerObject::Draw()
 {
-	slime->Draw(DirectXCommon::GetInstance()->GetCommandList());
+	slimeObj->Draw(DirectXCommon::GetInstance()->GetCommandList());
+}
+
+void PlayerObject::Absorb(float size)
+{
+	this->size += size;
+}
+
+void PlayerObject::UpdateCollider()
+{
+	//移動後の位置予測
+	afterPos = pos + moveVec;
+
+	//移動後の吸収範囲
+	suction = scale * suctionRatio;
+	
+	//見た目が大事用
+	collider.realSphere.center = afterPos;
+	collider.realSphere.radius = scale * 150.0f;
+	//吸い寄せ用
+	collider.suctionSphere.center = afterPos;
+	collider.suctionSphere.radius = suction;
+	//吸収用
+	collider.absorbSphere.center = afterPos;
+	collider.absorbSphere.radius = scale * 150.0f;
+}
+
+void PlayerObject::HitWall(
+	const XMVECTOR &hitPos,		//衝突位置
+	const Vector3 &normal)
+{
+	pos = hitPos + normal * collider.realSphere.radius;
+	moveVec = CalcWallScratchVector(moveVec, normal);
+	//コライダー更新
+	UpdateCollider();
 }

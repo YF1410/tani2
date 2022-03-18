@@ -61,21 +61,22 @@ public: // メンバ関数
 private: // メンバ変数
 	//カメラ
 	std::unique_ptr<Camera> camera;
+	
+	
+	
 	//スプライト
 	std::unique_ptr<Sprite> sprite;
 	//パーティクル
 	std::unique_ptr<ParticleManager> particleMan;
-	//オブジェクト
-	std::unique_ptr<Model> slimeModel;
-	std::unique_ptr<Model> modelSphere;
 
 	std::unique_ptr<PlayerObject> playerObject;
 
 	std::unique_ptr<Model> modelPlane;
 	std::vector<std::unique_ptr<Object3d>> objects;
 
-	std::unique_ptr<FbxObject3d> fbxObject3d;
-	std::unique_ptr<FbxModel> fbxModel;
+	//ステージ
+	std::unique_ptr<FbxObject3d> testStage;
+
 	bool flag = false;
 
 	//ライト
@@ -89,4 +90,13 @@ private: // メンバ変数
 	float fighterPos[3] = { 1, 0.0f, 0 };
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;
+
+	//ステージのポリゴンデータ
+	std::vector<Triangle> stagePolygon;
+	//ステージとの当たり判定
+	bool CheckSphere2Mesh(Sphere &sphere,				//球
+		std::vector<Triangle> meshDate,					//メッシュデータ
+		XMVECTOR *HitPos = nullptr,			//衝突位置
+		Triangle *hitTriangle = nullptr	//衝突したポリゴン
+	);
 };

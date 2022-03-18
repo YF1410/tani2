@@ -81,13 +81,15 @@ public: // メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//モデルを設定
 	void SetModel(FbxModel* model) { this->model = model; }
+	//モデルのゲッター
+	FbxModel *GetModel() {return model; }
 	//アニメーションのロード
 	void LoadAnimation();
 	//アニメーション開始
 	void PlayAnimation(int animationNumber = 0);
 
 	// 座標の取得
-	const XMFLOAT3& GetPosition() { return position; }
+	const XMFLOAT3& GetPos() { return position; }
 	// 座標の設定
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 	// X,Y,Z軸回りの取得
@@ -99,6 +101,8 @@ public: // メンバ関数
 	// スケールの設定
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
 	void SetScale(float scale) { this->scale = { scale,scale,scale }; }
+
+	XMMATRIX GetMatWorld() { return matWorld; }
 
 protected: // メンバ変数
 	// 定数バッファ

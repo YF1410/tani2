@@ -4,8 +4,10 @@
 #include "FbxModel.h"
 
 enum ModelName {
+	TESTS_TAGE,
 	SLIME,
 	SLIME_BREAK,
+	ENEMY,
 
 	//�ő吔
 	MAX
