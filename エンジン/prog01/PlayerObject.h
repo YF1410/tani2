@@ -4,13 +4,13 @@
 #include "Collision.h"
 
 enum DESTRUCT_TYPE {
-	CIRCLE,			//全方向
-	DIRECTIVITY		//指向性
+	DIRECTIVITY	=1,	//指向性
+	CIRCLE		=2,	//全方向
 };
 
 enum DESTRUCT_POW {
-	WEAK	= 15,	//弱い
-	STRONG	= 30	//強い
+	WEAK	= 8,	//弱い
+	STRONG	= 16	//強い
 };
 
 class PlayerObject
@@ -33,7 +33,7 @@ public:
 	//毎フレーム処理
 	void Update();
 	//最終更新
-	void Reflection();
+	void Adaptation();
 	//描画
 	void Draw();
 

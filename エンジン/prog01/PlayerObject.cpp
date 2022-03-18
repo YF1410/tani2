@@ -33,7 +33,7 @@ void PlayerObject::Init()
 	//ポジション初期化
 	pos = { 0,100,0 };
 	//サイズ初期化
-	size = 100.0f;
+	size = 500.0f;
 	scale = ConvertSizeToScale(size);
 	slimeObj->SetScale(scale);
 	//当たり判定初期化
@@ -90,6 +90,15 @@ void PlayerObject::Update()
 	if (input->PushKey(DIK_2)) {
 		destructPow = WEAK;
 	}
+	//爆破タイプ変更
+	if (input->PushKey(DIK_3)) {
+		destructType = CIRCLE;
+	}
+	if (input->PushKey(DIK_4)) {
+		destructType = DIRECTIVITY;
+	}
+
+
 
 	//デバッグ用サイズ変更
 	if (input->PushKey(DIK_Q)) {
@@ -116,27 +125,28 @@ void PlayerObject::Update()
 			maxSize = size * 0.2f;
 		}
 		else if (destructPow == STRONG ){
-			maxSize = size * 0.4f;
+			maxSize = size * 0.5f;
 		}
 
 		//爆発威力と爆発方向から破片の数を計算
-		for (int i = 0; i < destructPow; i++) {
+		for (int i = 0; i < destructPow * destructType; i++) {
 			Vector3 startVec;		//速度*向きベクトル
 			float shotRad;			//角度決定用
 			float shotSpeed ;		//発射速度
 			float shotSize;		//残骸のサイズ
 
-			if (destructPow == WEAK) {
-				shotSpeed = rand() % 10 + scale * 100;
-			}
-			else if (destructPow == STRONG) {
-				shotSpeed = rand() % 10 + scale * 150;
-			}
-			shotSize = maxSize / destructPow;
-
 			switch (destructType)
 			{
 			case CIRCLE:		//円形爆発
+				//サイズとスピード
+				if (destructPow == WEAK) {
+					shotSpeed = rand() % 4 + scale * 10;
+				}
+				else if (destructPow == STRONG) {
+					shotSpeed = rand() % 12 + scale * 100;
+				}
+				shotSize = maxSize / destructPow;
+
 				shotRad = XMConvertToRadians(rand() % 360);		//360度で計算
 				startVec = {
 					static_cast<float>(cos(shotRad)),
@@ -144,14 +154,25 @@ void PlayerObject::Update()
 					static_cast<float>(sin(shotRad))
 				};
 				break;
-			case DIRECTIVITY:	//指向性爆発
-				//shotRad = XMConvertToRadians(rand() % 60);		//360度で計算
-				//startVec = {
-				//	cos(shotRad),
-				//	0,
-				//	sin(shotRad)
-				//};
 
+			case DIRECTIVITY:	//指向性爆発
+				//サイズとスピード
+				if (destructPow == WEAK) {
+					shotSpeed = rand() % 4 + scale * 10;
+				}
+				else if (destructPow == STRONG) {
+					shotSpeed = rand() % 12 + scale * 100;
+				}
+				shotSize = maxSize / destructPow;
+
+
+				shotRad = XMConvertToRadians(rand() % 15 - 15);		//360度で計算
+				startVec = {
+					static_cast<float>(cos(shotRad)),
+					0,
+					static_cast<float>(sin(shotRad))
+				};
+				break;
 				break;
 			default:
 				break;
@@ -174,11 +195,10 @@ void PlayerObject::Update()
 	UpdateCollider();
 }
 
-void PlayerObject::Reflection()
+void PlayerObject::Adaptation()
 {
 	//描画位置決定
 	pos = afterPos;
-
 
 	slimeObj->SetPosition(pos);
 	slimeObj->SetScale(scale);
@@ -212,7 +232,7 @@ void PlayerObject::UpdateCollider()
 	collider.suctionSphere.radius = suction;
 	//吸収用
 	collider.absorbSphere.center = afterPos;
-	collider.absorbSphere.radius = scale * 150.0f;
+	collider.absorbSphere.radius = scale * 100.0f;
 }
 
 void PlayerObject::HitWall(

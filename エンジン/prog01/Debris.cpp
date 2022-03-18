@@ -28,13 +28,16 @@ void Debris::Update()
 		isStop = true;
 		moveVec = { 0,0,0 };
 	}
-	//空気抵抗処理
+	//移動処理
 	else {
-		airResistance = moveVec * 0.1f;
+		//空気抵抗
+		airResistance = moveVec *0.01f;
 		moveVec -= airResistance;
+		//重力
+		moveVec.y -= 0.5f;
 	}
 	//攻撃終了
-	if (moveVec.Length() <= 10.0f) {
+	if (moveVec.Length() <= 5.0f) {
 		isAttack = false;
 	}
 	
@@ -44,7 +47,7 @@ void Debris::Update()
 	UpdateCollider();
 }
 
-void Debris::Reflection()
+void Debris::Adaptation()
 {
 	//描画位置決定
 	pos = afterPos;
@@ -78,7 +81,7 @@ void Debris::StaticUpdate()
 void Debris::StaticReflection()
 {
 	for (int i = 0; i < debris.size(); i++) {
-		debris[i]->Reflection();
+		debris[i]->Adaptation();
 	}
 }
 
@@ -107,16 +110,15 @@ void Debris::Bounse(
 )
 {
 	pos = hitPos + normal * collider.realSphere.radius;
-	moveVec = CalcReflectVector(moveVec, normal)*1.5f;
+	moveVec = CalcReflectVector(moveVec, normal);
 	UpdateCollider();
 }
 
 void Debris::SuckedPlayer(const Vector3 &playerPos,const float &suckedRadius)
 {
-	//引き寄せられる速度
-	float suckedPow =  Vector3(playerPos - pos).Length() - suckedRadius;
-	if (suckedPow < 0) { return; }
-	moveVec += Vector3(pos - playerPos).Normalize() * suckedPow * 0.01f;
+	//移動開始
+	isStop = false;
+	moveVec += Vector3(playerPos- pos).Normalize() * 3.0f;
 }
 
 float Debris::AbsorbedToPlayer()

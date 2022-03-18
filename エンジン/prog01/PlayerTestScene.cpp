@@ -115,7 +115,7 @@ void PlayerTestScene::Finalize() {
 }
 
 void PlayerTestScene::Update() {
-	camera->SetEye(Vector3(playerObject.get()->GetPos() + Vector3(0,1,-1) * playerObject.get()->GetScale() * 1000));
+	camera->SetEye(Vector3(playerObject.get()->GetPos() + Vector3(0,1,-1) * 1000));
 	camera->SetTarget(playerObject.get()->GetPos());
 	camera->Update();
 	Input* input = Input::GetInstance();
@@ -183,7 +183,7 @@ void PlayerTestScene::Update() {
 	//collisionManager->CheckAllCollisions();
 
 	//‘S‚Ä‚ÌˆÚ“®ÅI“K‰žˆ—
-	playerObject.get()->Reflection();
+	playerObject.get()->Adaptation();
 	Debris::StaticReflection();
 }
 

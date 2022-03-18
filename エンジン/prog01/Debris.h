@@ -11,7 +11,7 @@ public:
 	//内部更新
 	void Update();
 	//最終更新
-	void Reflection();
+	void Adaptation();
 	//描画
 	void Draw();
 
