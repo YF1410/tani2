@@ -33,6 +33,8 @@ public:
 	void Update();
 	// •`‰æ
 	void Draw();
+	
+	Vector3 GetPosition() { return pos; }
 
 private: // ƒƒ“ƒo•Ï”
 	std::unique_ptr<FbxObject3d> slime;

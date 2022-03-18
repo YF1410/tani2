@@ -31,8 +31,7 @@ class CollisionManager;
 class Player;
 class ContactableObject;
 
-class GameScene : public BaseScene
-{
+class GameScene : public BaseScene {
 private: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -90,6 +89,8 @@ private: // メンバ変数
 	float circleShadowFactorAngle[2] = { 0.0f, 0.5f };
 
 	float fighterPos[3] = { 1, 0.0f, 0 };
+
+	float searchPlayerLen = 500.0f;
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;
 };
