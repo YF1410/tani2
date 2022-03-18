@@ -89,7 +89,7 @@ public: // ƒƒ“ƒoŠÖ”
 	void PlayAnimation(int animationNumber = 0);
 
 	// À•W‚ÌŽæ“¾
-	const XMFLOAT3& GetPosition() { return position; }
+	const XMFLOAT3& GetPos() { return position; }
 	// À•W‚ÌÝ’è
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 	// X,Y,ZŽ²‰ñ‚è‚ÌŽæ“¾

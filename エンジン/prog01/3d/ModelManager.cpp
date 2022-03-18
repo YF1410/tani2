@@ -14,6 +14,7 @@ void ModelManager::Initialize()
 	LoadModel(TESTS_TAGE, "stage");
 	LoadModel(SLIME, "slime");
 	LoadModel(SLIME_BREAK, "slime"/*_break"*/ );
+	LoadModel(ENEMY, "human"/*_break"*/);
 }
 
 void ModelManager::LoadModel(const ModelName modelName, std::string fileName)

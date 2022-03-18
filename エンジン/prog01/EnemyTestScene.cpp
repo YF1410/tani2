@@ -101,11 +101,8 @@ void EnemyTestScene::Update() {
 
 	DebugText::GetInstance()->VariablePrint(0, 0, "angle", enemyObject->GetAngle(), 3);
 
-	if (input->TriggerKey(DIK_C)) 	{
-		SceneManager::GetInstance()->ChangeScene("ClearScene");
-	}
-	else if (input->TriggerKey(DIK_B)) 	{
-		SceneManager::GetInstance()->ChangeScene("GameOverScene");
+	if (input->TriggerKey(DIK_B)) 	{
+		SceneManager::GetInstance()->ChangeScene("PlayerTestScene");
 	}
 
 

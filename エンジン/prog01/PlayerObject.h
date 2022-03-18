@@ -37,8 +37,6 @@ public:
 	//•`‰æ
 	void Draw();
 
-	
-
 	float size;	//¿—Ê
 
 	//ƒQƒbƒ^[

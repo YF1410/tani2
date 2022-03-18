@@ -42,6 +42,8 @@ public:		//Õ“ËŠÖŒW
 	//”j•Ğ“¯m‚Å‚­‚Á‚Â‚¢‚½‚Æ‚«
 	float AbsorbedToDebri();
 
+	Vector3 GetPos() { return pos; }
+
 
 	//¶‘¶ƒtƒ‰ƒO
 	bool isAlive;

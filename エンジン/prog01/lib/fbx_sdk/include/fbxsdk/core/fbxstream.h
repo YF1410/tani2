@@ -93,7 +93,7 @@ public:
 
 	/** Get the current stream position.
 	* \return Current number of bytes from the beginning of the stream. */
-	virtual long GetPosition() const = 0;
+	virtual long GetPos() const = 0;
 
 	/** Set the current stream position.
 	* \param pPosition Number of bytes from the beginning of the stream to seek to. */

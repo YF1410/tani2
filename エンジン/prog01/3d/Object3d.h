@@ -81,7 +81,7 @@ public: // メンバ関数
 	// 行列の更新
 	void UpdateWorldMatrix();
 	// 座標の取得
-	const XMFLOAT3& GetPosition() { return position; }
+	const XMFLOAT3& GetPos() { return position; }
 	// 座標の設定
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 	// X,Y,Z軸回りの取得
