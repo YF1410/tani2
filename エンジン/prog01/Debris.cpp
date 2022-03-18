@@ -10,54 +10,75 @@ Debris::Debris(XMFLOAT3 startPos, Vector3 startVec, float size):
 	moveVec(startVec),
 	size(size),
 	isAttack(true),
-	isAlive(true)
+	isAlive(true),
+	isStop(false),
+	airResistance(0,0,0)
 {
 	// 初期化
-	FbxObject3d::Initialize();
-	//モデルのセット
-	SetModel(ModelManager::GetIns()->GetModel(SLIME));
+	debriObj = FbxObject3d::Create(ModelManager::GetIns()->GetModel(SLIME));
 	//サイズからスケールへコンバート
-	SetScale(SizeToScaleConvert(size));
-
-	collider.sphere.radius = size + 10.0f;
+	scale = ConvertSizeToScale(size);
+	UpdateCollider();
 }
 
 void Debris::Update()
 {
-	//停止処理
-	if (moveVec.Length() <= 0.5f) {
-		isAttack = false;
+	//完全に停止
+	if (moveVec.Length() <= 1.0f) {
+		isStop = true;
 		moveVec = { 0,0,0 };
 	}
-	//減速処理
+	//空気抵抗処理
 	else {
-		pos += moveVec;
-		moveVec = moveVec * 0.9f;
+		airResistance = moveVec * 0.1f;
+		moveVec -= airResistance;
+	}
+	//攻撃終了
+	if (moveVec.Length() <= 10.0f) {
+		isAttack = false;
 	}
 	
-	collider.sphere.center = pos;
-	collider.sphere.radius = size + 10.0f;
-	SetPosition(pos);
+	
+	afterPos = pos + moveVec;
+	//当たり判定更新
+	UpdateCollider();
+}
 
-	FbxObject3d::Update();
+void Debris::Reflection()
+{
+	//描画位置決定
+	pos = afterPos;
+	debriObj->SetPosition(pos);
+	debriObj->SetScale(scale);
+	//全て適応
+	debriObj->Update();
 }
 
 void Debris::Draw()
 {
-	FbxObject3d::Draw(DirectXCommon::GetInstance()->GetCommandList());
+	debriObj->Draw(DirectXCommon::GetInstance()->GetCommandList());
 }
 
 void Debris::StaticUpdate()
 {
-	//更新
-	for (int i = 0; i < debris.size(); i++) {
-		debris[i]->Update();
-	}
+
+	//削除
 	for (int i = debris.size() - 1; i >= 0; i--) {
 		if (!debris[i]->isAlive) {
 			delete debris[i];
 			debris.erase(debris.begin() + i);
 		}
+	}
+	//更新
+	for (int i = 0; i < debris.size(); i++) {
+		debris[i]->Update();
+	}
+}
+
+void Debris::StaticReflection()
+{
+	for (int i = 0; i < debris.size(); i++) {
+		debris[i]->Reflection();
 	}
 }
 
@@ -68,7 +89,37 @@ void Debris::StaticDraw()
 	}
 }
 
-float Debris::Absorbed()
+void Debris::UpdateCollider()
+{
+	//移動後の位置予測
+	afterPos = pos + moveVec;
+	//見た目が大事用
+	collider.realSphere.center = afterPos;
+	collider.realSphere.radius = scale * 150.0f;
+	//吸収用
+	collider.absorbedSphere.center = afterPos;
+	collider.absorbedSphere.radius = scale * 150.0f;
+}
+
+void Debris::Bounse(
+	const XMVECTOR &hitPos,		//衝突位置
+	const Vector3 &normal	//衝突した物との向きベクトル
+)
+{
+	pos = hitPos + normal * collider.realSphere.radius;
+	moveVec = CalcReflectVector(moveVec, normal)*1.5f;
+	UpdateCollider();
+}
+
+void Debris::SuckedPlayer(const Vector3 &playerPos,const float &suckedRadius)
+{
+	//引き寄せられる速度
+	float suckedPow =  Vector3(playerPos - pos).Length() - suckedRadius;
+	if (suckedPow < 0) { return; }
+	moveVec += Vector3(pos - playerPos).Normalize() * suckedPow * 0.01f;
+}
+
+float Debris::AbsorbedToPlayer()
 {
 	isAlive = false;
 	return size;

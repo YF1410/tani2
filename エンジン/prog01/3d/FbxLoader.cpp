@@ -110,7 +110,7 @@ void FbxLoader::ParseNodeRecursive(FbxModel* model, FbxNode* fbxNode, Node* pare
 	FbxDouble3 translation = fbxNode->LclTranslation.Get();
 
 	// 形式変換して代入
-	node.rotation = { (float)rotation[0] * (XM_PI / 180.0f),(float)rotation[1] * (XM_PI / 180.0f),(float)rotation[2] * (XM_PI / 180.0f), 0.0f };
+	node.rotation = { (float)rotation[0] * (XM_PI / 180.0f), (float)rotation[1] * (XM_PI / 180.0f), (float)rotation[2] * (XM_PI / 180.0f), 0.0f };
 	node.scaling = { (float)scaling[0], (float)scaling[1], (float)scaling[2], 0.0f };
 	node.translation = { (float)translation[0], (float)translation[1], (float)translation[2], 1.0f };
 
@@ -262,7 +262,7 @@ void FbxLoader::ParseMeshFaces(FbxModel* model, FbxMesh* fbxMesh)
 				if (fbxMesh->GetPolygonVertexUV(i, j, uvNames[0], uvs, lUnmappedUV))
 				{
 					vertex.uv.x = (float)uvs[0];
-					vertex.uv.y = (float)uvs[1];
+					vertex.uv.y = (float)uvs[1] * -1.0f;
 				}
 			}
 
@@ -476,8 +476,6 @@ void FbxLoader::ParseSkin(FbxModel* model, FbxMesh* fbxMesh)
 		if (weightList.size() > 4)
 		{
 			weightList.resize(4);
-			//合計で1.0f(100%)になるように調整
-			//weightList[0] = 1.0f - (weightList[1] + weightList[2] + weightList[3]);
 		}
 
 		

@@ -11,6 +11,7 @@
 #include "ModelManager.h"
 #include "Debris.h"
 
+
 using namespace DirectX;
 
 PlayerTestScene::PlayerTestScene() {
@@ -70,6 +71,7 @@ void PlayerTestScene::Initialize() {
 
 	// 3Dオブジェクト生成
 	playerObject = std::make_unique<PlayerObject>();
+	playerObject->Init();
 
 
 	testStage = FbxObject3d::Create(ModelManager::GetIns()->GetModel(TESTS_TAGE));
@@ -78,13 +80,13 @@ void PlayerTestScene::Initialize() {
 	camera->SetTarget({ 0, 0, 0 });
 	camera->SetEye({ 0,1000, -1000 });
 	camera->SetUp({ 0,1,0 });
+	camera->Update();
 
 	//Debris::StaticInit();
-	playerObject->Init();
 
-	testStage->SetPosition({ 0,-100,0 });
 
 	//ステージの頂点データ保存
+	testStage.get()->Update();
 	stagePolygon.clear();
 	auto vertices = *testStage->GetModel()->GetVertices();
 	auto indices = *testStage->GetModel()->GetIndces();
@@ -113,13 +115,18 @@ void PlayerTestScene::Finalize() {
 }
 
 void PlayerTestScene::Update() {
+	camera->SetEye(Vector3(playerObject.get()->GetPos() + Vector3(0,1,-1) * playerObject.get()->GetScale() * 1000));
+	camera->SetTarget(playerObject.get()->GetPos());
+	camera->Update();
 	Input* input = Input::GetInstance();
 	light->Update();
-	camera->Update();
 	particleMan->Update();
 	testStage->Update();
 
+	//カメラをプレイヤーの位置から計算
+
 	DebugText::GetInstance()->VariablePrint(0, 0, "playerSize", playerObject.get()->size, 3);
+	DebugText::GetInstance()->VariablePrint(0, 40, "DebrisCount", Debris::debris.size(), 3);
 
 
 	if (input->TriggerKey(DIK_C)) 	{
@@ -136,23 +143,48 @@ void PlayerTestScene::Update() {
 	Debris::StaticUpdate();
 
 	//破片とステージの衝突
-	/*for (int debrisNum = 0; debrisNum < Debris::debris.size(); debrisNum++) {
-		if (CheckSphere2Mesh(Debris::debris[debrisNum]., stagePolygon)) {
-
+	for (int debrisNum = 0; debrisNum < Debris::debris.size(); debrisNum++) {
+		//停止状態の物とは判定をとらない
+		if (Debris::debris[debrisNum]->isStop) {
+			continue;
 		}
-	}*/
+		XMVECTOR hitPos;
+		Triangle hitPolygon;
+		if (CheckSphere2Mesh(Debris::debris[debrisNum]->collider.realSphere, stagePolygon,&hitPos,&hitPolygon)) {
+			Debris::debris[debrisNum]->Bounse(hitPos,hitPolygon.normal);
+		}
+	}
+
+	//プレイヤーと壁の衝突
+	XMVECTOR hitPos;
+	Triangle hitPolygon;
+	if (CheckSphere2Mesh(playerObject.get()->collider.realSphere, stagePolygon, &hitPos, &hitPolygon)) {
+		DebugText::GetInstance()->VariablePrint(0, 80, "HitStage", 1, 3);
+		playerObject.get()->HitWall(hitPos, hitPolygon.normal);
+	}
+
 
 	//破片とプレイヤーの衝突
 	for (int i = 0; i < Debris::debris.size(); i++) {
+		//攻撃中の物とは判定をとらない
 		if (Debris::debris[i]->isAttack) continue;
-		if (Collision::CheckSphere2Sphere(playerObject.get()->collider.absorbSphere, Debris::debris[i]->collider.sphere)) {
-			playerObject.get()->Absorb(Debris::debris[i]->Absorbed());
+		//吸い寄せ判定
+		if (Collision::CheckSphere2Sphere(playerObject.get()->collider.suctionSphere, Debris::debris[i]->collider.absorbedSphere)) {
+			Debris::debris[i]->SuckedPlayer(playerObject->GetPos(), playerObject->GetSuction());
+		}
+		//吸収判定
+		if (Collision::CheckSphere2Sphere(playerObject.get()->collider.absorbSphere, Debris::debris[i]->collider.absorbedSphere)) {
+			playerObject.get()->Absorb(Debris::debris[i]->AbsorbedToPlayer());
 		}
 	}
 
 	//fbxObject3d->Update();
 	// 全ての衝突をチェック
 	//collisionManager->CheckAllCollisions();
+
+	//全ての移動最終適応処理
+	playerObject.get()->Reflection();
+	Debris::StaticReflection();
 }
 
 void PlayerTestScene::Draw() {

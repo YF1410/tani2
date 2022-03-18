@@ -30,34 +30,64 @@ public:
 	~PlayerObject();
 	//初期化
 	void Init();
-	// 毎フレーム処理
+	//毎フレーム処理
 	void Update();
-	// 描画
+	//最終更新
+	void Reflection();
+	//描画
 	void Draw();
 
-	//残骸を吸収した時
-	void Absorb(float size);
 	
-	//当たり判定
-	struct COLLIDER {
-		Sphere absorbSphere;
-	}collider;
 
 	float size;	//質量
 
+	//ゲッター
+	Vector3 GetPos() { return pos; }
+	float GetSuction() { return suction; }
+	float GetSpeed() { return moveVec.Length(); }
+	float GetScale() { return scale; }
+
+public:		//衝突時関係
+
+	//当たり判定
+	struct COLLIDER {
+		Sphere realSphere;		//見た目が大事な当たり判定
+		Sphere suctionSphere;	//破片の吸い寄せ用当たり判定
+		Sphere absorbSphere;	//吸収用
+	}collider;
+	//当たり判定一括更新用
+	void UpdateCollider();
+
+
+	//コールバック
+	//壁との衝突
+	void HitWall(
+		const XMVECTOR &hitPos,		//衝突位置
+		const Vector3 &normal);
+	//残骸を吸収した時
+	void Absorb(float size);
 
 private: // メンバ変数
-	std::unique_ptr<FbxObject3d> slime;
+	//スライムオブジェクト
+	std::unique_ptr<FbxObject3d> slimeObj;
 	//キーボード移動用
-	float moveSpead = 30.0f;
+	float moveSpead;
 	
 	//プレイヤーの基準座標
 	Vector3 pos;
 	//総移動量
 	Vector3 moveVec;
-
+	//移動予想位置
+	Vector3 afterPos;
+	
+	//スケールに対する吸引比率
+	const float suctionRatio = 300.0f;
+	//吸引範囲
+	float suction;
 	//サイズ
 	float scale;//大きさ
+
+
 
 	//自爆タイプ
 	DESTRUCT_TYPE destructType;
