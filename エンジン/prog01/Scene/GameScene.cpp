@@ -55,9 +55,10 @@ void GameScene::Initialize()
 	light = LightGroup::Create();
 	//3Dオブジェクトにライトをセット
 	Object3d::SetLight(light.get());
+	FbxObject3d::SetLight(light.get());
 	light->SetDirLightActive(0, true);
-	light->SetDirLightActive(1, true);
-	light->SetDirLightActive(2, true);
+	light->SetDirLightActive(1, false);
+	light->SetDirLightActive(2, false);
 	light->SetPointLightActive(0, false);
 	light->SetPointLightActive(1, false);
 	light->SetPointLightActive(2, false);
@@ -104,7 +105,7 @@ void GameScene::Initialize()
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
-	camera->SetEye({ 0,1,-150 });
+	camera->SetEye({ 0,10,-50 });
 }
 
 void GameScene::Finalize()
@@ -121,24 +122,26 @@ void GameScene::Update()
 	// オブジェクト移動
 	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A))
 	{
+		static XMVECTOR p = {1,-1,1,0};
 		// 移動後の座標を計算
 		if (input->PushKey(DIK_W))
 		{
-			fighterPos[1] += 0.1f;
+			p.m128_f32[1] += 0.1f;
 		}
 		else if (input->PushKey(DIK_S))
 		{
-			fighterPos[1] -= 0.1f;
+			p.m128_f32[1] -= 0.1f;
 		}
 
 		if (input->PushKey(DIK_D))
 		{
-			fighterPos[0] += 0.1f;
+			p.m128_f32[0] += 0.1f;
 		}
 		else if (input->PushKey(DIK_A))
 		{
-			fighterPos[0] -= 0.1f;
+			p.m128_f32[0] -= 0.1f;
 		}
+		light->SetDirLightDir(0, p);
 	}
 
 	if (input->TriggerKey(DIK_SPACE))
