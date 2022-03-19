@@ -7,6 +7,7 @@
 class Debris
 {
 public:
+	//コンストラクタ
 	Debris(XMFLOAT3 startPos,Vector3 startVec,float size);
 	//内部更新
 	void Update();
@@ -14,24 +15,27 @@ public:
 	void Adaptation();
 	//描画
 	void Draw();
-
+	//コンテナ更新
 	static void StaticUpdate();
 	static void StaticReflection();
 	static void StaticDraw();
+
 public:		//衝突時関係
 
 	//当たり判定
 	struct COLLIDER {
-		//跳ね返り用おおざっぱ
+		//見た目に近い判定
 		Sphere realSphere;
-		Sphere absorbedSphere;
-
+		//攻撃判定
+		Sphere attackSphere;
+		//当たり判定
+		Sphere hitSphere;
 	}collider;
 	//当たり判定一括更新用
 	void UpdateCollider();
 	//跳ね返るとき
 	void Bounse(
-		const XMVECTOR &hitPos,		//衝突位置
+		const Vector3 &hitPos,		//衝突位置
 		const Vector3 &normal	//衝突した物との向きベクトル
 	);
 	//プレイヤーに吸い寄せられたとき
@@ -39,8 +43,8 @@ public:		//衝突時関係
 	//プレイヤーに吸収されたとき
 	float AbsorbedToPlayer();
 
-	//破片同士でくっついたとき
-	float AbsorbedToDebri();
+	//ダメージを受ける
+	void Damage(float damage);
 
 	Vector3 GetPos() { return pos; }
 
@@ -49,19 +53,21 @@ public:		//衝突時関係
 	bool isAlive;
 	//攻撃状態
 	bool isAttack;
-	//停止
-	bool isStop;
-
+	
 	//コンテナ
 	static std::vector<Debris *> debris;
+
+	Vector3 pos;
+	Vector3 moveVec;
+	
+
+	bool isAttackFlame;
 private:
 	//破片オブジェクト
 	std::unique_ptr<FbxObject3d> debriObj;
 
 	//計算用座標
-	Vector3 pos;
 	//総移動量
-	Vector3 moveVec;
 	//移動予想位置
 	Vector3 afterPos;
 

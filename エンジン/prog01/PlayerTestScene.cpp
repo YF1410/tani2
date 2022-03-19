@@ -130,7 +130,7 @@ void PlayerTestScene::Update() {
 
 
 	if (input->TriggerKey(DIK_C)) 	{
-		SceneManager::GetInstance()->ChangeScene("EnemyTestScene");
+		SceneManager::GetInstance()->ChangeScene("GameScene");
 	}
 
 
@@ -145,9 +145,9 @@ void PlayerTestScene::Update() {
 	//”j•Ğ‚ÆƒXƒe[ƒW‚ÌÕ“Ë
 	for (int debrisNum = 0; debrisNum < Debris::debris.size(); debrisNum++) {
 		//’â~ó‘Ô‚Ì•¨‚Æ‚Í”»’è‚ğ‚Æ‚ç‚È‚¢
-		if (Debris::debris[debrisNum]->isStop) {
+		/*if (Debris::debris[debrisNum]->isStop) {
 			continue;
-		}
+		}*/
 		XMVECTOR hitPos;
 		Triangle hitPolygon;
 		if (CheckSphere2Mesh(Debris::debris[debrisNum]->collider.realSphere, stagePolygon,&hitPos,&hitPolygon)) {
@@ -169,11 +169,11 @@ void PlayerTestScene::Update() {
 		//UŒ‚’†‚Ì•¨‚Æ‚Í”»’è‚ğ‚Æ‚ç‚È‚¢
 		if (Debris::debris[i]->isAttack) continue;
 		//‹z‚¢Šñ‚¹”»’è
-		if (Collision::CheckSphere2Sphere(playerObject.get()->collider.suctionSphere, Debris::debris[i]->collider.absorbedSphere)) {
+		if (Collision::CheckSphere2Sphere(playerObject.get()->collider.suctionSphere, Debris::debris[i]->collider.hitSphere)) {
 			Debris::debris[i]->SuckedPlayer(playerObject->GetPos(), playerObject->GetSuction());
 		}
 		//‹zû”»’è
-		if (Collision::CheckSphere2Sphere(playerObject.get()->collider.absorbSphere, Debris::debris[i]->collider.absorbedSphere)) {
+		if (Collision::CheckSphere2Sphere(playerObject.get()->collider.absorbSphere, Debris::debris[i]->collider.hitSphere)) {
 			playerObject.get()->Absorb(Debris::debris[i]->AbsorbedToPlayer());
 		}
 	}

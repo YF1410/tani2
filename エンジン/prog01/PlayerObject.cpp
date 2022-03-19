@@ -133,7 +133,8 @@ void PlayerObject::Update()
 			Vector3 startVec;		//速度*向きベクトル
 			float shotRad;			//角度決定用
 			float shotSpeed ;		//発射速度
-			float shotSize;		//残骸のサイズ
+			//残骸のサイズ
+			float shotSize = maxSize / (destructPow * destructType);
 
 			switch (destructType)
 			{
@@ -145,7 +146,7 @@ void PlayerObject::Update()
 				else if (destructPow == STRONG) {
 					shotSpeed = rand() % 12 + scale * 100;
 				}
-				shotSize = maxSize / destructPow;
+				
 
 				shotRad = XMConvertToRadians(rand() % 360);		//360度で計算
 				startVec = {
@@ -163,7 +164,6 @@ void PlayerObject::Update()
 				else if (destructPow == STRONG) {
 					shotSpeed = rand() % 12 + scale * 100;
 				}
-				shotSize = maxSize / destructPow;
 
 
 				shotRad = XMConvertToRadians(rand() % 15 - 15);		//360度で計算
@@ -224,7 +224,7 @@ void PlayerObject::UpdateCollider()
 	//移動後の吸収範囲
 	suction = scale * suctionRatio;
 	
-	//見た目が大事用
+	//見た目に近い判定
 	collider.realSphere.center = afterPos;
 	collider.realSphere.radius = scale * 150.0f;
 	//吸い寄せ用

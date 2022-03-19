@@ -59,6 +59,13 @@ public: // メンバ関数
 	// 描画
 	void Draw() override;
 
+
+
+private:	//当たり判定系関数
+	void AttackDebrisToEnemy();	//破片と敵
+	void PlayerToDebris();	//プレイヤーと破片
+
+
 private: // メンバ変数
 	//カメラ
 	std::unique_ptr<Camera> camera;
@@ -71,7 +78,6 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelSphere;
 
 	std::unique_ptr<PlayerObject> playerObject;
-	std::unique_ptr<Enemy> enemyObject;
 
 	std::unique_ptr<Model> modelPlane;
 	std::vector<std::unique_ptr<Object3d>> objects;
@@ -81,6 +87,11 @@ private: // メンバ変数
 	bool flag = false;
 
 
+	//ステージ
+	std::unique_ptr<FbxObject3d> testStage;
+	//ステージのポリゴンデータ
+	std::vector<Triangle> stagePolygon;
+
 	//ライト
 	std::unique_ptr<LightGroup> light;
 	//光線方向初期値
@@ -89,9 +100,13 @@ private: // メンバ変数
 	float circleShadowAtten[3] = { 0.5f,0.6f,0.0f };
 	float circleShadowFactorAngle[2] = { 0.0f, 0.5f };
 
-	float fighterPos[3] = { 1, 0.0f, 0 };
-
 	float searchPlayerLen = 500.0f;
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;
+	//ステージとの当たり判定
+	bool CheckSphere2Mesh(Sphere &sphere,				//球
+		std::vector<Triangle> meshDate,					//メッシュデータ
+		XMVECTOR *HitPos = nullptr,			//衝突位置
+		Triangle *hitTriangle = nullptr	//衝突したポリゴン
+	);
 };

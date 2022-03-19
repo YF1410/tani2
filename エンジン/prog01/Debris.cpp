@@ -11,7 +11,6 @@ Debris::Debris(XMFLOAT3 startPos, Vector3 startVec, float size):
 	size(size),
 	isAttack(true),
 	isAlive(true),
-	isStop(false),
 	airResistance(0,0,0)
 {
 	// 初期化
@@ -23,13 +22,7 @@ Debris::Debris(XMFLOAT3 startPos, Vector3 startVec, float size):
 
 void Debris::Update()
 {
-	//完全に停止
-	if (moveVec.Length() <= 1.0f) {
-		isStop = true;
-		moveVec = { 0,0,0 };
-	}
-	//移動処理
-	else {
+	{
 		//空気抵抗
 		airResistance = moveVec *0.01f;
 		moveVec -= airResistance;
@@ -37,7 +30,7 @@ void Debris::Update()
 		moveVec.y -= 0.5f;
 	}
 	//攻撃終了
-	if (moveVec.Length() <= 5.0f) {
+	if (moveVec.Length() <= 10.0f && isAttack) {
 		isAttack = false;
 	}
 	
@@ -96,16 +89,20 @@ void Debris::UpdateCollider()
 {
 	//移動後の位置予測
 	afterPos = pos + moveVec;
-	//見た目が大事用
+	//見た目nに近い判定
 	collider.realSphere.center = afterPos;
 	collider.realSphere.radius = scale * 150.0f;
+	//攻撃用判定
+	collider.attackSphere.center = afterPos;
+	collider.attackSphere.radius = scale * 180.0f;
+
 	//吸収用
-	collider.absorbedSphere.center = afterPos;
-	collider.absorbedSphere.radius = scale * 150.0f;
+	collider.hitSphere.center = afterPos;
+	collider.hitSphere.radius = scale * 150.0f;
 }
 
 void Debris::Bounse(
-	const XMVECTOR &hitPos,		//衝突位置
+	const Vector3 &hitPos,		//衝突位置
 	const Vector3 &normal	//衝突した物との向きベクトル
 )
 {
@@ -117,7 +114,6 @@ void Debris::Bounse(
 void Debris::SuckedPlayer(const Vector3 &playerPos,const float &suckedRadius)
 {
 	//移動開始
-	isStop = false;
 	moveVec += Vector3(playerPos- pos).Normalize() * 3.0f;
 }
 
@@ -125,4 +121,15 @@ float Debris::AbsorbedToPlayer()
 {
 	isAlive = false;
 	return size;
+}
+
+void Debris::Damage(float damage)
+{
+	size -= damage;
+	//HPが0以下になったら死亡状態へ以降
+	if (size < 0) {
+		isAlive = false;
+	}
+	else {
+	}
 }

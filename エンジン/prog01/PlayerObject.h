@@ -41,6 +41,7 @@ public:
 
 	//ÉQÉbÉ^Å[
 	Vector3 GetPos() { return pos; }
+	Vector3 *GetPosPointer() { return &pos; }
 	float GetSuction() { return suction; }
 	float GetSpeed() { return moveVec.Length(); }
 	float GetScale() { return scale; }

@@ -243,11 +243,11 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyTestScene.cpp">
-      <Filter>ゲームシステム\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerTestScene.cpp">
       <Filter>ゲームシステム\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Easing.cpp">
+      <Filter>エンジンシステム</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -400,14 +400,14 @@
     <ClInclude Include="Enemy.h">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyTestScene.h">
-      <Filter>ゲームシステム\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerTestScene.h">
       <Filter>ゲームシステム\Scene</Filter>
     </ClInclude>
     <ClInclude Include="SlimeMath.h">
       <Filter>ゲームシステム\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Easing.h">
+      <Filter>エンジンシステム</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
