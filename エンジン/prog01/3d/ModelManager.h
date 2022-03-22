@@ -3,15 +3,6 @@
 #include <string>
 #include "FbxModel.h"
 
-enum ModelName {
-	TESTS_TAGE,
-	SLIME,
-	SLIME_BREAK,
-	ENEMY,
-
-	//Å‘å”
-	MAX
-};
 class ModelManager final
 {
 private:
@@ -21,7 +12,16 @@ private:
 	ModelManager &operator= (const ModelManager &r) = default;
 
 public:
-	
+	enum ModelName {
+		TESTS_TAGE,
+		TESTS_MAP_BLOCK,
+		SLIME,
+		SLIME_BREAK,
+		ENEMY,
+
+		//Å‘å”
+		MAX
+	};
 
 public:
 	static ModelManager *GetIns();		//æ“¾—p
