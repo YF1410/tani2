@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 
 #include <Windows.h>
 #include <wrl.h>
@@ -99,9 +100,9 @@ public: // メンバ関数
 	// ワールド行列の取得
 	const XMMATRIX& GetMatWorld() { return matWorld; }
 	// コライダーのセット
-	void SetCollider(BaseCollider* collider);
+	//void SetCollider(BaseCollider* collider);
 	// 衝突時コールバック関数
-	virtual void OnCollision(const CollisionInfo& info) {}
+	//virtual void OnCollision(const CollisionInfo& info) {}
 	// ワールド座標を取得
 	XMFLOAT3 GetWorldPosition();
 	// モデルを取得
@@ -128,5 +129,5 @@ protected: // メンバ変数
 	//クラス名(デバック用)
 	const char* name = nullptr;
 	// コライダー
-	BaseCollider* collider = nullptr;
+	//BaseCollider* collider = nullptr;
 };

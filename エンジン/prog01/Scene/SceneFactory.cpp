@@ -3,7 +3,6 @@
 #include "GameScene.h"
 #include "ClearScene.h"
 #include "GameOverScene.h"
-#include "PlayerTestScene.h"
 
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 {
@@ -25,9 +24,6 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 	else if (sceneName == "GameOverScene")
 	{
 		newScene = new GameOverScene();
-	}
-	else if (sceneName == "PlayerTestScene") {
-		newScene = new PlayerTestScene();
 	}
 
 	return newScene;

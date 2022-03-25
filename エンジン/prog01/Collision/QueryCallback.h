@@ -2,13 +2,13 @@
 
 #include <DirectXMath.h>
 
-class Object3d;
+class GameObjCommon;
 class BaseCollider;
 
 struct QueryHit // クエリーによる情報を得る為の構造体
 {
 	// 衝突相手のオブジェクト
-	Object3d* object = nullptr;
+	GameObjCommon *object = nullptr;
 	// 衝突相手のコライダー
 	BaseCollider* collider = nullptr;
 	// 衝突点

@@ -62,7 +62,7 @@ public: //メンバ関数
 	bool PushPadStickRight();
 	bool PushPadStickLeft();
 
-	XMFLOAT2& PadStickGradient();
+	XMFLOAT2& PadStickGradient(const float &deadzone = 0.2f);
 	double PadStickAngle();
 
 	// キーの左ボタントリガーをチェック
@@ -71,9 +71,9 @@ public: //メンバ関数
 	bool TriggerPadRight();
 
 	//ゲームパッドのキーの押下をチェック
-	bool PushPadKey(PadKey keyNumber);
+	bool PushPadButton(PadKey keyNumber);
 	// キーのトリガーをチェック
-	bool TriggerPadKey(PadKey keyNumber);
+	bool TriggerPadButton(PadKey keyNumber);
 
 	// キーの左ボタン押下をチェック
 	bool PushMouseLeft();

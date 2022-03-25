@@ -1,6 +1,8 @@
 #include "FbxObject3d.h"
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
+#include "BaseCollider.h"
+#include "CollisionManager.h"
 
 using namespace Microsoft::WRL;
 using namespace DirectX;
@@ -274,21 +276,7 @@ bool FbxObject3d::Initialize()
 
 void FbxObject3d::Update()
 {
-	XMMATRIX matScale, matRot, matTrans;
-
-	// スケール、回転、平行移動行列の計算
-	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
-	matRot = XMMatrixIdentity();
-	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
-	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
-	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
-	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
-
-	// ワールド行列の合成
-	matWorld = XMMatrixIdentity(); // 変形をリセット
-	matWorld *= matScale; // ワールド行列にスケーリングを反映
-	matWorld *= matRot; // ワールド行列に回転を反映
-	matWorld *= matTrans; // ワールド行列に平行移動を反映
+	UpdateWorldMatrix();
 
 	// ビュープロジェクション行列
 	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
@@ -312,16 +300,22 @@ void FbxObject3d::Update()
 	//ボーン配列
 	std::vector<FbxModel::Bone>& bones = model->GetBones();
 
+	
 	//アニメーション
-	if (isPlay)
-	{
+	if (isPlay) {
 		//1フレーム進める
 		currentTime += frameTime;
-
-		//最後まで再生したら先頭に戻す
-		if (currentTime > endTime)
-		{
-			currentTime = startTime;
+		//アニメーションが終了したら
+		if (currentTime > endTime) {
+			//ループがtrueの時
+			if (isLoop) {
+				currentTime = startTime;
+			}
+			//ループしないときはアニメーションを終了
+			else {
+				currentTime = endTime;
+				isPlay = false;
+			}
 		}
 	}
 
@@ -340,6 +334,8 @@ void FbxObject3d::Update()
 		constMatSkin->bones[i] = model->GetModelTransform() * bones[i].invInitialPose * matCurrentPose * XMMatrixInverse(nullptr, model->GetModelTransform());
 	}
 	constBuffSkin->Unmap(0, nullptr);
+
+
 }
 
 void FbxObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -365,6 +361,25 @@ void FbxObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 	model->Draw(cmdList);
 }
 
+void FbxObject3d::UpdateWorldMatrix()
+{
+	XMMATRIX matScale, matRot, matTrans;
+
+	// スケール、回転、平行移動行列の計算
+	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
+	matRot = XMMatrixIdentity();
+	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
+	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
+	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
+	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
+
+	// ワールド行列の合成
+	matWorld = XMMatrixIdentity(); // 変形をリセット
+	matWorld *= matScale; // ワールド行列にスケーリングを反映
+	matWorld *= matRot; // ワールド行列に回転を反映
+	matWorld *= matTrans; // ワールド行列に平行移動を反映
+}
+
 void FbxObject3d::LoadAnimation()
 {
 	FbxScene* fbxScene = model->GetFbxScene();
@@ -385,7 +400,7 @@ void FbxObject3d::LoadAnimation()
 	}
 }
 
-void FbxObject3d::PlayAnimation(int animationNumber)
+void FbxObject3d::PlayAnimation(int animationNumber, bool isLoop)
 {
 	FbxScene* fbxScene = model->GetFbxScene();
 	//アニメーションの変更
@@ -398,4 +413,6 @@ void FbxObject3d::PlayAnimation(int animationNumber)
 	currentTime = startTime;
 	//再生中状態にする
 	isPlay = true;
+	this->isLoop = isLoop;
 }
+

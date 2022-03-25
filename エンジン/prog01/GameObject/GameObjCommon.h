@@ -2,16 +2,23 @@
 #include "Vector3.h"
 #include "ModelManager.h"
 #include "FbxObject3d.h"
-
+#include "CollisionInfo.h"
+#include <vector>
 
 class GameObjCommon
 {
 public://サブクラス
+	//衝突検知用タグ
 	enum Tag {
 		Notag,
 		MapChip,
 		Player,
-		Enemy,
+		DEBRIS,
+		ENEMY,
+
+		//Block系
+		DEFAULT_BLOACK,
+		PASSING_BLOCK,
 
 		MAX
 	};
@@ -35,29 +42,29 @@ public:
 		isDelete(false),
 		gravityPow(0.4f)
 	{
-		object = nullptr;
-		object = FbxObject3d::Create(ModelManager::GetIns()->GetModel(modelName));
-		object->SetModel(ModelManager::GetIns()->GetModel(modelName));
-		object->SetPosition(pos);
-		object->SetRotation(rotate);
-		object->SetScale(scale);
+		objectData = nullptr;
+		objectData = FbxObject3d::Create(ModelManager::GetIns()->GetModel(modelName));
+		objectData->SetModel(ModelManager::GetIns()->GetModel(modelName));
+		objectData->SetPosition(pos);
+		objectData->SetRotation(rotate);
+		objectData->SetScale(scale);
 		Initialize();
 	}
 
-	~GameObjCommon()
-	{
-	}
+	~GameObjCommon();
 
-	virtual void Initialize();
-	virtual void Update();
-	//重力計算と移動適応
-	void MovePos();
+	virtual void Initialize();		//初期化
+	virtual void Update();			//各オブジェクトの更新
+	virtual void Move();			//移動量計算
+	virtual void VelocityReset();								//移動量初期化
+	virtual void VelocityReset(bool isStap, float gain = 0.9f);	//移動量初期化
 	//変更を適応
-	void Reflection();
+	void Adaptation();
 	//アニメーション再生
-	void PlayAnimation(bool isLoop = false) { object->PlayAnimation(isLoop); };
+	void PlayAnimation(int playNumber, bool isLoop = false) { objectData->PlayAnimation(isLoop); };
+	//描画
 	virtual void Draw() const;
-	
+
 	////正面ベクトル取得
 	//Vector3 GetFrontVector() { return Vector3(object->matWorldf._31, object->matWorldf._32, object->matWorldf._33).Normalize(); }
 	////右ベクトル取得
@@ -66,27 +73,34 @@ public:
 	//Vector3 GetUpVector() { return Vector3(object->matWorldf._21, object->matWorldf._22, object->matWorldf._23).Normalize(); }
 
 	//オブジェクト取得
-	//std::unique_ptr<FbxObject3d> GetObjectDate() { return object; }
- 
+	std::unique_ptr<FbxObject3d> &GetObjectDate() { return objectData; }
+
 public:
 
 
-	Vector3 pos;	//座標
-	Vector3 rotate;//向き
-	float gravityPow;
+	Vector3 pos;		//座標
+	Vector3 rotate;		//向き
+	float gravityPow;	//重力の強さ
 	Vector3 velocity;	//移動量
-	Vector3 scale;	//サイズ
+	Vector3 scale;		//拡大率
 
-	bool isGravity;	//重力の影響を受けるかどうか
-	bool isActive;	//更新フラグ
-	bool isInvisible;//透明化フラグ
-	bool isDelete;	//消去フラグ
+	bool isGravity;		//重力の影響	trueで重力の影響を受ける
+	bool isActive;		//更新フラグ	falseだとUpdate()やColliderUpdate()の処理をを行わない
+	bool isInvisible;	//非表示フラグ	trueで描画を行わない
+	bool isDelete;		//消去フラグ	trueになるとそのフレームで消滅する
 
-	Tag Tag;		//オブジェクトタグ
-
+	Tag Tag;			//当たり判定などで使うオブジェクトタグ
 
 protected:
-	std::unique_ptr<FbxObject3d> object;
+	std::unique_ptr<FbxObject3d> objectData;	//オブジェクトデータ
 
+public:	
+	// コライダーのセット
+	void SetCollider(BaseCollider *collider);
+	// 衝突時コールバック関数
+	virtual void OnCollision(const CollisionInfo &info) {}
+protected:
+	//コライダー
+	BaseCollider *collider = nullptr;
 };
 

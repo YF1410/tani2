@@ -83,6 +83,12 @@
     <Filter Include="ゲームシステム\Stage">
       <UniqueIdentifier>{f68a34b1-5524-416a-b6dd-c77f8ef6d308}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ゲームシステム\GameObject">
+      <UniqueIdentifier>{3fff4a70-879f-4259-996f-4ed74b8945d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="エンジンシステム\Collision\Collider">
+      <UniqueIdentifier>{0e50f6de-3233-4dde-936c-da96a22a9fdd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -194,13 +200,7 @@
     <ClCompile Include="Collision\MeshCollider.cpp">
       <Filter>エンジンシステム\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Collision\SphereCollider.cpp">
-      <Filter>エンジンシステム\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject\ContactableObject.cpp">
-      <Filter>エンジンシステム\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject\Player.cpp">
       <Filter>エンジンシステム\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="3d\LightGroup.cpp">
@@ -243,11 +243,20 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerTestScene.cpp">
-      <Filter>ゲームシステム\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Easing.cpp">
       <Filter>エンジンシステム</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\GameObjCommon.cpp">
+      <Filter>ゲームシステム\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseBlock.cpp">
+      <Filter>ゲームシステム\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\SphereCollider.cpp">
+      <Filter>エンジンシステム\Collision\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="AABBCollider.cpp">
+      <Filter>エンジンシステム\Collision\Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -311,9 +320,6 @@
     <ClInclude Include="Base\WinApp.h">
       <Filter>エンジンシステム\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Collision\SphereCollider.h">
-      <Filter>エンジンシステム\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="Collision\BaseCollider.h">
       <Filter>エンジンシステム\Collision</Filter>
     </ClInclude>
@@ -334,9 +340,6 @@
     </ClInclude>
     <ClInclude Include="Collision\RaycastHit.h">
       <Filter>エンジンシステム\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject\Player.h">
-      <Filter>エンジンシステム\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="GameObject\ContactableObject.h">
       <Filter>エンジンシステム\GameObject</Filter>
@@ -400,14 +403,23 @@
     <ClInclude Include="Enemy.h">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerTestScene.h">
-      <Filter>ゲームシステム\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="SlimeMath.h">
       <Filter>ゲームシステム\Player</Filter>
     </ClInclude>
     <ClInclude Include="Easing.h">
       <Filter>エンジンシステム</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\GameObjCommon.h">
+      <Filter>ゲームシステム\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseBlock.h">
+      <Filter>ゲームシステム\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\SphereCollider.h">
+      <Filter>エンジンシステム\Collision\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="AABBCollider.h">
+      <Filter>エンジンシステム\Collision\Collider</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

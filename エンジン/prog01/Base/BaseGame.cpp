@@ -4,6 +4,7 @@
 #include "Object3d.h"
 #include "FbxLoader.h"
 #include "FbxObject3d.h"
+#include "ModelManager.h"
 
 void BaseGame::Run()
 {
@@ -58,6 +59,10 @@ void BaseGame::Initialize()
 	FbxObject3d::StaticInitialize(DirectXCommon::GetInstance()->GetDevice());
 	//FBXオブジェクト初期化
 	FbxLoader::GetInstance()->Initialize(DirectXCommon::GetInstance()->GetDevice());
+
+	//全モデル読み込み
+	ModelManager::GetIns()->Initialize();
+
 }
 
 void BaseGame::Finalize()

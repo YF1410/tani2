@@ -1,32 +1,23 @@
 #pragma once
-#include "Object3d.h"
 #include "FbxObject3d.h"
 #include "Vector3.h"
 #include <vector>
-#include "Collision.h"
+#include "GameObjCommon.h"
 
-class Enemy {
-private: // エイリアス
-	// Microsoft::WRL::を省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
-	using XMVECTOR = DirectX::XMVECTOR;
-
+class Enemy :
+	public GameObjCommon
+{
 public:
 	//コンストラクタ
 	Enemy(XMFLOAT3 startPos);
-	//デストラクタ
-	~Enemy();
+	//初期化
+	void Initialize() override;
 	//内部更新
-	virtual void Update();
-	//最終更新
-	void Adaptation();
-	// 描画
-	void Draw();
+	virtual void Update() override;
+
+	//衝突時コールバック
+	void OnCollision(const CollisionInfo &info) override;
+
 	//コンテナ更新
 	static void StaticUpdate();
 	static void StaticAdaptation();
@@ -45,21 +36,6 @@ public:
 
 
 public:		//当たり判定関係
-
-	//当たり判定
-	struct COLLIDER {
-		//索敵範囲
-		Sphere searchArea;
-		//当たり判定
-		Sphere hitSphere;
-		//攻撃用判定
-		Sphere attackSphere;
-		//見た目に近い判定
-		Sphere realSphere;
-
-	}collider;
-	//コライダーの更新
-	void UpdateCollider();
 
 	//ダメージを受ける
 	void Damage(float damage);
@@ -85,8 +61,6 @@ public:		//当たり判定関係
 	const float holmingLength = 700;
 
 private: // メンバ変数
-	std::unique_ptr<FbxObject3d> enemyObj;
-
 	int deadTimer;
 
 	float searchPlayerLen = 5.0f;
@@ -100,13 +74,6 @@ private: // メンバ変数
 	float HP;
 	//無敵時間
 	int InvincibleTimer;	//残り無敵時間
-
-	//計算用座標
-	Vector3 pos;
-	//総移動量
-	Vector3 moveVec;
-	//移動位置予想
-	Vector3 afterPos;
 
 	//待機関係
 	int stayTime = 0;
@@ -127,8 +94,4 @@ private: // メンバ変数
 	float targetLength;
 	//現在の最近対象への距離
 	float minTargetLength;
-
-
-	//描画用大きさ
-	float scale;
 };

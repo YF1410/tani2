@@ -254,12 +254,12 @@ bool Object3d::InitializeGraphicsPipeline()
 
 Object3d::~Object3d()
 {
-	if (collider)
-	{
-		//コリジョンマネージャから登録を解除する
-		CollisionManager::GetInstance()->RemoveCollider(collider);
-		delete collider;
-	}
+	//if (collider)
+	//{
+	//	//コリジョンマネージャから登録を解除する
+	//	CollisionManager::GetInstance()->RemoveCollider(collider);
+	//	delete collider;
+	//}
 	constBuffB0.Reset();
 }
 
@@ -305,10 +305,10 @@ void Object3d::Update()
 	constBuffB0->Unmap(0, nullptr);
 
 	// 当たり判定更新
-	if (collider)
+	/*if (collider)
 	{
 		collider->Update();
-	}
+	}*/
 }
 
 void Object3d::Draw()
@@ -366,17 +366,17 @@ void Object3d::UpdateWorldMatrix()
 	}
 }
 
-void Object3d::SetCollider(BaseCollider* collider)
-{
-	collider->SetObject(this);
-	this->collider = collider;
-	// コリジョンマネージャに追加
-	CollisionManager::GetInstance()->AddCollider(collider);
-	//行列の更新
-	UpdateWorldMatrix();
-	//コライダーを更新しておく
-	collider->Update();
-}
+//void Object3d::SetCollider(BaseCollider* collider)
+//{
+//	collider->SetObject(this);
+//	this->collider = collider;
+//	// コリジョンマネージャに追加
+//	CollisionManager::GetInstance()->AddCollider(collider);
+//	//行列の更新
+//	UpdateWorldMatrix();
+//	//コライダーを更新しておく
+//	collider->Update();
+//}
 
 XMFLOAT3 Object3d::GetWorldPosition()
 {

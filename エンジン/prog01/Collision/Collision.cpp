@@ -1,5 +1,5 @@
 #include "Collision.h"
-
+#include "Vector3.h"
 using namespace DirectX;
 
 bool Collision::CheckSphere2Plane(const Sphere& sphere, const Plane& plane,
@@ -293,4 +293,228 @@ bool Collision::CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB,
 	}
 
 	return false;
+}
+
+bool Collision::CheckSphere2Capsule(const Sphere& sphere, const Capsule& capsule)
+{
+	Vector3 vStartToEnd = capsule.endPosition - capsule.startPosition;
+
+	Vector3 n = vStartToEnd;
+	n.Normalize();
+
+	Vector3 sPos = { sphere.center.m128_f32[0], sphere.center.m128_f32[1], sphere.center.m128_f32[2] };
+
+	float t = n.VDot(Vector3(sPos - capsule.startPosition));
+
+	Vector3 vPsPn = n * t;
+	Vector3 posPn = capsule.startPosition + vPsPn;
+
+	float lengthRate = t / vStartToEnd.Length();
+
+	float distance;
+	if (lengthRate < 0.0f)
+	{
+		distance = Vector3(sPos + capsule.startPosition).Length() - capsule.radius;
+	}
+	else if (lengthRate <= 1.0f)
+	{
+		distance = Vector3(posPn - sPos).Length() - capsule.radius;
+	}
+	else
+	{
+		distance = Vector3(sPos + capsule.endPosition).Length() - capsule.radius;
+	}
+
+	return distance < sphere.radius;
+}
+
+bool Collision::CheckSphere2Box(const Sphere& sphere, const Box& box)
+{
+	float sqDistance = 0.0f;
+	float pos;
+
+	pos = sphere.center.m128_f32[0];
+	if (pos < box.center.m128_f32[0] - box.scale.x)
+	{
+		sqDistance += (pos - box.center.m128_f32[0] - box.scale.x) * (pos - box.center.m128_f32[0] - box.scale.x);
+	}
+	else if (pos > box.center.m128_f32[0] + box.scale.x)
+	{
+		sqDistance += (pos - box.center.m128_f32[0] + box.scale.x) * (pos - box.center.m128_f32[0] + box.scale.x);
+	}
+
+	pos = sphere.center.m128_f32[1];
+	if (pos < box.center.m128_f32[1] - box.scale.y)
+	{
+		sqDistance += (pos - box.center.m128_f32[1] - box.scale.y) * (pos - box.center.m128_f32[1] - box.scale.y);
+	}
+	else if (pos > box.center.m128_f32[1] + box.scale.y)
+	{
+		sqDistance += (pos - box.center.m128_f32[1] + box.scale.y) * (pos - box.center.m128_f32[1] + box.scale.y);
+	}
+
+	pos = sphere.center.m128_f32[2];
+	if (pos < box.center.m128_f32[2] - box.scale.z)
+	{
+		sqDistance += (pos - box.center.m128_f32[2] - box.scale.z) * (pos - box.center.m128_f32[2] - box.scale.z);
+	}
+	else if (pos > box.center.m128_f32[2] + box.scale.z)
+	{
+		sqDistance += (pos - box.center.m128_f32[2] + box.scale.z) * (pos - box.center.m128_f32[2] + box.scale.z);
+	}
+
+	return sqDistance < sphere.radius * sphere.radius;
+}
+
+bool Collision::CheckSphere2AABB(const Sphere &sphere, const AABB &aabb, DirectX::XMVECTOR *inter)
+{
+	//í∑Ç≥ÇÃÇ◊Ç´èÊ
+	float sqLen = 0;
+	Vector3 spherePos = sphere.center;
+	if (spherePos.x < aabb.center.x) {
+		sqLen += (spherePos.x - aabb.center.x) * (spherePos.x - aabb.center.x);
+	}
+	else if (spherePos.x > aabb.center.x + aabb.length.x) {
+		sqLen += (spherePos.x - (aabb.center.x + aabb.length.x)) * (spherePos.x- (aabb.center.x + aabb.length.x));
+	}
+	if (spherePos.y < aabb.center.y) {
+		sqLen += (spherePos.y - aabb.center.y) * (spherePos.y - aabb.center.y);
+	}
+	else if (spherePos.y > aabb.center.y + aabb.length.y) {
+		sqLen += (spherePos.y - (aabb.center.y + aabb.length.y)) * (spherePos.y - (aabb.center.y + aabb.length.y));
+	}
+	if (spherePos.z < aabb.center.z) {
+		sqLen += (spherePos.z - aabb.center.z) * (spherePos.z - aabb.center.z);
+	}
+	else if (spherePos.z > aabb.center.z + aabb.length.z) {
+		sqLen += (spherePos.z - (aabb.center.z + aabb.length.z)) * (spherePos.z - (aabb.center.z + aabb.length.z));
+	}
+
+	//è’ìÀ
+	if (sqLen < sphere.radius * sphere.radius) {
+		if (inter) {
+			
+		}
+		return true;
+	}
+	return false;
+}
+
+bool Collision::CheckCapsule2Box(const Capsule& capsule, const Box& box)
+{
+	Vector3 vStartToEnd = capsule.endPosition - capsule.startPosition;
+
+	Vector3 n = vStartToEnd;
+	n.Normalize();
+
+	Vector3 boxMinPos = { box.center.m128_f32[0] - box.scale.x, box.center.m128_f32[1] - box.scale.y, box.center.m128_f32[2] - box.scale.z };
+	Vector3 boxMaxPos = { box.center.m128_f32[0] + box.scale.x, box.center.m128_f32[1] + box.scale.y, box.center.m128_f32[2] + box.scale.z };
+
+	float t = n.VDot(Vector3(boxMaxPos - capsule.startPosition));
+
+	Vector3 vPsPn = n * t;
+	Vector3 posPn = capsule.startPosition + vPsPn;
+
+	float lengthRate = t / vStartToEnd.Length();
+
+	float sqDistance = 0.0f;
+	float pos;
+	if (lengthRate < 0.0f)
+	{
+		pos = capsule.startPosition.x;
+		if (pos < boxMinPos.x)
+		{
+			sqDistance += (pos - boxMinPos.x) * (pos - boxMinPos.x);
+		}
+		else if (pos > boxMaxPos.x)
+		{
+			sqDistance += (pos - boxMaxPos.x) * (pos - boxMaxPos.x);
+		}
+
+		pos = capsule.startPosition.y;
+		if (pos < boxMinPos.y)
+		{
+			sqDistance += (pos - boxMinPos.y) * (pos - boxMinPos.y);
+		}
+		else if (pos > boxMaxPos.y)
+		{
+			sqDistance += (pos - boxMaxPos.y) * (pos - boxMaxPos.y);
+		}
+
+		pos = capsule.startPosition.z;
+		if (pos < boxMinPos.z)
+		{
+			sqDistance += (pos - boxMinPos.z) * (pos - boxMinPos.z);
+		}
+		else if (pos > boxMaxPos.z)
+		{
+			sqDistance += (pos - boxMaxPos.z) * (pos - boxMaxPos.z);
+		}
+	}
+	else if (lengthRate <= 1.0f)
+	{
+		pos = posPn.x;
+		if (pos < boxMinPos.x)
+		{
+			sqDistance += (pos - boxMinPos.x) * (pos - boxMinPos.x);
+		}
+		else if (pos > boxMaxPos.x)
+		{
+			sqDistance += (pos - boxMaxPos.x) * (pos - boxMaxPos.x);
+		}
+
+		pos = posPn.y;
+		if (pos < boxMinPos.y)
+		{
+			sqDistance += (pos - boxMinPos.y) * (pos - boxMinPos.y);
+		}
+		else if (pos > boxMaxPos.y)
+		{
+			sqDistance += (pos - boxMaxPos.y) * (pos - boxMaxPos.y);
+		}
+
+		pos = posPn.z;
+		if (pos < boxMinPos.z)
+		{
+			sqDistance += (pos - boxMinPos.z) * (pos - boxMinPos.z);
+		}
+		else if (pos > boxMaxPos.z)
+		{
+			sqDistance += (pos - boxMaxPos.z) * (pos - boxMaxPos.z);
+		}
+	}
+	else
+	{
+		pos = capsule.endPosition.x;
+		if (pos < boxMinPos.x)
+		{
+			sqDistance += (pos - boxMinPos.x) * (pos - boxMinPos.x);
+		}
+		else if (pos > boxMaxPos.x)
+		{
+			sqDistance += (pos - boxMaxPos.x) * (pos - boxMaxPos.x);
+		}
+
+		pos = capsule.endPosition.y;
+		if (pos < boxMinPos.y)
+		{
+			sqDistance += (pos - boxMinPos.y) * (pos - boxMinPos.y);
+		}
+		else if (pos > boxMaxPos.y)
+		{
+			sqDistance += (pos - boxMaxPos.y) * (pos - boxMaxPos.y);
+		}
+
+		pos = capsule.endPosition.z;
+		if (pos < boxMinPos.z)
+		{
+			sqDistance += (pos - boxMinPos.z) * (pos - boxMinPos.z);
+		}
+		else if (pos > boxMaxPos.z)
+		{
+			sqDistance += (pos - boxMaxPos.z) * (pos - boxMaxPos.z);
+		}
+	}
+
+	return sqDistance < capsule.radius* capsule.radius;
 }

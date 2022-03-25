@@ -295,10 +295,18 @@ bool Input::PushPadStickLeft()
 	return false;
 }
 
-XMFLOAT2& Input::PadStickGradient()
+XMFLOAT2& Input::PadStickGradient(const float &deadzone)
 {
-	float x = padData.lX / 1000;
-	float y = padData.lY / 1000;
+
+	float x = padData.lX / 1000.0f;
+	float y = padData.lY / 1000.0f;
+	if (fabsf(x) < deadzone) {
+		x = 0.0f;
+	}
+	if (fabsf(y) < deadzone) {
+		y = 0.0f;
+	}
+	//0.0f~1.0fの範囲でreturn
 	return XMFLOAT2(x, y);
 }
 
@@ -328,7 +336,7 @@ bool Input::TriggerPadRight()
 	return false;
 }
 
-bool Input::PushPadKey(PadKey keyNumber)
+bool Input::PushPadButton(PadKey keyNumber)
 {
 	// 0でなければ押している
 	if (padData.rgbButtons[keyNumber])
@@ -340,7 +348,7 @@ bool Input::PushPadKey(PadKey keyNumber)
 	return false;
 }
 
-bool Input::TriggerPadKey(PadKey keyNumber)
+bool Input::TriggerPadButton(PadKey keyNumber)
 {
 	// 前回が0で、今回が0でなければトリガー
 	if (!padDataPre.rgbButtons[keyNumber] && padData.rgbButtons[keyNumber])

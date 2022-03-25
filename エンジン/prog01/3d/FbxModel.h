@@ -132,4 +132,8 @@ private:
 	D3D12_INDEX_BUFFER_VIEW ibView = {};
 	//SRV用デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
+
+
+	// メッシュコンテナ
+	//std::vector<std::unique_ptr<Mesh>> meshes;
 };

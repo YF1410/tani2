@@ -1,10 +1,17 @@
 #include "MapChip.h"
 
-void MapChip::CsvLoad(int mapChipMaxX, int mapChipMaxY, std::string fName)
+const std::string MapChip::baseDirectory = "Resources/Map/";
+
+void MapChip::Initialize()
 {
-	std::ifstream ifs(fName);
+	CsvLoad(TEST_MAP, "testMap",33,20);
+}
+
+void MapChip::CsvLoad(MAP_NAME mapName, std::string fName, int mapChipMaxX, int mapChipMaxY)
+{
+	std::ifstream ifs(baseDirectory + fName + ".csv");
+	MAP_DATA loadData;
 	std::string line;
-	std::vector<int> csv;
 	while (getline(ifs, line))
 	{
 		std::istringstream stream(line);
@@ -16,36 +23,69 @@ void MapChip::CsvLoad(int mapChipMaxX, int mapChipMaxY, std::string fName)
 		}
 		for (auto i : result)
 		{
-			csv.push_back(i);
+			loadData.mapChip.push_back(i);
 		}
 	}
-	this->mapChipMaxX.push_back(mapChipMaxX);
-	this->mapChipMaxY.push_back(mapChipMaxY);
-	mapData.push_back(csv);
+	//ファイル名を保存
+	loadData.mapName = baseDirectory + fName + ".csv";
+	//Xの最大値を保存
+	loadData.wide = mapChipMaxX;
+	//Yの最大値を保存
+	loadData.high = mapChipMaxY;
+
+	//マップネームに対応した位置に格納
+	mapData[mapName] = loadData;
 }
 
-int MapChip::GetChipNum(int x, int y, int mapChipSize, int mapNumber)
+int MapChip::GetChipNum(int x, int y, MAP_NAME mapName)
 {
-	const int X = x / mapChipSize;
-	const int Y = y / mapChipSize;
-
-	if (X < 0 || X >= mapChipMaxX[mapNumber] || Y < 0 || Y >= mapChipMaxY[mapNumber])
+	if (x < 0 || x >= mapData[mapName].wide || y < 0 || y >= mapData[mapName].high)
 	{
 		assert(0);
 	}
 
-	std::vector<int> map = mapData[mapNumber];
+	std::vector<int> map = mapData[mapName].mapChip;
 
-	return map[Y * mapChipMaxX[mapNumber] + X];
+	return map[y * mapData[mapName].wide + x];
 }
 
-MapChip::MapChip()
+void MapChip::CreateStage(MAP_NAME mapName)
 {
+	for (int y = 0; y < mapData[mapName].high; y++) {
+		for (int x = 0; x < mapData[mapName].wide; x++) {
+			switch (MapChip::GetInstance()->GetChipNum(x, y, mapName))
+			{
+			case 0:		//0には何も配置しない
+				break;
+			case 1:		//1はベースブロック
+				mapChipObj[mapName].push_back(new BaseBlock(Vector3(200 * x, -200 * y, 0)));
 
+			default:
+				break;
+			}
+		}
+	}
 }
 
-MapChip::~MapChip()
+void MapChip::Update(MAP_NAME mapName)
 {
+	for (int i = 0; i < mapChipObj[mapName].size(); i++) {
+		mapChipObj[mapName][i]->Update();
+	}
+}
+
+void MapChip::Adaptation(MAP_NAME mapName)
+{
+	for (int i = 0; i < mapChipObj[mapName].size(); i++) {
+		mapChipObj[mapName][i]->Adaptation();
+	}
+}
+
+void MapChip::Draw(MAP_NAME mapName)
+{
+	for (int i = 0; i < mapChipObj[mapName].size(); i++) {
+		mapChipObj[mapName][i]->Draw();
+	}
 }
 
 MapChip* MapChip::GetInstance()

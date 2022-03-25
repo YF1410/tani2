@@ -14,10 +14,14 @@ private:
 public:
 	enum ModelName {
 		TESTS_TAGE,
-		TESTS_MAP_BLOCK,
+		DEFAULT_BLOCK,
+		PASSING_BLOCK,
+		
+
 		SLIME,
 		SLIME_BREAK,
 		ENEMY,
+
 
 		//最大数
 		MAX
@@ -31,6 +35,6 @@ public:
 	FbxModel *GetModel(ModelName modelName) { return model[modelName].get(); }
 
 private:
-	static std::map<ModelName, std::unique_ptr<FbxModel>> model;	//モデル格納マップ
+	static std::map<ModelManager::ModelName, std::unique_ptr<FbxModel>> model;	//モデル格納マップ
 };
 

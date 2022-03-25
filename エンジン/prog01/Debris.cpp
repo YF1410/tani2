@@ -5,55 +5,48 @@
 
 std::vector<Debris *> Debris::debris;
 
-Debris::Debris(XMFLOAT3 startPos, Vector3 startVec, float size):
-	pos(startPos),
-	moveVec(startVec),
+Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
+	GameObjCommon(
+		ModelManager::SLIME_BREAK,
+		GameObjCommon::DEBRIS,
+		true,
+		startPos
+	),
 	size(size),
-	isAttack(true),
 	isAlive(true),
-	airResistance(0,0,0)
+	isAttack(true)
 {
-	// 初期化
-	debriObj = FbxObject3d::Create(ModelManager::GetIns()->GetModel(SLIME));
 	//サイズからスケールへコンバート
 	scale = ConvertSizeToScale(size);
+	//初期加速度セット
+	velocity = startVec;
 	UpdateCollider();
 }
 
 void Debris::Update()
 {
-	{
-		//空気抵抗
-		airResistance = moveVec *0.01f;
-		moveVec -= airResistance;
-		//重力
-		moveVec.y -= 0.5f;
-	}
+	VelocityReset();
+
 	//攻撃終了
-	if (moveVec.Length() <= 10.0f && isAttack) {
+	if (velocity.Length() <= 10.0f && isAttack) {
 		isAttack = false;
 	}
 	
 	
-	afterPos = pos + moveVec;
 	//当たり判定更新
 	UpdateCollider();
 }
 
-void Debris::Adaptation()
+void Debris::VelocityReset()
 {
-	//描画位置決定
-	pos = afterPos;
-	debriObj->SetPosition(pos);
-	debriObj->SetScale(scale);
-	//全て適応
-	debriObj->Update();
+	//空気抵抗
+	airResistance = velocity * 0.01f;
+	velocity -= airResistance;
+	//重力
+	velocity.y -= gravityPow;
+
 }
 
-void Debris::Draw()
-{
-	debriObj->Draw(DirectXCommon::GetInstance()->GetCommandList());
-}
 
 void Debris::StaticUpdate()
 {
@@ -71,7 +64,7 @@ void Debris::StaticUpdate()
 	}
 }
 
-void Debris::StaticReflection()
+void Debris::StaticAdaptation()
 {
 	for (int i = 0; i < debris.size(); i++) {
 		debris[i]->Adaptation();
@@ -87,18 +80,17 @@ void Debris::StaticDraw()
 
 void Debris::UpdateCollider()
 {
-	//移動後の位置予測
-	afterPos = pos + moveVec;
+	Move();
 	//見た目nに近い判定
-	collider.realSphere.center = afterPos;
-	collider.realSphere.radius = scale * 150.0f;
+	collider.realSphere.center = pos;
+	collider.realSphere.radius = scale.x * 150.0f;
 	//攻撃用判定
-	collider.attackSphere.center = afterPos;
-	collider.attackSphere.radius = scale * 180.0f;
+	collider.attackSphere.center = pos;
+	collider.attackSphere.radius = scale.x * 180.0f;
 
 	//吸収用
-	collider.hitSphere.center = afterPos;
-	collider.hitSphere.radius = scale * 150.0f;
+	collider.hitSphere.center = pos;
+	collider.hitSphere.radius = scale.x * 150.0f;
 }
 
 void Debris::Bounse(
@@ -107,14 +99,19 @@ void Debris::Bounse(
 )
 {
 	pos = hitPos + normal * collider.realSphere.radius;
-	moveVec = CalcReflectVector(moveVec, normal);
+	velocity = CalcReflectVector(velocity, normal);
+	//跳ね返りが一定以下ならバウンドを停止
+	if (velocity.Length() <= 10.0f) {
+		velocity = 0;
+	}
+
 	UpdateCollider();
 }
 
 void Debris::SuckedPlayer(const Vector3 &playerPos,const float &suckedRadius)
 {
 	//移動開始
-	moveVec += Vector3(playerPos- pos).Normalize() * 3.0f;
+	velocity += Vector3(playerPos- pos).Normalize() * 3.0f;
 }
 
 float Debris::AbsorbedToPlayer()

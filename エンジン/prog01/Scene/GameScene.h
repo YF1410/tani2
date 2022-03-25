@@ -8,10 +8,8 @@
 #include "Object3d.h"
 #include "DebugText.h"
 #include "Audio.h"
-#include "Model.h"
 #include "ParticleManager.h"
 #include "ParticleEmitter.h"
-#include "CollisionPrimitive.h"
 #include "Camera.h"
 #include "LightGroup.h"
 #include "FbxObject3d.h"
@@ -28,7 +26,6 @@
 
 
 class CollisionManager;
-class Player;
 class ContactableObject;
 
 class GameScene : public BaseScene {
@@ -62,13 +59,16 @@ public: // メンバ関数
 
 
 private:	//当たり判定系関数
-	void AttackDebrisToEnemy();	//破片と敵
-	void PlayerToDebris();	//プレイヤーと破片
+	//void AttackDebrisToEnemy();	//破片と敵
+	//void PlayerToDebris();	//プレイヤーと破片
 
 
 private: // メンバ変数
 	//カメラ
 	std::unique_ptr<Camera> camera;
+	
+	const Vector3 eyeDistance = { 0,400,-1000 };
+	const Vector3 targetDistance = { 0,500,0 };
 	//スプライト
 	std::unique_ptr<Sprite> sprite;
 	//パーティクル
@@ -82,15 +82,13 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelPlane;
 	std::vector<std::unique_ptr<Object3d>> objects;
 
-	std::unique_ptr<FbxObject3d> fbxObject3d;
-	std::unique_ptr<FbxModel> fbxModel;
 	bool flag = false;
 
 
 	//ステージ
-	std::unique_ptr<FbxObject3d> testStage;
+	//std::unique_ptr<FbxObject3d> testStage;
 	//ステージのポリゴンデータ
-	std::vector<Triangle> stagePolygon;
+	//std::vector<Triangle> stagePolygon;
 
 	//ライト
 	std::unique_ptr<LightGroup> light;
@@ -101,12 +99,11 @@ private: // メンバ変数
 	float circleShadowFactorAngle[2] = { 0.0f, 0.5f };
 
 	float searchPlayerLen = 500.0f;
+
+
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;
-	//ステージとの当たり判定
-	bool CheckSphere2Mesh(Sphere &sphere,				//球
-		std::vector<Triangle> meshDate,					//メッシュデータ
-		XMVECTOR *HitPos = nullptr,			//衝突位置
-		Triangle *hitTriangle = nullptr	//衝突したポリゴン
-	);
+
+
+
 };

@@ -11,6 +11,8 @@
 #include "FbxLoader.h"
 #include "Camera.h"
 
+
+
 class FbxObject3d
 {
 protected: // エイリアス
@@ -79,6 +81,8 @@ public: // メンバ関数
 	void Update();
 	// 描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
+	// 行列の更新
+	void UpdateWorldMatrix();
 	//モデルを設定
 	void SetModel(FbxModel* model) { this->model = model; }
 	//モデルのゲッター
@@ -86,7 +90,7 @@ public: // メンバ関数
 	//アニメーションのロード
 	void LoadAnimation();
 	//アニメーション開始
-	void PlayAnimation(int animationNumber = 0);
+	void PlayAnimation(int animationNumber = 0 ,bool isLoop = true);
 
 	// 座標の取得
 	const XMFLOAT3& GetPos() { return position; }
@@ -104,6 +108,7 @@ public: // メンバ関数
 
 	XMMATRIX GetMatWorld() { return matWorld; }
 
+	
 protected: // メンバ変数
 	// 定数バッファ
 	ComPtr<ID3D12Resource> constBuffTransform;
@@ -129,6 +134,12 @@ protected: // メンバ変数
 	FbxTime currentTime;
 	//アニメーション再生中
 	bool isPlay = false;
+	//ループフラグ
+	bool isLoop = false;
 	//アニメーションの保存
 	std::vector<Animation> animationData;
+
+	//クラス名(デバック用)
+	const char *name = nullptr;
+	
 };

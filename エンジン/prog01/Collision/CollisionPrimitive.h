@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Vector3.h"
 #include <DirectXMath.h>
 
 struct Sphere //球
@@ -39,4 +39,34 @@ struct Ray //レイ(半直線)
 	DirectX::XMVECTOR start = { 0, 0, 0, 1 };
 	//方向
 	DirectX::XMVECTOR dir = { 1, 0, 0, 0 };
+};
+
+struct Capsule //カプセル
+{
+	//最初の球の中心座標
+	Vector3 startPosition;
+	//最後の球の中心座標
+	Vector3 endPosition;
+	//半径
+	float radius = 1.0f;
+};
+
+
+//
+//後でAABBに修正する。
+//
+struct Box //箱
+{
+	//中心座標
+	DirectX::XMVECTOR center = { 0,0,0,1 };
+	//半径
+	DirectX::XMFLOAT3 scale = { 1.0f, 1.0f, 1.0f };
+};
+
+//軸並行境界ボックス
+struct AABB {
+	//中心座標
+	Vector3 center = { 0,0,0 };
+	//集点座標
+	Vector3 length = { 1,1,1 };
 };
