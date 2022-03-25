@@ -63,8 +63,9 @@ public: // メンバ関数
 
 private:	//当たり判定系関数
 	void AttackDebrisToEnemy();	//破片と敵
+	void AttackEnemyToDebris();
+	void AttackEnemyToPlayer();
 	void PlayerToDebris();	//プレイヤーと破片
-
 
 private: // メンバ変数
 	//カメラ

@@ -78,11 +78,16 @@ void Enemy::Update() {
 			state = STAY;
 
 		}
-		else{
+		else {//if(ここにrayがオブジェクトに届けばの条件式を書く){
 			targetVec = Vector3(targetPos - pos);
 			targetVec.y = 0;
 			moveVec += targetVec.Normalize() * moveSpeed;
 		}
+
+		if (targetLength <= attackLength) {
+			state = ATTACK;
+		}
+
 		break;
 	case Enemy::ATTACK:
 

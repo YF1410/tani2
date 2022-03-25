@@ -64,7 +64,7 @@ void GameScene::Initialize() {
 	light->SetPointLightActive(1, false);
 	light->SetPointLightActive(2, false);
 	light->SetCircleShadowActive(0, true);
-	
+
 
 	// 3Dオブジェクト生成
 	playerObject = std::make_unique<PlayerObject>();
@@ -123,13 +123,13 @@ void GameScene::Update() {
 	camera->Update();
 
 	//入力更新
-	Input *input = Input::GetInstance();
-	
+	Input* input = Input::GetInstance();
+
 	//ライト更新
 	light->Update();
 	//ステージ更新
 	testStage->Update();
-	
+
 	//デバックテキスト
 	DebugText::GetInstance()->VariablePrint(0, 0, "playerSize", playerObject.get()->size, 3);
 	DebugText::GetInstance()->VariablePrint(0, 40, "DebrisCount", Debris::debris.size(), 3);
@@ -235,8 +235,7 @@ void GameScene::Draw() {
 	}
 }
 
-void GameScene::AttackDebrisToEnemy()
-{
+void GameScene::AttackDebrisToEnemy() {
 	for (int debrisNum = 0; debrisNum < Debris::debris.size(); debrisNum++) {
 		/*float minLength = Enemy::enemys[enemysNum]->sarchLength;
 		bool isHoming = false;*/
@@ -244,14 +243,14 @@ void GameScene::AttackDebrisToEnemy()
 		for (int enemysNum = 0; enemysNum < Enemy::enemys.size(); enemysNum++) {
 			//どちらも攻撃状態でなければエネミーを押し出し
 			if (!Debris::debris[debrisNum]->isAttack &&				//破片が攻撃状態ではなく
-				Enemy::enemys[enemysNum]->state !=Enemy::ATTACK &&	//エネミーが攻撃状態ではなく
-				
+				Enemy::enemys[enemysNum]->state != Enemy::ATTACK &&	//エネミーが攻撃状態ではなく
+
 				Collision::CheckSphere2Sphere(
-				Debris::debris[debrisNum]->collider.realSphere,	//破片の攻撃範囲
-				Enemy::enemys[enemysNum]->collider.realSphere		//エネミーのヒットスフィア	
-				//&hitPos,
-				//&hitNormal
-			)) {
+					Debris::debris[debrisNum]->collider.realSphere,	//破片の攻撃範囲
+					Enemy::enemys[enemysNum]->collider.realSphere		//エネミーのヒットスフィア	
+					//&hitPos,
+					//&hitNormal
+				)) {
 				//Enemy::enemys[enemysNum]->SetPos(hitPos + -hitNormal * Enemy::enemys[enemysNum]->collider.realSphere.radius);
 			}
 
@@ -262,11 +261,10 @@ void GameScene::AttackDebrisToEnemy()
 					Debris::debris[debrisNum]->collider.attackSphere,	//破片の攻撃範囲
 					Enemy::enemys[enemysNum]->collider.hitSphere,		//エネミーのヒットスフィア	
 					&hitPos
-				))
-			{
+				)) {
 				Vector3 hitNormal = hitPos - Enemy::enemys[enemysNum]->collider.hitSphere.center;
 				Debris::debris[debrisNum]->Bounse(hitPos, Vector3(hitNormal).Normalize());
-				if(Debris::debris[debrisNum]->isAttack){
+				if (Debris::debris[debrisNum]->isAttack) {
 					Debris::debris[debrisNum]->isAttackFlame = true;
 					Enemy::enemys[enemysNum]->Damage(1/*testダメージ*/);
 
@@ -300,8 +298,49 @@ void GameScene::AttackDebrisToEnemy()
 	}
 }
 
-void GameScene::PlayerToDebris()
-{
+void GameScene::AttackEnemyToDebris() {
+	for (int debrisNum = 0; debrisNum < Debris::debris.size(); debrisNum++) {
+		/*float minLength = Enemy::enemys[enemysNum]->sarchLength;
+		bool isHoming = false;*/
+
+		for (int enemysNum = 0; enemysNum < Enemy::enemys.size(); enemysNum++) {
+
+			//エネミーから破片への攻撃
+			if (!Debris::debris[debrisNum]->isAttack &&				//破片が攻撃状態ではなく
+				Collision::CheckSphere2Sphere(
+					Enemy::enemys[enemysNum]->collider.attackSphere,		//エネミーのヒットスフィア
+					Debris::debris[debrisNum]->collider.hitSphere		//破片の攻撃範囲
+				)) 			{
+				Debris::debris[debrisNum]->Damage(0.1f);
+			}
+
+			//エネミーから破片の探索
+			if (!Debris::debris[debrisNum]->isAttack &&			//攻撃中以外の破片を除外
+				Collision::CheckSphere2Sphere(
+					Debris::debris[debrisNum]->collider.realSphere,
+					Enemy::enemys[enemysNum]->collider.searchArea)) {
+				Ray ray;
+				Sphere s;
+				ray.start = Enemy::enemys[enemysNum]->GetPos();
+				ray.dir = Debris::debris[debrisNum]->pos - Enemy::enemys[enemysNum]->GetPos();
+				//距離が現在の最小値以下なら対象を更新
+				if (Collision::CheckRay2Sphere(ray,)) {
+					float length = Vector3(Debris::debris[debrisNum]->GetPos() - Enemy::enemys[enemysNum]->GetPos()).Length();
+				}
+
+				/*if(length < minLength){
+					isHoming = true;
+					Enemy::enemys[enemysNum]->HomingObjectCheck(Debris::debris[debrisNum]->GetPos());
+				}*/
+			}
+		}
+	}
+}
+
+void GameScene::AttackEnemyToPlayer() {
+}
+
+void GameScene::PlayerToDebris() {
 	//破片とプレイヤーの衝突
 	for (int i = 0; i < Debris::debris.size(); i++) {
 		//攻撃中の物とは判定をとらない
@@ -319,12 +358,11 @@ void GameScene::PlayerToDebris()
 
 
 bool GameScene::CheckSphere2Mesh(
-	Sphere &sphere,				//球
+	Sphere& sphere,				//球
 	std::vector<Triangle> meshDate,					//メッシュデータ
-	XMVECTOR *HitPos,			//衝突位置
-	Triangle *hitTriangle
-)
-{
+	XMVECTOR* HitPos,			//衝突位置
+	Triangle* hitTriangle
+) {
 	for (int polygonNum = 0; polygonNum < meshDate.size(); polygonNum++) {
 		if (Collision::CheckSphere2Triangle(sphere, meshDate[polygonNum], HitPos)) {
 			if (hitTriangle != nullptr) {
