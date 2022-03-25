@@ -3,21 +3,21 @@
 #include "Vector3.h"
 #include <vector>
 #include "Collision.h"
+#include "GameObjCommon.h"
 
-class Debris
+class Debris :
+	public GameObjCommon
 {
 public:
 	//コンストラクタ
-	Debris(XMFLOAT3 startPos,Vector3 startVec,float size);
+	Debris(Vector3 startPos,Vector3 startVec,float size);
 	//内部更新
 	void Update();
-	//最終更新
-	void Adaptation();
-	//描画
-	void Draw();
+	//移動量リセットをオーバーライド
+	void VelocityReset() override;
 	//コンテナ更新
 	static void StaticUpdate();
-	static void StaticReflection();
+	static void StaticAdaptation();
 	static void StaticDraw();
 
 public:		//衝突時関係
@@ -57,27 +57,13 @@ public:		//衝突時関係
 	//コンテナ
 	static std::vector<Debris *> debris;
 
-	Vector3 pos;
-	Vector3 moveVec;
-	
-
 	bool isAttackFlame;
 private:
-	//破片オブジェクト
-	std::unique_ptr<FbxObject3d> debriObj;
-
-	//計算用座標
-	//総移動量
-	//移動予想位置
-	Vector3 afterPos;
-
 	//空気抵抗
 	Vector3 airResistance;
 
 	//数値的な大きさ
 	float size;
-	//描画用大きさ
-	float scale;
 
 };
 

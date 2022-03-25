@@ -5,34 +5,40 @@
 #include <time.h>
 #include "Easing.h"
 
+//コライダー
+#include "SphereCollider.h"
+
 using namespace DirectX;
 std::vector<Enemy*> Enemy::enemys;
 
-Enemy::Enemy(XMFLOAT3 startPos):
-	pos(startPos),
-	state(STAY),
-	isAlive(true)
+Enemy::Enemy(XMFLOAT3 startPos) :
+	GameObjCommon(
+		ModelManager::ENEMY,	//エネミーモデルをセット
+		GameObjCommon::ENEMY,	//エネミーとして扱う
+		false,					//重力の影響を受ける
+		startPos				//初期位置をセット
+	)
 {
-	//初期化
-	enemyObj = FbxObject3d::Create(ModelManager::GetIns()->GetModel(ENEMY));
-	//coreObj->SetScale({ 50.0f ,50.0f,50.0f });
-	//sphereObj->SetScale({ 360.0f ,360.0f,360.0f });
-
+	isAlive = true;
 	scale = 1.0f;
 	HP = 3;
 	minTargetLength = holmingLength;
+	state = STAY;
 	//乱数初期化
 	srand(time(NULL));
-	//当たり判定セット
-	UpdateCollider();
+	//当たり判定初期化
+	float radius = 100;
+	SetCollider(new SphereCollider(XMVECTOR{ 0,radius,0 }, radius));
 }
 
-Enemy::~Enemy() {
+
+void Enemy::Initialize()
+{
 }
 
 void Enemy::Update() {
 	//移動量初期化
-	moveVec = { 0,0,0 };
+	velocity = { 0,0,0 };
 
 	//State別処理
 	switch (state)
@@ -44,11 +50,11 @@ void Enemy::Update() {
 	case Enemy::STAY:		//待機
 		//待機時間を経過させる
 		stayTime++;
-		
+
 		if (isPlayerContact) {		//待機時間に関係なくプレイヤーを察知していればHOMINGへ以降
 			state = HOMING;
 		}
-		else if(stayTime >= maxStayTime) {
+		else if (stayTime >= maxStayTime) {
 			//角度をランダムで決定
 			moveRad = XMConvertToRadians(static_cast<float>(rand() % 360));
 			stayTime = 0;
@@ -60,10 +66,10 @@ void Enemy::Update() {
 	case Enemy::WANDERING:	//うろうろする
 		//移動時間を経過させる
 		moveTime++;
-		
+
 		//ランダムな方向へと移動する
-		moveVec.x += cos(moveRad) * moveSpeed;
-		moveVec.z += sin(moveRad) * moveSpeed;
+		velocity.x += cos(moveRad) * moveSpeed;
+		velocity.z += sin(moveRad) * moveSpeed;
 
 		//一定時間移動したらSATYに移行
 		if (moveTime >= maxMoveTime) {
@@ -81,7 +87,7 @@ void Enemy::Update() {
 		else {//if(ここにrayがオブジェクトに届けばの条件式を書く){
 			targetVec = Vector3(targetPos - pos);
 			targetVec.y = 0;
-			moveVec += targetVec.Normalize() * moveSpeed;
+			velocity += targetVec.Normalize() * moveSpeed;
 		}
 
 		if (targetLength <= attackLength) {
@@ -109,7 +115,7 @@ void Enemy::Update() {
 	if (isInvincible) {
 		InvincibleTimer++;
 		if (InvincibleTimer <= 20) {
-			scale = Ease(In,Back, (float)(InvincibleTimer / 20.0f), 1.0f, 0.7f);
+			scale = Ease(In, Back, (float)(InvincibleTimer / 20.0f), 1.0f, 0.7f);
 		}
 		if (20 < InvincibleTimer && InvincibleTimer <= 40) {
 			scale = Ease(In, Back, (float)((InvincibleTimer - 20.0f) / 20.0f), 0.7f, 1.2f);
@@ -123,23 +129,19 @@ void Enemy::Update() {
 			isInvincible = false;
 		}
 	}
-
-	enemyObj->Update();
-	UpdateCollider();
+	Move();
 }
 
-void Enemy::Adaptation()
+void Enemy::OnCollision(const CollisionInfo &info)
 {
-	//描画位置決定
-	pos = afterPos;
-	
-	enemyObj->SetScale(scale);
-	enemyObj->SetPosition(pos);
-	enemyObj->Update();
-}
-
-void Enemy::Draw() {
-	enemyObj->Draw((DirectXCommon::GetInstance()->GetCommandList()));
+	switch (info.object->Tag)
+	{
+	case Player:
+		Damage(1.0f);
+		break;
+	default:
+		break;
+	}
 }
 
 void Enemy::StaticUpdate() {
@@ -167,25 +169,6 @@ void Enemy::StaticDraw() {
 	for (int i = 0; i < enemys.size(); i++) {
 		enemys[i]->Draw();
 	}
-}
-
-void Enemy::UpdateCollider()
-{
-	//移動後の位置予測
-	afterPos = pos + moveVec;
-
-	//索敵範囲用判定
-	collider.searchArea.center = afterPos;
-	collider.searchArea.radius = sarchLength;
-	//当たり判定
-	collider.hitSphere.center = afterPos + Vector3{0,20,0};
-	collider.hitSphere.radius = 20.0f;
-	//攻撃判定
-	collider.attackSphere.center = afterPos;
-	collider.attackSphere.radius = 20.0f;
-	//見た目に近い判定
-	collider.realSphere.center = afterPos;
-	collider.realSphere.radius = 20.0f;
 }
 
 void Enemy::Damage(float damage)

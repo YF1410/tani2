@@ -41,6 +41,15 @@ struct Vector3 : public XMFLOAT3 {
 		return *this;
 	}
 
+	Vector3 operator*=(const float &r) {
+		*this = *this * r;
+		return *this;
+	}
+
+	Vector3 operator=(const float &r) {
+		*this = Vector3(r,r,r);
+		return *this;
+	}
 	// ベクトルの内積
 	float VDot(Vector3 In) const { return x * In.x + y * In.y + z * In.z; }
 	// ベクトルの外積

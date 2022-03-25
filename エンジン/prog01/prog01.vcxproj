@@ -261,10 +261,12 @@
     <ClCompile Include="3d\ParticleEmitter.cpp" />
     <ClCompile Include="3d\ParticleManager.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
+    <ClCompile Include="BaseBlock.cpp" />
     <ClCompile Include="Base\BaseGame.cpp" />
     <ClCompile Include="Base\DirectXCommon.cpp" />
     <ClCompile Include="Base\MyGame.cpp" />
     <ClCompile Include="Base\WinApp.cpp" />
+    <ClCompile Include="AABBCollider.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Collision\Collision.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
@@ -280,12 +282,11 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameObject\ContactableObject.cpp" />
     <ClCompile Include="GameObject\Ease.cpp" />
+    <ClCompile Include="GameObject\GameObjCommon.cpp" />
     <ClCompile Include="GameObject\MapChip.cpp" />
-    <ClCompile Include="GameObject\Player.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
-    <ClCompile Include="PlayerTestScene.cpp" />
     <ClCompile Include="Scene\ClearScene.cpp" />
     <ClCompile Include="Scene\GameOverScene.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
@@ -309,12 +310,14 @@
     <ClInclude Include="3d\ParticleEmitter.h" />
     <ClInclude Include="3d\ParticleManager.h" />
     <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="BaseBlock.h" />
     <ClInclude Include="Base\BaseGame.h" />
     <ClInclude Include="Base\BaseScene.h" />
     <ClInclude Include="Base\DirectXCommon.h" />
     <ClInclude Include="Base\MyGame.h" />
     <ClInclude Include="Base\SafeDelete.h" />
     <ClInclude Include="Base\WinApp.h" />
+    <ClInclude Include="AABBCollider.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="CircleShadow.h" />
     <ClInclude Include="Collision\BaseCollider.h" />
@@ -332,11 +335,10 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameObject\ContactableObject.h" />
     <ClInclude Include="GameObject\Ease.h" />
+    <ClInclude Include="GameObject\GameObjCommon.h" />
     <ClInclude Include="GameObject\MapChip.h" />
-    <ClInclude Include="GameObject\Player.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="PlayerObject.h" />
-    <ClInclude Include="PlayerTestScene.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Scene\AbstractSceneFactory.h" />
     <ClInclude Include="Scene\ClearScene.h" />

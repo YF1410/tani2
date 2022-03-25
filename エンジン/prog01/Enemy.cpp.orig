@@ -1,76 +1,199 @@
 #include "Enemy.h"
-<<<<<<< HEAD
-#include "Input.h"
+#include "ModelManager.h"
+#include "DirectXCommon.h"
 #include <stdlib.h>
 #include <time.h>
+#include "Easing.h"
+
+//コライダー
+#include "SphereCollider.h"
 
 using namespace DirectX;
+std::vector<Enemy*> Enemy::enemys;
 
-Enemy::Enemy() {
-	//エネミーのコア
-	coreModel = Model::CreateFromObject("chr_sword");
-	coreObj = Object3d::Create(coreModel.get());
-	//当たり判定可視化
-	sphereModel = Model::CreateFromObject("sphere", true);
-	sphereModel->SetAlpha(0.5f);
-	sphereObj = Object3d::Create(sphereModel.get());
-	sphereObj->SetPosition({ 0, 0.6f, 0 });
+Enemy::Enemy(XMFLOAT3 startPos) :
+	GameObjCommon(
+		ModelManager::ENEMY,	//エネミーモデルをセット
+		GameObjCommon::ENEMY,	//エネミーとして扱う
+		false,					//重力の影響を受ける
+		startPos				//初期位置をセット
+	)
+{
+	isAlive = true;
+	scale = 1.0f;
+	HP = 3;
+	minTargetLength = holmingLength;
+	state = STAY;
 	//乱数初期化
 	srand(time(NULL));
+	//当たり判定初期化
+	float radius = 100;
+	SetCollider(new SphereCollider(XMVECTOR{ 0,radius,0 }, radius));
 }
 
-Enemy::~Enemy() {
+
+void Enemy::Initialize()
+{
 }
 
 void Enemy::Update() {
-	Input* input = Input::GetInstance();
+	//移動量初期化
+	velocity = { 0,0,0 };
 
-	//今後time管理
-	if (input->TriggerKey(DIK_SPACE)) {
-		//プレイヤーとの距離より索敵範囲が短ければうろうろする為にangleに乱数代入
-		//if (searchPlayerLen <= ) {
-		srand(time(NULL));
-			angle = static_cast<float>(rand() % 360);
+	//State別処理
+	switch (state)
+	{
+	case Enemy::NOUPDATE:
+		//画面外にいるときは更新しない
+		return;
+		break;
+	case Enemy::STAY:		//待機
+		//待機時間を経過させる
+		stayTime++;
+
+		if (isPlayerContact) {		//待機時間に関係なくプレイヤーを察知していればHOMINGへ以降
+			state = HOMING;
+		}
+		else if (stayTime >= maxStayTime) {
+			//角度をランダムで決定
+			moveRad = XMConvertToRadians(static_cast<float>(rand() % 360));
+			stayTime = 0;
+			state = WANDERING;
+		}
+
+		break;
+
+	case Enemy::WANDERING:	//うろうろする
+		//移動時間を経過させる
+		moveTime++;
+
+		//ランダムな方向へと移動する
+		velocity.x += cos(moveRad) * moveSpeed;
+		velocity.z += sin(moveRad) * moveSpeed;
+
+		//一定時間移動したらSATYに移行
+		if (moveTime >= maxMoveTime) {
 			moveTime = 0;
-			playerContact = false;
-		//}
-		//索敵範囲よりプレイヤーとの距離が短ければそちらに移動するようにangleに値を代入
-		/*else if (searchPlayerLen >= ) {
-			angle = atan2(playerPosy - coreObj->GetPosition().y, playerPosx - coreObj->GetPosition().x);
-			playerContact = true;
-		}*/
-	}
+			state = STAY;
+		}
+		break;
+	case Enemy::HOMING:
+		//ターゲットが消滅していた場合や追跡範囲を外れたときはSTAYに移行
+		if (targetLength >= holmingLength) {
+			minTargetLength = holmingLength;
+			state = STAY;
 
-	//うろうろする時間を加算してカウント
-	moveTime += 1;
-
-	//プレイヤーを見つけていなければ一定時間うろうろ
-	if (moveTime <= maxMoveTime && playerContact == false) {
-		enemyMove();
-	}
-	//見つけていれば時間関係無しに追いかけ続ける
-	if (playerContact == true) {
-		enemyMove();
-	}
-
-	coreObj->Update();
-	sphereObj->Update();
-}
-
-void Enemy::Draw() {
-	coreObj->Draw();
-	sphereObj->Draw();
-}
-
-void Enemy::enemyMove() {
-	float rad = XMConvertToRadians(angle);//(angle * 3.14159265359f / 180.0f) * -1;
-	XMFLOAT3 enemyPos = coreObj->GetPosition();
-
-	enemyPos.x += cos(rad) * speed;
-	enemyPos.y += sin(rad) * speed;
-
-	coreObj->SetPosition(enemyPos);
-	sphereObj->SetPosition({ enemyPos.x, enemyPos.y + 0.6f, enemyPos.z });
-}
+		}
+<<<<<<< HEAD
+		else {//if(ここにrayがオブジェクトに届けばの条件式を書く){
 =======
->>>>>>> 668177489f2abee1951198cb55ec7c7c4ffc91ea
+		else {
+>>>>>>> af761a078badf521ffa881b0129f6a86eb655545
+			targetVec = Vector3(targetPos - pos);
+			targetVec.y = 0;
+			velocity += targetVec.Normalize() * moveSpeed;
+		}
+
+		if (targetLength <= attackLength) {
+			state = ATTACK;
+		}
+
+		break;
+	case Enemy::ATTACK:
+
+		if (true) {
+			state = STAY;
+		}
+		break;
+	case Enemy::DEAD:
+		isAlive = false;
+
+		break;
+	default:
+		break;
+	}
+
+	//共通処理
+
+	//無敵時間タイマーを管理
+	if (isInvincible) {
+		InvincibleTimer++;
+		if (InvincibleTimer <= 20) {
+			scale = Ease(In, Back, (float)(InvincibleTimer / 20.0f), 1.0f, 0.7f);
+		}
+		if (20 < InvincibleTimer && InvincibleTimer <= 40) {
+			scale = Ease(In, Back, (float)((InvincibleTimer - 20.0f) / 20.0f), 0.7f, 1.2f);
+		}
+		if (40 < InvincibleTimer && InvincibleTimer <= 60) {
+			scale = Ease(Out, Bounce, (float)((InvincibleTimer - 40.0f) / 20.0f), 1.2f, 1.0f);
+		}
+
+		//タイマーが30になったら無敵を解除
+		if (InvincibleTimer >= 60) {
+			isInvincible = false;
+		}
+	}
+	Move();
+}
+
+void Enemy::OnCollision(const CollisionInfo &info)
+{
+	switch (info.object->Tag)
+	{
+	case Player:
+		Damage(1.0f);
+		break;
+	default:
+		break;
+	}
+}
+
+void Enemy::StaticUpdate() {
+
+	//削除
+	for (int i = enemys.size() - 1; i >= 0; i--) {
+		if (!enemys[i]->isAlive) {
+			delete enemys[i];
+			enemys.erase(enemys.begin() + i);
+		}
+	}
+	//更新
+	for (int i = 0; i < enemys.size(); i++) {
+		enemys[i]->Update();
+	}
+}
+
+void Enemy::StaticAdaptation() {
+	for (int i = 0; i < enemys.size(); i++) {
+		enemys[i]->Adaptation();
+	}
+}
+
+void Enemy::StaticDraw() {
+	for (int i = 0; i < enemys.size(); i++) {
+		enemys[i]->Draw();
+	}
+}
+
+void Enemy::Damage(float damage)
+{
+	//無敵時間中は処理を中断
+	if (isInvincible) { return; }
+	//ダメージを受ける
+	HP -= damage;
+	//HPが0以下になったら死亡状態へ以降
+	if (HP < 0) {
+		state = DEAD;
+	}
+	else{
+		//無敵時間をセットする
+		isInvincible = true;
+		InvincibleTimer = 0;
+	}
+}
+
+void Enemy::HomingObjectCheck(Vector3 targetPos)
+{
+	this->targetPos = targetPos;
+	state = HOMING;
+}

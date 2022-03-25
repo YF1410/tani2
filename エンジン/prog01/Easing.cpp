@@ -78,21 +78,31 @@ static double (*FuncPtr[12])(double t)
 };
 
 
-double Ease(type Type, ease Ease, double t, double start, double end)
+double Ease(type InOutType, ease EaseType, double t, double start, double end)
 {
-    if (Type == In)
+    if (InOutType == In)
     {
-        return (end - start) * FuncPtr[Ease](t) + start;
+        return (end - start) * FuncPtr[EaseType](t) + start;
     }
-    else if (Type == Out)
+    else if (InOutType == Out)
     {
-        return (end - start) * (1 - FuncPtr[Ease](1 - t)) + start;
+        return (end - start) * (1 - FuncPtr[EaseType](1 - t)) + start;
     }
-    else if (Type == InOut)
+    else if (InOutType == InOut)
     {
         if (t < 0.5)
-            return (end - start) * (FuncPtr[Ease](t * 2) / 2) + start;
+            return (end - start) * (FuncPtr[EaseType](t * 2) / 2) + start;
 
-        return (end - start) * (1 - FuncPtr[Ease](2 - 2 * t) / 2) + start;
+        return (end - start) * (1 - FuncPtr[EaseType](2 - 2 * t) / 2) + start;
     }
+}
+
+Vector3 Ease(type InOutType, ease EaseType, double t, Vector3 start, Vector3 end)
+{
+    Vector3 result;
+    result.x = Ease(InOutType, EaseType, t, start.x, end.x);
+    result.y = Ease(InOutType, EaseType, t, start.y, end.y);
+    result.z = Ease(InOutType, EaseType, t, start.z, end.z);
+
+    return result;
 }

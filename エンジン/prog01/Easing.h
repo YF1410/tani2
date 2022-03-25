@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector3.h"
 
 enum type
 {
@@ -26,3 +27,4 @@ namespace EasingFunction
 }
 
 double Ease(type Type, ease Ease, double t, double start,double end);
+Vector3 Ease(type Type, ease Ease, double t, Vector3 start, Vector3 end);

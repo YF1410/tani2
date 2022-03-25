@@ -11,11 +11,11 @@ public:
 	MeshCollider()
 	{
 		// メッシュ形状をセット
-		shapeType = COLLISIONSHAPE_MESH;
+		shapeType = SHAPE_MESH;
 	}
 
 	// 三角形の配列を構築する
-	void ConstructTriangles(Model* model);
+	void ConstructTriangles(FbxModel* model);
 	// 更新
 	void Update() override;
 	// 球との当たり判定

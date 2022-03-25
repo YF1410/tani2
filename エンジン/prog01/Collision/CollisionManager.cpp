@@ -27,24 +27,70 @@ void CollisionManager::CheckAllCollisions()
 			BaseCollider* colA = *itA;
 			BaseCollider* colB = *itB;
 
-			// ともに球
-			if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE &&
-				colB->GetShapeType() == COLLISIONSHAPE_SPHERE)
+			//自分同士の衝突や、コライダー未設定の者は無視する
+			if (itB == itA ||
+				colA->GetShapeType() == SHAPE_UNKNOWN ||
+				colB->GetShapeType() == SHAPE_UNKNOWN) {
+				continue;
+			}
+
+			int collisions = colA->GetShapeType() | colB->GetShapeType();
+
+			//同じモノ同士の処理から
+			//ともに点
+			if (collisions == SHAPE_POINT) 
+			{
+
+			}
+			//ともに球
+			else if (collisions == SHAPE_SPHERE)
 			{
 				Sphere* SphereA = dynamic_cast<Sphere*>(colA);
 				Sphere* SphereB = dynamic_cast<Sphere*>(colB);
 				DirectX::XMVECTOR inter;
+				//判定
 				if (Collision::CheckSphere2Sphere(*SphereA, *SphereB, &inter))
 				{
 					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter));
 					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter));
 				}
 			}
-			else if (colA->GetShapeType() == COLLISIONSHAPE_MESH &&
-				colB->GetShapeType() == COLLISIONSHAPE_SPHERE)
+
+			//異なる組み合わせ
+			//球とAABB
+			else if (collisions == (SHAPE_SPHERE | SHAPE_AABB)) {
+				Sphere *sohereCollider;
+				AABB *boxCollider;
+				//引数様に変換合わせる
+				if (colA->GetShapeType() == SHAPE_SPHERE) {
+					sohereCollider = dynamic_cast<Sphere *>(colA);
+					boxCollider = dynamic_cast<AABB *>(colB);
+				}
+				else {
+					sohereCollider = dynamic_cast<Sphere *>(colB);
+					boxCollider = dynamic_cast<AABB *>(colA);
+				}
+				DirectX::XMVECTOR inter;
+				//判定
+				if (Collision::CheckSphere2AABB(*sohereCollider, *boxCollider)) {
+					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter));
+					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter));
+				}
+			}
+			//球とメッシュ
+			else if (collisions == (SHAPE_SPHERE | SHAPE_MESH))
 			{
-				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colA);
-				Sphere* sphere = dynamic_cast<Sphere*>(colB);
+				MeshCollider* meshCollider;
+				Sphere *sphere;
+				//引数様に変換合わせる
+				if (colA->GetShapeType() == SHAPE_MESH) {
+					meshCollider = dynamic_cast<MeshCollider *>(colA);
+					sphere = dynamic_cast<Sphere *>(colB);
+				}
+				else {
+					meshCollider = dynamic_cast<MeshCollider *>(colB);
+					sphere = dynamic_cast<Sphere *>(colA);
+				}
 				DirectX::XMVECTOR inter;
 				if (meshCollider->CheckCollisionSphere(*sphere, &inter))
 				{
@@ -52,14 +98,25 @@ void CollisionManager::CheckAllCollisions()
 					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter));
 				}
 			}
-			else if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE &&
-				colB->GetShapeType() == COLLISIONSHAPE_MESH)
-			{
-				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colB);
-				Sphere* sphere = dynamic_cast<Sphere*>(colA);
+
+			
+			//カプセル系
+			//カプセルとAABB
+			else if (collisions == (SHAPE_CAPSULE | SHAPE_AABB)) {
+				Capsule *capsuleCollider;
+				Box *boxCollider;
+				//引数様に変換合わせる
+				if (colA->GetShapeType() == SHAPE_CAPSULE) {
+					capsuleCollider = dynamic_cast<Capsule *>(colA);
+					boxCollider = dynamic_cast<Box *>(colB);
+				}
+				else {
+					capsuleCollider = dynamic_cast<Capsule *>(colB);
+					boxCollider = dynamic_cast<Box *>(colA);
+				}
 				DirectX::XMVECTOR inter;
-				if (meshCollider->CheckCollisionSphere(*sphere, &inter))
-				{
+				//判定
+				if (Collision::CheckCapsule2Box(*capsuleCollider, *boxCollider)) {
 					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter));
 					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter));
 				}
@@ -99,7 +156,7 @@ bool CollisionManager::Raycast(const Ray& ray, unsigned short attribute, Raycast
 		}
 
 		//球の場合
-		if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE)
+		if (colA->GetShapeType() == SHAPE_SPHERE)
 		{
 			Sphere* sphere = dynamic_cast<Sphere*>(colA);
 
@@ -116,7 +173,7 @@ bool CollisionManager::Raycast(const Ray& ray, unsigned short attribute, Raycast
 			inter = tempInter;
 			it_hit = it;
 		}
-		else if (colA->GetShapeType() == COLLISIONSHAPE_MESH)
+		else if (colA->GetShapeType() == SHAPE_MESH)
 		{
 			MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colA);
 		
@@ -163,7 +220,7 @@ void CollisionManager::QuerySphere(const Sphere& sphere, QueryCallback* callback
 		}
 
 		// 球
-		if (col->GetShapeType() == COLLISIONSHAPE_SPHERE)
+		if (col->GetShapeType() == SHAPE_SPHERE)
 		{
 			Sphere* sphereB = dynamic_cast<Sphere*>(col);
 
@@ -186,7 +243,7 @@ void CollisionManager::QuerySphere(const Sphere& sphere, QueryCallback* callback
 			}
 		}
 		// メッシュ
-		else if (col->GetShapeType() == COLLISIONSHAPE_MESH)
+		else if (col->GetShapeType() == SHAPE_MESH)
 		{
 			MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(col);
 
