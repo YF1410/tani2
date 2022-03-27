@@ -10,6 +10,7 @@
 #include "FbxModel.h"
 #include "FbxLoader.h"
 #include "Camera.h"
+#include "LightGroup.h"
 
 
 
@@ -61,12 +62,15 @@ public: // 静的メンバ関数
 	// setter
 	static void SetDevice(ID3D12Device* device) { FbxObject3d::device = device; }
 	static void SetCamera(Camera* camera) { FbxObject3d::camera = camera; }
+	static void SetLight(LightGroup* light) { FbxObject3d::light = light; }
 
 private: // 静的メンバ変数
 	// デバイス
 	static ID3D12Device* device;
 	// カメラ
 	static Camera* camera;
+	//ライト
+	static LightGroup* light;
 	// ルートシグネチャ
 	static ComPtr<ID3D12RootSignature> rootsignature;
 	// パイプラインステートオブジェクト
