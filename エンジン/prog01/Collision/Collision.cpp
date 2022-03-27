@@ -518,3 +518,8 @@ bool Collision::CheckCapsule2Box(const Capsule& capsule, const Box& box)
 
 	return sqDistance < capsule.radius* capsule.radius;
 }
+
+bool Collision::CheckLine2Box(const Line& line, const AABB& aabb)
+{
+	return false;
+}
