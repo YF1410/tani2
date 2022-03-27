@@ -70,3 +70,12 @@ struct AABB {
 	//集点座標
 	Vector3 length = { 1,1,1 };
 };
+
+struct Line {
+	//始点
+	Vector3 start = { 0,0,0 };
+	//終点
+	Vector3 end = { 0,0,0 };
+	//ベクトル
+	Vector3 vec = { 0,0,0 };
+};

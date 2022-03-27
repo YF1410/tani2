@@ -139,6 +139,14 @@ void GameScene::Update() {
 
 	// 全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
+
+	line.start = Enemy::enemys[0]->GetPos();
+	line.end = playerObject->GetPos();
+	line.vec = line.end - line.start;
+
+	Collision::CheckLine2Box(line, )
+
+	bool isCollision = ColRayAABB(lineStart, &(*lineEnd - *lineStart), &aabb[i], &box_WorldMat[i], col_t);
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
 	Debris::StaticAdaptation();
@@ -199,6 +207,7 @@ void GameScene::Draw() {
 		SceneManager::GetInstance()->ChangeScene("PlayerTestScene");
 	}
 }
+
 //
 //void GameScene::AttackDebrisToEnemy()
 //{
