@@ -9,16 +9,11 @@ enum DESTRUCT_TYPE {
 	CIRCLE		=2,	//全方向
 };
 
-enum DESTRUCT_POW {
-	WEAK	= 8,	//弱い
-	STRONG	= 16	//強い
-};
-
 class PlayerObject :
 	public GameObjCommon
 {
 public:
-	PlayerObject();
+	PlayerObject(XMFLOAT3 startPos);
 	//初期化
 	void Initialize() override;
 	//毎フレーム処理
@@ -35,37 +30,41 @@ public:
 	Vector3 *GetPosPointer() { return &pos; }
 	float GetSuction() { return suction; }
 	float GetSpeed() { return velocity.Length(); }
-	float GetScale() { return scale; }
+	float GetScale() { return scalef; }
+	BOX2D GetBox() { return rect2d; }
 
-private:	//衝突時の処理関数
 	//壁との衝突
 	void HitWall(
 		const XMVECTOR &hitPos,		//衝突位置
 		const Vector3 &normal);
-	//残骸を吸収した時
-	void Absorb(float size);
+private:	//衝突時の処理関数
 
 private: // メンバ変数
 	//キーボード移動用
 	float moveSpead;
 	
+	//スタート位置
+	XMFLOAT3 startPos;
 	//スケールに対する吸引比率
 	const float suctionRatio = 300.0f;
 	//吸引範囲
 	float suction;
 	//サイズ
-	float scale;//大きさ
+	float scalef;//大きさ
 
 
 
 	//自爆タイプ
 	DESTRUCT_TYPE destructType;
 	//自爆力
-	DESTRUCT_POW destructPow;
-	//自爆フラグ
-	bool destructFlag = false;
+	const int  destructPow = 10;
 
 	//コライダー
-	SphereCollider *hitSphere;	//衝突判定用
+	SphereCollider *hitCollider;	//衝突判定用
+	SphereCollider *absorptionCollider;	//衝突判定用
+
+	BOX2D rect2d;					//マップチップ計算用
+	void AdjustToMapchipEdgePosition(EdgeType contact_edge, float contact_pos);
+
 };
 

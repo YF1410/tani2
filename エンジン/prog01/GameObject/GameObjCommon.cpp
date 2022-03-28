@@ -5,7 +5,15 @@
 
 GameObjCommon::~GameObjCommon()
 {
-	CollisionManager::GetInstance()->RemoveCollider(collider);
+	// 当たり判定更新
+	if (colliders.size() != 0)
+	{
+		auto iter = colliders.begin();
+		while (iter != colliders.end()) {
+			CollisionManager::GetInstance()->RemoveCollider(iter->second);
+			++iter;
+		}
+	}
 }
 
 void GameObjCommon::Initialize()
@@ -15,8 +23,14 @@ void GameObjCommon::Initialize()
 void GameObjCommon::Update()
 {
 
-	if (collider) {
-		collider->Update();
+	// 当たり判定更新
+	if (colliders.size() != 0)
+	{
+		auto iter = colliders.begin();
+		while (iter != colliders.end()) {
+			iter->second->Update();
+			++iter;
+		}
 	}
 }
 
@@ -26,6 +40,7 @@ void GameObjCommon::Move()
 		velocity.y -= gravityPow;
 	}
 	pos += velocity;
+
 }
 
 void GameObjCommon::VelocityReset()
@@ -54,9 +69,13 @@ void GameObjCommon::Adaptation()
 	objectData->Update();
 
 	// 当たり判定更新
-	if (collider)
+	if (colliders.size() != 0)
 	{
-		collider->Update();
+		auto iter = colliders.begin();
+		while(iter != colliders.end()){
+			iter->second->Update();
+			++iter;
+		}
 	}
 }
 
@@ -69,7 +88,7 @@ void GameObjCommon::Draw() const
 void GameObjCommon::SetCollider(BaseCollider *collider)
 {
 	collider->SetObject(this);
-	this->collider = collider;
+	colliders[collider->GetCollisionName()] = collider;
 	// コリジョンマネージャに追加
 	CollisionManager::GetInstance()->AddCollider(collider);
 	//行列の更新

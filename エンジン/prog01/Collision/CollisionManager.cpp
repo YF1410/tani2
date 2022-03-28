@@ -33,6 +33,16 @@ void CollisionManager::CheckAllCollisions()
 				colB->GetShapeType() == SHAPE_UNKNOWN) {
 				continue;
 			}
+			
+			if (colA->object->exclusionList.size() != 0) {
+				auto result  = std::find(
+					colA->object->exclusionList.begin(), 
+					colA->object->exclusionList.end(),
+					colB->object->Tag);
+				if (result != colA->object->exclusionList.end()) {
+					continue;
+				}
+			}
 
 			int collisions = colA->GetShapeType() | colB->GetShapeType();
 
@@ -51,8 +61,8 @@ void CollisionManager::CheckAllCollisions()
 				//判定
 				if (Collision::CheckSphere2Sphere(*SphereA, *SphereB, &inter))
 				{
-					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter));
-					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter));
+					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName()));
+					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName()));
 				}
 			}
 
@@ -73,8 +83,8 @@ void CollisionManager::CheckAllCollisions()
 				DirectX::XMVECTOR inter;
 				//判定
 				if (Collision::CheckSphere2AABB(*sohereCollider, *boxCollider)) {
-					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter));
-					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter));
+					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName()));
+					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName()));
 				}
 			}
 			//球とメッシュ
@@ -94,8 +104,8 @@ void CollisionManager::CheckAllCollisions()
 				DirectX::XMVECTOR inter;
 				if (meshCollider->CheckCollisionSphere(*sphere, &inter))
 				{
-					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter));
-					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter));
+					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName()));
+					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName()));
 				}
 			}
 
@@ -117,91 +127,86 @@ void CollisionManager::CheckAllCollisions()
 				DirectX::XMVECTOR inter;
 				//判定
 				if (Collision::CheckCapsule2Box(*capsuleCollider, *boxCollider)) {
-					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter));
-					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter));
+					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName()));
+					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName()));
 				}
 			}
 		}
 	}
 }
 
-bool CollisionManager::Raycast(const Ray& ray, RaycastHit* hitInfo, float maxDistance)
-{
-	//全属性有効にして属性版を実行
-	return Raycast(ray, 0xffff, hitInfo, maxDistance);
-}
+//bool CollisionManager::Raycast(const Ray& ray, RaycastHit* hitInfo, float maxDistance)
+//{
+//	//全属性有効にして属性版を実行
+//	return Raycast(ray, 0xffff, hitInfo, maxDistance);
+//}
+//
+//bool CollisionManager::Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo, float maxDistance)
+//{
+//	bool result = false;
+//	//走査用のイテレータ
+//	std::forward_list<BaseCollider*>::iterator it;
+//	//今までで最も近いコライダーを記録する為のイテレータ
+//	std::forward_list<BaseCollider*>::iterator it_hit;
+//	//今までで最も近いコライダーの距離を記録する変数
+//	float distance = maxDistance;
+//	//今までで最も近いコライダーとの交点を記録する変数
+//	XMVECTOR inter;
+//
+//	// 全てのコライダーと総当りチェック
+//	it = colliders.begin();
+//	for (; it != colliders.end(); ++it)
+//	{
+//		BaseCollider* colA = *it;
+//
+//
+//		//球の場合
+//		if (colA->GetShapeType() == SHAPE_SPHERE)
+//		{
+//			Sphere* sphere = dynamic_cast<Sphere*>(colA);
+//
+//			float tempDistance;
+//			XMVECTOR tempInter;
+//
+//			//当たらなければ除外
+//			if (!Collision::CheckRay2Sphere(ray, *sphere, &tempDistance, &tempInter)) continue;
+//			//距離が最小でなければ除外
+//			if (tempDistance >= distance) continue;
+//			//今までで最も近いので記録を取る
+//			result = true;
+//			distance = tempDistance;
+//			inter = tempInter;
+//			it_hit = it;
+//		}
+//		else if (colA->GetShapeType() == SHAPE_MESH)
+//		{
+//			MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colA);
+//		
+//			float tempDistance;
+//			DirectX::XMVECTOR tempInter;
+//			if (!meshCollider->CheckCollisionRay(ray, &tempDistance, &tempInter)) continue;
+//			if (tempDistance >= distance) continue;
+//		
+//			result = true;
+//			distance = tempDistance;
+//			inter = tempInter;
+//			it_hit = it;
+//		}
+//	}
+//
+//	//最終的になにかに当たっていたら結果を書き込む
+//	if (result && hitInfo)
+//	{
+//		hitInfo->distance = distance;
+//		hitInfo->inter = inter;
+//		hitInfo->collider = *it_hit;
+//		hitInfo->object = hitInfo->collider->GetObject3d();
+//	}
+//
+//	return result;
+//}
 
-bool CollisionManager::Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo, float maxDistance)
-{
-	bool result = false;
-	//走査用のイテレータ
-	std::forward_list<BaseCollider*>::iterator it;
-	//今までで最も近いコライダーを記録する為のイテレータ
-	std::forward_list<BaseCollider*>::iterator it_hit;
-	//今までで最も近いコライダーの距離を記録する変数
-	float distance = maxDistance;
-	//今までで最も近いコライダーとの交点を記録する変数
-	XMVECTOR inter;
-
-	// 全てのコライダーと総当りチェック
-	it = colliders.begin();
-	for (; it != colliders.end(); ++it)
-	{
-		BaseCollider* colA = *it;
-
-		// 属性が合わなければスキップ
-		if (!(colA->attribute & attribute))
-		{
-			continue;
-		}
-
-		//球の場合
-		if (colA->GetShapeType() == SHAPE_SPHERE)
-		{
-			Sphere* sphere = dynamic_cast<Sphere*>(colA);
-
-			float tempDistance;
-			XMVECTOR tempInter;
-
-			//当たらなければ除外
-			if (!Collision::CheckRay2Sphere(ray, *sphere, &tempDistance, &tempInter)) continue;
-			//距離が最小でなければ除外
-			if (tempDistance >= distance) continue;
-			//今までで最も近いので記録を取る
-			result = true;
-			distance = tempDistance;
-			inter = tempInter;
-			it_hit = it;
-		}
-		else if (colA->GetShapeType() == SHAPE_MESH)
-		{
-			MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colA);
-		
-			float tempDistance;
-			DirectX::XMVECTOR tempInter;
-			if (!meshCollider->CheckCollisionRay(ray, &tempDistance, &tempInter)) continue;
-			if (tempDistance >= distance) continue;
-		
-			result = true;
-			distance = tempDistance;
-			inter = tempInter;
-			it_hit = it;
-		}
-	}
-
-	//最終的になにかに当たっていたら結果を書き込む
-	if (result && hitInfo)
-	{
-		hitInfo->distance = distance;
-		hitInfo->inter = inter;
-		hitInfo->collider = *it_hit;
-		hitInfo->object = hitInfo->collider->GetObject3d();
-	}
-
-	return result;
-}
-
-void CollisionManager::QuerySphere(const Sphere& sphere, QueryCallback* callback, unsigned short attribute)
+void CollisionManager::QuerySphere(const Sphere& sphere, QueryCallback* callback)
 {
 	assert(callback);
 
@@ -212,12 +217,6 @@ void CollisionManager::QuerySphere(const Sphere& sphere, QueryCallback* callback
 	for (; it != colliders.end(); ++it)
 	{
 		BaseCollider* col = *it;
-
-		// 属性が合わなければスキップ
-		if (!(col->attribute & attribute))
-		{
-			continue;
-		}
 
 		// 球
 		if (col->GetShapeType() == SHAPE_SPHERE)

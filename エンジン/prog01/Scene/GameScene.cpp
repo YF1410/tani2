@@ -6,19 +6,31 @@
 #include "SphereCollider.h"
 #include "MeshCollider.h"
 #include "CollisionManager.h"
-#include "Player.h"
 #include "ContactableObject.h"
 #include "SceneManager.h"
+#include "ModelManager.h"
+#include "Debris.h"
+#include "MapChip.h"
+#include "Easing.h"
 
 using namespace DirectX;
 
-GameScene::~GameScene()
-{
+GameScene::GameScene() {
+	MapChip::GetInstance()->Initialize();
+	//マップ生成
+	MapChip::GetInstance()->SetMapName(MapChip::TEST_MAP);
+	MapChip::GetInstance()->CreateStage();
+
+
+	//プレイヤー生成
+	playerObject = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos());
+}
+
+GameScene::~GameScene() {
 	Finalize();
 }
 
-void GameScene::Initialize()
-{
+void GameScene::Initialize() {
 	collisionManager = CollisionManager::GetInstance();
 
 	// カメラ生成
@@ -30,16 +42,14 @@ void GameScene::Initialize()
 	FbxObject3d::SetCamera(camera.get());
 
 	// デバッグテキスト用テクスチャ読み込み
-	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png"))
-	{
+	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
 		assert(0);
 	}
 	// デバッグテキスト初期化
 	DebugText::GetInstance()->Initialize(debugTextTexNumber);
 
 	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(1, L"Resources/APEX_01.png"))
-	{
+	if (!Sprite::LoadTexture(1, L"Resources/APEX_01.png")) {
 		assert(0);
 	}
 
@@ -55,136 +65,217 @@ void GameScene::Initialize()
 	light = LightGroup::Create();
 	//3Dオブジェクトにライトをセット
 	Object3d::SetLight(light.get());
-	FbxObject3d::SetLight(light.get());
 	light->SetDirLightActive(0, true);
-	light->SetDirLightActive(1, false);
-	light->SetDirLightActive(2, false);
+	light->SetDirLightActive(1, true);
+	light->SetDirLightActive(2, true);
 	light->SetPointLightActive(0, false);
 	light->SetPointLightActive(1, false);
 	light->SetPointLightActive(2, false);
 	light->SetCircleShadowActive(0, true);
 
-	// モデル読み込み
-	modelFighter = Model::CreateFromObject("chr_sword");
-	modelSphere = Model::CreateFromObject("sphere", true);
 
-	// 3Dオブジェクト生成
-	playerObject = std::make_unique<PlayerObject>(modelFighter.get(), modelSphere.get());
+	Enemy::enemys.push_back(new Enemy({ 2000,0,-5000 }));
+	Enemy::enemys.push_back(new Enemy({ 2000,0,-5000 }));
+	Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));
+	Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));
+	Enemy::enemys.push_back(new Enemy({ 1800,0,-5800 }));
 
-	//モデルテーブル
-	modelPlane = Model::CreateFromObject("cube");
-	Model* modeltable = modelPlane.get();
-
-	MapChip::GetInstance()->CsvLoad(26, 20, "Resources/map.csv");
-
-	const float LAND_SCALE = 2.0f;
-	for (int i = 0; i < 20; i++) {
-		for (int j = 0; j < 26; j++) {
-
-			if (MapChip::GetInstance()->GetChipNum(j, i, 1, 0))
-			{
-				ContactableObject* object = ContactableObject::Create(modeltable);
-				object->SetScale({ LAND_SCALE, LAND_SCALE, LAND_SCALE });
-				object->SetPosition({ j * LAND_SCALE, (i * -LAND_SCALE) + 30, 0 });
-				objects.push_back(std::unique_ptr<Object3d>(object));
-			}
-		}
-	}
-
-	//.fbxの名前を指定してモデルを読み込む
-	fbxModel = FbxLoader::GetInstance()->LoadModelFromFile("prin");
-	// FBXオブジェクト生成
-	fbxObject3d = FbxObject3d::Create(fbxModel.get(), true);
-	//アニメーション
-	fbxObject3d->PlayAnimation(0);
-
-	fbxObject3d->SetScale({ 0.1f, 0.1f, 0.1f });
 
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
-	camera->SetEye({ 0,10,-50 });
+	camera->SetEye({ 0,1600,-500 });
+	camera->SetUp({ 0,1,0 });
+	
+	//プレイヤーの初期化
+	playerObject->Initialize();
+
+	checkPoint = false;
 }
 
-void GameScene::Finalize()
-{
+void GameScene::Finalize() {
 }
 
-void GameScene::Update()
-{
-	Input* input = Input::GetInstance();
-	light->Update();
+void GameScene::Update() {
+	//カメラ更新
+	//プレイヤーの少し上を焦点にする
+	camera->SetEye(
+		Ease(Out, Quad, 0.01f,
+			camera.get()->GetEye(),
+			Vector3(playerObject.get()->GetPos() + eyeDistance))
+	);
+
+	camera->SetTarget(Ease(Out, Quad, 0.01f,
+		camera.get()->GetTarget(),
+		Vector3(playerObject.get()->GetPos() + targetDistance))
+	);
 	camera->Update();
+
+
+	//マップチップ更新
+	//MapChip::GetInstance()->Update(MapChip::TEST_MAP);
+
+
+	//入力更新
+	Input* input = Input::GetInstance();
+
+	//ライト更新
+	light->Update();
+	//ステージ更新
+	//testStage->Update();
+	
+	//デバックテキスト
+	DebugText::GetInstance()->VariablePrint(0, 0, "playerSize", playerObject.get()->size, 3);
+	DebugText::GetInstance()->VariablePrint(0, 40, "DebrisCount", Debris::debris.size(), 3);
+
 	particleMan->Update();
-
-	// オブジェクト移動
-	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A))
-	{
-		static XMVECTOR p = {1,-1,1,0};
-		// 移動後の座標を計算
-		if (input->PushKey(DIK_W))
-		{
-			p.m128_f32[1] += 0.1f;
-		}
-		else if (input->PushKey(DIK_S))
-		{
-			p.m128_f32[1] -= 0.1f;
-		}
-
-		if (input->PushKey(DIK_D))
-		{
-			p.m128_f32[0] += 0.1f;
-		}
-		else if (input->PushKey(DIK_A))
-		{
-			p.m128_f32[0] -= 0.1f;
-		}
-		light->SetDirLightDir(0, p);
-	}
-
-	if (input->TriggerKey(DIK_SPACE))
-	{
-		if (flag)
-		{
-			fbxObject3d->PlayAnimation(0);
-			flag = false;
-		}
-		else if (!flag)
-		{
-			fbxObject3d->PlayAnimation(1);
-			flag = true;
-		}
-	}
-
-	DebugText::GetInstance()->VariablePrint(0, 0, "angle", input->PadStickAngle(), 3);
-
-	/*XMFLOAT3 rot = fbxObject3d->GetRotation();
-	rot.y += 1.0f;
-	fbxObject3d->SetRotation(rot);*/
-
-	if (input->TriggerKey(DIK_C))
-	{
-		SceneManager::GetInstance()->ChangeScene("ClearScene");
-	}
-	else if (input->TriggerKey(DIK_B))
-	{
-		SceneManager::GetInstance()->ChangeScene("GameOverScene");
-	}
-
 
 	for (auto& object : objects) {
 		object->Update();
 	}
+
+	//プレイヤー更新
 	playerObject->Update();
-	fbxObject3d->Update();
+	//破片更新
+	Debris::StaticUpdate();
+	//エネミー更新
+	Enemy::StaticUpdate();
+
+
+	////マップチップとの当たり判定
+	EdgeType contact_edge = EdgeType::EdgeTypeNon;
+	float contact_pos = 0.0f;
+	////X軸
+	//if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
+	//	playerObject.get()->GetBox(),
+	//	Vector3(playerObject.get()->velocity.x,0,0),
+	//	contact_edge,
+	//	contact_pos,
+	//	MapChip::TEST_MAP
+	//)) {
+	//	Vector3 hitPos = {
+	//		contact_pos,
+	//		0,
+	//		playerObject.get()->pos.z,
+	//	};
+	//	Vector3 normal;
+	//	if (contact_edge == EdgeType::EdgeTypeLeft) {
+	//		DebugText::GetInstance()->Print("hitLeftMap", 0, 90, 3);
+
+	//		normal = { -1,0,0 };
+	//	}
+	//	else {
+	//		DebugText::GetInstance()->Print("hitRigthMap", 0, 90, 3);
+	//		normal = { 1,0,0 };
+	//	}
+	//	playerObject.get()->HitWall(hitPos, normal);
+	//}
+	////Y軸
+	//if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
+	//	playerObject.get()->GetBox(),
+	//	Vector3( 0, 0, playerObject.get()->velocity.z ),
+	//	contact_edge,
+	//	contact_pos,
+	//	MapChip::TEST_MAP
+	//)) {
+	//	Vector3 hitPos = {
+	//		playerObject.get()->pos.x,
+	//		0,
+	//		contact_pos
+	//	};
+	//	Vector3 normal;
+	//	if (contact_edge == EdgeType::EdgeTypeBottom) {
+	//		normal = { 0,0,-1 };
+	//		DebugText::GetInstance()->Print("hitBottomMap", 0, 120, 3);
+
+	//	}
+	//	else {
+	//		DebugText::GetInstance()->Print("hitTopMap", 0, 120, 3);
+	//		normal = { 0,0,1 };
+	//	}
+	//	playerObject.get()->HitWall(hitPos, normal);
+
+	//}
+
+
+
+	//残骸とマップチップ
+	for (int i = 0; i < Debris::debris.size(); i++) {
+
+		//X軸
+		if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
+			Debris::debris[i]->GetBox(),
+			Vector3(Debris::debris[i]->velocity.x, 0, 0),
+			contact_edge,
+			contact_pos,
+			MapChip::TEST_MAP
+		)) {
+			Vector3 hitPos = {
+				contact_pos,
+				0,
+				Debris::debris[i]->pos.z,
+			};
+			Vector3 normal;
+			if (contact_edge == EdgeType::EdgeTypeLeft) {
+				DebugText::GetInstance()->Print("hitLeftMap", 0, 90, 3);
+
+				normal = { -1,0,0 };
+			}
+			else {
+				DebugText::GetInstance()->Print("hitRigthMap", 0, 90, 3);
+				normal = { 1,0,0 };
+			}
+			Debris::debris[i]->HitWall(hitPos, normal);
+		}
+		//Y軸
+		if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
+			Debris::debris[i]->GetBox(),
+			Vector3(0, 0, Debris::debris[i]->velocity.z),
+			contact_edge,
+			contact_pos,
+			MapChip::TEST_MAP
+		)) {
+			Vector3 hitPos = {
+				Debris::debris[i]->pos.x,
+				0,
+				contact_pos
+			};
+			Vector3 normal;
+			if (contact_edge == EdgeType::EdgeTypeBottom) {
+				normal = { 0,0,-1 };
+				DebugText::GetInstance()->Print("hitBottomMap", 0, 120, 3);
+
+			}
+			else {
+				DebugText::GetInstance()->Print("hitTopMap", 0, 120, 3);
+				normal = { 0,0,1 };
+			}
+			Debris::debris[i]->HitWall(hitPos, normal);
+
+		}
+
+	}
+
 	// 全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
+
+	line.start = Enemy::enemys[0]->GetPos();
+	line.end = playerObject->GetPos();
+	line.vec = line.end - line.start;
+
+	Collision::CheckLine2Box(line, )
+
+	bool isCollision = ColRayAABB(lineStart, &(*lineEnd - *lineStart), &aabb[i], &box_WorldMat[i], col_t);
+	//全ての移動最終適応処理
+	playerObject.get()->Adaptation();
+	Debris::StaticAdaptation();
+	Enemy::StaticAdaptation();
+	MapChip::GetInstance()->Adaptation();
 }
 
-void GameScene::Draw()
-{
+void GameScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
 #pragma region 背景スプライト描画
@@ -197,22 +288,29 @@ void GameScene::Draw()
 	// 深度バッファクリア
 	DirectXCommon::GetInstance()->ClearDepthBuffer();
 #pragma endregion 背景スプライト描画
+
 #pragma region 3Dオブジェクト描画
 	// 3Dオブクジェクトの描画
 	Object3d::PreDraw(cmdList);
-	/*for (auto& object : objects) {
-		object->Draw();
-	}
-	playerObject->Draw();*/
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
+
+
 #pragma region 3Dオブジェクト(FBX)描画
-	fbxObject3d->Draw(cmdList);
+	//testStage->Draw(DirectXCommon::GetInstance()->GetCommandList());
+	MapChip::GetInstance()->Draw();
+	playerObject->Draw();
+	Debris::StaticDraw();
+	Enemy::StaticDraw();
 #pragma endregion 3Dオブジェクト(FBX)描画
+
+
 #pragma region パーティクル
 	// パーティクルの描画
 	particleMan->Draw(cmdList);
 #pragma endregion パーティクル
+
+
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
@@ -221,4 +319,95 @@ void GameScene::Draw()
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画
+
+	Input* input = Input::GetInstance();
+	if (input->TriggerKey(DIK_C)) {
+		SceneManager::GetInstance()->ChangeScene("EnemyTestScene");
+	}
+	else if (input->TriggerKey(DIK_B)) {
+		SceneManager::GetInstance()->ChangeScene("PlayerTestScene");
+	}
 }
+
+//
+//void GameScene::AttackDebrisToEnemy()
+//{
+//	for (int debrisNum = 0; debrisNum < Debris::debris.size(); debrisNum++) {
+//		/*float minLength = Enemy::enemys[enemysNum]->sarchLength;
+//		bool isHoming = false;*/
+//
+//		for (int enemysNum = 0; enemysNum < Enemy::enemys.size(); enemysNum++) {
+//			//どちらも攻撃状態でなければエネミーを押し出し
+//			if (!Debris::debris[debrisNum]->isAttack &&				//破片が攻撃状態ではなく
+//				Enemy::enemys[enemysNum]->state !=Enemy::ATTACK &&	//エネミーが攻撃状態ではなく
+//				
+//				Collision::CheckSphere2Sphere(
+//				Debris::debris[debrisNum]->collider.realSphere,	//破片の攻撃範囲
+//				Enemy::enemys[enemysNum]->collider.realSphere		//エネミーのヒットスフィア	
+//				//&hitPos,
+//				//&hitNormal
+//			)) {
+//				//Enemy::enemys[enemysNum]->SetPos(hitPos + -hitNormal * Enemy::enemys[enemysNum]->collider.realSphere.radius);
+//			}
+//
+//			//破片からエネミーへの攻撃
+//			XMVECTOR hitPos;
+//			if (!Enemy::enemys[enemysNum]->isInvincible &&			//エネミーが無敵ではないとき	
+//				Collision::CheckSphere2Sphere(
+//					Debris::debris[debrisNum]->collider.attackSphere,	//破片の攻撃範囲
+//					Enemy::enemys[enemysNum]->collider.hitSphere,		//エネミーのヒットスフィア	
+//					&hitPos
+//				))
+//			{
+//				Vector3 hitNormal = hitPos - Enemy::enemys[enemysNum]->collider.hitSphere.center;
+//				Debris::debris[debrisNum]->Bounse(hitPos, Vector3(hitNormal).Normalize());
+//				if(Debris::debris[debrisNum]->isAttack){
+//					Debris::debris[debrisNum]->isAttackFlame = true;
+//					Enemy::enemys[enemysNum]->Damage(1/*testダメージ*/);
+//
+//				}
+//			}
+//			//エネミーから破片への攻撃
+//			//if (!Debris::debris[debrisNum]->isAttack &&				//破片が攻撃状態ではなく
+//			//	Collision::CheckSphere2Sphere(
+//			//		Enemy::enemys[enemysNum]->collider.attackSphere,		//エネミーのヒットスフィア
+//			//		Debris::debris[debrisNum]->collider.hitSphere	//破片の攻撃範囲
+//			//	))
+//			//{
+//
+//			//	Debris::debris[debrisNum]->Damage(0.1f);
+//			//}
+//
+//			//エネミーから破片の探索
+//			//if (!Debris::debris[debrisNum]->isAttack &&			//攻撃中以外の破片を除外
+//			//	Collision::CheckSphere2Sphere(
+//			//	Debris::debris[debrisNum]->collider.realSphere,
+//			//	Enemy::enemys[enemysNum]->collider.searchArea)) {
+//			//	//距離が現在の最小値以下なら対象を更新
+//			//	float length = Vector3(Debris::debris[debrisNum]->GetPos() - Enemy::enemys[enemysNum]->GetPos()).Length();
+//
+//			//	if(length < minLength){
+//			//		isHoming = true;
+//			//		Enemy::enemys[enemysNum]->HomingObjectCheck(Debris::debris[debrisNum]->GetPos());
+//			//	}
+//			//}
+//		}
+//	}
+//}
+
+//void GameScene::PlayerToDebris()
+//{
+//	//破片とプレイヤーの衝突
+//	for (int i = 0; i < Debris::debris.size(); i++) {
+//		//攻撃中の物とは判定をとらない
+//		if (Debris::debris[i]->isAttack) continue;
+//		//吸い寄せ判定
+//		if (Collision::CheckSphere2Sphere(playerObject.get()->collider.suctionSphere, Debris::debris[i]->collider.hitSphere)) {
+//			Debris::debris[i]->SuckedPlayer(playerObject->GetPos(), playerObject->GetSuction());
+//		}
+//		//吸収判定
+//		if (Collision::CheckSphere2Sphere(playerObject.get()->collider.absorbSphere, Debris::debris[i]->collider.hitSphere)) {
+//			playerObject.get()->Absorb(Debris::debris[i]->AbsorbedToPlayer());
+//		}
+//	}
+//}

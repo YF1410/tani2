@@ -30,14 +30,13 @@ public:// メンバ関数
 	// 全ての衝突チェック
 	void CheckAllCollisions();
 	// レイキャスト
-	bool Raycast(const Ray& ray, RaycastHit* hitInfo = nullptr, float maxDistance = D3D12_FLOAT32_MAX);
+	//bool Raycast(const Ray& ray, RaycastHit* hitInfo = nullptr, float maxDistance = D3D12_FLOAT32_MAX);
 
-	bool Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo = nullptr,
-		float maxDistance = D3D12_FLOAT32_MAX);
+	/*bool Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo = nullptr,
+		float maxDistance = D3D12_FLOAT32_MAX);*/
 
 	// 球による衝突全検索
-	void QuerySphere(const Sphere& sphere, QueryCallback* callback,
-		unsigned short attribute = (unsigned short)0xffffffff);
+	void QuerySphere(const Sphere& sphere, QueryCallback* callback);
 
 private:
 	CollisionManager() = default;

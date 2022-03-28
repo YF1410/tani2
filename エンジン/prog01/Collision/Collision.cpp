@@ -363,10 +363,10 @@ bool Collision::CheckSphere2Box(const Sphere& sphere, const Box& box)
 		sqDistance += (pos - box.center.m128_f32[2] + box.scale.z) * (pos - box.center.m128_f32[2] + box.scale.z);
 	}
 
-	return sqDistance < sphere.radius * sphere.radius;
+	return sqDistance < sphere.radius* sphere.radius;
 }
 
-bool Collision::CheckSphere2AABB(const Sphere &sphere, const AABB &aabb, DirectX::XMVECTOR *inter)
+bool Collision::CheckSphere2AABB(const Sphere& sphere, const AABB& aabb, DirectX::XMVECTOR* inter)
 {
 	//長さのべき乗
 	float sqLen = 0;
@@ -375,7 +375,7 @@ bool Collision::CheckSphere2AABB(const Sphere &sphere, const AABB &aabb, DirectX
 		sqLen += (spherePos.x - aabb.center.x) * (spherePos.x - aabb.center.x);
 	}
 	else if (spherePos.x > aabb.center.x + aabb.length.x) {
-		sqLen += (spherePos.x - (aabb.center.x + aabb.length.x)) * (spherePos.x- (aabb.center.x + aabb.length.x));
+		sqLen += (spherePos.x - (aabb.center.x + aabb.length.x)) * (spherePos.x - (aabb.center.x + aabb.length.x));
 	}
 	if (spherePos.y < aabb.center.y) {
 		sqLen += (spherePos.y - aabb.center.y) * (spherePos.y - aabb.center.y);
@@ -393,7 +393,28 @@ bool Collision::CheckSphere2AABB(const Sphere &sphere, const AABB &aabb, DirectX
 	//衝突
 	if (sqLen < sphere.radius * sphere.radius) {
 		if (inter) {
-			
+			Vector3 checkPos = spherePos - aabb.center;
+			//衝突位置
+			if (checkPos.x < aabb.length.x) {
+				inter->m128_f32[0] = aabb.length.x;
+			}
+			else {
+				inter->m128_f32[0] = spherePos.x;
+			}
+
+			if (checkPos.y < aabb.length.y) {
+				inter->m128_f32[1] = aabb.length.y;
+			}
+			else {
+				inter->m128_f32[1] = spherePos.y;
+			}
+
+			if (checkPos.z < aabb.length.z) {
+				inter->m128_f32[2] = aabb.length.z;
+			}
+			else {
+				inter->m128_f32[2] = spherePos.z;
+			}
 		}
 		return true;
 	}
@@ -517,4 +538,59 @@ bool Collision::CheckCapsule2Box(const Capsule& capsule, const Box& box)
 	}
 
 	return sqDistance < capsule.radius* capsule.radius;
+}
+
+bool Collision::CheckLine2Box(const Line& line, const AABB& aabb)
+{
+	//bool isCollision = ColRayAABB(lineStart, &(*lineEnd - *lineStart), &aabb[i], &box_WorldMat[i], col_t);
+
+	// 交差判定
+	float p[3], d[3], min[3], max[3];
+	p[0] = line.start.x;
+	p[1] = line.start.y;
+	p[2] = line.start.z;
+
+	d[0] = line.end.x - line.start.x;
+	d[1] = line.end.y - line.start.y;
+	d[2] = line.end.z - line.start.z;
+
+	min[0] = aabb.center.x - aabb.length.x;
+	min[1] = aabb.center.y - aabb.length.y;
+	min[2] = aabb.center.z - aabb.length.z;
+
+	max[0] = aabb.center.x + aabb.length.x;
+	max[1] = aabb.center.y + aabb.length.y;
+	max[2] = aabb.center.z + aabb.length.z;
+
+	float t = -FLT_MAX;
+	float t_max = FLT_MAX;
+
+	for (int i = 0; i < 3; ++i) {
+		if (abs(d[i]) < FLT_EPSILON) {
+			if (p[i] < min[i] || p[i] > max[i])
+				return false;	// 交差していない
+		}
+		else {
+			// スラブとの距離を算出
+			// t1が近スラブ、t2が遠スラブとの距離
+			float odd = 1.0f / d[i];
+			float t1 = (min[i] - p[i]) * odd;
+			float t2 = (max[i] - p[i]) * odd;
+			if (t1 > t2) {
+				float tmp = t1; t1 = t2; t2 = tmp;
+			}
+
+			if (t1 > t) t = t1;
+			if (t2 < t_max) t_max = t2;
+
+			// スラブ交差チェック
+			if (t >= t_max)
+				return false;
+		}
+	}
+	Vector3 colPos;
+	// 交差している
+	colPos = line.start + t * (line.end - line.start);
+
+	return true;
 }

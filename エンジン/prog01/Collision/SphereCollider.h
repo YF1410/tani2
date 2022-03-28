@@ -11,12 +11,13 @@ private: // エイリアス
 	// DirectX::を省略
 	using XMVECTOR = DirectX::XMVECTOR;
 public:
-	SphereCollider(XMVECTOR offset = { 0,0,0,0 }, float radius = 1.0f) :
+	SphereCollider(std::string tag,XMVECTOR offset = { 0,0,0,0 }, float radius = 1.0f) :
 		offset(offset),
 		radius(radius)
 	{
 		// 球形状をセット
 		shapeType = SHAPE_SPHERE;
+		this->collisionName = tag;
 	}
 
 	// 更新

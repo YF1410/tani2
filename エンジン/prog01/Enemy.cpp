@@ -4,9 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "Easing.h"
-
-//コライダー
-#include "SphereCollider.h"
+#include "Debris.h"
 
 using namespace DirectX;
 std::vector<Enemy*> Enemy::enemys;
@@ -28,7 +26,7 @@ Enemy::Enemy(XMFLOAT3 startPos) :
 	srand(time(NULL));
 	//当たり判定初期化
 	float radius = 100;
-	SetCollider(new SphereCollider(XMVECTOR{ 0,radius,0 }, radius));
+	SetCollider(new SphereCollider("hitCollider",XMVECTOR{ 0,radius,0 }, radius));
 }
 
 
@@ -130,14 +128,25 @@ void Enemy::Update() {
 		}
 	}
 	Move();
+
+	//マップチップ用の判定を移動
+	rect2d.Top = -(int)((pos.z + scale.x * 100.0f));
+	rect2d.Bottom = -(int)((pos.z - scale.x * 100.0f));
+	rect2d.Right = (int)((pos.x + scale.x * 100.0f));
+	rect2d.Left = (int)((pos.x - scale.x * 100.0f));
+
 }
 
 void Enemy::OnCollision(const CollisionInfo &info)
 {
+	Debris *debri;
 	switch (info.object->Tag)
 	{
-	case Player:
-		Damage(1.0f);
+	case DEBRIS:
+		debri = dynamic_cast<Debris *>(info.object);
+		if (debri->isAttack) {
+			Damage(1.0f);
+		}
 		break;
 	default:
 		break;

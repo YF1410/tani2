@@ -34,4 +34,6 @@ public:
 	static bool CheckSphere2AABB(const Sphere &sphere, const AABB &aabb, DirectX::XMVECTOR *inter= nullptr);
 	//カプセルとボックスの当たり判定
 	static bool CheckCapsule2Box(const Capsule& capsule, const Box& box);
+
+	static bool CheckLine2Box(const Line& line, const AABB& aabb);
 };

@@ -9,5 +9,6 @@ BaseBlock::BaseBlock(Vector3 pos) :
 		pos
 	) 
 {
-	SetCollider(new AABBCollider({ -100,-100,-100 }, { 200,200,200}));
+	//SetCollider(new AABBCollider({ -100,-100,-100 }, { 200,200,200}));
+	//exclusionList.push_back(DEFAULT_BLOACK);
 }

@@ -8,7 +8,7 @@
 
 void BaseGame::Run()
 {
-	Initialize();
+	Initialize();	//この時点でロードを終わらせる
 
 	while (true)  // ゲームループ
 	{

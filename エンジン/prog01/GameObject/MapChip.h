@@ -7,6 +7,8 @@
 #include <cassert>
 #include <map>
 #include "BaseBlock.h"
+#include "CollisionPrimitive.h"
+
 
 class MapChip
 {
@@ -39,23 +41,40 @@ public:
 	void Initialize();
 	//CSVファイル読み込み
 	void CsvLoad(MAP_NAME mapName, std::string fName, int mapChipMaxX, int mapChipMaxY);
+	
+	//マップをセット
+	void SetMapName(MAP_NAME mapName) { nowMap = mapName; }
 	//マップナンバー指定
-	int GetChipNum(int x, int y, MAP_NAME mapName);
+	int GetChipNum(int x, int y);
 	//オブジェクト生成
-	void CreateStage(MAP_NAME mapName);
+	void CreateStage();
 	
 	//更新
-	void Update(MAP_NAME mapName);
+	void Update();
 	//適応
-	void Adaptation(MAP_NAME mapName);
+	void Adaptation();
 	//描画
-	void Draw(MAP_NAME mapName);
+	void Draw();
 
+	XMFLOAT3 GetStartPos() { return startPos[nowMap]; }
+
+	MAP_DATA GetMapData() { return mapData[nowMap]; }
+	
+	//衝突判定
+	bool CollisionRectAndMapchipEdgeVersion(BOX2D &src_rect, Vector3 velocity, EdgeType &contact_edge, float &contact_edge_position, MAP_NAME name);
 
 private:
+	//現在のマップ
+	MAP_NAME nowMap;
 	//マップデータ
 	MAP_DATA mapData[MAX];
 
+	//Blockのサイズ
+	const int chipSize = 200;
+
 	//オブジェクトデータ
 	std::vector<BaseBlock *> mapChipObj[MAX];
+
+	//プレイヤーのスタートポジション
+	XMFLOAT3 startPos[MAX];
 };
