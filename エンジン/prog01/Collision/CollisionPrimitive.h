@@ -70,3 +70,21 @@ struct AABB {
 	//èWì_ç¿ïW
 	Vector3 length = { 1,1,1 };
 };
+
+
+//2D
+struct BOX2D {
+	float Bottom = 1.0f;
+	float Top	 = 1.0f;
+	float Right	 = 1.0f;
+	float Left	 = 1.0f;
+};
+enum EdgeType
+{
+	EdgeTypeNon = -1,
+	EdgeTypeLeft,
+	EdgeTypeRight,
+	EdgeTypeTop,
+	EdgeTypeBottom,
+	EdgeTypeMax,
+};

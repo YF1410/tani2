@@ -4,15 +4,16 @@
 #include "FbxObject3d.h"
 #include "CollisionInfo.h"
 #include <vector>
+#include <map>
 
 class GameObjCommon
 {
 public://サブクラス
 	//衝突検知用タグ
-	enum Tag {
+	enum TAG {
 		Notag,
 		MapChip,
-		Player,
+		PLAYER,
 		DEBRIS,
 		ENEMY,
 
@@ -25,7 +26,7 @@ public://サブクラス
 public:
 	GameObjCommon(
 		ModelManager::ModelName modelName,	//モデルの名前
-		Tag tag = Notag,					//当たり判定用タグ
+		TAG tag = Notag,					//当たり判定用タグ
 		bool isGravity = false,				//重力処理の有無
 		Vector3 pos = { 0,0,0 },			//初期位置
 		Vector3 scale = { 1,1,1 },			//初期サイズ
@@ -89,7 +90,10 @@ public:
 	bool isInvisible;	//非表示フラグ	trueで描画を行わない
 	bool isDelete;		//消去フラグ	trueになるとそのフレームで消滅する
 
-	Tag Tag;			//当たり判定などで使うオブジェクトタグ
+	TAG Tag;			//当たり判定などで使うオブジェクトタグ
+	
+	//当たり判定除外リスト
+	std::vector<TAG> exclusionList;
 
 protected:
 	std::unique_ptr<FbxObject3d> objectData;	//オブジェクトデータ
@@ -101,6 +105,7 @@ public:
 	virtual void OnCollision(const CollisionInfo &info) {}
 protected:
 	//コライダー
-	BaseCollider *collider = nullptr;
+	std::map<std::string,BaseCollider *> colliders;
+	
 };
 

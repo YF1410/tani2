@@ -17,11 +17,13 @@ using namespace DirectX;
 
 GameScene::GameScene() {
 	MapChip::GetInstance()->Initialize();
-	MapChip::GetInstance()->CreateStage(MapChip::TEST_MAP);
+	//マップ生成
+	MapChip::GetInstance()->SetMapName(MapChip::TEST_MAP);
+	MapChip::GetInstance()->CreateStage();
 
 
 	//プレイヤー生成
-	playerObject = std::make_unique<PlayerObject>();
+	playerObject = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos());
 }
 
 GameScene::~GameScene() {
@@ -72,13 +74,12 @@ void GameScene::Initialize() {
 	light->SetCircleShadowActive(0, true);
 	
 
-	/*Enemy::enemys.push_back(new Enemy({ 2000,0,-2000 }));
-	Enemy::enemys.push_back(new Enemy({ 2000,0,-1600 }));
-	Enemy::enemys.push_back(new Enemy({ 1600,0,-2000 }));
-	Enemy::enemys.push_back(new Enemy({ 1600,0,-1600 }));
-	Enemy::enemys.push_back(new Enemy({ 1800,0,-1800 }));*/
+	Enemy::enemys.push_back(new Enemy({ 2000,0,-5000 }));
+	Enemy::enemys.push_back(new Enemy({ 2000,0,-5000 }));
+	Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));
+	Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));
+	Enemy::enemys.push_back(new Enemy({ 1800,0,-5800 }));
 
-	//testStage = FbxObject3d::Create(ModelManager::GetIns()->GetModel(ModelManager::TESTS_TAGE));
 
 	//サウンド再生
 	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
@@ -87,9 +88,11 @@ void GameScene::Initialize() {
 	camera->SetTarget({ 0, 0, 0 });
 	camera->SetEye({ 0,1600,-500 });
 	camera->SetUp({ 0,1,0 });
-
+	
 	//プレイヤーの初期化
 	playerObject->Initialize();
+
+	checkPoint = false;
 }
 
 void GameScene::Finalize() {
@@ -109,7 +112,10 @@ void GameScene::Update() {
 		Vector3(playerObject.get()->GetPos() + targetDistance))
 	);
 	camera->Update();
-	MapChip::GetInstance()->Update(MapChip::TEST_MAP);
+
+
+	//マップチップ更新
+	//MapChip::GetInstance()->Update(MapChip::TEST_MAP);
 
 
 	//入力更新
@@ -137,13 +143,128 @@ void GameScene::Update() {
 	//エネミー更新
 	Enemy::StaticUpdate();
 
+
+	////マップチップとの当たり判定
+	EdgeType contact_edge = EdgeType::EdgeTypeNon;
+	float contact_pos = 0.0f;
+	////X軸
+	//if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
+	//	playerObject.get()->GetBox(),
+	//	Vector3(playerObject.get()->velocity.x,0,0),
+	//	contact_edge,
+	//	contact_pos,
+	//	MapChip::TEST_MAP
+	//)) {
+	//	Vector3 hitPos = {
+	//		contact_pos,
+	//		0,
+	//		playerObject.get()->pos.z,
+	//	};
+	//	Vector3 normal;
+	//	if (contact_edge == EdgeType::EdgeTypeLeft) {
+	//		DebugText::GetInstance()->Print("hitLeftMap", 0, 90, 3);
+
+	//		normal = { -1,0,0 };
+	//	}
+	//	else {
+	//		DebugText::GetInstance()->Print("hitRigthMap", 0, 90, 3);
+	//		normal = { 1,0,0 };
+	//	}
+	//	playerObject.get()->HitWall(hitPos, normal);
+	//}
+	////Y軸
+	//if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
+	//	playerObject.get()->GetBox(),
+	//	Vector3( 0, 0, playerObject.get()->velocity.z ),
+	//	contact_edge,
+	//	contact_pos,
+	//	MapChip::TEST_MAP
+	//)) {
+	//	Vector3 hitPos = {
+	//		playerObject.get()->pos.x,
+	//		0,
+	//		contact_pos
+	//	};
+	//	Vector3 normal;
+	//	if (contact_edge == EdgeType::EdgeTypeBottom) {
+	//		normal = { 0,0,-1 };
+	//		DebugText::GetInstance()->Print("hitBottomMap", 0, 120, 3);
+
+	//	}
+	//	else {
+	//		DebugText::GetInstance()->Print("hitTopMap", 0, 120, 3);
+	//		normal = { 0,0,1 };
+	//	}
+	//	playerObject.get()->HitWall(hitPos, normal);
+
+	//}
+
+
+
+	//残骸とマップチップ
+	for (int i = 0; i < Debris::debris.size(); i++) {
+
+		//X軸
+		if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
+			Debris::debris[i]->GetBox(),
+			Vector3(Debris::debris[i]->velocity.x, 0, 0),
+			contact_edge,
+			contact_pos,
+			MapChip::TEST_MAP
+		)) {
+			Vector3 hitPos = {
+				contact_pos,
+				0,
+				Debris::debris[i]->pos.z,
+			};
+			Vector3 normal;
+			if (contact_edge == EdgeType::EdgeTypeLeft) {
+				DebugText::GetInstance()->Print("hitLeftMap", 0, 90, 3);
+
+				normal = { -1,0,0 };
+			}
+			else {
+				DebugText::GetInstance()->Print("hitRigthMap", 0, 90, 3);
+				normal = { 1,0,0 };
+			}
+			Debris::debris[i]->HitWall(hitPos, normal);
+		}
+		//Y軸
+		if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
+			Debris::debris[i]->GetBox(),
+			Vector3(0, 0, Debris::debris[i]->velocity.z),
+			contact_edge,
+			contact_pos,
+			MapChip::TEST_MAP
+		)) {
+			Vector3 hitPos = {
+				Debris::debris[i]->pos.x,
+				0,
+				contact_pos
+			};
+			Vector3 normal;
+			if (contact_edge == EdgeType::EdgeTypeBottom) {
+				normal = { 0,0,-1 };
+				DebugText::GetInstance()->Print("hitBottomMap", 0, 120, 3);
+
+			}
+			else {
+				DebugText::GetInstance()->Print("hitTopMap", 0, 120, 3);
+				normal = { 0,0,1 };
+			}
+			Debris::debris[i]->HitWall(hitPos, normal);
+
+		}
+
+	}
+
 	// 全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
 	Debris::StaticAdaptation();
 	Enemy::StaticAdaptation();
-	MapChip::GetInstance()->Adaptation(MapChip::TEST_MAP);
+	MapChip::GetInstance()->Adaptation();
 }
 
 void GameScene::Draw() {
@@ -169,7 +290,7 @@ void GameScene::Draw() {
 
 #pragma region 3Dオブジェクト(FBX)描画
 	//testStage->Draw(DirectXCommon::GetInstance()->GetCommandList());
-	MapChip::GetInstance()->Draw(MapChip::TEST_MAP);
+	MapChip::GetInstance()->Draw();
 	playerObject->Draw();
 	Debris::StaticDraw();
 	Enemy::StaticDraw();

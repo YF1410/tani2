@@ -3,6 +3,7 @@
 #include "Vector3.h"
 #include <vector>
 #include "GameObjCommon.h"
+#include "SphereCollider.h"
 
 class Enemy :
 	public GameObjCommon
@@ -94,4 +95,8 @@ private: // メンバ変数
 	float targetLength;
 	//現在の最近対象への距離
 	float minTargetLength;
+
+
+	BOX2D rect2d;					//マップチップ計算用
+
 };

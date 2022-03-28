@@ -239,7 +239,6 @@
     <ClCompile Include="PlayerObject.cpp">
       <Filter>ゲームシステム\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Debris.cpp" />
     <ClCompile Include="Enemy.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
@@ -257,6 +256,12 @@
     </ClCompile>
     <ClCompile Include="AABBCollider.cpp">
       <Filter>エンジンシステム\Collision\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Debris.cpp">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckBlock.cpp">
+      <Filter>ゲームシステム\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -399,7 +404,6 @@
     <ClInclude Include="PlayerObject.h">
       <Filter>ゲームシステム\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Debris.h" />
     <ClInclude Include="Enemy.h">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
@@ -420,6 +424,12 @@
     </ClInclude>
     <ClInclude Include="AABBCollider.h">
       <Filter>エンジンシステム\Collision\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Debris.h">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckBlock.h">
+      <Filter>ゲームシステム\Stage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
