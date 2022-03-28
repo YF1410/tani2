@@ -2,24 +2,29 @@
 
 #include "CollisionInfo.h"
 #include "GameObjCommon.h"
+#include <string>
 
 
-//衝突判定用関連の型定義
+//衝突判定形状の型定義
 enum CollisionShapeType
 {
 	SHAPE_UNKNOWN = -1, // 未設定
 
-	SHAPE_POINT		= 0x001,	//点
-	SHAPE_RAY		= 0x002,	//線（終端なし）
-	SHAPE_LINE		= 0x004,	//線（終端あり）
-	SHAPE_TRIANGLE	= 0x008,	//三角形
-	SHAPE_SPHERE	= 0x010,	//球
-	SHAPE_CYLINDER	= 0x020,	//筒
-	SHAPE_AABB		= 0x040,	//AABB
-	SHAPE_OBB		= 0x080,	//OBB
-	SHAPE_CAPSULE	= 0x100,	//カプセル
-	SHAPE_MESH		= 0x200,	//メッシュ
+	//3d
+	SHAPE_POINT		= 0x00001,	//点
+	SHAPE_RAY		= 0x00002,	//線（終端なし）
+	SHAPE_LINE		= 0x00004,	//線（終端あり）
+	SHAPE_TRIANGLE	= 0x00008,	//三角形
+	SHAPE_SPHERE	= 0x00010,	//球
+	SHAPE_CYLINDER	= 0x00020,	//筒
+	SHAPE_AABB		= 0x00040,	//AABB
+	SHAPE_OBB		= 0x00080,	//OBB
+	SHAPE_CAPSULE	= 0x00100,	//カプセル
+	SHAPE_MESH		= 0x00200,	//メッシュ
+	SHAPE_PLANE		= 0x00400,	//無限平面
 	// = 0x000	//コリジョンタイプ
+
+	BOX_2D			= 0x10000,
 };
 
 class BaseCollider
@@ -38,6 +43,7 @@ public:
 	virtual void Update() = 0;
 	//形状タイプ取得
 	inline CollisionShapeType GetShapeType() { return shapeType; }
+	inline std::string GetCollisionName() { return collisionName; }
 
 	//衝突時コールバック関数
 	inline void OnCollision(const CollisionInfo& info)
@@ -46,27 +52,21 @@ public:
 	}
 
 	// 当たり判定属性をセット
-	inline void SetAttribute(unsigned short attribute)
+	inline void SetAttribute(std::string tag)
 	{
-		this->attribute = attribute;
-	}
-
-	// 当たり判定属性を追加
-	inline void AddAttribute(unsigned short attribute)
-	{
-		this->attribute |= attribute;
+		this->collisionName = tag;
 	}
 
 	// 当たり判定属性を削除
-	inline void RemoveAttribute(unsigned short attribute)
+	inline void RemoveAttribute(std::string tag)
 	{
-		this->attribute &= !attribute;
+		this->collisionName  = nullptr;
 	}
 
 protected:
 	GameObjCommon *object = nullptr;
 	//形状タイプ
 	CollisionShapeType shapeType = SHAPE_UNKNOWN;
-	// 当たり判定属性
-	unsigned short attribute = 0b1111111111111111;
+	//当たり判定タグ
+	std::string collisionName;
 };

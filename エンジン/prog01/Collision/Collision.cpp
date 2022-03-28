@@ -393,7 +393,28 @@ bool Collision::CheckSphere2AABB(const Sphere& sphere, const AABB& aabb, DirectX
 	//è’ìÀ
 	if (sqLen < sphere.radius * sphere.radius) {
 		if (inter) {
+			Vector3 checkPos = spherePos - aabb.center;
+			//è’ìÀà íu
+			if (checkPos.x < aabb.length.x) {
+				inter->m128_f32[0] = aabb.length.x;
+			}
+			else {
+				inter->m128_f32[0] = spherePos.x;
+			}
 
+			if (checkPos.y < aabb.length.y) {
+				inter->m128_f32[1] = aabb.length.y;
+			}
+			else {
+				inter->m128_f32[1] = spherePos.y;
+			}
+
+			if (checkPos.z < aabb.length.z) {
+				inter->m128_f32[2] = aabb.length.z;
+			}
+			else {
+				inter->m128_f32[2] = spherePos.z;
+			}
 		}
 		return true;
 	}

@@ -66,8 +66,8 @@ private: // メンバ変数
 	//カメラ
 	std::unique_ptr<Camera> camera;
 	
-	const Vector3 eyeDistance = { 0,400,-1000 };
-	const Vector3 targetDistance = { 0,500,0 };
+	const Vector3 eyeDistance = { 0,2000,0 };
+	const Vector3 targetDistance = { 0,0,100 };
 	//スプライト
 	std::unique_ptr<Sprite> sprite;
 	//パーティクル
@@ -105,5 +105,5 @@ private: // メンバ変数
 	CollisionManager* collisionManager = nullptr;
 
 
-
+	bool checkPoint;
 };
