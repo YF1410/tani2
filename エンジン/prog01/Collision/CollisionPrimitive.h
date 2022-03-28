@@ -79,6 +79,7 @@ struct BOX2D {
 	float Right	 = 1.0f;
 	float Left	 = 1.0f;
 };
+
 enum EdgeType
 {
 	EdgeTypeNon = -1,
@@ -87,7 +88,6 @@ enum EdgeType
 	EdgeTypeTop,
 	EdgeTypeBottom,
 	EdgeTypeMax,
-};
 };
 
 struct Line {
