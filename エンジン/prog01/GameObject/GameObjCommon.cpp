@@ -6,10 +6,10 @@
 GameObjCommon::~GameObjCommon()
 {
 	// 当たり判定更新
-	if (colliders.size() != 0)
+	if (broadColliders.size() != 0)
 	{
-		auto iter = colliders.begin();
-		while (iter != colliders.end()) {
+		auto iter = broadColliders.begin();
+		while (iter != broadColliders.end()) {
 			CollisionManager::GetInstance()->RemoveCollider(iter->second);
 			++iter;
 		}
@@ -24,10 +24,10 @@ void GameObjCommon::Update()
 {
 
 	// 当たり判定更新
-	if (colliders.size() != 0)
+	if (broadColliders.size() != 0)
 	{
-		auto iter = colliders.begin();
-		while (iter != colliders.end()) {
+		auto iter = broadColliders.begin();
+		while (iter != broadColliders.end()) {
 			iter->second->Update();
 			++iter;
 		}
@@ -36,6 +36,7 @@ void GameObjCommon::Update()
 
 void GameObjCommon::Move()
 {
+	oldPos = pos;
 	if (isGravity) {
 		velocity.y -= gravityPow;
 	}
@@ -68,11 +69,20 @@ void GameObjCommon::Adaptation()
 
 	objectData->Update();
 
-	// 当たり判定更新
-	if (colliders.size() != 0)
+	//ブロードフェイズコライダー判定更新
+	if (broadColliders.size() != 0)
 	{
-		auto iter = colliders.begin();
-		while(iter != colliders.end()){
+		auto iter = broadColliders.begin();
+		while(iter != broadColliders.end()){
+			iter->second->Update();
+			++iter;
+		}
+	}
+	//ナローフェイズコライダー判定更新
+	if (narrowColliders.size() != 0)
+	{
+		auto iter = narrowColliders.begin();
+		while (iter != narrowColliders.end()) {
 			iter->second->Update();
 			++iter;
 		}
@@ -85,15 +95,22 @@ void GameObjCommon::Draw() const
 	objectData->Draw(DirectXCommon::GetInstance()->GetCommandList());
 }
 
-void GameObjCommon::SetCollider(BaseCollider *collider)
+void GameObjCommon::SetBroadCollider(BaseCollider *collider)
 {
 	collider->SetObject(this);
-	colliders[collider->GetCollisionName()] = collider;
+	broadColliders[collider->GetCollisionName()] = collider;
 	// コリジョンマネージャに追加
 	CollisionManager::GetInstance()->AddCollider(collider);
 	//行列の更新
 	//objectData->UpdateWorldMatrix();
 	//コライダーを更新しておく
+	collider->Update();
+}
+
+void GameObjCommon::SetNarrowCollider(BaseCollider *collider)
+{
+	collider->SetObject(this);
+	narrowColliders[collider->GetCollisionName()] = collider;
 	collider->Update();
 }
 

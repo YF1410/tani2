@@ -13,7 +13,7 @@ void ModelManager::Initialize()
 {
 	LoadModel(TESTS_TAGE, "stage");
 	LoadModel(DEFAULT_BLOCK, "testBlock");
-	LoadModel(PASSING_BLOCK, "passingBlock");
+	LoadModel(CHECK_BLOCK, "checkBlock");
 	LoadModel(SLIME, "slime");
 	LoadModel(SLIME_BREAK, "slime"/*_break"*/ );
 	LoadModel(ENEMY, "human"/*_break"*/);

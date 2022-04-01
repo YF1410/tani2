@@ -300,7 +300,7 @@ bool Collision::CheckSphere2Capsule(const Sphere& sphere, const Capsule& capsule
 	Vector3 vStartToEnd = capsule.endPosition - capsule.startPosition;
 
 	Vector3 n = vStartToEnd;
-	n.Normalize();
+	n.Normal();
 
 	Vector3 sPos = { sphere.center.m128_f32[0], sphere.center.m128_f32[1], sphere.center.m128_f32[2] };
 
@@ -426,7 +426,7 @@ bool Collision::CheckCapsule2Box(const Capsule& capsule, const Box& box)
 	Vector3 vStartToEnd = capsule.endPosition - capsule.startPosition;
 
 	Vector3 n = vStartToEnd;
-	n.Normalize();
+	n.Normal();
 
 	Vector3 boxMinPos = { box.center.m128_f32[0] - box.scale.x, box.center.m128_f32[1] - box.scale.y, box.center.m128_f32[2] - box.scale.z };
 	Vector3 boxMaxPos = { box.center.m128_f32[0] + box.scale.x, box.center.m128_f32[1] + box.scale.y, box.center.m128_f32[2] + box.scale.z };

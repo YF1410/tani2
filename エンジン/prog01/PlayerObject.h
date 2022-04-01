@@ -2,6 +2,7 @@
 #include "FbxObject3d.h"
 #include "Vector3.h"
 #include "SphereCollider.h"
+#include "Box2DCollider.h"
 #include "GameObjCommon.h"
 
 enum DESTRUCT_TYPE {
@@ -31,12 +32,14 @@ public:
 	float GetSuction() { return suction; }
 	float GetSpeed() { return velocity.Length(); }
 	float GetScale() { return scalef; }
-	BOX2D GetBox() { return rect2d; }
 
 	//壁との衝突
 	void HitWall(
 		const XMVECTOR &hitPos,		//衝突位置
 		const Vector3 &normal);
+
+	bool isCheckPoint;
+
 private:	//衝突時の処理関数
 
 private: // メンバ変数
@@ -60,11 +63,7 @@ private: // メンバ変数
 	const int  destructPow = 10;
 
 	//コライダー
-	SphereCollider *hitCollider;	//衝突判定用
-	SphereCollider *absorptionCollider;	//衝突判定用
-
-	BOX2D rect2d;					//マップチップ計算用
-	void AdjustToMapchipEdgePosition(EdgeType contact_edge, float contact_pos);
-
+	SphereCollider *broadSphereCollider;	//衝突判定用
+	Box2DCollider *toMapChipCollider;
 };
 

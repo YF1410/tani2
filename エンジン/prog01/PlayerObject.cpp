@@ -12,7 +12,7 @@
 
 using namespace DirectX;
 
-PlayerObject::PlayerObject(XMFLOAT3 startPos):
+PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	GameObjCommon(
 		ModelManager::SLIME,	//スライムのモデルをセット
 		GameObjCommon::PLAYER,	//プレイヤーとして扱う
@@ -24,23 +24,25 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos):
 	this->startPos = startPos;
 	pos = startPos;
 
-	//サイズ初期化
-	size = 500.0f;
-
-	scalef = ConvertSizeToScale(size);
-	objectData->SetScale(scalef);
 	//当たり判定
-	hitCollider = new SphereCollider("hitCollider", { 0,scalef * 180.0f,0 }, scalef * 180.0f);
-	SetCollider(hitCollider);
-	absorptionCollider = new SphereCollider("absorptionCollider", { 0,scalef * 180.0f,0 }, (scalef + 1) * 180.0f);
-	SetCollider(absorptionCollider);
+	broadSphereCollider = new SphereCollider("hitCollider", { 0,scalef * 180.0f,0 }, scalef * 180.0f);
+	SetBroadCollider(broadSphereCollider);
+
+	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, 100, 100);
+	SetNarrowCollider(toMapChipCollider);
+	//absorptionCollider->Update();
 }
 
 
 void PlayerObject::Initialize()
 {
+	isCheckPoint = false;
 	//サイズ初期化
 	size = 500.0f;
+	//サイズ初期化
+	scalef = ConvertSizeToScale(size);
+	objectData->SetScale(scalef);
+	toMapChipCollider->SetRadius(scalef * 180.0f, scalef * 180.0f);
 	//自爆フラグ
 	destructType = CIRCLE;
 	//吸引範囲
@@ -52,12 +54,12 @@ void PlayerObject::Initialize()
 
 void PlayerObject::Update()
 {
-	Input* input = Input::GetInstance();
+	Input *input = Input::GetInstance();
 	//スケールから移動量決定
 	moveSpead = scalef * 5;
 
 	//移動量減衰処理
-	VelocityReset(false,0.8f);
+	VelocityReset(false, 0.8f);
 
 	//リセット
 	if (input->PushKey(DIK_R)) {
@@ -88,7 +90,7 @@ void PlayerObject::Update()
 
 
 	//爆破タイプ切り替え
-	if (input->TriggerKey(DIK_3)||input->TriggerPadButton(BUTTON_RIGHT_SHOULDER)) {
+	if (input->TriggerKey(DIK_3) || input->TriggerPadButton(BUTTON_RIGHT_SHOULDER)) {
 		if (destructType != CIRCLE) {
 			destructType = CIRCLE;
 		}
@@ -117,7 +119,7 @@ void PlayerObject::Update()
 			Vector3 startVec;		//速度*向きベクトル
 			float shotRad;			//角度決定用
 			//発射スピード
-			float shotSpeed = rand() % 12 + scalef * 20;
+			float shotSpeed = rand() % 12 + scalef * 60;
 			//残骸のサイズ
 			float shotSize = maxSize / (destructPow * destructType);
 
@@ -136,8 +138,8 @@ void PlayerObject::Update()
 			case DIRECTIVITY:	//指向性爆発
 				//-15~15度で計算
 				shotRad = XMConvertToRadians(rand() % 30 - 15);
-			
-				startVec = velocity.Normalize();
+
+				startVec = velocity.Normal();
 
 				startVec.AddRotationY(shotRad);
 				//startVec = startVec + offset;
@@ -146,9 +148,9 @@ void PlayerObject::Update()
 				break;
 			}
 
-
+			velocity += velocity.Normal() * 10;
 			//Debrisのコンテナに追加
-			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize,&pos));
+			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed + velocity, shotSize, &pos));
 		}
 		//爆発終了
 		size -= maxSize;
@@ -161,75 +163,48 @@ void PlayerObject::Update()
 			Debris::debris[i]->ReturnStart();
 		}
 	}
-	
 
-	
+
+
 	//サイズからスケールへ変換
 	scalef = ConvertSizeToScale(size);
 	scale = scalef;
+	broadSphereCollider->SetRadius(scalef * 180.0f + 20.0f);
+	toMapChipCollider->SetRadius( scalef * 150.0f, scalef * 150.0f);
 	//移動量を適応
 	Move();
-
-	//マップチップ用の判定を移動
-	rect2d.Top		= -(int)((pos.z + scalef * 100.0f));
-	rect2d.Bottom	= -(int)((pos.z - scalef * 100.0f));
-	rect2d.Right	= (int)((pos.x + scalef * 100.0f) );
-	rect2d.Left		= (int)((pos.x - scalef * 100.0f) );
-
+	DebugText::GetInstance()->VariablePrint(800, 0, "pos.x", pos.x, 3);
+	DebugText::GetInstance()->VariablePrint(800, 40, "pos.y", pos.z, 3);
+	DebugText::GetInstance()->VariablePrint(800, 320, "R", toMapChipCollider->GetRadiusX(), 3);
 
 	//マップチップとの当たり判定
-	EdgeType contact_edge = EdgeType::EdgeTypeNon;
-	float contact_pos = 0.0f;
-	//X軸
-	if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
-		rect2d,
-		Vector3(velocity.x, 0, 0),
-		contact_edge,
-		contact_pos,
-		MapChip::TEST_MAP
-	)) {
-		Vector3 hitPos = {
-			contact_pos,
-			0,
-			pos.z,
-		};
-		Vector3 normal;
-		if (contact_edge == EdgeType::EdgeTypeLeft) {
-			DebugText::GetInstance()->Print("hitLeftMap", 0, 90, 3);
-
-			normal = { -1,0,0 };
+	toMapChipCollider->Update();
+	Vector3 hitPos = {0,0,0};
+	Vector3 oldPos;
+	if (MapChip::GetInstance()->CheckHitMapChip(toMapChipCollider, &velocity, &hitPos)) {
+		Vector3 normal = {0,0,0};
+		
+		if (hitPos.x != 0) {
+			int vec = 1;	//向き
+			if (0 < velocity.x) {
+				vec = -1;
+			}
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
+			normal.x = vec;
 		}
-		else {
-			DebugText::GetInstance()->Print("hitRigthMap", 0, 90, 3);
-			normal = { 1,0,0 };
+		if (hitPos.z != 0) {
+			int vec = 1;	//向き
+			if (velocity.z < 0) {
+				vec = -1;
+			}
+			pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
+			normal.z = vec;
 		}
+		normal.Normalize();
 		HitWall(hitPos, normal);
 	}
-	//Y軸
-	if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
-		rect2d,
-		Vector3(0, 0, velocity.z),
-		contact_edge,
-		contact_pos,
-		MapChip::TEST_MAP
-	)) {
-		Vector3 hitPos = {
-			pos.x,
-			0,
-			contact_pos
-		};
-		Vector3 normal;
-		if (contact_edge == EdgeType::EdgeTypeBottom) {
-			normal = { 0,0,-1 };
-			DebugText::GetInstance()->Print("hitBottomMap", 0, 120, 3);
 
-		}
-		else {
-			DebugText::GetInstance()->Print("hitTopMap", 0, 120, 3);
-			normal = { 0,0,1 };
-		}
-		HitWall(hitPos, normal);
-	}
+
 }
 
 
@@ -250,18 +225,17 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 		}
 		break;
 	case ENEMY:
-		DebugText::GetInstance()->Print("HitEnemy", 0, 60,3);
+		DebugText::GetInstance()->Print("HitEnemy", 0, 80, 3);
 		break;
 
 	case DEFAULT_BLOACK:
-		DebugText::GetInstance()->Print("HitBox", 0, 60, 3);
 		/*
-		
+
 		pos = (info.object->pos );
 		velocity = CalcWallScratchVector(velocity, info);*/
 
 		break;
-		
+
 	default:
 		break;
 	}
@@ -271,44 +245,6 @@ void PlayerObject::HitWall(
 	const XMVECTOR &hitPos,		//衝突位置
 	const Vector3 &normal)
 {
-	Vector3 HitPos = hitPos;
-	pos = HitPos + normal * (rect2d.Bottom - rect2d.Top);
 	velocity = CalcWallScratchVector(velocity, normal);
-
-
-	//マップチップ用の判定を移動
-	rect2d.Top = -(int)((pos.z + scalef * 100.0f));
-	rect2d.Bottom = -(int)((pos.z - scalef * 100.0f));
-	rect2d.Right = (int)((pos.x + scalef * 100.0f));
-	rect2d.Left = (int)((pos.x - scalef * 100.0f));
 }
 
-void PlayerObject::AdjustToMapchipEdgePosition(EdgeType contact_edge, float contact_pos)
-{
-	struct Vec2 {
-		float x;
-		float y;
-		Vec2(float x, float y) {
-			this->x = x;
-			this->y = y;
-		}
-	};
-		
-	Vec2 offset = Vec2(rect2d.Bottom - rect2d.Top, rect2d.Bottom - rect2d.Top);
-
-	switch (contact_edge)
-	{
-	case EdgeTypeLeft:
-		pos.x = contact_pos - offset.x/2;
-		break;
-	case EdgeTypeRight:
-		pos.x = contact_pos + offset.x / 2;
-		break;
-	case EdgeTypeTop:
-		pos.z = contact_pos - offset.y/2;
-		break;
-	case EdgeTypeBottom:
-		pos.z = contact_pos + offset.y /2;
-		break;
-	}
-}

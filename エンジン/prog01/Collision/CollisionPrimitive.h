@@ -72,29 +72,11 @@ struct AABB {
 };
 
 
-//2D
-struct BOX2D {
+//2D箱
+struct Box2D {
+	Vector3 center = { 0,0,0 };
 	float Bottom = 1.0f;
 	float Top	 = 1.0f;
 	float Right	 = 1.0f;
 	float Left	 = 1.0f;
-};
-
-enum EdgeType
-{
-	EdgeTypeNon = -1,
-	EdgeTypeLeft,
-	EdgeTypeRight,
-	EdgeTypeTop,
-	EdgeTypeBottom,
-	EdgeTypeMax,
-};
-
-struct Line {
-	//始点
-	Vector3 start = { 0,0,0 };
-	//終点
-	Vector3 end = { 0,0,0 };
-	//ベクトル
-	Vector3 vec = { 0,0,0 };
 };

@@ -98,7 +98,8 @@ private: // メンバ変数
 	//現在の最近対象への距離
 	float minTargetLength;
 
-
-	BOX2D rect2d;					//マップチップ計算用
-
+	//壁との衝突
+	void HitWall(
+		const XMVECTOR &hitPos,		//衝突位置
+		const Vector3 &normal);
 };

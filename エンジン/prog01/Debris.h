@@ -4,6 +4,7 @@
 #include <vector>
 #include "GameObjCommon.h"
 #include "SphereCollider.h"
+#include "Box2DCollider.h"
 
 class Debris :
 	public GameObjCommon
@@ -48,7 +49,6 @@ public:		//衝突時関係
 		const Vector3 &normal);
 
 	Vector3 GetPos() { return pos; }
-	BOX2D GetBox() { return rect2d; }
 
 	//サイズを取得
 	float GetSize() { return size; }
@@ -80,12 +80,17 @@ private:
 	SphereCollider *hitCollider;
 	SphereCollider *attackCollider;
 
+	//反転エリア
+	Vector3 reverseCenter;
+	//半径
+	float reversRagne;
+
 
 	//衝突用
 	//ダメージを受ける
 	void Damage(float damage);
 
 
-	BOX2D rect2d;					//マップチップ計算用
+	Box2DCollider *toMapChipCollider;			//マップチップ計算用
 };
 

@@ -4,7 +4,11 @@
 using namespace DirectX;
 
 struct Vector3 : public XMFLOAT3 {
-	Vector3() = default;
+	Vector3() {
+		this->x = 0;
+		this->y = 0;
+		this->z = 0;
+	};
 	Vector3(float x, float y, float z) {
 		this->x = x;
 		this->y = y;
@@ -76,10 +80,13 @@ struct Vector3 : public XMFLOAT3 {
 		return powf(this->Length(),2);
 	}
 	//ê≥ãKâª
-	Vector3 Normalize() {
+	Vector3 Normal() {
 		return XMVector3Normalize(XMVECTOR(*this));
 	}
-
+	Vector3 Normalize() {
+		*this = XMVector3Normalize(XMVECTOR(*this));
+		return *this;
+	}
 
 	void RotationX(float angle) {
 	

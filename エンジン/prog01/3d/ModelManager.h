@@ -15,7 +15,7 @@ public:
 	enum ModelName {
 		TESTS_TAGE,
 		DEFAULT_BLOCK,
-		PASSING_BLOCK,
+		CHECK_BLOCK,
 		
 
 		SLIME,
