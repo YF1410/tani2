@@ -73,16 +73,18 @@ void GameScene::Initialize() {
 	light->SetPointLightActive(2, false);
 	light->SetCircleShadowActive(0, true);
 	
+	//敵初期配置
+	Enemy::enemys.push_back(new Enemy({ 4000,0,-3200 }));
+	Enemy::enemys.push_back(new Enemy({ 6200,0,-3200 }));
+	Enemy::enemys.push_back(new Enemy({ 5200,0,-2400 }));
+	Enemy::enemys.push_back(new Enemy({ 6000,0,-2200 }));
+	Enemy::enemys.push_back(new Enemy({ 4200,0,-3200 }));
+	Enemy::enemys.push_back(new Enemy({ 5200,0,-1100 }));
 
-	Enemy::enemys.push_back(new Enemy({ 2000,0,-5000 }));
-	Enemy::enemys.push_back(new Enemy({ 2000,0,-5000 }));
 	Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));
 	Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));
 	Enemy::enemys.push_back(new Enemy({ 1800,0,-5800 }));
 
-
-	//サウンド再生
-	Audio::GetInstance()->LoadWave(0, "Resources/Alarm01.wav");
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
@@ -101,19 +103,36 @@ void GameScene::Finalize() {
 void GameScene::Update() {
 	//カメラ更新
 	//プレイヤーの少し上を焦点にする
-	camera->SetEye(
-		Ease(Out, Quad, 0.01f,
-			camera.get()->GetEye(),
-			Vector3(playerObject.get()->GetPos() + eyeDistance))
-	);
-
+	//カメラ更新
+	Vector3 camEye = camera.get()->GetEye();
+	float debrisLengthMax = 0.0f;
+	for (int i = 0; i < Debris::debris.size(); i++) {
+		if (Debris::debris[i]->isFirstAttack &&
+			debrisLengthMax <= Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length()) {
+			debrisLengthMax = Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length();
+		}
+	}
+	eyeDistance = Ease(Out, Quad, 0.01f,
+		camera.get()->GetEye(),
+		Vector3(playerObject.get()->GetPos() + eyeDistanceDef + Vector3(0, debrisLengthMax, 0)));
+	camera->SetEye(eyeDistance);
+	//プレイヤーの少し上を焦点にする
 	camera->SetTarget(Ease(Out, Quad, 0.01f,
 		camera.get()->GetTarget(),
 		Vector3(playerObject.get()->GetPos() + targetDistance))
 	);
 	camera->Update();
 
+	//追加の敵
+	if (playerObject.get()->isCheckPoint && !checkPoint) {
+		Enemy::enemys.push_back(new Enemy({ 2000,0,-5000 }));
+		Enemy::enemys.push_back(new Enemy({ 2000,0,-5000 }));
+		Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));
+		Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));
+		Enemy::enemys.push_back(new Enemy({ 1800,0,-5800 }));
+		checkPoint = true;
 
+	}
 	//マップチップ更新
 	//MapChip::GetInstance()->Update(MapChip::TEST_MAP);
 
@@ -144,122 +163,10 @@ void GameScene::Update() {
 	Enemy::StaticUpdate();
 
 
-	////マップチップとの当たり判定
-	EdgeType contact_edge = EdgeType::EdgeTypeNon;
 	float contact_pos = 0.0f;
-	////X軸
-	//if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
-	//	playerObject.get()->GetBox(),
-	//	Vector3(playerObject.get()->velocity.x,0,0),
-	//	contact_edge,
-	//	contact_pos,
-	//	MapChip::TEST_MAP
-	//)) {
-	//	Vector3 hitPos = {
-	//		contact_pos,
-	//		0,
-	//		playerObject.get()->pos.z,
-	//	};
-	//	Vector3 normal;
-	//	if (contact_edge == EdgeType::EdgeTypeLeft) {
-	//		DebugText::GetInstance()->Print("hitLeftMap", 0, 90, 3);
-
-	//		normal = { -1,0,0 };
-	//	}
-	//	else {
-	//		DebugText::GetInstance()->Print("hitRigthMap", 0, 90, 3);
-	//		normal = { 1,0,0 };
-	//	}
-	//	playerObject.get()->HitWall(hitPos, normal);
-	//}
-	////Y軸
-	//if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
-	//	playerObject.get()->GetBox(),
-	//	Vector3( 0, 0, playerObject.get()->velocity.z ),
-	//	contact_edge,
-	//	contact_pos,
-	//	MapChip::TEST_MAP
-	//)) {
-	//	Vector3 hitPos = {
-	//		playerObject.get()->pos.x,
-	//		0,
-	//		contact_pos
-	//	};
-	//	Vector3 normal;
-	//	if (contact_edge == EdgeType::EdgeTypeBottom) {
-	//		normal = { 0,0,-1 };
-	//		DebugText::GetInstance()->Print("hitBottomMap", 0, 120, 3);
-
-	//	}
-	//	else {
-	//		DebugText::GetInstance()->Print("hitTopMap", 0, 120, 3);
-	//		normal = { 0,0,1 };
-	//	}
-	//	playerObject.get()->HitWall(hitPos, normal);
-
-	//}
-
-
-
-	//残骸とマップチップ
-	for (int i = 0; i < Debris::debris.size(); i++) {
-
-		//X軸
-		if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
-			Debris::debris[i]->GetBox(),
-			Vector3(Debris::debris[i]->velocity.x, 0, 0),
-			contact_edge,
-			contact_pos,
-			MapChip::TEST_MAP
-		)) {
-			Vector3 hitPos = {
-				contact_pos,
-				0,
-				Debris::debris[i]->pos.z,
-			};
-			Vector3 normal;
-			if (contact_edge == EdgeType::EdgeTypeLeft) {
-				DebugText::GetInstance()->Print("hitLeftMap", 0, 90, 3);
-
-				normal = { -1,0,0 };
-			}
-			else {
-				DebugText::GetInstance()->Print("hitRigthMap", 0, 90, 3);
-				normal = { 1,0,0 };
-			}
-			Debris::debris[i]->HitWall(hitPos, normal);
-		}
-		//Y軸
-		if (MapChip::GetInstance()->CollisionRectAndMapchipEdgeVersion(
-			Debris::debris[i]->GetBox(),
-			Vector3(0, 0, Debris::debris[i]->velocity.z),
-			contact_edge,
-			contact_pos,
-			MapChip::TEST_MAP
-		)) {
-			Vector3 hitPos = {
-				Debris::debris[i]->pos.x,
-				0,
-				contact_pos
-			};
-			Vector3 normal;
-			if (contact_edge == EdgeType::EdgeTypeBottom) {
-				normal = { 0,0,-1 };
-				DebugText::GetInstance()->Print("hitBottomMap", 0, 120, 3);
-
-			}
-			else {
-				DebugText::GetInstance()->Print("hitTopMap", 0, 120, 3);
-				normal = { 0,0,1 };
-			}
-			Debris::debris[i]->HitWall(hitPos, normal);
-
-		}
-
-	}
 
 	// 全ての衝突をチェック
-	collisionManager->CheckAllCollisions();
+	collisionManager->CheckBroadCollisions();
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
 	Debris::StaticAdaptation();

@@ -24,7 +24,7 @@ enum CollisionShapeType
 	SHAPE_PLANE		= 0x00400,	//無限平面
 	// = 0x000	//コリジョンタイプ
 
-	BOX_2D			= 0x10000,
+	SHAPE_BOX2D			= 0x10000,
 };
 
 class BaseCollider

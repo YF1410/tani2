@@ -7,7 +7,7 @@
 #include <cassert>
 #include <map>
 #include "BaseBlock.h"
-#include "CollisionPrimitive.h"
+#include "Box2dCollider.h"
 
 
 class MapChip
@@ -60,8 +60,9 @@ public:
 
 	MAP_DATA GetMapData() { return mapData[nowMap]; }
 	
-	//衝突判定
-	bool CollisionRectAndMapchipEdgeVersion(BOX2D &src_rect, Vector3 velocity, EdgeType &contact_edge, float &contact_edge_position, MAP_NAME name);
+
+	//マップチップと矩形の当たり判定
+	bool CheckHitMapChip(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos);
 
 private:
 	//現在のマップ

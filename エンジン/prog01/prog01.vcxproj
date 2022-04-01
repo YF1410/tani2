@@ -267,6 +267,7 @@
     <ClCompile Include="Base\MyGame.cpp" />
     <ClCompile Include="Base\WinApp.cpp" />
     <ClCompile Include="AABBCollider.cpp" />
+    <ClCompile Include="Box2DCollider.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="CheckBlock.cpp" />
     <ClCompile Include="Collision\Collision.cpp">
@@ -319,6 +320,7 @@
     <ClInclude Include="Base\SafeDelete.h" />
     <ClInclude Include="Base\WinApp.h" />
     <ClInclude Include="AABBCollider.h" />
+    <ClInclude Include="Box2DCollider.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="CheckBlock.h" />
     <ClInclude Include="CircleShadow.h" />

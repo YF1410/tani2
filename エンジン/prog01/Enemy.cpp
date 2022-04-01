@@ -5,6 +5,8 @@
 #include <time.h>
 #include "Easing.h"
 #include "Debris.h"
+#include "SlimeMath.h"
+#include "MapChip.h"
 
 using namespace DirectX;
 std::vector<Enemy*> Enemy::enemys;
@@ -26,7 +28,9 @@ Enemy::Enemy(XMFLOAT3 startPos) :
 	srand(time(NULL));
 	//当たり判定初期化
 	float radius = 100;
-	SetCollider(new SphereCollider("hitCollider",XMVECTOR{ 0,radius,0 }, radius));
+	SetBroadCollider(new SphereCollider("hitCollider",XMVECTOR{ 0,radius,0 }, radius));
+	exclusionList.push_back(ENEMY);
+
 }
 
 
@@ -85,7 +89,7 @@ void Enemy::Update() {
 		else {
 			targetVec = Vector3(targetPos - pos);
 			targetVec.y = 0;
-			velocity += targetVec.Normalize() * moveSpeed;
+			velocity += targetVec.Normal() * moveSpeed;
 		}
 		break;
 	case Enemy::ATTACK:
@@ -124,12 +128,6 @@ void Enemy::Update() {
 	}
 	Move();
 
-	//マップチップ用の判定を移動
-	rect2d.Top = -(int)((pos.z + scale.x * 100.0f));
-	rect2d.Bottom = -(int)((pos.z - scale.x * 100.0f));
-	rect2d.Right = (int)((pos.x + scale.x * 100.0f));
-	rect2d.Left = (int)((pos.x - scale.x * 100.0f));
-
 }
 
 void Enemy::OnCollision(const CollisionInfo &info)
@@ -137,8 +135,13 @@ void Enemy::OnCollision(const CollisionInfo &info)
 	Debris *debri;
 	switch (info.object->Tag)
 	{
+	case PLAYER:
+		if (true) {
+
+		}
+		break;
 	case DEBRIS:
-		debri = dynamic_cast<Debris *>(info.object);
+ 		debri = dynamic_cast<Debris *>(info.object);
 		if (debri->isAttack) {
 			Damage(1.0f);
 		}
@@ -196,4 +199,14 @@ void Enemy::HomingObjectCheck(Vector3 targetPos)
 {
 	this->targetPos = targetPos;
 	state = HOMING;
+}
+
+void Enemy::HitWall(const XMVECTOR &hitPos, const Vector3 &normal)
+{
+
+	Vector3 HitPos = hitPos;
+	//pos = HitPos + normal * (rect2d.Bottom - rect2d.Top);
+	velocity = CalcReflectVector(velocity, normal);
+
+
 }

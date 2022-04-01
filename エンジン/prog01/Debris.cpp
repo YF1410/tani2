@@ -2,6 +2,7 @@
 #include "ModelManager.h"
 #include "DirectXCommon.h"
 #include "SlimeMath.h"
+#include "MapChip.h"
 
 std::vector<Debris *> Debris::debris;
 
@@ -15,7 +16,9 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size,Vector3 *playerPos
 	size(size),
 	isAlive(true),
 	isAttack(true),
-	isFirstAttack(true)
+	isFirstAttack(true),
+	reverseCenter(startPos),
+	reversRagne(2000)
 {
 	//サイズからスケールへコンバート
 	scale = ConvertSizeToScale(size);
@@ -26,16 +29,20 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size,Vector3 *playerPos
 	//プレイヤーの位置セット
 	this->playerPos = playerPos;
 
+	////マップチップ用コライダー
+	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, scale.x * 150.0f, scale.x*150.0f);
+	SetNarrowCollider(toMapChipCollider);
+
 	//押し返し判定用コライダー
 	hitCollider = new SphereCollider("hitCollider");
 	hitCollider->SetRadius(scale.x * 180.0f);
 	hitCollider->SetOffset({ 0,hitCollider->GetRadius(),0 });
+	SetBroadCollider(hitCollider);
 	//攻撃判定用コライダー
 	attackCollider = new SphereCollider("attackCollider");
-	attackCollider->SetRadius(scale.x * 180.0f + 20.0f);
+	attackCollider->SetRadius(scale.x * 150.0f);
 	attackCollider->SetOffset({ 0,attackCollider->GetRadius(),0 });
-	SetCollider(hitCollider);
-	SetCollider(attackCollider);
+	SetNarrowCollider(attackCollider);
 	//残骸どうしは判定しない
 	exclusionList.push_back(DEBRIS);
 }
@@ -62,7 +69,7 @@ void Debris::Update()
 		
 		break;
 	case Debris::RETURN:
-		velocity += Vector3(*playerPos- pos).Normalize();
+		velocity = Vector3(*playerPos- pos).Normal() * 100;
 		if (returnTimer-- <= 0) {
 			state = STAY;
 		}
@@ -74,19 +81,42 @@ void Debris::Update()
 	//移動量を適応
 	Move();
 
-	//マップチップ用の判定を移動
-	rect2d.Top = -(int)((pos.z + scale.x * 100.0f));
-	rect2d.Bottom = -(int)((pos.z - scale.x * 100.0f));
-	rect2d.Right = (int)((pos.x + scale.x * 100.0f));
-	rect2d.Left = (int)((pos.x - scale.x * 100.0f));
+	//マップチップとの当たり判定
+	toMapChipCollider->Update();
+	Vector3 hitPos = { 0,0,0 };
+	Vector3 oldPos;
+	if (MapChip::GetInstance()->CheckHitMapChip(toMapChipCollider, &velocity, &hitPos)) {
+		Vector3 normal = { 0,0,0 };
 
+		if (hitPos.x != 0) {
+			int vec = 1;	//向き
+			if (0 < velocity.x) {
+				vec = -1;
+			}
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
+			normal.x = vec;
+		}
+		if (hitPos.z != 0) {
+			int vec = 1;	//向き
+			if (velocity.z < 0) {
+				vec = -1;
+			}
+			pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
+			normal.z = vec;
+		}
+		normal.Normalize();
+		HitWall(hitPos, normal);
+	}
 
+	if (Vector3(pos - reverseCenter).Length() < reversRagne) {
+		velocity *= -1;
+	}
 }
 
 void Debris::VelocityReset()
 {
 	//空気抵抗
-	airResistance = velocity * 0.01f;
+	airResistance = velocity * 0.02f;
 	velocity -= airResistance;
 }
 
@@ -167,27 +197,19 @@ void Debris::ReturnStart()
 {
 	//ステートをリターンに
 	state = RETURN;
-	velocity *= Vector3(pos - *playerPos).Normalize();
+	velocity *= Vector3(pos - *playerPos).Normal();
 	returnTimer = 120;
 }
 
 void Debris::SuckedPlayer(const Vector3 &playerPos,const float &suckedRadius)
 {
 	//移動開始
-	velocity += Vector3(playerPos- pos).Normalize() * 3.0f;
+	velocity += Vector3(playerPos- pos).Normal() * 3.0f;
 }
 
 void Debris::HitWall(const XMVECTOR &hitPos, const Vector3 &normal)
 {
-	Vector3 HitPos = hitPos;
-	pos = HitPos + normal * (rect2d.Bottom - rect2d.Top);
 	velocity = CalcReflectVector(velocity, normal);
-
-	//マップチップ用の判定を移動
-	rect2d.Top = -(int)((pos.z + scale.x * 100.0f));
-	rect2d.Bottom = -(int)((pos.z - scale.x * 100.0f));
-	rect2d.Right = (int)((pos.x + scale.x * 100.0f));
-	rect2d.Left = (int)((pos.x - scale.x * 100.0f));
 }
 
 

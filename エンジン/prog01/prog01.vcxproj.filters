@@ -86,8 +86,11 @@
     <Filter Include="ゲームシステム\GameObject">
       <UniqueIdentifier>{3fff4a70-879f-4259-996f-4ed74b8945d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="エンジンシステム\Collision\Collider">
+    <Filter Include="エンジンシステム\Collision\Collider3d">
       <UniqueIdentifier>{0e50f6de-3233-4dde-936c-da96a22a9fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="エンジンシステム\Collision\Collider2d">
+      <UniqueIdentifier>{2a2180a3-83be-4f6e-aaa2-613ff38ddf2f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -252,16 +255,19 @@
       <Filter>ゲームシステム\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Collision\SphereCollider.cpp">
-      <Filter>エンジンシステム\Collision\Collider</Filter>
+      <Filter>エンジンシステム\Collision\Collider3d</Filter>
     </ClCompile>
     <ClCompile Include="AABBCollider.cpp">
-      <Filter>エンジンシステム\Collision\Collider</Filter>
+      <Filter>エンジンシステム\Collision\Collider3d</Filter>
     </ClCompile>
     <ClCompile Include="Debris.cpp">
       <Filter>ゲームシステム\Player</Filter>
     </ClCompile>
     <ClCompile Include="CheckBlock.cpp">
       <Filter>ゲームシステム\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Box2DCollider.cpp">
+      <Filter>エンジンシステム\Collision\Collider2d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -420,16 +426,19 @@
       <Filter>ゲームシステム\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Collision\SphereCollider.h">
-      <Filter>エンジンシステム\Collision\Collider</Filter>
+      <Filter>エンジンシステム\Collision\Collider3d</Filter>
     </ClInclude>
     <ClInclude Include="AABBCollider.h">
-      <Filter>エンジンシステム\Collision\Collider</Filter>
+      <Filter>エンジンシステム\Collision\Collider3d</Filter>
     </ClInclude>
     <ClInclude Include="Debris.h">
       <Filter>ゲームシステム\Player</Filter>
     </ClInclude>
     <ClInclude Include="CheckBlock.h">
       <Filter>ゲームシステム\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Box2DCollider.h">
+      <Filter>エンジンシステム\Collision\Collider2d</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
