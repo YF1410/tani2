@@ -35,5 +35,5 @@ public:
 	//カプセルとボックスの当たり判定
 	static bool CheckCapsule2Box(const Capsule& capsule, const Box& box);
 
-	static bool CheckLine2Box(const Line& line, const AABB& aabb);
+	//static bool CheckLine2Box(const Line& line, const AABB& aabb);
 };

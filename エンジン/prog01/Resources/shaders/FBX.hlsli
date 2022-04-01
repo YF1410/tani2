@@ -40,6 +40,19 @@ struct SkinOutput
 	float3 normal;
 };
 
+//マテリアル
+cbuffer cbuff1 : register(b1)
+{
+	//アルベド
+	float3 baseColor;
+	//金属度
+	float metalness;
+	//鏡面反射度
+	float specular;
+	//粗さ
+	float roughness;
+}
+
 // 平行光源の数
 static const int DIRLIGHT_NUM = 3;
 

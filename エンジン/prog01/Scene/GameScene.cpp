@@ -65,6 +65,7 @@ void GameScene::Initialize() {
 	light = LightGroup::Create();
 	//3Dオブジェクトにライトをセット
 	Object3d::SetLight(light.get());
+	FbxObject3d::SetLight(light.get());
 	light->SetDirLightActive(0, true);
 	light->SetDirLightActive(1, true);
 	light->SetDirLightActive(2, true);
