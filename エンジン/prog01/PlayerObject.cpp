@@ -50,6 +50,8 @@ void PlayerObject::Initialize()
 	//ポジション初期化
 	pos = startPos;
 
+	canReturn = true;
+	returnCounter = 0;
 	reverseArea = MIN;
 }
 
@@ -168,9 +170,18 @@ void PlayerObject::Update()
 	}
 
 	//回収
-	if (input->TriggerKey(DIK_Q)) {
+	if (input->TriggerKey(DIK_Q) &&
+		canReturn == true) {
+		canReturn = false;
+		returnCounter = 300;
 		for (int i = 0; i < Debris::debris.size(); i++) {
 			Debris::debris[i]->ReturnStart();
+		}
+	}
+	if (!canReturn) {
+		returnCounter--;
+		if (returnCounter <= 0) {
+			canReturn = true;
 		}
 	}
 
@@ -183,10 +194,13 @@ void PlayerObject::Update()
 	toMapChipCollider->SetRadius( scalef * 150.0f, scalef * 150.0f);
 	//移動量を適応
 	Move();
-	DebugText::GetInstance()->VariablePrint(800, 0, "pos.x", pos.x, 3);
-	DebugText::GetInstance()->VariablePrint(800, 40, "pos.y", pos.z, 3);
-	DebugText::GetInstance()->VariablePrint(800, 320, "R", toMapChipCollider->GetRadiusX(), 3);
-
+	DebugText::GetInstance()->Print("WASD : Move",800,0,3);
+	DebugText::GetInstance()->Print("Q : ReturnDebri",800,40,3);
+	DebugText::GetInstance()->Print("SPACE : Boom",800,80,3);
+	DebugText::GetInstance()->VariablePrint(0, 0, "playerSize", size, 3);
+	DebugText::GetInstance()->VariablePrint(0, 40, "DebrisCount", Debris::debris.size(), 3);
+	DebugText::GetInstance()->VariablePrint(0, 80, "returnStayTimer", returnCounter, 3);
+	
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();
 	Vector3 hitPos = {0,0,0};

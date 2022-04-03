@@ -60,7 +60,10 @@ private: // メンバ変数
 	//サイズ
 	float scalef;//大きさ
 
-
+	//回収フラグ
+	bool canReturn;
+	//再回収可能までのカウンター
+	int returnCounter;
 
 	//自爆タイプ
 	DESTRUCT_TYPE destructType;

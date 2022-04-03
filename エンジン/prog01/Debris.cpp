@@ -71,7 +71,7 @@ void Debris::Update()
 		break;
 	case Debris::RETURN:
 		if(velocity.Length() <= 200){
-			velocity += Vector3(*playerPos - pos).Normal() * 10;
+			velocity = Vector3(*playerPos - pos).Normal() * 100;
 		}
 		//
 		if (returnTimer-- <= 0) {
@@ -196,7 +196,7 @@ void Debris::ReturnStart()
 	state = RETURN;
 	velocity *= Vector3(pos - *playerPos).Normal();
 	isFirstAttack = false;
-	returnTimer = 60;
+	returnTimer = 90;
 }
 
 void Debris::SuckedPlayer(const Vector3 &playerPos,const float &suckedRadius)

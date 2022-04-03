@@ -141,9 +141,6 @@ void GameScene::Update() {
 	//testStage->Update();
 	
 	//デバックテキスト
-	DebugText::GetInstance()->VariablePrint(0, 0, "playerSize", playerObject.get()->size, 3);
-	DebugText::GetInstance()->VariablePrint(0, 40, "DebrisCount", Debris::debris.size(), 3);
-	DebugText::GetInstance()->VariablePrint(0, 80, "FrameCounter", counter, 3);
 
 	particleMan->Update();
 

@@ -12,7 +12,7 @@ void EnemySpawnManager::Update()
 	//十秒ごとに敵追加
 	if (GameScene::counter % 600 == 0 &&
 		Enemy::enemys.size() <= 10) {
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < 5; i++) {
 			float Rad = XMConvertToRadians(rand() % 360);
 			Vector3 spawnPos = {
 				static_cast<float>(cos(Rad)),
@@ -20,6 +20,21 @@ void EnemySpawnManager::Update()
 				static_cast<float>(sin(Rad))
 			};
 			spawnPos = spawnPos * 1500 + player->GetPos();
+			//マップ外に生成しない
+			if (spawnPos.x < 300) {
+				spawnPos.x = 300;
+			}
+			if (MapChip::GetInstance()->GetMapData().wide * 200 - 300 < spawnPos.x) {
+				spawnPos.x = MapChip::GetInstance()->GetMapData().wide * 200 - 300;
+			}
+			if (-(MapChip::GetInstance()->GetMapData().high * 200 - 300) > spawnPos.z) {
+				spawnPos.z = -(MapChip::GetInstance()->GetMapData().high * 200 - 300);
+			}
+			if (spawnPos.z < -300) {
+				spawnPos.z = -300;
+			}
+
+
 			SpawnEnemy(spawnPos);
 		}
 	}
