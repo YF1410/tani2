@@ -112,6 +112,8 @@ public: // メンバ関数
 
 	XMMATRIX GetMatWorld() { return matWorld; }
 
+	void SetAlpha(float _alpha) { model->SetAlpha(_alpha); }
+
 	
 protected: // メンバ変数
 	// 定数バッファ

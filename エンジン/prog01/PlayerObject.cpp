@@ -50,6 +50,8 @@ void PlayerObject::Initialize()
 	//ƒ|ƒWƒVƒ‡ƒ“‰Šú‰»
 	pos = startPos;
 
+	objectData->SetAlpha(0.5f);
+
 }
 
 void PlayerObject::Update()

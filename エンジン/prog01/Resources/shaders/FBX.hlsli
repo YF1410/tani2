@@ -51,6 +51,8 @@ cbuffer cbuff1 : register(b1)
 	float specular;
 	//粗さ
 	float roughness;
+	//アルファ値
+	float alpha;
 }
 
 // 平行光源の数

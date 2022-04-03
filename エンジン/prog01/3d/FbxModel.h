@@ -105,6 +105,8 @@ public: // サブクラス
 		float specular;
 		//粗さ
 		float roughness;
+		//アルファ
+		float alpha;
 		//パディング(16Byte境界)
 		float pad[2];
 	};
@@ -128,10 +130,11 @@ public:
 	float GetSpecular() { return specular; }
 	float GetRoughness() { return roughness; }
 	//setter
-	void SetBaseColor(const XMFLOAT3& _baseColor) { baseColor = _baseColor; }
-	void SetMetalness(float _metalness) { metalness = _metalness; }
-	void SetSpecular(float _specular) { specular = _specular; }
-	void SetRoughness(float _roughness) { roughness = _roughness; }
+	void SetBaseColor(const XMFLOAT3& _baseColor) { baseColor = _baseColor; TransferMaterial(); }
+	void SetMetalness(float _metalness) { metalness = _metalness;TransferMaterial(); }
+	void SetSpecular(float _specular) { specular = _specular;TransferMaterial(); }
+	void SetRoughness(float _roughness) { roughness = _roughness;TransferMaterial(); }
+	void SetAlpha(float _alpha) { alpha = _alpha;TransferMaterial(); }
 	//頂点情報の取得
 	std::vector<VertexPosNormalUvSkin> *GetVertices() { return &vertices; }
 	//インデックスの取得
@@ -180,6 +183,8 @@ private:
 	float specular = 1.0f;
 	//粗さ
 	float roughness = 1.0f;
+	//アルファ
+	float alpha = 1.0f;
 	//定数バッファ(マテリアル)
 	ComPtr<ID3D12Resource> constBufferMaterial;
 	//ベーステクスチャ

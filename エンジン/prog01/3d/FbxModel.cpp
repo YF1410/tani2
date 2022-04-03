@@ -106,6 +106,7 @@ void FbxModel::TransferMaterial()
         constMapMaterial->metalness = metalness;
         constMapMaterial->specular = specular;
         constMapMaterial->roughness = roughness;
+        constMapMaterial->alpha = alpha;
         constBufferMaterial->Unmap(0, nullptr);
     }
 }
