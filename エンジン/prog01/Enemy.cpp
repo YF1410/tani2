@@ -30,7 +30,10 @@ Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 	//当たり判定初期化
 	float radius = 100;
 	SetBroadCollider(new SphereCollider("hitCollider",XMVECTOR{ 0,radius,0 }, radius));
-	exclusionList.push_back(ENEMY);
+
+
+	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, 100, 100);
+	SetNarrowCollider(toMapChipCollider);
 
 }
 
@@ -53,7 +56,6 @@ void Enemy::Update() {
 	case Enemy::STAY:		//待機
 		////待機時間を経過させる
 		//stayTime++;
-
 		//if (isPlayerContact) {		//待機時間に関係なくプレイヤーを察知していればHOMINGへ以降
 		//	state = HOMING;
 		//}
@@ -63,23 +65,19 @@ void Enemy::Update() {
 		//	stayTime = 0;
 		//	state = WANDERING;
 		//}
-
 		break;
 
 	case Enemy::WANDERING:	//うろうろする
 		////移動時間を経過させる
 		//moveTime++;
-
 		////ランダムな方向へと移動する
 		//velocity.x += cos(moveRad) * moveSpeed;
 		//velocity.z += sin(moveRad) * moveSpeed;
-
 		////一定時間移動したらSATYに移行
 		//if (moveTime >= maxMoveTime) {
 		//	moveTime = 0;
 		//	state = STAY;
 		//}
-
 		break;
 	case Enemy::HOMING:
 		//ターゲットが消滅していた場合や追跡範囲を外れたときはSTAYに移行
@@ -95,7 +93,6 @@ void Enemy::Update() {
 		//}
 		break;
 	case Enemy::ATTACK:
-
 		if (true) {
 			state = STAY;
 		}
@@ -128,6 +125,32 @@ void Enemy::Update() {
 		}
 	}
 	Move();
+
+	//マップチップとの当たり判定
+	toMapChipCollider->Update();
+	Vector3 hitPos = { 0,0,0 };
+	if (MapChip::GetInstance()->CheckHitMapChip(toMapChipCollider, &velocity, &hitPos)) {
+		Vector3 normal = { 0,0,0 };
+
+		if (hitPos.x != 0) {
+			int vec = 1;	//向き
+			if (0 < velocity.x) {
+				vec = -1;
+			}
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
+			normal.x = vec;
+		}
+		if (hitPos.z != 0) {
+			int vec = 1;	//向き
+			if (velocity.z < 0) {
+				vec = -1;
+			}
+			pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
+			normal.z = vec;
+		}
+		normal.Normalize();
+		HitWall(hitPos, normal);
+	}
 
 }
 

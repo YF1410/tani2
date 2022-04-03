@@ -5,6 +5,7 @@
 #include "GameObjCommon.h"
 #include "SphereCollider.h"
 #include "PlayerObject.h"
+#include "Box2DCollider.h"
 
 class Enemy :
 	public GameObjCommon
@@ -103,4 +104,7 @@ private: // ƒƒ“ƒo•Ï”
 	void HitWall(
 		const XMVECTOR &hitPos,		//Õ“ËˆÊ’u
 		const Vector3 &normal);
+
+	Box2DCollider *toMapChipCollider;
+
 };

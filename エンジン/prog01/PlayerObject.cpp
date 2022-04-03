@@ -129,7 +129,7 @@ void PlayerObject::Update()
 			Vector3 startVec;		//速度*向きベクトル
 			float shotRad;			//角度決定用
 			//発射スピード
-			float shotSpeed = rand() % 12 + scalef * 60;
+			float shotSpeed = rand() % 20 + scalef * 60;
 			//残骸のサイズ
 			float shotSize = maxSize / (destructPow * destructType);
 
@@ -168,7 +168,7 @@ void PlayerObject::Update()
 	}
 
 	//回収
-	if (input->TriggerKey(DIK_1)) {
+	if (input->TriggerKey(DIK_Q)) {
 		for (int i = 0; i < Debris::debris.size(); i++) {
 			Debris::debris[i]->ReturnStart();
 		}
@@ -190,7 +190,6 @@ void PlayerObject::Update()
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();
 	Vector3 hitPos = {0,0,0};
-	Vector3 oldPos;
 	if (MapChip::GetInstance()->CheckHitMapChip(toMapChipCollider, &velocity, &hitPos)) {
 		Vector3 normal = {0,0,0};
 		
@@ -213,8 +212,6 @@ void PlayerObject::Update()
 		normal.Normalize();
 		HitWall(hitPos, normal);
 	}
-
-
 }
 
 
@@ -229,7 +226,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 		debri = dynamic_cast<Debris *>(info.object);
 		if (info.myName == "hitCollider" &&
 			info.collider->GetCollisionName() == "hitCollider" &&
-			!debri->isFirstAttack) {
+			(!debri->isFirstAttack || debri->state == Debris::RETURN)) {
 			//吸収
 			size += debri->GetSize();
 		}
@@ -238,11 +235,6 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 		DebugText::GetInstance()->Print("HitEnemy", 0, 80, 3);
 		break;
 
-	case DEFAULT_BLOACK:
-		/*
-
-		pos = (info.object->pos );
-		velocity = CalcWallScratchVector(velocity, info);*/
 
 		break;
 
@@ -255,6 +247,6 @@ void PlayerObject::HitWall(
 	const XMVECTOR &hitPos,		//衝突位置
 	const Vector3 &normal)
 {
-	velocity = CalcWallScratchVector(velocity, normal);
+	velocity = CalcReflectVector(velocity, normal);
 }
 

@@ -10,15 +10,18 @@ EnemySpawnManager *EnemySpawnManager::GetIns()
 void EnemySpawnManager::Update()
 {
 	//è\ïbÇ≤Ç∆Ç…ìGí«â¡
-	if (GameScene::counter % 360 == 0) {
-		float Rad = XMConvertToRadians(rand() % 360);
-		Vector3 spawnPos = {
-			static_cast<float>(cos(Rad)),
-			0,
-			static_cast<float>(sin(Rad))
-		};
-		spawnPos = spawnPos * 1500 + player->GetPos();
-		SpawnEnemy(spawnPos);
+	if (GameScene::counter % 600 == 0 &&
+		Enemy::enemys.size() <= 10) {
+		for (int i = 0; i < 15; i++) {
+			float Rad = XMConvertToRadians(rand() % 360);
+			Vector3 spawnPos = {
+				static_cast<float>(cos(Rad)),
+				0,
+				static_cast<float>(sin(Rad))
+			};
+			spawnPos = spawnPos * 1500 + player->GetPos();
+			SpawnEnemy(spawnPos);
+		}
 	}
 
 

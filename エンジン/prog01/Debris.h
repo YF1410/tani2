@@ -85,6 +85,7 @@ private:
 	//ダメージを受ける
 	void Damage(float damage);
 
+	bool reversFlag;
 
 	Box2DCollider *toMapChipCollider;			//マップチップ計算用
 };

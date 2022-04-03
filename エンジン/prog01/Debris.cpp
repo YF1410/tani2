@@ -6,7 +6,7 @@
 
 std::vector<Debris *> Debris::debris;
 
-Debris::Debris(Vector3 startPos, Vector3 startVec, float size,Vector3 *playerPos, int reversAERA) :
+Debris::Debris(Vector3 startPos, Vector3 startVec, float size, Vector3 *playerPos, int reversAERA) :
 	GameObjCommon(
 		ModelManager::SLIME_BREAK,
 		GameObjCommon::DEBRIS,
@@ -18,7 +18,8 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size,Vector3 *playerPos
 	isAttack(true),
 	isFirstAttack(true),
 	reverseCenter(startPos),
-	reversRagne(reversAERA)
+	reversRagne(reversAERA),
+	reversFlag(false)
 {
 	//サイズからスケールへコンバート
 	scale = ConvertSizeToScale(size);
@@ -69,7 +70,10 @@ void Debris::Update()
 		
 		break;
 	case Debris::RETURN:
-		velocity = Vector3(*playerPos- pos).Normal() * 100;
+		if(velocity.Length() <= 200){
+			velocity += Vector3(*playerPos - pos).Normal() * 10;
+		}
+		//
 		if (returnTimer-- <= 0) {
 			state = STAY;
 		}
@@ -109,8 +113,13 @@ void Debris::Update()
 	}
 
 	//反転
-	if (Vector3(reverseCenter - pos).Length() > reversRagne) {
+	if (Vector3(reverseCenter - pos).Length() > reversRagne && !reversFlag && isFirstAttack) {
+		reversFlag = true;
+		//移動方向反転
 		velocity *= -1;
+	}
+	else if(Vector3(reverseCenter - pos).Length() < reversRagne && reversFlag) {
+		reversFlag = false;
 	}
 }
 
@@ -172,7 +181,7 @@ void Debris::OnCollision(const CollisionInfo &info)
 		//当たり判定用のコライダーとプレイヤーの当たり判定コライダーが当たっていたら削除
 		if (info.myName == "hitCollider" &&
 			info.collider->GetCollisionName() == "hitCollider" &&
-			!isFirstAttack) {
+			(!isFirstAttack || state == RETURN)) {
 			isAlive = false;
 		}
 		break;
@@ -186,7 +195,8 @@ void Debris::ReturnStart()
 	//ステートをリターンに
 	state = RETURN;
 	velocity *= Vector3(pos - *playerPos).Normal();
-	returnTimer = 120;
+	isFirstAttack = false;
+	returnTimer = 60;
 }
 
 void Debris::SuckedPlayer(const Vector3 &playerPos,const float &suckedRadius)

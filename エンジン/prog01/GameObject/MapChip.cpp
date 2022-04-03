@@ -8,7 +8,7 @@ const std::string MapChip::baseDirectory = "Resources/Map/";
 
 void MapChip::Initialize()
 {
-	CsvLoad(TEST_MAP, "testMap",32,32);
+	CsvLoad(TEST_MAP, "testMap",63,63);
 }
 
 void MapChip::CsvLoad(MAP_NAME nowMap, std::string fName, int mapChipMaxX, int mapChipMaxY)

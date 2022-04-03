@@ -109,16 +109,19 @@ void GameScene::Update() {
 			debrisLengthMax = Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length();
 		}
 	}
-	eyeDistance = Ease(Out, Quad, 0.01f,
+	//カメラのイージング制御
+	eyeDistance = Ease(Out, Quad, 0.1f,
 		camera.get()->GetEye(),
-		Vector3(playerObject.get()->GetPos() + eyeDistanceDef + Vector3(0, debrisLengthMax, 0)));
+		Vector3(playerObject.get()->GetPos() + eyeDistanceDef + Vector3(0, debrisLengthMax * 0.7f, 0)));
 	camera->SetEye(eyeDistance);
 	//プレイヤーの少し上を焦点にする
-	camera->SetTarget(Ease(Out, Quad, 0.01f,
+	camera->SetTarget(Ease(Out, Quad, 0.1f,
 		camera.get()->GetTarget(),
 		Vector3(playerObject.get()->GetPos() + targetDistance))
 	);
 	camera->Update();
+
+
 
 	//追加の敵
 	if (playerObject.get()->isCheckPoint && !checkPoint) {
