@@ -75,15 +75,15 @@ void GameScene::Initialize() {
 	light->SetCircleShadowActive(0, true);
 	
 	//敵初期配置
-	Enemy::enemys.push_back(new Enemy({ 4000,0,-3200 }));
+	/*Enemy::enemys.push_back(new Enemy({ 4000,0,-3200 }));
 	Enemy::enemys.push_back(new Enemy({ 6200,0,-3200 }));
 	Enemy::enemys.push_back(new Enemy({ 5200,0,-2400 }));
 	Enemy::enemys.push_back(new Enemy({ 6000,0,-2200 }));
 	Enemy::enemys.push_back(new Enemy({ 4200,0,-3200 }));
 	Enemy::enemys.push_back(new Enemy({ 5200,0,-1100 }));
 
-	Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));
-	Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));
+	Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));*/
+	//Enemy::enemys.push_back(new Enemy({ 1600,0,-5000 }));
 	Enemy::enemys.push_back(new Enemy({ 1800,0,-5800 }));
 
 
@@ -168,6 +168,22 @@ void GameScene::Update() {
 
 	// 全ての衝突をチェック
 	collisionManager->CheckBroadCollisions();
+
+	line.startPos = Enemy::enemys[0]->GetPos();
+	line.endPos = playerObject->GetPos();
+	aabb.length = { 200,0,200 };
+
+	for (int z = 0; z < 34; z++) {
+		for (int x = 0; x < 57; x++) {
+			if (MapChip::GetInstance()->GetChipNum(x, z) == 1) {
+				aabb.center = { 200.0f * x - 100.0f ,0.0f,-200.0f * z + 100.0f };
+				if (Collision::CheckLine2Box(line, aabb)) {
+					DebugText::GetInstance()->Print("hit", 0, 80, 3);
+				}
+			}
+		}
+	}
+	 
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
 	Debris::StaticAdaptation();

@@ -101,6 +101,7 @@ private: // ƒƒ“ƒo•Ï”
 	float searchPlayerLen = 500.0f;
 
 	Line line;
+	AABB aabb;
 
 	//“–‚½‚è”»’è
 	CollisionManager* collisionManager = nullptr;

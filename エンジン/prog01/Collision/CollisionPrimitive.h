@@ -83,5 +83,6 @@ struct Box2D {
 
 struct Line
 {
-
+	Vector3 startPos;
+	Vector3 endPos;
 };
