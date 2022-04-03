@@ -21,17 +21,17 @@ void EnemySpawnManager::Update()
 			};
 			spawnPos = spawnPos * 1500 + player->GetPos();
 			//マップ外に生成しない
-			if (spawnPos.x < 300) {
-				spawnPos.x = 300;
+			if (spawnPos.x < 400) {
+				spawnPos.x = 400;
 			}
-			if (MapChip::GetInstance()->GetMapData().wide * 200 - 300 < spawnPos.x) {
-				spawnPos.x = MapChip::GetInstance()->GetMapData().wide * 200 - 300;
+			if (MapChip::GetInstance()->GetMapData().wide * 200 - 400 < spawnPos.x) {
+				spawnPos.x = MapChip::GetInstance()->GetMapData().wide * 200 - 400;
 			}
-			if (-(MapChip::GetInstance()->GetMapData().high * 200 - 300) > spawnPos.z) {
-				spawnPos.z = -(MapChip::GetInstance()->GetMapData().high * 200 - 300);
+			if (-(MapChip::GetInstance()->GetMapData().high * 200 - 400) > spawnPos.z) {
+				spawnPos.z = -(MapChip::GetInstance()->GetMapData().high * 200 ) + 400;
 			}
-			if (spawnPos.z < -300) {
-				spawnPos.z = -300;
+			if (spawnPos.z > -400) {
+				spawnPos.z = -400;
 			}
 
 

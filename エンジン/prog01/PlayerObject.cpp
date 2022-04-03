@@ -66,6 +66,9 @@ void PlayerObject::Update()
 
 	//移動量減衰処理
 	VelocityReset(false, 0.9f);
+	if (velocity.Length() >= 1000) {
+		velocity = velocity.Normal() * 1000;
+	}
 
 	//リセット
 	if (input->PushKey(DIK_R)) {
@@ -185,7 +188,7 @@ void PlayerObject::Update()
 		itr->sphere.get()->Update();
 	}
 	//回収
-	if (input->TriggerKey(DIK_Q) &&
+	if ((input->TriggerKey(DIK_Q)|| input->TriggerPadButton(BUTTON_B))&&
 		canReturn == true) {
 		canReturn = false;
 		returnCounter = 300;
@@ -209,12 +212,12 @@ void PlayerObject::Update()
 	toMapChipCollider->SetRadius( scalef * 150.0f, scalef * 150.0f);
 	//移動量を適応
 	Move();
-	DebugText::GetInstance()->Print("WASD : Move",800,0,3);
-	DebugText::GetInstance()->Print("Q : ReturnDebri",800,40,3);
-	DebugText::GetInstance()->Print("SPACE : Boom",800,80,3);
+	DebugText::GetInstance()->Print("WASD stick : Move",600,0,3);
+	DebugText::GetInstance()->Print("Qkey Bbutton: ReturnDebri",600,40,3);
+	DebugText::GetInstance()->Print("SPACEkey Abutton : Boom",600,80,3);
 	DebugText::GetInstance()->VariablePrint(0, 0, "playerSize", size, 3);
 	DebugText::GetInstance()->VariablePrint(0, 40, "DebrisCount", Debris::debris.size(), 3);
-	DebugText::GetInstance()->VariablePrint(0, 80, "returnStayTimer", returnCounter, 3);
+	DebugText::GetInstance()->VariablePrint(0, 80, "StayTimer", returnCounter, 3);
 	
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();
