@@ -11,7 +11,7 @@ class Debris :
 {
 public:
 	//コンストラクタ
-	Debris(Vector3 startPos,Vector3 startVec,float size, Vector3 *playerPos);
+	Debris(Vector3 startPos,Vector3 startVec,float size, Vector3 *playerPos,int reversAERA);
 	//内部更新
 	void Update();
 	//移動量リセットをオーバーライド
@@ -32,11 +32,6 @@ public:		//衝突時関係
 	//衝突時コールバック
 	void OnCollision(const CollisionInfo &info) override;
 
-	//跳ね返るとき
-	void Bounse(
-		const Vector3 &hitPos,		//衝突位置
-		const Vector3 &normal	//衝突した物との向きベクトル
-	);
 	void ReturnStart();
 
 	//プレイヤーに吸い寄せられたとき

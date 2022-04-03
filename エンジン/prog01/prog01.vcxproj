@@ -83,7 +83,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)2d\;$(ProjectDir)3d\;$(ProjectDir)Audio\;$(ProjectDir)Base\;$(ProjectDir)Camera\;$(ProjectDir)Collision\;$(ProjectDir)Input\;$(ProjectDir)Scene\;$(ProjectDir);$(ProjectDir)lib\fbx_sdk\include\;$(ProjectDir)GameObject\</IncludePath>
+    <IncludePath>$(ProjectDir)2d\;$(ProjectDir)3d\;$(ProjectDir)Audio\;$(ProjectDir)Base\;$(ProjectDir)Camera\;$(ProjectDir)Collision\;$(ProjectDir)Input\;$(ProjectDir)Scene\;$(ProjectDir);$(ProjectDir)lib\fbx_sdk\include\;$(ProjectDir)GameObject\;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib\release\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -282,6 +282,7 @@
     <ClCompile Include="Debris.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemySpawnManager.cpp" />
     <ClCompile Include="GameObject\ContactableObject.cpp" />
     <ClCompile Include="GameObject\Ease.cpp" />
     <ClCompile Include="GameObject\GameObjCommon.cpp" />
@@ -337,6 +338,7 @@
     <ClInclude Include="Debris.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemySpawnManager.h" />
     <ClInclude Include="GameObject\ContactableObject.h" />
     <ClInclude Include="GameObject\Ease.h" />
     <ClInclude Include="GameObject\GameObjCommon.h" />

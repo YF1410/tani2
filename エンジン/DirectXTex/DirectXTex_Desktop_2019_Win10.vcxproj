@@ -153,6 +153,7 @@
     <IntDir>Bin\Desktop_2019_Win10\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>DirectXTex</TargetName>
     <GenerateManifest>true</GenerateManifest>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <OutDir>Bin\Desktop_2019_Win10\$(Platform)\$(Configuration)\</OutDir>

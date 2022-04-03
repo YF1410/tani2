@@ -10,6 +10,11 @@ enum DESTRUCT_TYPE {
 	CIRCLE		=2,	//全方向
 };
 
+enum REVERSE_AREA {
+	MIN = 800,
+	MAX = 1000
+};
+
 class PlayerObject :
 	public GameObjCommon
 {
@@ -65,5 +70,7 @@ private: // メンバ変数
 	//コライダー
 	SphereCollider *broadSphereCollider;	//衝突判定用
 	Box2DCollider *toMapChipCollider;
+
+	REVERSE_AREA reverseArea;
 };
 

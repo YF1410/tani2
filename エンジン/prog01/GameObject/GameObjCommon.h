@@ -80,7 +80,7 @@ public:
 
 
 	Vector3 pos;		//座標
-	Vector3 oldPos = {0,0,0};		//座標
+	Vector3 oldPos = { 0,0,0 };		//座標
 	Vector3 rotate;		//向き
 	float gravityPow;	//重力の強さ
 	Vector3 velocity;	//移動量
@@ -92,27 +92,28 @@ public:
 	bool isDelete;		//消去フラグ	trueになるとそのフレームで消滅する
 
 	TAG Tag;			//当たり判定などで使うオブジェクトタグ
-	
+
 	//当たり判定除外リスト
 	std::vector<TAG> exclusionList;
 
 protected:
 	std::unique_ptr<FbxObject3d> objectData;	//オブジェクトデータ
 
-public:	
+public:
 	//ブロードフェイズコライダーのセット
 	void SetBroadCollider(BaseCollider *collider);
 	//ナローフェイズコライダーのセット
 	void SetNarrowCollider(BaseCollider *collider);
+	std::map<std::string, BaseCollider *> GetNarrowCollider() { return narrowColliders; }
 
 	// 衝突時コールバック関数
 	virtual void OnCollision(const CollisionInfo &info) {}
 protected:
 	//ブロードフェイズコライダー
-	std::map<std::string,BaseCollider *> broadColliders;
+	std::map<std::string, BaseCollider *> broadColliders;
 	//厳密なコライダー
-	std::map<std::string,BaseCollider *> narrowColliders;
+	std::map<std::string, BaseCollider *> narrowColliders;
 
-	
+
 };
 

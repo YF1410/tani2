@@ -11,7 +11,7 @@
 using namespace DirectX;
 std::vector<Enemy*> Enemy::enemys;
 
-Enemy::Enemy(XMFLOAT3 startPos) :
+Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 	GameObjCommon(
 		ModelManager::ENEMY,	//エネミーモデルをセット
 		GameObjCommon::ENEMY,	//エネミーとして扱う
@@ -23,7 +23,8 @@ Enemy::Enemy(XMFLOAT3 startPos) :
 	scale = 1.0f;
 	HP = 3;
 	minTargetLength = holmingLength;
-	state = STAY;
+	state = HOMING;
+	this->player = player;
 	//乱数初期化
 	srand(time(NULL));
 	//当たり判定初期化
@@ -50,47 +51,48 @@ void Enemy::Update() {
 		return;
 		break;
 	case Enemy::STAY:		//待機
-		//待機時間を経過させる
-		stayTime++;
+		////待機時間を経過させる
+		//stayTime++;
 
-		if (isPlayerContact) {		//待機時間に関係なくプレイヤーを察知していればHOMINGへ以降
-			state = HOMING;
-		}
-		else if (stayTime >= maxStayTime) {
-			//角度をランダムで決定
-			moveRad = XMConvertToRadians(static_cast<float>(rand() % 360));
-			stayTime = 0;
-			state = WANDERING;
-		}
+		//if (isPlayerContact) {		//待機時間に関係なくプレイヤーを察知していればHOMINGへ以降
+		//	state = HOMING;
+		//}
+		//else if (stayTime >= maxStayTime) {
+		//	//角度をランダムで決定
+		//	moveRad = XMConvertToRadians(static_cast<float>(rand() % 360));
+		//	stayTime = 0;
+		//	state = WANDERING;
+		//}
 
 		break;
 
 	case Enemy::WANDERING:	//うろうろする
-		//移動時間を経過させる
-		moveTime++;
+		////移動時間を経過させる
+		//moveTime++;
 
-		//ランダムな方向へと移動する
-		velocity.x += cos(moveRad) * moveSpeed;
-		velocity.z += sin(moveRad) * moveSpeed;
+		////ランダムな方向へと移動する
+		//velocity.x += cos(moveRad) * moveSpeed;
+		//velocity.z += sin(moveRad) * moveSpeed;
 
-		//一定時間移動したらSATYに移行
-		if (moveTime >= maxMoveTime) {
-			moveTime = 0;
-			state = STAY;
-		}
+		////一定時間移動したらSATYに移行
+		//if (moveTime >= maxMoveTime) {
+		//	moveTime = 0;
+		//	state = STAY;
+		//}
+
 		break;
 	case Enemy::HOMING:
 		//ターゲットが消滅していた場合や追跡範囲を外れたときはSTAYに移行
-		if (targetLength >= holmingLength) {
-			minTargetLength = holmingLength;
-			state = STAY;
+		//if (targetLength >= holmingLength) {
+		//	minTargetLength = holmingLength;
+		//	state = STAY;
 
-		}
-		else {
-			targetVec = Vector3(targetPos - pos);
-			targetVec.y = 0;
-			velocity += targetVec.Normal() * moveSpeed;
-		}
+		//}
+		//else {
+		targetVec = Vector3(player->GetPos() - pos);
+		targetVec.y = 0;
+		velocity += targetVec.Normal() * moveSpeed;
+		//}
 		break;
 	case Enemy::ATTACK:
 
@@ -107,7 +109,6 @@ void Enemy::Update() {
 	}
 
 	//共通処理
-
 	//無敵時間タイマーを管理
 	if (isInvincible) {
 		InvincibleTimer++;
@@ -151,21 +152,6 @@ void Enemy::OnCollision(const CollisionInfo &info)
 	}
 }
 
-void Enemy::StaticUpdate() {
-
-	//削除
-	for (int i = enemys.size() - 1; i >= 0; i--) {
-		if (!enemys[i]->isAlive) {
-			delete enemys[i];
-			enemys.erase(enemys.begin() + i);
-		}
-	}
-	//更新
-	for (int i = 0; i < enemys.size(); i++) {
-		enemys[i]->Update();
-	}
-}
-
 void Enemy::StaticAdaptation() {
 	for (int i = 0; i < enemys.size(); i++) {
 		enemys[i]->Adaptation();
@@ -195,18 +181,17 @@ void Enemy::Damage(float damage)
 	}
 }
 
-void Enemy::HomingObjectCheck(Vector3 targetPos)
-{
-	this->targetPos = targetPos;
-	state = HOMING;
-}
+//void Enemy::HomingObjectCheck(Vector3 targetPos)
+//{
+//	this->targetPos = targetPos;
+//	state = HOMING;
+//}
 
 void Enemy::HitWall(const XMVECTOR &hitPos, const Vector3 &normal)
 {
 
 	Vector3 HitPos = hitPos;
 	//pos = HitPos + normal * (rect2d.Bottom - rect2d.Top);
-	velocity = CalcReflectVector(velocity, normal);
-
+	velocity = CalcWallScratchVector(velocity, normal);
 
 }

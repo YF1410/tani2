@@ -269,6 +269,9 @@
     <ClCompile Include="Box2DCollider.cpp">
       <Filter>エンジンシステム\Collision\Collider2d</Filter>
     </ClCompile>
+    <ClCompile Include="EnemySpawnManager.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -439,6 +442,9 @@
     </ClInclude>
     <ClInclude Include="Box2DCollider.h">
       <Filter>エンジンシステム\Collision\Collider2d</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySpawnManager.h">
+      <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

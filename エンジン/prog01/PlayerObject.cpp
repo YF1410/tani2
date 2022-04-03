@@ -50,6 +50,7 @@ void PlayerObject::Initialize()
 	//ポジション初期化
 	pos = startPos;
 
+	reverseArea = MIN;
 }
 
 void PlayerObject::Update()
@@ -59,7 +60,7 @@ void PlayerObject::Update()
 	moveSpead = scalef * 5;
 
 	//移動量減衰処理
-	VelocityReset(false, 0.8f);
+	VelocityReset(false, 0.9f);
 
 	//リセット
 	if (input->PushKey(DIK_R)) {
@@ -96,6 +97,15 @@ void PlayerObject::Update()
 		}
 		else {
 			destructType = DIRECTIVITY;
+		}
+	}
+	//反射距離変更
+	if (input->TriggerKey(DIK_4)) {
+		if (reverseArea != MIN) {
+			reverseArea = MIN;
+		}
+		else {
+			reverseArea = REVERSE_AREA::MAX;
 		}
 	}
 
@@ -150,7 +160,7 @@ void PlayerObject::Update()
 
 			velocity += velocity.Normal() * 10;
 			//Debrisのコンテナに追加
-			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed + velocity, shotSize, &pos));
+			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize, &pos,reverseArea));
 		}
 		//爆発終了
 		size -= maxSize;

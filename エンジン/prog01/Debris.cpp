@@ -6,7 +6,7 @@
 
 std::vector<Debris *> Debris::debris;
 
-Debris::Debris(Vector3 startPos, Vector3 startVec, float size,Vector3 *playerPos) :
+Debris::Debris(Vector3 startPos, Vector3 startVec, float size,Vector3 *playerPos, int reversAERA) :
 	GameObjCommon(
 		ModelManager::SLIME_BREAK,
 		GameObjCommon::DEBRIS,
@@ -18,7 +18,7 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size,Vector3 *playerPos
 	isAttack(true),
 	isFirstAttack(true),
 	reverseCenter(startPos),
-	reversRagne(2000)
+	reversRagne(reversAERA)
 {
 	//サイズからスケールへコンバート
 	scale = ConvertSizeToScale(size);
@@ -108,7 +108,8 @@ void Debris::Update()
 		HitWall(hitPos, normal);
 	}
 
-	if (Vector3(pos - reverseCenter).Length() < reversRagne) {
+	//反転
+	if (Vector3(reverseCenter - pos).Length() > reversRagne) {
 		velocity *= -1;
 	}
 }
@@ -179,19 +180,6 @@ void Debris::OnCollision(const CollisionInfo &info)
 
 }
 
-void Debris::Bounse(
-	const Vector3 &hitPos,		//衝突位置
-	const Vector3 &normal	//衝突した物との向きベクトル
-)
-{
-	//pos = hitPos + normal * collider.realSphere.radius;
-	velocity = CalcReflectVector(velocity, normal);
-	//跳ね返りが一定以下ならバウンドを停止
-	if (velocity.Length() <= 10.0f) {
-		velocity = 0;
-	}
-
-}
 
 void Debris::ReturnStart()
 {

@@ -22,7 +22,7 @@ public:// メンバ関数
 	}
 
 	// コライダーの削除
-	inline void RemoveCollider(BaseCollider* collider)
+	inline void RemoveBroadCollider(BaseCollider* collider)
 	{
 		broadColliders.remove(collider);
 	}

@@ -4,13 +4,14 @@
 #include <vector>
 #include "GameObjCommon.h"
 #include "SphereCollider.h"
+#include "PlayerObject.h"
 
 class Enemy :
 	public GameObjCommon
 {
 public:
 	//コンストラクタ
-	Enemy(XMFLOAT3 startPos);
+	Enemy(XMFLOAT3 startPos,PlayerObject *targetPos);
 	//初期化
 	void Initialize() override;
 	//内部更新
@@ -20,7 +21,6 @@ public:
 	void OnCollision(const CollisionInfo &info) override;
 
 	//コンテナ更新
-	static void StaticUpdate();
 	static void StaticAdaptation();
 	static void StaticDraw();
 
@@ -42,7 +42,7 @@ public:		//当たり判定関係
 	void Damage(float damage);
 	
 	//追跡対象を決定
-	void HomingObjectCheck(Vector3 targetPos);
+	//void HomingObjectCheck(Vector3 targetPos);
 
 
 	//当たり判定に使用
@@ -61,6 +61,9 @@ public:		//当たり判定関係
 	//追跡範囲
 	const float holmingLength = 700;
 
+	bool isAlive;
+
+
 private: // メンバ変数
 	int deadTimer;
 
@@ -68,8 +71,7 @@ private: // メンバ変数
 	bool isPlayerContact = false;	//playerを確認したか
 	bool isWandering = false;		//さまよい状態か
 	int wanderingCount = 0;
-	float moveSpeed = 3.0f;
-	bool isAlive;
+	float moveSpeed = 10.0f;
 
 	//体力
 	float HP;
@@ -87,8 +89,9 @@ private: // メンバ変数
 	const int maxMoveTime = 180;	//移動終了用
 
 	//ホーミング状態
+	PlayerObject *player;
 	//ターゲット座標ポインタ
-	Vector3 targetPos;
+	Vector3 *targetPos;
 	//ターゲットへのベクトル
 	Vector3 targetVec;
 	//対象までの距離

@@ -5,12 +5,12 @@
 
 GameObjCommon::~GameObjCommon()
 {
-	// 当たり判定更新
+	//ブロードフェイズコライダー削除
 	if (broadColliders.size() != 0)
 	{
 		auto iter = broadColliders.begin();
 		while (iter != broadColliders.end()) {
-			CollisionManager::GetInstance()->RemoveCollider(iter->second);
+			CollisionManager::GetInstance()->RemoveBroadCollider(iter->second);
 			++iter;
 		}
 	}
@@ -23,11 +23,20 @@ void GameObjCommon::Initialize()
 void GameObjCommon::Update()
 {
 
-	// 当たり判定更新
+	//ブロードフェイズコライダー判定更新
 	if (broadColliders.size() != 0)
 	{
 		auto iter = broadColliders.begin();
 		while (iter != broadColliders.end()) {
+			iter->second->Update();
+			++iter;
+		}
+	}
+	//ナローフェイズコライダー判定更新
+	if (narrowColliders.size() != 0)
+	{
+		auto iter = narrowColliders.begin();
+		while (iter != narrowColliders.end()) {
 			iter->second->Update();
 			++iter;
 		}
@@ -73,7 +82,7 @@ void GameObjCommon::Adaptation()
 	if (broadColliders.size() != 0)
 	{
 		auto iter = broadColliders.begin();
-		while(iter != broadColliders.end()){
+		while (iter != broadColliders.end()) {
 			iter->second->Update();
 			++iter;
 		}
@@ -113,4 +122,3 @@ void GameObjCommon::SetNarrowCollider(BaseCollider *collider)
 	narrowColliders[collider->GetCollisionName()] = collider;
 	collider->Update();
 }
-

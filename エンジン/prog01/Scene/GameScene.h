@@ -57,7 +57,7 @@ public: // ƒƒ“ƒoŠÖ”
 	void Draw() override;
 
 
-
+	static int counter;
 private:	//“–‚½‚è”»’èŒnŠÖ”
 	//void AttackDebrisToEnemy();	//”j•Ğ‚Æ“G
 	//void PlayerToDebris();	//ƒvƒŒƒCƒ„[‚Æ”j•Ğ
