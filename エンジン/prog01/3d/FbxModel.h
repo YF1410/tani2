@@ -129,6 +129,7 @@ public:
 	float GetMetalness() { return metalness; }
 	float GetSpecular() { return specular; }
 	float GetRoughness() { return roughness; }
+	std::wstring GetHLSLfName() { return HLSLfName; }
 	//setter
 	void SetBaseColor(const XMFLOAT3& _baseColor) { baseColor = _baseColor; TransferMaterial(); }
 	void SetMetalness(float _metalness) { metalness = _metalness;TransferMaterial(); }
@@ -195,6 +196,8 @@ private:
 	TextureData normalTexture;
 	//ラフネステクスチャ
 	TextureData roughnessTexture;
+	//シェーダの名前
+	std::wstring HLSLfName;
 
 	// メッシュコンテナ
 	//std::vector<std::unique_ptr<Mesh>> meshes;

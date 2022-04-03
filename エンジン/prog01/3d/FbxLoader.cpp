@@ -304,18 +304,12 @@ void FbxLoader::ParseMaterial(FbxModel* model, FbxNode* fbxNode)
 		{
 			//マテリアル名(デバック用)
 			string name = material->GetName();
-
+			// ディフューズテクスチャを取り出す
+			const FbxProperty diffuseProperty = material->FindProperty(FbxSurfaceMaterial::sDiffuse);
 			//ベースカラー
 			const FbxProperty propBaseColor = FbxSurfaceMaterialUtils::GetProperty("baseColor", material);
 			if (propBaseColor.IsValid())
 			{
-				//FbxDouble3としてプロパティの値を読み取り
-				FbxDouble3 baseColor = propBaseColor.Get<FbxDouble3>();
-				//モデルに読み取った値を書き込む
-				model->baseColor.x = (float)baseColor.Buffer()[0];
-				model->baseColor.y = (float)baseColor.Buffer()[1];
-				model->baseColor.z = (float)baseColor.Buffer()[2];
-
 				const FbxFileTexture* texture = propBaseColor.GetSrcObject<FbxFileTexture>();
 				if (texture)
 				{
@@ -325,9 +319,25 @@ void FbxLoader::ParseMaterial(FbxModel* model, FbxNode* fbxNode)
 					string name = ExtractFileName(path_str);
 					// テクスチャ読み込み
 					LoadTexture(&model->baseTexture, baseDirectory + model->name + "/" + name);
-					model->baseColor = { 0,0,0 };
 					textureLoaded = true;
 				}
+
+				model->HLSLfName = L"PBRFBX";
+			}
+			else if (diffuseProperty.IsValid())
+			{
+				const FbxFileTexture* texture = diffuseProperty.GetSrcObject<FbxFileTexture>();
+				if (texture)
+				{
+					const char* filepath = texture->GetFileName();
+					// ファイルパスからファイル名抽出
+					string path_str(filepath);
+					string name = ExtractFileName(path_str);
+					// テクスチャ読み込み
+					LoadTexture(&model->baseTexture, baseDirectory + model->name + "/" + name);
+					textureLoaded = true;
+				}
+				model->HLSLfName = L"FBX";
 			}
 
 			//金属度

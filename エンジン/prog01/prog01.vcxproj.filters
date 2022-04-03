@@ -135,6 +135,12 @@
     <FxCompile Include="Resources\shaders\SpriteVS.hlsl">
       <Filter>シェーダーファイル\Sprite</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\PBRFBXVS.hlsl">
+      <Filter>シェーダーファイル\FBX</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PBRFBXPS.hlsl">
+      <Filter>シェーダーファイル\FBX</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="2d\DebugText.cpp">

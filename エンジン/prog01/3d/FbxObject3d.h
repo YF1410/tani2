@@ -57,6 +57,8 @@ public: // 静的メンバ関数
 	static void StaticFinalize();
 	// グラフィックパイプラインの生成
 	static void CreateGraphicsPipeline();
+	// グラフィックパイプラインの生成
+	static void CreateGraphicsPipeline2();
 	// 3Dオブジェクト生成
 	static std::unique_ptr<FbxObject3d> Create(FbxModel* model = nullptr, bool isAnimation = false);
 	// setter
@@ -73,8 +75,12 @@ private: // 静的メンバ変数
 	static LightGroup* light;
 	// ルートシグネチャ
 	static ComPtr<ID3D12RootSignature> rootsignature;
+	// ルートシグネチャ
+	static ComPtr<ID3D12RootSignature> rootsignature2;
 	// パイプラインステートオブジェクト
 	static ComPtr<ID3D12PipelineState> pipelinestate;
+	// パイプラインステートオブジェクト
+	static ComPtr<ID3D12PipelineState> pipelinestate2;
 
 public: // メンバ関数
 	//デストラクタ
