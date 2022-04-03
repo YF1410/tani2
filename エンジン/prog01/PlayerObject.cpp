@@ -31,6 +31,9 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, 100, 100);
 	SetNarrowCollider(toMapChipCollider);
 	//absorptionCollider->Update();
+
+	areaModel = Model::CreateFromObject("Sphere", true);
+	areaModel.get()->SetAlpha(0.2f);
 }
 
 
@@ -52,7 +55,7 @@ void PlayerObject::Initialize()
 
 	canReturn = true;
 	returnCounter = 0;
-	reverseArea = MIN;
+	reverseRange = MIN;
 }
 
 void PlayerObject::Update()
@@ -103,11 +106,11 @@ void PlayerObject::Update()
 	}
 	//反射距離変更
 	if (input->TriggerKey(DIK_4)) {
-		if (reverseArea != MIN) {
-			reverseArea = MIN;
+		if (reverseRange != MIN) {
+			reverseRange = MIN;
 		}
 		else {
-			reverseArea = REVERSE_AREA::MAX;
+			reverseRange = REVERSE_Range::MAX;
 		}
 	}
 
@@ -162,13 +165,25 @@ void PlayerObject::Update()
 
 			velocity += velocity.Normal() * 10;
 			//Debrisのコンテナに追加
-			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize, &pos,reverseArea));
+			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize, &pos,reverseRange));
 		}
 		//爆発終了
 		size -= maxSize;
-
+		
+		reversAreas.push_back(new REVERS_AREA(pos,areaModel.get()));
 	}
-
+	//削除
+	for (int i = reversAreas.size() - 1; i >= 0; i--) {
+		if (reversAreas[i]->timer <= 0) {
+			delete reversAreas[i];
+			reversAreas.erase(reversAreas.begin() + i);
+		}
+	}
+	//更新
+	for (auto itr : reversAreas) {
+		itr->timer--;
+		itr->sphere.get()->Update();
+	}
 	//回収
 	if (input->TriggerKey(DIK_Q) &&
 		canReturn == true) {
@@ -226,6 +241,17 @@ void PlayerObject::Update()
 		normal.Normalize();
 		HitWall(hitPos, normal);
 	}
+}
+
+void PlayerObject::Draw() const
+{
+	GameObjCommon::Draw();
+
+	Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
+	for (auto itr : reversAreas) {
+		itr->sphere.get()->Draw();
+	}
+	Object3d::PostDraw();
 }
 
 

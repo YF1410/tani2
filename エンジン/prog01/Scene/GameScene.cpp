@@ -196,9 +196,9 @@ void GameScene::Draw() {
 #pragma region 3Dオブジェクト(FBX)描画
 	//testStage->Draw(DirectXCommon::GetInstance()->GetCommandList());
 	MapChip::GetInstance()->Draw();
-	playerObject->Draw();
 	Debris::StaticDraw();
 	Enemy::StaticDraw();
+	playerObject->Draw();
 #pragma endregion 3Dオブジェクト(FBX)描画
 
 

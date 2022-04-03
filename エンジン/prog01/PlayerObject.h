@@ -1,5 +1,6 @@
 #pragma once
 #include "FbxObject3d.h"
+#include "Object3d.h"
 #include "Vector3.h"
 #include "SphereCollider.h"
 #include "Box2DCollider.h"
@@ -10,7 +11,7 @@ enum DESTRUCT_TYPE {
 	CIRCLE		=2,	//全方向
 };
 
-enum REVERSE_AREA {
+enum REVERSE_Range {
 	MIN = 800,
 	MAX = 1000
 };
@@ -24,7 +25,7 @@ public:
 	void Initialize() override;
 	//毎フレーム処理
 	void Update() override;
-	
+	void Draw() const override;
 	//衝突時コールバック
 	void OnCollision(const CollisionInfo &info) override;
 	
@@ -45,7 +46,22 @@ public:
 
 	bool isCheckPoint;
 
-private:	//衝突時の処理関数
+private:
+	struct REVERS_AREA {
+		std::unique_ptr<Object3d> sphere;
+		int timer;
+		float alpha;
+		REVERS_AREA(Vector3 pos,Model *areaModel) {
+			sphere = Object3d::Create(areaModel);
+			sphere.get()->SetPosition(pos);
+			sphere.get()->SetScale({800,800,800});
+			alpha = 1.0f;
+			timer = 60;
+		}
+	};
+
+	std::unique_ptr<Model> areaModel;
+	std::vector<REVERS_AREA *> reversAreas;
 
 private: // メンバ変数
 	//キーボード移動用
@@ -74,6 +90,6 @@ private: // メンバ変数
 	SphereCollider *broadSphereCollider;	//衝突判定用
 	Box2DCollider *toMapChipCollider;
 
-	REVERSE_AREA reverseArea;
+	REVERSE_Range reverseRange;
 };
 
