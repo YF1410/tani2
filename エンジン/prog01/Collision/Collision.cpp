@@ -540,57 +540,75 @@ bool Collision::CheckCapsule2Box(const Capsule& capsule, const Box& box)
 	return sqDistance < capsule.radius* capsule.radius;
 }
 
-//bool Collision::CheckLine2Box(const Line& line, const AABB& aabb)
-//{
-//	//bool isCollision = ColRayAABB(lineStart, &(*lineEnd - *lineStart), &aabb[i], &box_WorldMat[i], col_t);
-//
-//	// 交差判定
-//	float p[3], d[3], min[3], max[3];
-//	p[0] = line.start.x;
-//	p[1] = line.start.y;
-//	p[2] = line.start.z;
-//
-//	d[0] = line.end.x - line.start.x;
-//	d[1] = line.end.y - line.start.y;
-//	d[2] = line.end.z - line.start.z;
-//
-//	min[0] = aabb.center.x - aabb.length.x;
-//	min[1] = aabb.center.y - aabb.length.y;
-//	min[2] = aabb.center.z - aabb.length.z;
-//
-//	max[0] = aabb.center.x + aabb.length.x;
-//	max[1] = aabb.center.y + aabb.length.y;
-//	max[2] = aabb.center.z + aabb.length.z;
-//
-//	float t = -FLT_MAX;
-//	float t_max = FLT_MAX;
-//
-//	for (int i = 0; i < 3; ++i) {
-//		if (abs(d[i]) < FLT_EPSILON) {
-//			if (p[i] < min[i] || p[i] > max[i])
-//				return false;	// 交差していない
-//		}
-//		else {
-//			// スラブとの距離を算出
-//			// t1が近スラブ、t2が遠スラブとの距離
-//			float odd = 1.0f / d[i];
-//			float t1 = (min[i] - p[i]) * odd;
-//			float t2 = (max[i] - p[i]) * odd;
-//			if (t1 > t2) {
-//				float tmp = t1; t1 = t2; t2 = tmp;
-//			}
-//
-//			if (t1 > t) t = t1;
-//			if (t2 < t_max) t_max = t2;
-//
-//			// スラブ交差チェック
-//			if (t >= t_max)
-//				return false;
-//		}
-//	}
-//	Vector3 colPos;
-//	// 交差している
-//	colPos = line.start + t * (line.end - line.start);
-//
-//	return true;
-//}
+bool Collision::CheckLine2Box(const Line& line, const AABB& aabb)
+{
+	//bool isCollision = ColRayAABB(lineStart, &(*lineEnd - *lineStart), &aabb[i], &box_WorldMat[i], col_t);
+
+	// 交差判定
+	float sp[2], ep[2], d[2], min[2], max[2];
+	sp[0] = line.startPos.x;
+	//p[1] = line.start.y;
+	sp[1] = line.startPos.z;
+
+	ep[0] = line.endPos.x;
+	ep[1] = line.endPos.z;
+
+	d[0] = ep[0] - sp[0];
+	//d[1] = line.end.y - line.start.y;
+	d[1] = ep[1] - sp[1];
+
+	min[0] = aabb.center.x;
+	min[1] = aabb.center.z;
+
+	max[0] = aabb.center.x + aabb.length.x;
+	max[1] = aabb.center.z + aabb.length.z;
+
+	float t = -FLT_MAX;
+	float t_max = FLT_MAX;
+
+	if (d[0] < FLT_EPSILON) {
+		float tmp = sp[0]; sp[0] = ep[0]; ep[0] = tmp;
+	}
+
+	if (d[1] < FLT_EPSILON) {
+		float tmp = sp[1]; sp[1] = ep[1]; ep[1] = tmp;
+	}
+
+	d[0] = ep[0] - sp[0];
+	d[1] = ep[1] - sp[1];
+
+	if ((max[0] < sp[0] || max[1] < sp[1]) || (ep[0] < min[0] || ep[1] < min[1])) {
+		return false;
+	}
+
+
+	for (int i = 0; i < 2; ++i) {
+		if (abs(static_cast<int>(d[i])) < FLT_EPSILON) {
+			if (sp[i] < min[i] || sp[i] > max[i])
+				return false;	// 交差していない
+		}
+		else {
+			// スラブとの距離を算出
+			// t1が近スラブ、t2が遠スラブとの距離
+			float odd = 1.0f / d[i];
+			float t1 = (min[i] - sp[i]) * odd;
+			float t2 = (max[i] - sp[i]) * odd;
+			if (t1 > t2) {
+				float tmp = t1; t1 = t2; t2 = tmp;
+			}
+
+			if (t1 > t) t = t1;
+			if (t2 < t_max) t_max = t2;
+
+			// スラブ交差チェック
+			if (t >= t_max)
+				return false;
+		}
+	}
+
+	Vector3 colPos;
+	// 交差している
+	colPos = line.startPos + t * (line.endPos - line.startPos);
+
+	return true;
+}
