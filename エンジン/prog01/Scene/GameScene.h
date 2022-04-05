@@ -62,7 +62,6 @@ private:	//当たり判定系関数
 	//void AttackDebrisToEnemy();	//破片と敵
 	//void PlayerToDebris();	//プレイヤーと破片
 
-
 private: // メンバ変数
 	//カメラ
 	std::unique_ptr<Camera> camera;
@@ -101,6 +100,7 @@ private: // メンバ変数
 
 	float searchPlayerLen = 500.0f;
 
+	Line line;
 
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;

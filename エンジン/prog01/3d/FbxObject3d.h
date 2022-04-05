@@ -10,6 +10,7 @@
 #include "FbxModel.h"
 #include "FbxLoader.h"
 #include "Camera.h"
+#include "LightGroup.h"
 
 
 
@@ -56,21 +57,30 @@ public: // 静的メンバ関数
 	static void StaticFinalize();
 	// グラフィックパイプラインの生成
 	static void CreateGraphicsPipeline();
+	// グラフィックパイプラインの生成
+	static void CreateGraphicsPipeline2();
 	// 3Dオブジェクト生成
 	static std::unique_ptr<FbxObject3d> Create(FbxModel* model = nullptr, bool isAnimation = false);
 	// setter
 	static void SetDevice(ID3D12Device* device) { FbxObject3d::device = device; }
 	static void SetCamera(Camera* camera) { FbxObject3d::camera = camera; }
+	static void SetLight(LightGroup* light) { FbxObject3d::light = light; }
 
 private: // 静的メンバ変数
 	// デバイス
 	static ID3D12Device* device;
 	// カメラ
 	static Camera* camera;
+	//ライト
+	static LightGroup* light;
 	// ルートシグネチャ
 	static ComPtr<ID3D12RootSignature> rootsignature;
+	// ルートシグネチャ
+	static ComPtr<ID3D12RootSignature> rootsignature2;
 	// パイプラインステートオブジェクト
 	static ComPtr<ID3D12PipelineState> pipelinestate;
+	// パイプラインステートオブジェクト
+	static ComPtr<ID3D12PipelineState> pipelinestate2;
 
 public: // メンバ関数
 	//デストラクタ
@@ -107,6 +117,8 @@ public: // メンバ関数
 	void SetScale(float scale) { this->scale = { scale,scale,scale }; }
 
 	XMMATRIX GetMatWorld() { return matWorld; }
+
+	void SetAlpha(float _alpha) { model->SetAlpha(_alpha); }
 
 	
 protected: // メンバ変数

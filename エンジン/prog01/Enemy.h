@@ -61,6 +61,8 @@ public:		//“–‚½‚è”»’èŠÖŒW
 	const float sarchLength = 500;
 	//’ÇÕ”ÍˆÍ
 	const float holmingLength = 700;
+	//UŒ‚”ÍˆÍ
+	const float attackLength = 100;
 
 	bool isAlive;
 

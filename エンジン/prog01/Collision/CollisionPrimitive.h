@@ -80,3 +80,8 @@ struct Box2D {
 	float Right	 = 1.0f;
 	float Left	 = 1.0f;
 };
+
+struct Line
+{
+
+};

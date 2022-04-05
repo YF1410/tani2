@@ -56,6 +56,8 @@ void PlayerObject::Initialize()
 	canReturn = true;
 	returnCounter = 0;
 	reverseRange = MIN;
+	objectData->SetAlpha(0.5f);
+
 }
 
 void PlayerObject::Update()
