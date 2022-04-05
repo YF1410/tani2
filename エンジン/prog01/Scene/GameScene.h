@@ -65,7 +65,7 @@ private:	//“–‚½‚è”»’èŒnŠÖ”
 private: // ƒƒ“ƒo•Ï”
 	//ƒJƒƒ‰
 	std::unique_ptr<Camera> camera;
-	
+
 	Vector3 eyeDistance = { 0,2000,0 };
 	const Vector3 eyeDistanceDef = { 0,2500,0 };
 	const Vector3 targetDistance = { 0,0,100 };

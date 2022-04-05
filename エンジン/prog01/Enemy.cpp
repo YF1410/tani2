@@ -88,7 +88,7 @@ void Enemy::Update() {
 
 		}
 		else {//if(ここにrayがオブジェクトに届けばの条件式を書く){
-			targetVec = Vector3(targetPos - pos);
+			targetVec = Vector3(player->GetPos()- pos);
 			targetVec.y = 0;
 			velocity += targetVec.Normal() * moveSpeed;
 		}
