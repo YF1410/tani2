@@ -21,10 +21,6 @@ public:
 	//衝突時コールバック
 	void OnCollision(const CollisionInfo &info) override;
 
-	//コンテナ更新
-	static void StaticAdaptation();
-	static void StaticDraw();
-
 public:
 	enum STATE {
 		NOUPDATE,		//画面外等アップデートをしない状態
@@ -50,8 +46,6 @@ public:		//当たり判定関係
 	Vector3 GetPos() { return pos; }
 	void SetPos(Vector3 pos) { this->pos = pos; }
 
-	//コンテナ
-	static std::vector<Enemy*> enemys;
 
 	//State
 	bool isInvincible;		//無敵状態か

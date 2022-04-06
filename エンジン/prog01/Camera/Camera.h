@@ -70,4 +70,5 @@ protected: // メンバ変数
 	XMFLOAT3 up = { 0, 1, 0 };
 	// アスペクト比
 	float aspectRatio = 1.0f;
+
 };

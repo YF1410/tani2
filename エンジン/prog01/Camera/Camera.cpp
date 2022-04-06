@@ -1,4 +1,6 @@
 #include "Camera.h"
+#include <cstdlib>
+#include <time.h>
 
 using namespace DirectX;
 

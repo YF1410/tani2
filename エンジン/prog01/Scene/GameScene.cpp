@@ -18,6 +18,7 @@ using namespace DirectX;
 
 int GameScene::counter;
 
+
 GameScene::GameScene() {
 	MapChip::GetInstance()->Initialize();
 	//マップ生成
@@ -80,6 +81,8 @@ void GameScene::Initialize() {
 	light->SetPointLightActive(1, false);
 	light->SetPointLightActive(2, false);
 	light->SetCircleShadowActive(0, true);
+
+	light->SetDirLightDir(0, { 0.8f,-1,-1 });
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
@@ -163,7 +166,7 @@ void GameScene::Update() {
 	// 全ての衝突をチェック
 	collisionManager->CheckBroadCollisions();
 
-	line.startPos = Enemy::enemys[0]->GetPos();
+	/*line.startPos = Enemy::enemys[0]->GetPos();
 	line.endPos = playerObject->GetPos();
 	aabb.length = { 200,0,200 };
 
@@ -176,12 +179,12 @@ void GameScene::Update() {
 				}
 			}
 		}
-	}
+	}*/
 	 
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
 	Debris::StaticAdaptation();
-	Enemy::StaticAdaptation();
+	EnemySpawnManager::GetIns()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
 
@@ -214,7 +217,7 @@ void GameScene::Draw() {
 	//testStage->Draw(DirectXCommon::GetInstance()->GetCommandList());
 	MapChip::GetInstance()->Draw();
 	Debris::StaticDraw();
-	Enemy::StaticDraw();
+	EnemySpawnManager::GetIns()->Draw();
 	playerObject->Draw();
 #pragma endregion 3Dオブジェクト(FBX)描画
 

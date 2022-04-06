@@ -36,7 +36,7 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size, Vector3 *playerPo
 
 	//押し返し判定用コライダー
 	hitCollider = new SphereCollider("hitCollider");
-	hitCollider->SetRadius(scale.x * 180.0f);
+	hitCollider->SetRadius(scale.x * 120.0f);
 	hitCollider->SetOffset({ 0,hitCollider->GetRadius(),0 });
 	SetBroadCollider(hitCollider);
 	//攻撃判定用コライダー
@@ -46,6 +46,9 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size, Vector3 *playerPo
 	SetNarrowCollider(attackCollider);
 	//残骸どうしは判定しない
 	exclusionList.push_back(DEBRIS);
+	
+	objectData->SetAlpha(0.5f);
+
 }
 
 void Debris::Update()
@@ -55,9 +58,15 @@ void Debris::Update()
 	//攻撃終了
 	if (velocity.Length() <= 10.0f && isAttack) {
 		isFirstAttack = false;
+		isAttack = false;
+
 	}
-	else if (!isActive) {
+	if (velocity.Length() >= 10.0f) {
 		isAttack = true;
+	}
+	//移動量制限
+	if (velocity.Length() >= 1000) {
+		velocity = velocity.Normal() * 1000;
 	}
 
 	switch (state)
@@ -166,13 +175,13 @@ void Debris::OnCollision(const CollisionInfo &info)
 	{
 	case ENEMY:
 		if (isAttack) {
-
 		}
 		else {
-			Damage(1.0f);
+
 		}
 		break;
 	case PLAYER:
+		//回収
 		if (info.myName == "hitCollider" &&
 			info.collider->GetCollisionName() == "absorptionCollider" &&
 			!isFirstAttack) {

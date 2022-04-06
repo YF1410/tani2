@@ -51,6 +51,8 @@ void GameObjCommon::Move()
 	}
 	pos += velocity;
 
+	GameObjCommon::Update();
+
 }
 
 void GameObjCommon::VelocityReset()

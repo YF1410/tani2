@@ -9,7 +9,6 @@
 #include "MapChip.h"
 
 using namespace DirectX;
-std::vector<Enemy*> Enemy::enemys;
 
 Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 	GameObjCommon(
@@ -82,20 +81,20 @@ void Enemy::Update() {
 	case Enemy::HOMING:
 		//ターゲットが消滅していた場合や追跡範囲を外れたときはSTAYに移行
 
-		if (targetLength >= holmingLength) {
+		/*if (targetLength >= holmingLength) {
 			minTargetLength = holmingLength;
 			state = STAY;
 
-		}
-		else {//if(ここにrayがオブジェクトに届けばの条件式を書く){
+		}*/
+		//else {//if(ここにrayがオブジェクトに届けばの条件式を書く){
 			targetVec = Vector3(player->GetPos()- pos);
 			targetVec.y = 0;
 			velocity += targetVec.Normal() * moveSpeed;
-		}
+		//}
 
-		if (targetLength <= attackLength) {
+		/*if (targetLength <= attackLength) {
 			state = ATTACK;
-		}
+		}*/
 
 		break;
 	case Enemy::ATTACK:
@@ -176,22 +175,15 @@ void Enemy::OnCollision(const CollisionInfo &info)
 			Damage(1.0f);
 		}
 		break;
+
+	case ENEMY:
+		//pos = info.inter;
+		break;
 	default:
 		break;
 	}
 }
 
-void Enemy::StaticAdaptation() {
-	for (int i = 0; i < enemys.size(); i++) {
-		enemys[i]->Adaptation();
-	}
-}
-
-void Enemy::StaticDraw() {
-	for (int i = 0; i < enemys.size(); i++) {
-		enemys[i]->Draw();
-	}
-}
 
 void Enemy::Damage(float damage)
 {

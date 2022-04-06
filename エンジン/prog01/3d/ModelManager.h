@@ -20,6 +20,9 @@ public:
 
 		SLIME,
 		SLIME_BREAK,
+		SLIME_CORE,
+		SLIME_CORE_UNDER,
+
 		ENEMY,
 
 

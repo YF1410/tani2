@@ -63,6 +63,13 @@ private:
 	std::unique_ptr<Model> areaModel;
 	std::vector<REVERS_AREA *> reversAreas;
 
+	//被ダメージ
+	void Damage(float damage);
+	//無敵
+	bool isInvincible;
+	//時間
+	int invincibleCounter;
+
 private: // メンバ変数
 	//キーボード移動用
 	float moveSpead;
@@ -91,5 +98,7 @@ private: // メンバ変数
 	Box2DCollider *toMapChipCollider;
 
 	REVERSE_Range reverseRange;
+
+	GameObjCommon *coreUp;
 };
 

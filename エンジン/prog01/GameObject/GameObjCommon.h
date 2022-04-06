@@ -30,7 +30,8 @@ public:
 		bool isGravity = false,				//重力処理の有無
 		Vector3 pos = { 0,0,0 },			//初期位置
 		Vector3 scale = { 1,1,1 },			//初期サイズ
-		Vector3 rotate = { 0,0,0 }			//初期回転
+		Vector3 rotate = { 0,0,0 },			//初期回転
+		bool loadAnimation =false			//アニメーション読み込み
 	) :
 		Tag(tag),
 		isGravity(isGravity),
@@ -44,7 +45,7 @@ public:
 		gravityPow(0.4f)
 	{
 		objectData = nullptr;
-		objectData = FbxObject3d::Create(ModelManager::GetIns()->GetModel(modelName));
+		objectData = FbxObject3d::Create(ModelManager::GetIns()->GetModel(modelName),loadAnimation);
 		objectData->SetModel(ModelManager::GetIns()->GetModel(modelName));
 		objectData->SetPosition(pos);
 		objectData->SetRotation(rotate);

@@ -16,7 +16,11 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	GameObjCommon(
 		ModelManager::SLIME,	//スライムのモデルをセット
 		GameObjCommon::PLAYER,	//プレイヤーとして扱う
-		false					//重力の影響を受ける
+		false,					//重力の影響を受ける
+		{0,0,0},
+		{0,0,0},
+		{0,0,0},
+		true
 	)
 {
 	srand(time(NULL));			//爆破用乱数のシード値をセット
@@ -34,6 +38,8 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 
 	areaModel = Model::CreateFromObject("Sphere", true);
 	areaModel.get()->SetAlpha(0.2f);
+
+	coreUp = new GameObjCommon(ModelManager::SLIME_CORE, Notag, false,{ 0,0,0 }, {1.5f,1.5f,1.5f });
 }
 
 
@@ -58,6 +64,12 @@ void PlayerObject::Initialize()
 	reverseRange = MIN;
 	objectData->SetAlpha(0.5f);
 
+	//アニメーション開始
+	objectData->PlayAnimation();
+
+	//無敵フラグ
+
+
 }
 
 void PlayerObject::Update()
@@ -76,6 +88,15 @@ void PlayerObject::Update()
 	if (input->PushKey(DIK_R)) {
 		Initialize();
 	}
+
+	//無敵処理
+	if (isInvincible) {
+		invincibleCounter--;
+		if (invincibleCounter <= 0) {
+			isInvincible = false;
+		}
+	}
+
 
 	//キーボード移動
 	if (input->PushKey(DIK_A))	//左
@@ -210,8 +231,8 @@ void PlayerObject::Update()
 	//サイズからスケールへ変換
 	scalef = ConvertSizeToScale(size);
 	scale = scalef;
-	broadSphereCollider->SetRadius(scalef * 150.0f + 20.0f);
-	toMapChipCollider->SetRadius( scalef * 150.0f, scalef * 150.0f);
+	broadSphereCollider->SetRadius(scalef * 120.0f);
+	toMapChipCollider->SetRadius( scalef * 120.0f, scalef * 120.0f);
 	//移動量を適応
 	Move();
 	DebugText::GetInstance()->Print("WASD stick : Move",600,0,3);
@@ -267,13 +288,23 @@ void PlayerObject::Update()
 			normal.z = vec;
 		}
 		normal.Normalize();
-		HitWall(hitPos, normal);
+		velocity = CalcWallScratchVector(velocity, normal);
+		//HitWall(hitPos, normal);
 	}
 }
 
 void PlayerObject::Draw() const
 {
+	Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
+
+	coreUp->pos = pos;
+	coreUp->Adaptation();
+	coreUp->Draw();
+
+	Object3d::PostDraw();
+
 	GameObjCommon::Draw();
+
 
 	Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 	for (auto itr : reversAreas) {
@@ -300,6 +331,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 		}
 		break;
 	case ENEMY:
+		Damage(1.0f);
 		DebugText::GetInstance()->Print("HitEnemy", 0, 80, 3);
 		break;
 
@@ -316,7 +348,17 @@ void PlayerObject::HitWall(
 	const Vector3 &normal)
 {
 	velocity = CalcReflectVector(velocity, normal);
-	GameObjCommon::Update();
+}
+
+void PlayerObject::Damage(float damage)
+{
+	//無敵だったらダメージを受けない
+	if (isInvincible) return;
+	isInvincible = true;
+	size -= damage;
+	invincibleCounter = 60;
+
 
 }
+
 

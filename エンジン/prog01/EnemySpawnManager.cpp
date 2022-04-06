@@ -10,8 +10,8 @@ EnemySpawnManager *EnemySpawnManager::GetIns()
 void EnemySpawnManager::Update()
 {
 	//è\ïbÇ≤Ç∆Ç…ìGí«â¡
-	if (/*GameScene::counter % 600 == 0 &&
-		Enemy::enemys.size() <= 10*/false) {
+	if (GameScene::counter % 600 == 0 &&
+		enemys.size() <= 10) {
 		for (int i = 0; i < 5; i++) {
 			float Rad = XMConvertToRadians(rand() % 360);
 			Vector3 spawnPos = {
@@ -41,20 +41,34 @@ void EnemySpawnManager::Update()
 
 
 	//çÌèú
-	for (int i = Enemy::enemys.size() - 1; i >= 0; i--) {
-		if (!Enemy::enemys[i]->Enemy::enemys[i]->isAlive) {
-			delete Enemy::enemys[i];
-			Enemy::enemys.erase(Enemy::enemys.begin() + i);
+	for (int i = enemys.size() - 1; i >= 0; i--) {
+		if (!enemys[i]->isAlive) {
+			delete enemys[i];
+			enemys.erase(enemys.begin() + i);
 		}
 	}
 	//çXêV
-	for (int i = 0; i < Enemy::enemys.size(); i++) {
-		Enemy::enemys[i]->Update();
+	for (int i = 0; i < enemys.size(); i++) {
+		enemys[i]->Update();
 	}
 
 }
 
+void EnemySpawnManager::Adaptation()
+{
+	for (int i = 0; i < enemys.size(); i++) {
+		enemys[i]->Adaptation();
+	}
+}
+
+void EnemySpawnManager::Draw()
+{
+	for (int i = 0; i < enemys.size(); i++) {
+		enemys[i]->Draw();
+	}
+}
+
 void EnemySpawnManager::SpawnEnemy(Vector3 spawnPos)
 {
-	Enemy::enemys.push_back(new Enemy(spawnPos,player));
+	enemys.push_back(new Enemy(spawnPos,player));
 }

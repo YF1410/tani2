@@ -448,3 +448,4 @@ prog01/prog01/lib/fbx_sdk/lib/libfbxsdk-mt.lib
 prog01/prog01/lib/fbx_sdk/lib/libfbxsdk-md.lib
 prog01/prog01/Resources/BGM/game_bgm.wav
 *.orig
+エンジン/prog01/Resources/
