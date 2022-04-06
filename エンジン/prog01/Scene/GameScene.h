@@ -62,11 +62,10 @@ private:	//当たり判定系関数
 	//void AttackDebrisToEnemy();	//破片と敵
 	//void PlayerToDebris();	//プレイヤーと破片
 
-
 private: // メンバ変数
 	//カメラ
 	std::unique_ptr<Camera> camera;
-	
+
 	Vector3 eyeDistance = { 0,2000,0 };
 	const Vector3 eyeDistanceDef = { 0,2500,0 };
 	const Vector3 targetDistance = { 0,0,100 };
@@ -101,6 +100,8 @@ private: // メンバ変数
 
 	float searchPlayerLen = 500.0f;
 
+	Line line;
+	AABB aabb;
 
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;

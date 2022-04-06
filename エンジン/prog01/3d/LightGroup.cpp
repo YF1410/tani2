@@ -183,6 +183,7 @@ void LightGroup::SetDirLightActive(int index, bool active)
 	assert(0 <= index && index < DirLightNum);
 
 	dirLights[index].SetActive(active);
+	dirty = true;
 }
 
 void LightGroup::SetDirLightDir(int index, const XMVECTOR& lightdir)
@@ -206,6 +207,7 @@ void LightGroup::SetPointLightActive(int index, bool active)
 	assert(0 <= index && index < PointLightNum);
 
 	pointLights[index].SetActive(active);
+	dirty = true;
 }
 
 void LightGroup::SetPointLightPos(int index, const XMFLOAT3& lightpos)
@@ -237,6 +239,7 @@ void LightGroup::SetSpotLightActive(int index, bool active)
 	assert(0 <= index && index < SpotLightNum);
 
 	spotLights[index].SetActive(active);
+	dirty = true;
 }
 
 void LightGroup::SetSpotLightDir(int index, const XMVECTOR& lightdir)
@@ -284,6 +287,7 @@ void LightGroup::SetCircleShadowActive(int index, bool active)
 	assert(0 <= index && index < CircleShadowNum);
 
 	circleShadows[index].SetActive(active);
+	dirty = true;
 }
 
 void LightGroup::SetCircleShadowCasterPos(int index, const XMFLOAT3& casterPos)

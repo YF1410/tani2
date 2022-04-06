@@ -372,10 +372,10 @@ bool Collision::CheckSphere2Box(const Sphere& sphere, const Box& box)
 		sqDistance += (pos - box.center.m128_f32[2] + box.scale.z) * (pos - box.center.m128_f32[2] + box.scale.z);
 	}
 
-	return sqDistance < sphere.radius * sphere.radius;
+	return sqDistance < sphere.radius* sphere.radius;
 }
 
-bool Collision::CheckSphere2AABB(const Sphere &sphere, const AABB &aabb, DirectX::XMVECTOR *inter)
+bool Collision::CheckSphere2AABB(const Sphere& sphere, const AABB& aabb, DirectX::XMVECTOR* inter)
 {
 	//長さのべき乗
 	float sqLen = 0;
@@ -384,7 +384,7 @@ bool Collision::CheckSphere2AABB(const Sphere &sphere, const AABB &aabb, DirectX
 		sqLen += (spherePos.x - aabb.center.x) * (spherePos.x - aabb.center.x);
 	}
 	else if (spherePos.x > aabb.center.x + aabb.length.x) {
-		sqLen += (spherePos.x - (aabb.center.x + aabb.length.x)) * (spherePos.x- (aabb.center.x + aabb.length.x));
+		sqLen += (spherePos.x - (aabb.center.x + aabb.length.x)) * (spherePos.x - (aabb.center.x + aabb.length.x));
 	}
 	if (spherePos.y < aabb.center.y) {
 		sqLen += (spherePos.y - aabb.center.y) * (spherePos.y - aabb.center.y);
@@ -547,4 +547,77 @@ bool Collision::CheckCapsule2Box(const Capsule& capsule, const Box& box)
 	}
 
 	return sqDistance < capsule.radius* capsule.radius;
+}
+
+bool Collision::CheckLine2Box(const Line& line, const AABB& aabb)
+{
+	//bool isCollision = ColRayAABB(lineStart, &(*lineEnd - *lineStart), &aabb[i], &box_WorldMat[i], col_t);
+
+	// 交差判定
+	float sp[2], ep[2], d[2], min[2], max[2];
+	sp[0] = line.startPos.x;
+	//p[1] = line.start.y;
+	sp[1] = line.startPos.z;
+
+	ep[0] = line.endPos.x;
+	ep[1] = line.endPos.z;
+
+	d[0] = ep[0] - sp[0];
+	//d[1] = line.end.y - line.start.y;
+	d[1] = ep[1] - sp[1];
+
+	min[0] = aabb.center.x;
+	min[1] = aabb.center.z;
+
+	max[0] = aabb.center.x + aabb.length.x;
+	max[1] = aabb.center.z + aabb.length.z;
+
+	float t = -FLT_MAX;
+	float t_max = FLT_MAX;
+
+	if (d[0] < FLT_EPSILON) {
+		float tmp = sp[0]; sp[0] = ep[0]; ep[0] = tmp;
+	}
+
+	if (d[1] < FLT_EPSILON) {
+		float tmp = sp[1]; sp[1] = ep[1]; ep[1] = tmp;
+	}
+
+	d[0] = ep[0] - sp[0];
+	d[1] = ep[1] - sp[1];
+
+	if ((max[0] < sp[0] || max[1] < sp[1]) || (ep[0] < min[0] || ep[1] < min[1])) {
+		return false;
+	}
+
+
+	for (int i = 0; i < 2; ++i) {
+		if (abs(static_cast<int>(d[i])) < FLT_EPSILON) {
+			if (sp[i] < min[i] || sp[i] > max[i])
+				return false;	// 交差していない
+		}
+		else {
+			// スラブとの距離を算出
+			// t1が近スラブ、t2が遠スラブとの距離
+			float odd = 1.0f / d[i];
+			float t1 = (min[i] - sp[i]) * odd;
+			float t2 = (max[i] - sp[i]) * odd;
+			if (t1 > t2) {
+				float tmp = t1; t1 = t2; t2 = tmp;
+			}
+
+			if (t1 > t) t = t1;
+			if (t2 < t_max) t_max = t2;
+
+			// スラブ交差チェック
+			if (t >= t_max)
+				return false;
+		}
+	}
+
+	Vector3 colPos;
+	// 交差している
+	colPos = line.startPos + t * (line.endPos - line.startPos);
+
+	return true;
 }

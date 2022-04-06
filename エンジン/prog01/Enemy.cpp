@@ -81,16 +81,22 @@ void Enemy::Update() {
 		break;
 	case Enemy::HOMING:
 		//ターゲットが消滅していた場合や追跡範囲を外れたときはSTAYに移行
-		//if (targetLength >= holmingLength) {
-		//	minTargetLength = holmingLength;
-		//	state = STAY;
 
-		//}
-		//else {
-		targetVec = Vector3(player->GetPos() - pos);
-		targetVec.y = 0;
-		velocity += targetVec.Normal() * moveSpeed;
-		//}
+		if (targetLength >= holmingLength) {
+			minTargetLength = holmingLength;
+			state = STAY;
+
+		}
+		else {//if(ここにrayがオブジェクトに届けばの条件式を書く){
+			targetVec = Vector3(player->GetPos()- pos);
+			targetVec.y = 0;
+			velocity += targetVec.Normal() * moveSpeed;
+		}
+
+		if (targetLength <= attackLength) {
+			state = ATTACK;
+		}
+
 		break;
 	case Enemy::ATTACK:
 		if (true) {

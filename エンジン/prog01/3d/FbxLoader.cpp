@@ -302,27 +302,29 @@ void FbxLoader::ParseMaterial(FbxModel* model, FbxNode* fbxNode)
 
 		if (material)
 		{
-			// FbxSurfaceLambertクラスかどうかを調べる
-			if (material->GetClassId().Is(FbxSurfaceLambert::ClassId))
-			{
-				FbxSurfaceLambert* lambert = static_cast<FbxSurfaceLambert*>(material);
-
-				//環境光係数
-				FbxPropertyT<FbxDouble3> ambient = lambert->Ambient;
-				model->ambient.x = (float)ambient.Get()[0];
-				model->ambient.y = (float)ambient.Get()[1];
-				model->ambient.z = (float)ambient.Get()[2];
-
-				//拡散反射光係数
-				FbxPropertyT<FbxDouble3> diffuse = lambert->Diffuse;
-				model->diffuse.x = (float)diffuse.Get()[0];
-				model->diffuse.y = (float)diffuse.Get()[1];
-				model->diffuse.z = (float)diffuse.Get()[2];
-			}
-
+			//マテリアル名(デバック用)
+			string name = material->GetName();
 			// ディフューズテクスチャを取り出す
 			const FbxProperty diffuseProperty = material->FindProperty(FbxSurfaceMaterial::sDiffuse);
-			if (diffuseProperty.IsValid())
+			//ベースカラー
+			const FbxProperty propBaseColor = FbxSurfaceMaterialUtils::GetProperty("baseColor", material);
+			if (propBaseColor.IsValid())
+			{
+				const FbxFileTexture* texture = propBaseColor.GetSrcObject<FbxFileTexture>();
+				if (texture)
+				{
+					const char* filepath = texture->GetFileName();
+					// ファイルパスからファイル名抽出
+					string path_str(filepath);
+					string name = ExtractFileName(path_str);
+					// テクスチャ読み込み
+					LoadTexture(&model->baseTexture, baseDirectory + model->name + "/" + name);
+					textureLoaded = true;
+				}
+
+				model->HLSLfName = L"PBRFBX";
+			}
+			else if (diffuseProperty.IsValid())
 			{
 				const FbxFileTexture* texture = diffuseProperty.GetSrcObject<FbxFileTexture>();
 				if (texture)
@@ -332,27 +334,150 @@ void FbxLoader::ParseMaterial(FbxModel* model, FbxNode* fbxNode)
 					string path_str(filepath);
 					string name = ExtractFileName(path_str);
 					// テクスチャ読み込み
-					LoadTexture(model, baseDirectory + model->name + "/" + name);
+					LoadTexture(&model->baseTexture, baseDirectory + model->name + "/" + name);
 					textureLoaded = true;
 				}
+				model->HLSLfName = L"FBX";
+			}
+
+			//金属度
+			const FbxProperty propMetalness = FbxSurfaceMaterialUtils::GetProperty("metalness", material);
+			if (propMetalness.IsValid())
+			{
+				//モデルに読み取った値を書き込む
+				model->metalness = propMetalness.Get<float>();
+
+				const FbxFileTexture* texture = propMetalness.GetSrcObject<FbxFileTexture>();
+				if (texture)
+				{
+					const char* filepath = texture->GetFileName();
+					// ファイルパスからファイル名抽出
+					string path_str(filepath);
+					string name = ExtractFileName(path_str);
+					// テクスチャ読み込み
+					LoadTexture(&model->metalnessTexture, baseDirectory + model->name + "/" + name);
+					model->metalness = 0.0f;
+					textureLoaded = true;
+				}
+			}
+
+			//隙間
+			const FbxProperty propSpecular = FbxSurfaceMaterialUtils::GetProperty("specular", material);
+			if (propSpecular.IsValid())
+			{
+				//モデルに読み取った値を書き込む
+				model->specular = propSpecular.Get<float>();
+			}
+
+			//粗さ
+			const FbxProperty propSpecularRoughness = FbxSurfaceMaterialUtils::GetProperty("specularRoughness", material);
+			if (propSpecularRoughness.IsValid())
+			{
+				//モデルに読み取った値を書き込む
+				model->roughness = propSpecularRoughness.Get<float>();
+
+				const FbxFileTexture* texture = propSpecularRoughness.GetSrcObject<FbxFileTexture>();
+				if (texture)
+				{
+					const char* filepath = texture->GetFileName();
+					// ファイルパスからファイル名抽出
+					string path_str(filepath);
+					string name = ExtractFileName(path_str);
+					// テクスチャ読み込み
+					LoadTexture(&model->roughnessTexture, baseDirectory + model->name + "/" + name);
+					model->roughness = 0.0f;
+					textureLoaded = true;
+				}
+			}
+
+			//法線マップ
+			const FbxProperty propNormalCamera = FbxSurfaceMaterialUtils::GetProperty("normalCamera", material);
+			if (propNormalCamera.IsValid())
+			{
+				const FbxFileTexture* texture = propNormalCamera.GetSrcObject<FbxFileTexture>();
+				if (texture)
+				{
+					const char* filepath = texture->GetFileName();
+					// ファイルパスからファイル名抽出
+					string path_str(filepath);
+					string name = ExtractFileName(path_str);
+					// テクスチャ読み込み
+					LoadTexture(&model->normalTexture, baseDirectory + model->name + "/" + name);
+				}
+			}
+
+			//サブサーフェス
+			const FbxProperty propSubsurface = FbxSurfaceMaterialUtils::GetProperty("subsurface", material);
+			if (propSubsurface.IsValid())
+			{
+				//モデルに読み取った値を書き込む
+				float subsurface = propSubsurface.Get<float>();
+			}
+
+			//鏡面反射色
+			const FbxProperty propSpecularColor = FbxSurfaceMaterialUtils::GetProperty("specularColor", material);
+			if (propSpecularColor.IsValid())
+			{
+				//モデルに読み取った値を書き込む
+				float specularColor = propSpecularColor.Get<float>();
+			}
+
+			//異方性反射率
+			const FbxProperty propSpecularAnisotropy = FbxSurfaceMaterialUtils::GetProperty("specularAnisotropy", material);
+			if (propSpecularAnisotropy.IsValid())
+			{
+				//モデルに読み取った値を書き込む
+				float specularColor = propSpecularAnisotropy.Get<float>();
+			}
+
+			//ツヤ色
+			const FbxProperty propSheenColor = FbxSurfaceMaterialUtils::GetProperty("sheenColor", material);
+			if (propSheenColor.IsValid())
+			{
+				//モデルに読み取った値を書き込む
+				float sheenColor = propSheenColor.Get<float>();
+			}
+
+			//ツヤ
+			const FbxProperty propSheen = FbxSurfaceMaterialUtils::GetProperty("sheen", material);
+			if (propSheen.IsValid())
+			{
+				//モデルに読み取った値を書き込む
+				float sheen = propSheen.Get<float>();
+			}
+
+			//クリア塗装の粗さ
+			const FbxProperty propCoatRoughness = FbxSurfaceMaterialUtils::GetProperty("coatRoughness", material);
+			if (propCoatRoughness.IsValid())
+			{
+				//モデルに読み取った値を書き込む
+				float coatRoughness = propCoatRoughness.Get<float>();
+			}
+
+			//クリア塗装
+			const FbxProperty propCoat = FbxSurfaceMaterialUtils::GetProperty("coat", material);
+			if (propCoat.IsValid())
+			{
+				//モデルに読み取った値を書き込む
+				float coat = propCoat.Get<float>();
 			}
 		}
 
 		// テクスチャがない場合は白テクスチャを貼る
 		if (!textureLoaded)
 		{
-			LoadTexture(model, baseDirectory + defaultTextureFileName);
+			LoadTexture(&model->baseTexture, baseDirectory + defaultTextureFileName);
 		}
 	}
 }
 
-void FbxLoader::LoadTexture(FbxModel* model, const std::string& fullpath)
+void FbxLoader::LoadTexture(TextureData* texData, const std::string& fullpath)
 {
 	HRESULT result = S_FALSE;
 
 	// WICテクスチャのロード
-	TexMetadata& metadata = model->metadata;
-	ScratchImage& scratchImg = model->scratchImg;
+	TexMetadata& metadata = texData->metaData;
+	ScratchImage& scratchImg = texData->scratchImg;
 
 	// ユニコード文字列に変換
 	wchar_t wfilepath[128];

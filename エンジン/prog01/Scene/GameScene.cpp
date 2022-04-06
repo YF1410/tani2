@@ -72,9 +72,10 @@ void GameScene::Initialize() {
 	light = LightGroup::Create();
 	//3Dオブジェクトにライトをセット
 	Object3d::SetLight(light.get());
+	FbxObject3d::SetLight(light.get());
 	light->SetDirLightActive(0, true);
-	light->SetDirLightActive(1, true);
-	light->SetDirLightActive(2, true);
+	light->SetDirLightActive(1, false);
+	light->SetDirLightActive(2, false);
 	light->SetPointLightActive(0, false);
 	light->SetPointLightActive(1, false);
 	light->SetPointLightActive(2, false);
@@ -161,6 +162,22 @@ void GameScene::Update() {
 
 	// 全ての衝突をチェック
 	collisionManager->CheckBroadCollisions();
+
+	line.startPos = Enemy::enemys[0]->GetPos();
+	line.endPos = playerObject->GetPos();
+	aabb.length = { 200,0,200 };
+
+	for (int z = 0; z < 34; z++) {
+		for (int x = 0; x < 57; x++) {
+			if (MapChip::GetInstance()->GetChipNum(x, z) == 1) {
+				aabb.center = { 200.0f * x - 100.0f ,0.0f,-200.0f * z + 100.0f };
+				if (Collision::CheckLine2Box(line, aabb)) {
+					DebugText::GetInstance()->Print("hit", 0, 80, 3);
+				}
+			}
+		}
+	}
+	 
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
 	Debris::StaticAdaptation();
