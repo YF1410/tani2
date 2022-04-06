@@ -89,7 +89,7 @@ void Debris::Update()
 	toMapChipCollider->Update();
 	Vector3 hitPos = { 0,0,0 };
 	Vector3 oldPos;
-	if (MapChip::GetInstance()->CheckHitMapChip(toMapChipCollider, &velocity, &hitPos)) {
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &velocity, &hitPos)) {
 		Vector3 normal = { 0,0,0 };
 
 		if (hitPos.x != 0) {

@@ -58,7 +58,7 @@ public:
 	virtual void Update();			//各オブジェクトの更新
 	virtual void Move();			//移動量計算
 	virtual void VelocityReset();								//移動量初期化
-	virtual void VelocityReset(bool isStap, float gain = 0.9f);	//移動量初期化
+	virtual void VelocityReset(float gain = 0.9f,float dead = 0.01f);	//移動量初期化
 	//変更を適応
 	void Adaptation();
 	//アニメーション再生

@@ -10,8 +10,8 @@ EnemySpawnManager *EnemySpawnManager::GetIns()
 void EnemySpawnManager::Update()
 {
 	//\•b‚²‚Æ‚É“G’Ç‰Á
-	if (GameScene::counter % 600 == 0 &&
-		Enemy::enemys.size() <= 10) {
+	if (/*GameScene::counter % 600 == 0 &&
+		Enemy::enemys.size() <= 10*/false) {
 		for (int i = 0; i < 5; i++) {
 			float Rad = XMConvertToRadians(rand() % 360);
 			Vector3 spawnPos = {

@@ -65,7 +65,7 @@ void PlayerObject::Update()
 	moveSpead = scalef * 5;
 
 	//移動量減衰処理
-	VelocityReset(false, 0.9f);
+	VelocityReset(0.9f);
 	if (velocity.Length() >= 1000) {
 		velocity = velocity.Normal() * 1000;
 	}
@@ -93,7 +93,7 @@ void PlayerObject::Update()
 		velocity.z += moveSpead;
 
 	}
-
+	//コントローラーでの移動
 	velocity.x += input->PadStickGradient().x * moveSpead;
 	velocity.z += -input->PadStickGradient().y * moveSpead;
 
@@ -208,7 +208,7 @@ void PlayerObject::Update()
 	//サイズからスケールへ変換
 	scalef = ConvertSizeToScale(size);
 	scale = scalef;
-	broadSphereCollider->SetRadius(scalef * 180.0f + 20.0f);
+	broadSphereCollider->SetRadius(scalef * 150.0f + 20.0f);
 	toMapChipCollider->SetRadius( scalef * 150.0f, scalef * 150.0f);
 	//移動量を適応
 	Move();
@@ -222,7 +222,8 @@ void PlayerObject::Update()
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();
 	Vector3 hitPos = {0,0,0};
-	if (MapChip::GetInstance()->CheckHitMapChip(toMapChipCollider, &velocity, &hitPos)) {
+	//上下左右
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &velocity, &hitPos)) {
 		Vector3 normal = {0,0,0};
 		
 		if (hitPos.x != 0) {
@@ -239,6 +240,28 @@ void PlayerObject::Update()
 				vec = -1;
 			}
 			pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
+			normal.z = vec;
+		}
+		normal.Normalize();
+		HitWall(hitPos, normal);
+	}
+	//角
+	else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
+		Vector3 normal = { 0,0,0 };
+		if (hitPos.x != 0) {
+			int vec = 1;	//向き
+			if (0 < velocity.x) {
+				vec = -1;
+			}
+			pos.x = hitPos.x;
+			normal.x = vec;
+		}
+		if (hitPos.z != 0) {
+			int vec = 1;	//向き
+			if (velocity.z < 0) {
+				vec = -1;
+			}
+			pos.z = hitPos.z;
 			normal.z = vec;
 		}
 		normal.Normalize();
@@ -291,5 +314,7 @@ void PlayerObject::HitWall(
 	const Vector3 &normal)
 {
 	velocity = CalcReflectVector(velocity, normal);
+	GameObjCommon::Update();
+
 }
 

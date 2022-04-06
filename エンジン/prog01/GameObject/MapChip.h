@@ -8,7 +8,7 @@
 #include <map>
 #include "BaseBlock.h"
 #include "Box2dCollider.h"
-
+#include "SphereCollider.h"
 
 class MapChip
 {
@@ -62,7 +62,9 @@ public:
 	
 
 	//マップチップと矩形の当たり判定
-	bool CheckHitMapChip(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos);
+	bool CheckMapChipToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos);
+	//マップチップと球の当たり判定
+	bool CheckMapChipToSphere2d(SphereCollider *sphereCollider,Vector3 *vel,Vector3 *hitPos);
 
 private:
 	//現在のマップ

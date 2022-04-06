@@ -295,6 +295,15 @@ bool Collision::CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB,
 	return false;
 }
 
+bool Collision::CheckSphere2Point(const Sphere &sphere, const Vector3 &point, DirectX::XMVECTOR *inter, DirectX::XMVECTOR *reject)
+{
+	Sphere pointSphere = {
+		point,
+		0.0f
+	};
+	return CheckSphere2Sphere(sphere, pointSphere, inter, reject);
+}
+
 bool Collision::CheckSphere2Capsule(const Sphere& sphere, const Capsule& capsule)
 {
 	Vector3 vStartToEnd = capsule.endPosition - capsule.startPosition;

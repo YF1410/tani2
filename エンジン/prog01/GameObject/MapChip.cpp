@@ -3,6 +3,7 @@
 #include "SlimeMath.h"
 #include "DebugText.h"
 #include "slimeMath.h"
+#include "Collision.h"
 
 const std::string MapChip::baseDirectory = "Resources/Map/";
 
@@ -100,7 +101,7 @@ void MapChip::Draw()
 	}
 }
 
-bool MapChip::CheckHitMapChip(Box2DCollider *boxCollider,Vector3 *vel, Vector3 *hitpos)
+bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vector3 *hitpos)
 {
 	Vector3 hitPositon = { 0,0,0 };
 	Box2DCollider box = *boxCollider;
@@ -146,28 +147,123 @@ bool MapChip::CheckHitMapChip(Box2DCollider *boxCollider,Vector3 *vel, Vector3 *
 		*hitpos = hitPositon;
 	}
 
-	//Vector3 normal;
-	//if (hitPositon.x != 0) {
-	//	int vec = 1;	//向き
-	//	int offset = -1;
-	//	if (0 < vel->x) {
-	//		vec = -1;
-	//		offset = 0;
-	//	}
-	//	boxCollider->GetObject3d()->pos.x = hitPositon.x + boxCollider->GetRadiusX() * vec + offset;
-	//	normal.x = offset;
-	//}
-	//if (hitPositon.z != 0) {
-	//	int vec = 1;	//向き
-	//	int offset = 0;
-	//	if (vel->z < 0) {
-	//		vec = -1;
-	//		//offset = -1;
-	//	}
-	//	boxCollider->GetObject3d()->pos.z = hitPositon.z - boxCollider->GetRadiusY() * vec + offset;
-	//	normal.y = offset;
-	//}
+	return hit;
+}
 
+bool MapChip::CheckMapChipToSphere2d(SphereCollider *sphereCollider, Vector3 *vel, Vector3 *hitPos)
+{
+	SphereCollider sphere = *sphereCollider;
+	Vector3 center = sphere.center;
+	int nowChipX = (center.x + (chipSize / 2) - fmodf(center.x + (chipSize / 2), chipSize)) / chipSize;
+	int nowChipY = (-center.z - (chipSize / 2) - fmodf(-center.z - (chipSize / 2), chipSize)) / chipSize + 1;
+
+	int rig = ((center.x + sphere.GetRadius()) - (chipSize / 2) - fmodf((center.x + sphere.GetRadius()) - (chipSize / 2), chipSize)) / chipSize + 1;
+	int lef = ((center.x - sphere.GetRadius()) + (chipSize / 2) - fmodf((center.x - sphere.GetRadius()) + (chipSize / 2), chipSize)) / chipSize;
+	int up = (-center.z - sphere.GetRadius() + (chipSize / 2) - fmodf(-center.z - sphere.GetRadius() + (chipSize / 2), chipSize)) / chipSize;
+	int down = (-center.z + sphere.GetRadius() - (chipSize / 2) - fmodf(-center.z + sphere.GetRadius() - (chipSize / 2), chipSize)) / chipSize + 1;
+	
+	Vector3 hitPosition = { 0,0,0 };
+	bool hit = false;
+
+	//上方向への移動（下側への接触）
+	if (0 < vel->z) {
+		//ブロードフェイズ
+		//横
+		for (int x = lef; x <= rig; x++) {
+			if (GetChipNum(x, up) == 1) {
+				//細かい当たり判定
+				for (int offset = -1; offset <= 1; offset +=2) {
+					Vector3 cornerPos = {
+						(float)(x * chipSize + (chipSize / 2)*offset),
+						0,
+						(float)(-up * chipSize - (chipSize / 2))
+					};
+					Sphere mapChipSphere = {
+						cornerPos,
+						sphere.GetRadius()
+					};
+					if (Collision::CheckSphere2Point(mapChipSphere, sphere.center)) {
+						hitPosition.z = Vector3(cornerPos + Vector3(sphere.center- cornerPos).Normal() * mapChipSphere.radius).z;
+						hit = true;
+					}
+				}
+			}
+		}
+	}
+	//下側
+	if (0 > vel->z) {
+		//ブロードフェイズ
+		//横
+		for (int x = lef; x <= rig; x++) {
+			if (GetChipNum(x, down) == 1) {
+				//細かい当たり判定
+				for (int offset = -1; offset <= 1; offset += 2) {
+					Vector3 cornerPos = {
+						(float)(x * chipSize + (chipSize / 2) * offset),
+						0,
+						(float)(-down * chipSize + (chipSize / 2))
+					};
+					Sphere mapChipSphere = {
+						cornerPos,
+						sphere.GetRadius()
+					};
+					if (Collision::CheckSphere2Point(mapChipSphere, sphere.center)) {
+						hitPosition.z = Vector3(cornerPos + Vector3(sphere.center - cornerPos).Normal() * mapChipSphere.radius).z;
+						hit = true;
+					}
+				}
+			}
+		}
+	}
+	//右側
+	if (0 < vel->x) {
+		for (int y = up; y <= down; y++) {
+			if (GetChipNum(rig,y) == 1) {
+				//細かい当たり判定
+				for (int offset = -1; offset <= 1; offset += 2) {
+					Vector3 cornerPos = {
+						(float)(rig * chipSize - (chipSize / 2)),
+						0,
+						(float)(-y * chipSize + (chipSize / 2) * offset),
+					};
+					Sphere mapChipSphere = {
+						cornerPos,
+						sphere.GetRadius()
+					};
+					if (Collision::CheckSphere2Point(mapChipSphere, sphere.center)) {
+						hitPosition.x = Vector3(cornerPos + Vector3(sphere.center - cornerPos).Normal() * mapChipSphere.radius).x;
+						hit = true;
+					}
+				}
+			}
+		}
+	}
+	//左側
+	if (vel->x < 0) {
+		for (int y = up; y <= down; y++) {
+			if (GetChipNum(lef, y) == 1) {
+				//細かい当たり判定
+				for (int offset = -1; offset <= 1; offset += 2) {
+					Vector3 cornerPos = {
+						(float)(lef * chipSize + (chipSize / 2)),
+						0,
+						(float)(-y * chipSize + (chipSize / 2) * offset),
+					};
+					Sphere mapChipSphere = {
+						cornerPos,
+						sphere.GetRadius()
+					};
+					if (Collision::CheckSphere2Point(mapChipSphere, sphere.center)) {
+						hitPosition.x = Vector3(cornerPos + Vector3(sphere.center - cornerPos).Normal() * mapChipSphere.radius).x;
+						hit = true;
+					}
+				}
+			}
+		}
+	}
+	if (hitPos != nullptr) {
+		*hitPos = hitPosition;
+	}
 	return hit;
 }
 

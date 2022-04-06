@@ -26,6 +26,9 @@ public:
 	//球と球の当たり判定
 	static bool CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB,
 		DirectX::XMVECTOR* inter = nullptr, DirectX::XMVECTOR* reject = nullptr);
+	//球と点の当たり判定
+	static bool CheckSphere2Point(const Sphere &sphere,const Vector3 &point,
+		DirectX::XMVECTOR *inter = nullptr, DirectX::XMVECTOR *reject = nullptr);
 	//球とカプセルの当たり判定
 	static bool CheckSphere2Capsule(const Sphere& sphere, const Capsule& capsule);
 	//球とボックスの当たり判定

@@ -58,13 +58,17 @@ void GameObjCommon::VelocityReset()
 	velocity = 0;
 }
 
-void GameObjCommon::VelocityReset(bool isStap, float gain)
+void GameObjCommon::VelocityReset(float gain, float dead)
 {
-	if (isStap) {
-		velocity = 0;
+	velocity *= gain;
+	if (velocity.x < dead && -dead < velocity.x) {
+		velocity.x = 0;
 	}
-	else {
-		velocity *= gain;
+	if (velocity.y < dead && -dead < velocity.y) {
+		velocity.y = 0;
+	}
+	if (velocity.z < dead && -dead < velocity.z) {
+		velocity.z = 0;
 	}
 }
 
