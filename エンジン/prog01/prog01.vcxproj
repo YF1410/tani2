@@ -310,6 +310,7 @@
     <ClCompile Include="Scene\SceneFactory.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\DebugText.h" />
@@ -369,6 +370,7 @@
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="SlimeMath.h" />
     <ClInclude Include="SpotLight.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

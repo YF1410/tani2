@@ -278,6 +278,9 @@
     <ClCompile Include="EnemySpawnManager.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -451,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="EnemySpawnManager.h">
       <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>ゲームシステム\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
