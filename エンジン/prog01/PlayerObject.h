@@ -45,6 +45,8 @@ public:
 		const Vector3 &normal);
 
 	bool isCheckPoint;
+	//体当たり
+	bool isAttack;
 
 private:
 	struct REVERS_AREA {
@@ -60,13 +62,15 @@ private:
 		}
 	};
 
-	std::unique_ptr<Model> areaModel;
-	std::vector<REVERS_AREA *> reversAreas;
+	std::unique_ptr<Model> flontModel;
+	std::unique_ptr<Object3d> flont;
 
 	//被ダメージ
 	void Damage(float damage);
 	//無敵
 	bool isInvincible;
+	
+	
 	//時間
 	int invincibleCounter;
 
@@ -97,7 +101,6 @@ private: // メンバ変数
 	SphereCollider *broadSphereCollider;	//衝突判定用
 	Box2DCollider *toMapChipCollider;
 
-	REVERSE_Range reverseRange;
 
 	GameObjCommon *coreUp;
 };

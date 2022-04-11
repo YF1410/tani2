@@ -89,7 +89,7 @@
     <Filter Include="エンジンシステム\Collision\Collider2d">
       <UniqueIdentifier>{2a2180a3-83be-4f6e-aaa2-613ff38ddf2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ゲームシステム\Enemy\GameObject">
+    <Filter Include="エンジンシステム\GameObject\GameObject">
       <UniqueIdentifier>{3fff4a70-879f-4259-996f-4ed74b8945d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -255,7 +255,7 @@
       <Filter>エンジンシステム</Filter>
     </ClCompile>
     <ClCompile Include="GameObject\GameObjCommon.cpp">
-      <Filter>ゲームシステム\Enemy\GameObject</Filter>
+      <Filter>エンジンシステム\GameObject\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="BaseBlock.cpp">
       <Filter>ゲームシステム\Stage</Filter>
@@ -400,9 +400,6 @@
     <ClInclude Include="GameObject\Ease.h">
       <Filter>エンジンシステム\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject\MapChip.h">
-      <Filter>エンジンシステム\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Base\BaseScene.h">
       <Filter>ゲームシステム\Besa\Scene</Filter>
     </ClInclude>
@@ -432,7 +429,7 @@
       <Filter>エンジンシステム</Filter>
     </ClInclude>
     <ClInclude Include="GameObject\GameObjCommon.h">
-      <Filter>ゲームシステム\Enemy\GameObject</Filter>
+      <Filter>エンジンシステム\GameObject\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="BaseBlock.h">
       <Filter>ゲームシステム\Stage</Filter>
@@ -457,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="UI.h">
       <Filter>ゲームシステム\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\MapChip.h">
+      <Filter>エンジンシステム\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

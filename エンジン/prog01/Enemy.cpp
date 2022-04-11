@@ -162,11 +162,15 @@ void Enemy::Update() {
 void Enemy::OnCollision(const CollisionInfo &info)
 {
 	Debris *debri;
+	PlayerObject *player;
 	switch (info.object->Tag)
 	{
 	case PLAYER:
-		if (true) {
-
+		player = dynamic_cast<PlayerObject *>(info.object);
+		//位置修正
+		//pos = info.inter;
+		if (player->isAttack == true) {
+			Damage(1.0f);
 		}
 		break;
 	case DEBRIS:
@@ -194,6 +198,10 @@ void Enemy::Damage(float damage)
 	//HPが0以下になったら死亡状態へ以降
 	if (HP < 0) {
 		state = DEAD;
+		//一定の確率でアイテムドロップ
+		if (rand() % 101 <= 30) {
+			Debris::debris.push_back(new Debris(pos, {0,0,0}, 10));
+		}
 	}
 	else{
 		//無敵時間をセットする

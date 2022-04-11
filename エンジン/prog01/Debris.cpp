@@ -5,8 +5,9 @@
 #include "MapChip.h"
 
 std::vector<Debris *> Debris::debris;
+PlayerObject *Debris::playerData;
 
-Debris::Debris(Vector3 startPos, Vector3 startVec, float size, Vector3 *playerPos, int reversAERA) :
+Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	GameObjCommon(
 		ModelManager::SLIME_BREAK,
 		GameObjCommon::DEBRIS,
@@ -17,8 +18,6 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size, Vector3 *playerPo
 	isAlive(true),
 	isAttack(true),
 	isFirstAttack(true),
-	reverseCenter(startPos),
-	reversRagne(reversAERA),
 	reversFlag(false)
 {
 	//サイズからスケールへコンバート
@@ -27,8 +26,6 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size, Vector3 *playerPo
 	velocity = startVec;
 	//最初から攻撃状態
 	state = ATTACK;
-	//プレイヤーの位置セット
-	this->playerPos = playerPos;
 
 	////マップチップ用コライダー
 	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, scale.x * 150.0f, scale.x*150.0f);
@@ -80,7 +77,7 @@ void Debris::Update()
 		break;
 	case Debris::RETURN:
 		if(velocity.Length() <= 200){
-			velocity = Vector3(*playerPos - pos).Normal() * 100;
+			velocity = Vector3(playerData->pos - pos).Normal() * 100;
 		}
 		//
 		if (returnTimer-- <= 0) {
@@ -121,24 +118,20 @@ void Debris::Update()
 		HitWall(hitPos, normal);
 	}
 
-	//反転
-	if (Vector3(reverseCenter - pos).Length() > reversRagne && !reversFlag && isFirstAttack) {
-		reversFlag = true;
-		//移動方向反転
-		velocity *= -1;
-	}
-	else if(Vector3(reverseCenter - pos).Length() < reversRagne && reversFlag) {
-		reversFlag = false;
-	}
 }
 
 void Debris::VelocityReset()
 {
 	//空気抵抗
-	airResistance = velocity * 0.02f;
+	airResistance = velocity * 0.05f;
 	velocity -= airResistance;
 }
 
+
+void Debris::StaticInitialize(PlayerObject *player)
+{
+	playerData = player;
+}
 
 void Debris::StaticUpdate()
 {
@@ -185,7 +178,7 @@ void Debris::OnCollision(const CollisionInfo &info)
 		if (info.myName == "hitCollider" &&
 			info.collider->GetCollisionName() == "absorptionCollider" &&
 			!isFirstAttack) {
-			velocity += Vector3(*playerPos - pos).Normalize() * 5.0f;
+			velocity += Vector3(playerData->pos - pos).Normalize() * 5.0f;
 		}
 		//当たり判定用のコライダーとプレイヤーの当たり判定コライダーが当たっていたら削除
 		if (info.myName == "hitCollider" &&
@@ -203,7 +196,7 @@ void Debris::ReturnStart()
 {
 	//ステートをリターンに
 	state = RETURN;
-	velocity *= Vector3(pos - *playerPos).Normal();
+	velocity *= Vector3(pos - playerData->pos).Normal();
 	isFirstAttack = false;
 	returnTimer = 90;
 }

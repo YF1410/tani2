@@ -5,18 +5,20 @@
 #include "GameObjCommon.h"
 #include "SphereCollider.h"
 #include "Box2DCollider.h"
+#include "PlayerObject.h"
 
 class Debris :
 	public GameObjCommon
 {
 public:
 	//コンストラクタ
-	Debris(Vector3 startPos,Vector3 startVec,float size, Vector3 *playerPos,int reversAERA);
+	Debris(Vector3 startPos,Vector3 startVec,float size);
 	//内部更新
 	void Update();
 	//移動量リセットをオーバーライド
 	void VelocityReset() override;
 	//コンテナ更新
+	static void StaticInitialize(PlayerObject *player);
 	static void StaticUpdate();
 	static void StaticAdaptation();
 	static void StaticDraw();
@@ -54,8 +56,9 @@ public:		//衝突時関係
 	bool isAttack;
 	//発射直後除外用
 	bool isFirstAttack;
+
 	//回収用のポインター
-	Vector3 *playerPos = nullptr;
+	static PlayerObject *playerData;
 	
 	//コンテナ
 	static std::vector<Debris *> debris;
@@ -73,13 +76,8 @@ private:
 
 	//当たり判定
 	SphereCollider *hitCollider;
+	//攻撃判定
 	SphereCollider *attackCollider;
-
-	//反転エリア
-	Vector3 reverseCenter;
-	//半径
-	float reversRagne;
-
 
 	//衝突用
 	//ダメージを受ける

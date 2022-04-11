@@ -96,6 +96,9 @@ void GameScene::Initialize() {
 	EnemySpawnManager::GetIns()->SetPlayer(playerObject.get());
 
 	checkPoint = false;
+
+	//デブリリセット
+	Debris::StaticInitialize(playerObject.get());
 }
 
 void GameScene::Finalize() {
@@ -109,6 +112,11 @@ void GameScene::Update() {
 	float debrisLengthMax = 0.0f;
 	for (int i = 0; i < Debris::debris.size(); i++) {
 		if (Debris::debris[i]->isFirstAttack &&
+			debrisLengthMax <= Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length()) {
+			debrisLengthMax = Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length();
+		}
+
+		if (Debris::debris[i]->state == Debris::RETURN &&
 			debrisLengthMax <= Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length()) {
 			debrisLengthMax = Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length();
 		}

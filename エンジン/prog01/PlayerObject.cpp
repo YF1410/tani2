@@ -36,10 +36,13 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	SetNarrowCollider(toMapChipCollider);
 	//absorptionCollider->Update();
 
-	areaModel = Model::CreateFromObject("Sphere", true);
-	areaModel.get()->SetAlpha(0.2f);
+	//flontModel = Model::CreateFromObject("Sphere", true);
+	//flontModel.get()->SetAlpha(0.2f);
+	//flont = Object3d::Create(flontModel.get());
+	//flont.get()->SetScale({ 10,10,10 });
 
 	coreUp = new GameObjCommon(ModelManager::SLIME_CORE, Notag, false,{ 0,0,0 }, {1.5f,1.5f,1.5f });
+
 }
 
 
@@ -53,7 +56,7 @@ void PlayerObject::Initialize()
 	objectData->SetScale(scalef);
 	toMapChipCollider->SetRadius(scalef * 180.0f, scalef * 180.0f);
 	//自爆フラグ
-	destructType = CIRCLE;
+	destructType = DIRECTIVITY;
 	//吸引範囲
 	suction = scalef * suctionRatio;
 	//ポジション初期化
@@ -61,7 +64,6 @@ void PlayerObject::Initialize()
 
 	canReturn = true;
 	returnCounter = 0;
-	reverseRange = MIN;
 	objectData->SetAlpha(0.5f);
 
 	//アニメーション開始
@@ -82,6 +84,9 @@ void PlayerObject::Update()
 	VelocityReset(0.9f);
 	if (velocity.Length() >= 1000) {
 		velocity = velocity.Normal() * 1000;
+	}
+	if (isAttack && velocity.Length() < 10) {
+		isAttack = false;
 	}
 
 	//リセット
@@ -130,15 +135,7 @@ void PlayerObject::Update()
 			destructType = DIRECTIVITY;
 		}
 	}
-	//反射距離変更
-	if (input->TriggerKey(DIK_4)) {
-		if (reverseRange != MIN) {
-			reverseRange = MIN;
-		}
-		else {
-			reverseRange = REVERSE_Range::MAX;
-		}
-	}
+	
 
 
 
@@ -178,9 +175,9 @@ void PlayerObject::Update()
 
 			case DIRECTIVITY:	//指向性爆発
 				//-15~15度で計算
-				shotRad = XMConvertToRadians(rand() % 30 - 15);
+				shotRad = XMConvertToRadians(rand() % 90 - 45);
 
-				startVec = velocity.Normal();
+				startVec = -velocity.Normal();
 
 				startVec.AddRotationY(shotRad);
 				//startVec = startVec + offset;
@@ -189,32 +186,21 @@ void PlayerObject::Update()
 				break;
 			}
 
-			velocity += velocity.Normal() * 10;
+			velocity += velocity.Normal() * 30;
+			isAttack = true;
 			//Debrisのコンテナに追加
-			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize, &pos,reverseRange));
+			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
 		}
 		//爆発終了
 		size -= maxSize;
 		
-		reversAreas.push_back(new REVERS_AREA(pos,areaModel.get()));
 	}
-	//削除
-	for (int i = reversAreas.size() - 1; i >= 0; i--) {
-		if (reversAreas[i]->timer <= 0) {
-			delete reversAreas[i];
-			reversAreas.erase(reversAreas.begin() + i);
-		}
-	}
-	//更新
-	for (auto itr : reversAreas) {
-		itr->timer--;
-		itr->sphere.get()->Update();
-	}
+
 	//回収
 	if ((input->TriggerKey(DIK_Q)|| input->TriggerPadButton(BUTTON_B))&&
 		canReturn == true) {
 		canReturn = false;
-		returnCounter = 300;
+		returnCounter = 120;
 		for (int i = 0; i < Debris::debris.size(); i++) {
 			Debris::debris[i]->ReturnStart();
 		}
@@ -225,7 +211,6 @@ void PlayerObject::Update()
 			canReturn = true;
 		}
 	}
-
 
 
 	//サイズからスケールへ変換
@@ -289,8 +274,9 @@ void PlayerObject::Update()
 		}
 		normal.Normalize();
 		velocity = CalcWallScratchVector(velocity, normal);
-		//HitWall(hitPos, normal);
 	}
+
+	//flont.get()->SetPosition(Vector3(pos + velocity.Normal() * 500));
 }
 
 void PlayerObject::Draw() const
@@ -306,11 +292,9 @@ void PlayerObject::Draw() const
 	GameObjCommon::Draw();
 
 
-	Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
-	for (auto itr : reversAreas) {
-		itr->sphere.get()->Draw();
-	}
-	Object3d::PostDraw();
+	//Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
+	//flont.get()->Draw();
+	//Object3d::PostDraw();
 }
 
 
@@ -331,6 +315,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 		}
 		break;
 	case ENEMY:
+		//位置修正
 		Damage(1.0f);
 		DebugText::GetInstance()->Print("HitEnemy", 0, 80, 3);
 		break;
