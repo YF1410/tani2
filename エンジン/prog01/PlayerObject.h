@@ -26,8 +26,6 @@ public:
 	//衝突時コールバック
 	void OnCollision(const CollisionInfo &info) override;
 	
-	
-	float size;	//質量
 
 	//ゲッター
 	Vector3 GetPos() { return pos; }
@@ -40,6 +38,8 @@ public:
 	void HitWall(
 		const XMVECTOR &hitPos,		//衝突位置
 		const Vector3 &normal);
+
+	int GetHp() { return size; }
 
 
 	//回収フラグ
@@ -56,6 +56,9 @@ private:
 	int invincibleCounter;
 
 private: // メンバ変数
+	
+	int size;	//質量
+
 	//キーボード移動用
 	float moveSpead;
 	

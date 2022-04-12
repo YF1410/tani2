@@ -78,8 +78,6 @@ void PlayerObject::Initialize()
 	};
 
 
-	objectData->SetAlpha(0.5f);
-
 	//アニメーション開始
 	objectData->PlayAnimation();
 
@@ -321,7 +319,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 		
 		//攻撃中でなければ押し返し処理
 		if (!attack.is) {
-			penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.2f;
+			penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.02f;
 		}
 
 		break;

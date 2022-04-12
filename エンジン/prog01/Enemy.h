@@ -81,7 +81,7 @@ private: // ƒƒ“ƒo•Ï”
 	bool isWandering = false;		//‚³‚Ü‚æ‚¢ó‘Ô‚©
 	int wanderingCount = 0;
 	float moveSpeed = 5.0f;
-	float maxMoveSpeed = 20.0f;
+	float maxMoveSpeed = 10.0f;
 
 	//‘Ì—Í
 	int maxHP;		//Å‘åHP

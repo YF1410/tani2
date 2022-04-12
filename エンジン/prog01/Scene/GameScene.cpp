@@ -82,7 +82,7 @@ void GameScene::Initialize() {
 	light->SetPointLightActive(2, false);
 	light->SetCircleShadowActive(0, true);
 
-	light->SetDirLightDir(0, { 0.8f,-1,-1 });
+	light->SetDirLightDir(0, Vector3(0,-1,-0.4).Normal());
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
@@ -95,7 +95,6 @@ void GameScene::Initialize() {
 	//エネミーにプレイヤーの情報を渡す
 	EnemyManager::GetIns()->SetPlayer(playerObject.get());
 
-	//checkPoint = false;
 
 	//デブリリセット
 	Debris::StaticInitialize(playerObject.get());
@@ -121,16 +120,25 @@ void GameScene::Update() {
 			debrisLengthMax = Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length();
 		}
 	}
+
+	const float velocityOffset = 17.0f;
 	//カメラのイージング制御
-	eyeDistance = Ease(Out, Quad, 0.1f,
+	eyeDistance = Ease(Out, Quad, 0.05f,
 		camera.get()->GetEye(),
-		Vector3(playerObject.get()->GetPos() + eyeDistanceDef + Vector3(0, debrisLengthMax * 0.7f, 0)));
+		Vector3(playerObject.get()->GetPos() +
+			eyeDistanceDef +
+			Vector3(0, debrisLengthMax * 0.7f, 0) +
+			playerObject.get()->velocity * velocityOffset
+		));
 	camera->SetEye(eyeDistance);
 	//プレイヤーの少し上を焦点にする
-	camera->SetTarget(Ease(Out, Quad, 0.1f,
+	targetDistance = Ease(Out, Quad, 0.05f,
 		camera.get()->GetTarget(),
-		Vector3(playerObject.get()->GetPos() + targetDistance))
-	);
+		Vector3(playerObject.get()->GetPos() + 
+			targetDistanceDef +
+			playerObject.get()->velocity * velocityOffset));
+	camera->SetTarget(targetDistance);
+
 	camera->Update();
 
 	//マップチップ更新
@@ -191,6 +199,9 @@ void GameScene::Update() {
 	EnemyManager::GetIns()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
+	if (playerObject.get()->GetHp() == 0) {
+		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
+	}
 
 	//カウンターを加算
 	counter++;

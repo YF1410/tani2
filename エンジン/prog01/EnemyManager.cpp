@@ -12,7 +12,7 @@ void EnemyManager::Update()
 {
 	//è\ïbÇ≤Ç∆Ç…ìGí«â¡
 	if (GameScene::counter % 30 == 0 &&
-		enemys.size() <= 256) {
+		enemys.size() <= 64) {
 		float Rad;
 		for (int i = 0; i < 2; i++) {
 			Rad = XMConvertToRadians(rand() % 360);
@@ -37,7 +37,8 @@ void EnemyManager::Update()
 			}
 
 
-			SpawnEnemy(spawnPos);
+			enemys.push_back(new Enemy(spawnPos, player));
+
 		}
 	}
 
@@ -76,9 +77,4 @@ void EnemyManager::Draw()
 	for (int i = 0; i < enemys.size(); i++) {
 		enemys[i]->Draw();
 	}
-}
-
-void EnemyManager::SpawnEnemy(Vector3 spawnPos)
-{
-	enemys.push_back(new Enemy(spawnPos,player));
 }

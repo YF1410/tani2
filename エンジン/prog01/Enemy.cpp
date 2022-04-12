@@ -19,11 +19,11 @@ Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 	)
 {
 	isAlive = true;
-	scale = 20.0f;
+	scale = 1.0f;
 	minTargetLength = holmingLength;
 	this->player = player;
 	state = HOMING;
-	maxHP = 1;
+	maxHP = 3;
 	
 	//当たり判定初期化
 	float radius = 100;
@@ -126,18 +126,22 @@ void Enemy::Update() {
 	//無敵時間タイマーを管理
 	if (isInvincible) {
 		InvincibleTimer++;
-		if (InvincibleTimer <= 20) {
-			scale = Ease(In, Back, (float)(InvincibleTimer / 20.0f), 1.0f * 20.0f, 0.7f * 20.0f);
+		if (InvincibleTimer <= 10) {
+			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), 1.0f, 3.0f);
 		}
-		if (20 < InvincibleTimer && InvincibleTimer <= 40) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 20.0f) / 20.0f), 0.7f * 20.0f, 1.2f * 20.0f);
-		}
-		if (40 < InvincibleTimer && InvincibleTimer <= 60) {
-			scale = Ease(Out, Bounce, (float)((InvincibleTimer - 40.0f) / 20.0f), 1.2f * 20.0f, 1.0f * 2.0f);
+		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 30.0f), 3.0f  , 1.0f  );
 		}
 
+		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 30.0f), 3.0f, 0.0f);
+		}
+		//if (40 < InvincibleTimer && InvincibleTimer <= 60) {
+		//	scale = Ease(Out, Bounce, (float)((InvincibleTimer - 40.0f) / 20.0f), 4.0f  , 0.0f);
+		//}
+
 		//タイマーが60になったら無敵を解除
-		if (InvincibleTimer >= 60) {
+		if (InvincibleTimer >= 30) {
 			isInvincible = false;
 			//HPが0以下になったら死亡状態へ以降
 			if (HP <= 0) {
@@ -146,6 +150,9 @@ void Enemy::Update() {
 				if (rand() % 101 <= 30) {
 					Debris::debris.push_back(new Debris(pos, { 0,0,0 }, 5));
 				}
+			}
+			else {
+				scale = 1.0f;
 			}
 		}
 	}
@@ -224,7 +231,8 @@ void Enemy::OnCollision(const CollisionInfo &info)
 	case PLAYER:
 		player = dynamic_cast<PlayerObject *>(info.object);
 		//位置修正
-		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.2f;
+		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.4f;
+		penalty.y = 0;
 		if (player->attack.is) {
 			Damage(1.0f);
 		}

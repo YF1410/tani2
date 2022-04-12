@@ -44,7 +44,6 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	//ŽcŠ[‚Ç‚¤‚µ‚Í”»’è‚µ‚È‚¢
 	exclusionList.push_back(DEBRIS);
 	
-	objectData->SetAlpha(0.5f);
 
 }
 
