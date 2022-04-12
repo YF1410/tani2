@@ -207,6 +207,10 @@ void GameScene::Update() {
 	counter++;
 }
 
+void GameScene::LastUpdate()
+{
+}
+
 void GameScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();

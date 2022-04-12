@@ -37,6 +37,10 @@ void GameOverScene::Update()
 	}
 }
 
+void GameOverScene::LastUpdate()
+{
+}
+
 void GameOverScene::Draw()
 {
 	// コマンドリストの取得

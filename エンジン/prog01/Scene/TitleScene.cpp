@@ -34,6 +34,10 @@ void TitleScene::Update()
 	}
 }
 
+void TitleScene::LastUpdate()
+{
+}
+
 void TitleScene::Draw()
 {
 	// コマンドリストの取得

@@ -38,6 +38,8 @@ void SceneManager::Update()
 		scene->Initialize();
 	}
 	scene->Update();
+
+	scene->LastUpdate();
 }
 
 void SceneManager::Draw()

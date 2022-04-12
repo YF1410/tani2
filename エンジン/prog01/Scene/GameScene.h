@@ -53,6 +53,8 @@ public: // メンバ関数
 	void Finalize() override;
 	// 毎フレーム処理
 	void Update() override;
+	// 毎フレームごとの最後の処理
+	void LastUpdate() override;
 	// 描画
 	void Draw() override;
 

@@ -34,6 +34,10 @@ void ClearScene::Update()
 	}
 }
 
+void ClearScene::LastUpdate()
+{
+}
+
 void ClearScene::Draw()
 {
 	// コマンドリストの取得
