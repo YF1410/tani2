@@ -7,7 +7,7 @@
 std::vector<Debris *> Debris::debris;
 PlayerObject *Debris::playerData;
 
-Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
+Debris::Debris(Vector3 startPos, Vector3 startVec, float size, bool isFirstAttack) :
 	GameObjCommon(
 		ModelManager::SLIME_BREAK,
 		GameObjCommon::DEBRIS,
@@ -20,6 +20,8 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	isFirstAttack(true),
 	reversFlag(false)
 {
+	this->isFirstAttack = isFirstAttack;
+
 	//サイズからスケールへコンバート
 	scale = ConvertSizeToScale(size);
 	//初期加速度セット

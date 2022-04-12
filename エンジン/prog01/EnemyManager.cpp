@@ -37,7 +37,7 @@ void EnemyManager::Update()
 			}
 
 
-			SpawnEnemy(spawnPos);
+			enemys.push_back(new Enemy(spawnPos, player));
 		}
 	}
 
@@ -76,9 +76,4 @@ void EnemyManager::Draw()
 	for (int i = 0; i < enemys.size(); i++) {
 		enemys[i]->Draw();
 	}
-}
-
-void EnemyManager::SpawnEnemy(Vector3 spawnPos)
-{
-	enemys.push_back(new Enemy(spawnPos,player));
 }

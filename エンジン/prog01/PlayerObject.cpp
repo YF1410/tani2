@@ -90,14 +90,14 @@ void PlayerObject::Update()
 {
 	Input *input = Input::GetInstance();
 	//スケールから移動量決定
-	moveSpead = scalef * 5;
+	moveSpead = scalef * 4;
 	//ペナルティリセット
 	penalty = { 0,0,0 };
 
 	//移動量減衰処理
 	VelocityReset(0.9f);
-	if (velocity.Length() >= 1000) {
-		velocity = velocity.Normal() * 1000;
+	if (velocity.Length() >= 200) {
+		velocity = velocity.Normal() * 200;
 	}
 	if (attack.is && velocity.Length() < 60) {
 		attack.is = false;
@@ -163,19 +163,19 @@ void PlayerObject::Update()
 			Vector3 startVec;		//速度*向きベクトル
 			float shotRad;			//角度決定用
 			//発射スピード
-			float shotSpeed = rand() % 20 + scalef * 60;
+			float shotSpeed = rand() % 20 + scalef * 40;
 			//残骸のサイズ
 			float shotSize = maxSize / destructPow;
 
 			//-15~15度で計算
-			shotRad = XMConvertToRadians(rand() % 90 - 45);
+			shotRad = XMConvertToRadians(rand() % 120 - 60);
 
 			startVec = -velocity.Normal();
 
 			startVec.AddRotationY(shotRad);
 			//startVec = startVec + offset;
 
-			velocity += velocity.Normal() * 30;
+			velocity += velocity.Normal() * 50;
 			//Debrisのコンテナに追加
 			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
 		}

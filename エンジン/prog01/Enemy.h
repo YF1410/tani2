@@ -43,7 +43,7 @@ public:		//“–‚½‚è”»’èŠÖŒW
 
 
 	//—^‚¦‚ç‚ê‚éƒ_ƒ[ƒW
-	int attackPow = 1;
+	int attackPow = 3;
 	
 	//’ÇÕ‘ÎÛ‚ğŒˆ’è
 	//void HomingObjectCheck(Vector3 targetPos);

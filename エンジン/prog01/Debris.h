@@ -12,7 +12,7 @@ class Debris :
 {
 public:
 	//コンストラクタ
-	Debris(Vector3 startPos,Vector3 startVec,float size);
+	Debris(Vector3 startPos,Vector3 startVec,float size,bool isFirstAttack = true);
 	//内部更新
 	void Update();
 	//移動量リセットをオーバーライド

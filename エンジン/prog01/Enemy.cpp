@@ -144,7 +144,7 @@ void Enemy::Update() {
 				state = DEAD;
 				//一定の確率でアイテムドロップ
 				if (rand() % 101 <= 30) {
-					Debris::debris.push_back(new Debris(pos, { 0,0,0 }, 5));
+					Debris::debris.push_back(new Debris(pos, { 0,0,0 }, 5, false));
 				}
 			}
 		}
