@@ -21,9 +21,13 @@ public:
 	void Adaptation();
 	void Draw();
 
+	int GetEnemySize() { return enemys.size(); }
+
 public:
 	PlayerObject *player;
 	std::vector<Enemy *> enemys;
-
+	bool enemyAddFlag = true;
+	int weveCount = 0;
+	int enemyCount = 0;
 };
 

@@ -12,7 +12,7 @@ class Debris :
 {
 public:
 	//コンストラクタ
-	Debris(Vector3 startPos,Vector3 startVec,float size);
+	Debris(Vector3 startPos,Vector3 startVec,float size, int reversAERA);
 	//内部更新
 	void Update();
 	//移動量リセットをオーバーライド
@@ -78,6 +78,11 @@ private:
 	SphereCollider *hitCollider;
 	//攻撃判定
 	SphereCollider *attackCollider;
+
+	//反転エリア
+	Vector3 reverseCenter;
+	//半径
+	float reversRagne;
 
 	//衝突用
 	//ダメージを受ける

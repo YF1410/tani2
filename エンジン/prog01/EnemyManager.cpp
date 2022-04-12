@@ -11,8 +11,7 @@ EnemyManager *EnemyManager::GetIns()
 void EnemyManager::Update()
 {
 	//十秒ごとに敵追加
-	if (GameScene::counter % 30 == 0 &&
-		enemys.size() <= 64) {
+	if (enemyAddFlag && weveCount <= 3) {
 		float Rad;
 		for (int i = 0; i < 2; i++) {
 			Rad = XMConvertToRadians(rand() % 360);
@@ -21,7 +20,7 @@ void EnemyManager::Update()
 				0,
 				static_cast<float>(sin(Rad))
 			};
-			Vector3 spawnPos = normal.Normal() * 2000 + player->GetPos();
+			Vector3 spawnPos = normal.Normal() * 8000 + player->GetPos();
 			//マップ外に生成しない
 			if (spawnPos.x < 400) {
 				spawnPos.x = 400;
@@ -36,12 +35,21 @@ void EnemyManager::Update()
 				spawnPos.z = -400;
 			}
 
-
 			enemys.push_back(new Enemy(spawnPos, player));
 
+			if (enemys.size() >= 60 + enemyCount)
+			{
+				enemyAddFlag = false;
+			}
 		}
 	}
 
+	if (GameScene::counter % 2400 == 0 && !enemyAddFlag)
+	{
+		enemyAddFlag = true;
+		weveCount++;
+		enemyCount = enemys.size();
+	}
 
 	//削除
 	for (int i = enemys.size() - 1; i >= 0; i--) {
@@ -55,6 +63,7 @@ void EnemyManager::Update()
 		enemys[i]->Update();
 	}
 	DebugText::GetInstance()->VariablePrint(0, 120, "EnemySize", enemys.size(), 3);
+	DebugText::GetInstance()->VariablePrint(0, 180, "weveCount", weveCount, 3);
 
 }
 
