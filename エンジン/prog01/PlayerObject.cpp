@@ -45,7 +45,8 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 
 	coreUp = new GameObjCommon(ModelManager::SLIME_CORE, Notag, false,{ 0,0,0 }, {1.5f,1.5f,1.5f });
 
-	
+	areaModel = Model::CreateFromObject("Sphere", true);
+	areaModel.get()->SetAlpha(0.2f);
 }
 
 
@@ -165,23 +166,35 @@ void PlayerObject::Update()
 			//残骸のサイズ
 			float shotSize = maxSize / destructPow;
 
-			//-15~15度で計算
-			shotRad = XMConvertToRadians(rand() % 90 - 45);
+			//放射角度を360度で計算
+			shotRad = XMConvertToRadians(rand() % 360);
+			startVec = {
+				static_cast<float>(cos(shotRad)),
+				0,
+				static_cast<float>(sin(shotRad))
+			};
 
-			startVec = -velocity.Normal();
-
-			startVec.AddRotationY(shotRad);
-			//startVec = startVec + offset;
-
-			velocity += velocity.Normal() * 30;
+			velocity += velocity.Normal() * 10;
 			//Debrisのコンテナに追加
-			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
+			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize, 500));
 		}
 		//爆発終了
 		size -= maxSize;
-		
+		reversAreas.push_back(new REVERS_AREA(pos, areaModel.get()));
 	}
 
+	//削除
+	for (int i = reversAreas.size() - 1; i >= 0; i--) {
+		if (reversAreas[i]->timer <= 0) {
+			delete reversAreas[i];
+			reversAreas.erase(reversAreas.begin() + i);
+		}
+	}
+	//更新
+	for (auto itr : reversAreas) {
+		itr->timer--;
+		itr->sphere.get()->Update();
+	}
 	//回収
 	if (input->TriggerKey(DIK_Q)|| input->TriggerPadButton(BUTTON_B)) {
 		if (collect.Start()) {
@@ -233,6 +246,12 @@ void PlayerObject::Draw() const
 	//Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 	//flont.get()->Draw();
 	//Object3d::PostDraw();
+
+	Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
+	for (auto itr : reversAreas) {
+		itr->sphere.get()->Draw();
+	}
+	Object3d::PostDraw();
 }
 
 void PlayerObject::FinalUpdate()

@@ -56,6 +56,18 @@ private:
 	int invincibleCounter;
 
 private: // メンバ変数
+	struct REVERS_AREA {
+		std::unique_ptr<Object3d> sphere;
+		int timer;
+		float alpha;
+		REVERS_AREA(Vector3 pos, Model* areaModel) {
+			sphere = Object3d::Create(areaModel);
+			sphere.get()->SetPosition(pos);
+			sphere.get()->SetScale({ 500,500,500 });
+			alpha = 1.0f;
+			timer = 60;
+		}
+	};
 	
 	int size;	//質量
 
@@ -70,6 +82,9 @@ private: // メンバ変数
 	float suction;
 	//サイズ
 	float scalef;//大きさ
+
+	std::unique_ptr<Model> areaModel;
+	std::vector<REVERS_AREA*> reversAreas;
 
 
 	//自爆力

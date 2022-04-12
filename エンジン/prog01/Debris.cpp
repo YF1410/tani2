@@ -7,7 +7,7 @@
 std::vector<Debris *> Debris::debris;
 PlayerObject *Debris::playerData;
 
-Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
+Debris::Debris(Vector3 startPos, Vector3 startVec, float size, int reversAERA) :
 	GameObjCommon(
 		ModelManager::SLIME_BREAK,
 		GameObjCommon::DEBRIS,
@@ -18,6 +18,8 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	isAlive(true),
 	isAttack(true),
 	isFirstAttack(true),
+	reverseCenter(startPos),
+	reversRagne(reversAERA),
 	reversFlag(false)
 {
 	//サイズからスケールへコンバート
@@ -78,10 +80,6 @@ void Debris::Update()
 		if (velocity.Length() <= 200) {
 			velocity = Vector3(playerData->pos - pos).Normal() * 100;
 		}
-		//
-		if (returnTimer-- <= 0) {
-			state = STAY;
-		}
 		break;
 	default:
 		break;
@@ -119,12 +117,21 @@ void Debris::Update()
 		}
 	}
 
+	//反転
+	if (Vector3(reverseCenter - pos).Length() > reversRagne && !reversFlag && isFirstAttack) {
+		reversFlag = true;
+		//移動方向反転
+		velocity *= -1;
+	}
+	else if (Vector3(reverseCenter - pos).Length() < reversRagne && reversFlag) {
+		reversFlag = false;
+	}
 }
 
 void Debris::VelocityReset()
 {
 	//空気抵抗
-	airResistance = velocity * 0.05f;
+	airResistance = velocity * 0.02f;
 	velocity -= airResistance;
 }
 

@@ -59,7 +59,7 @@ void Enemy::Update() {
 		velocity = velocity.Normal() * maxMoveSpeed;
 	}
 	else {
-		VelocityReset(0.9f);
+		VelocityReset(0.75f);
 	}
 
 	//State別処理
@@ -146,10 +146,6 @@ void Enemy::Update() {
 			//HPが0以下になったら死亡状態へ以降
 			if (HP <= 0) {
 				state = DEAD;
-				//一定の確率でアイテムドロップ
-				if (rand() % 101 <= 30) {
-					Debris::debris.push_back(new Debris(pos, { 0,0,0 }, 5));
-				}
 			}
 			else {
 				scale = 1.0f;

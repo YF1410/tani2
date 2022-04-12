@@ -127,16 +127,14 @@ void GameScene::Update() {
 		camera.get()->GetEye(),
 		Vector3(playerObject.get()->GetPos() +
 			eyeDistanceDef +
-			Vector3(0, debrisLengthMax * 0.7f, 0) +
-			playerObject.get()->velocity * velocityOffset
+			Vector3(0, debrisLengthMax * 0.7f, 0)
 		));
 	camera->SetEye(eyeDistance);
 	//プレイヤーの少し上を焦点にする
 	targetDistance = Ease(Out, Quad, 0.05f,
 		camera.get()->GetTarget(),
 		Vector3(playerObject.get()->GetPos() + 
-			targetDistanceDef +
-			playerObject.get()->velocity * velocityOffset));
+			targetDistanceDef));
 	camera->SetTarget(targetDistance);
 
 	camera->Update();
@@ -147,6 +145,11 @@ void GameScene::Update() {
 
 	//入力更新
 	Input *input = Input::GetInstance();
+
+	if (input->TriggerKey(DIK_SPACE) && EnemyManager::GetIns()->GetEnemySize() <= 0)
+	{
+		EnemyManager::GetIns()->SetEnemyAddFlag(true);
+	}
 	
 	//ライト更新
 	light->Update();
