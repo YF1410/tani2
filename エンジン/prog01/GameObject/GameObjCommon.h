@@ -57,6 +57,8 @@ public:
 
 	virtual void Initialize();		//初期化
 	virtual void Update();			//各オブジェクトの更新
+	virtual void FixedUpdate();		//一定周期での更新
+	virtual void FinalUpdate();		//必ず最後に行う処理
 	virtual void Move();			//移動量計算
 	virtual void VelocityReset();								//移動量初期化
 	virtual void VelocityReset(float gain = 0.9f,float dead = 0.01f);	//移動量初期化
@@ -86,6 +88,8 @@ public:
 	float gravityPow;	//重力の強さ
 	Vector3 velocity;	//移動量
 	Vector3 scale;		//拡大率
+	Vector3 penalty = { 0,0,0 };	//ペナルティ法での押し返し量
+
 
 	bool isGravity;		//重力の影響	trueで重力の影響を受ける
 	bool isActive;		//更新フラグ	falseだとUpdate()やColliderUpdate()の処理をを行わない

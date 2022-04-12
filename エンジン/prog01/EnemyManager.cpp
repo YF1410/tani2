@@ -1,25 +1,27 @@
-#include "EnemySpawnManager.h"
+#include "EnemyManager.h"
 #include "GameScene.h"
+#include "DebugText.h"
 
-EnemySpawnManager *EnemySpawnManager::GetIns()
+EnemyManager *EnemyManager::GetIns()
 {
-	static EnemySpawnManager instance;
+	static EnemyManager instance;
 	return &instance;
 }
 
-void EnemySpawnManager::Update()
+void EnemyManager::Update()
 {
 	//十秒ごとに敵追加
-	if (GameScene::counter % 600 == 0 &&
-		enemys.size() <= 10) {
-		for (int i = 0; i < 5; i++) {
-			float Rad = XMConvertToRadians(rand() % 360);
-			Vector3 spawnPos = {
+	if (GameScene::counter % 30 == 0 &&
+		enemys.size() <= 256) {
+		float Rad;
+		for (int i = 0; i < 2; i++) {
+			Rad = XMConvertToRadians(rand() % 360);
+			Vector3 normal = {
 				static_cast<float>(cos(Rad)),
 				0,
 				static_cast<float>(sin(Rad))
 			};
-			spawnPos = spawnPos * 1500 + player->GetPos();
+			Vector3 spawnPos = normal.Normal() * 2000 + player->GetPos();
 			//マップ外に生成しない
 			if (spawnPos.x < 400) {
 				spawnPos.x = 400;
@@ -51,24 +53,32 @@ void EnemySpawnManager::Update()
 	for (int i = 0; i < enemys.size(); i++) {
 		enemys[i]->Update();
 	}
+	DebugText::GetInstance()->VariablePrint(0, 120, "EnemySize", enemys.size(), 3);
 
 }
 
-void EnemySpawnManager::Adaptation()
+void EnemyManager::FinalUpdate()
+{
+	for (int i = 0; i < enemys.size(); i++) {
+		enemys[i]->FinalUpdate();
+	}
+}
+
+void EnemyManager::Adaptation()
 {
 	for (int i = 0; i < enemys.size(); i++) {
 		enemys[i]->Adaptation();
 	}
 }
 
-void EnemySpawnManager::Draw()
+void EnemyManager::Draw()
 {
 	for (int i = 0; i < enemys.size(); i++) {
 		enemys[i]->Draw();
 	}
 }
 
-void EnemySpawnManager::SpawnEnemy(Vector3 spawnPos)
+void EnemyManager::SpawnEnemy(Vector3 spawnPos)
 {
 	enemys.push_back(new Enemy(spawnPos,player));
 }

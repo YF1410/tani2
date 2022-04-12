@@ -5,11 +5,7 @@
 #include "SphereCollider.h"
 #include "Box2DCollider.h"
 #include "GameObjCommon.h"
-
-enum DESTRUCT_TYPE {
-	DIRECTIVITY	=1,	//指向性
-	CIRCLE		=2,	//全方向
-};
+#include "State.h"
 
 enum REVERSE_Range {
 	MIN = 800,
@@ -26,6 +22,7 @@ public:
 	//毎フレーム処理
 	void Update() override;
 	void Draw() const override;
+	void FinalUpdate() override;
 	//衝突時コールバック
 	void OnCollision(const CollisionInfo &info) override;
 	
@@ -44,33 +41,17 @@ public:
 		const XMVECTOR &hitPos,		//衝突位置
 		const Vector3 &normal);
 
-	bool isCheckPoint;
-	//体当たり
-	bool isAttack;
+
+	//回収フラグ
+	STATE collect;
+	//攻撃フラグ
+	STATE attack;
 
 private:
-	struct REVERS_AREA {
-		std::unique_ptr<Object3d> sphere;
-		int timer;
-		float alpha;
-		REVERS_AREA(Vector3 pos,Model *areaModel) {
-			sphere = Object3d::Create(areaModel);
-			sphere.get()->SetPosition(pos);
-			sphere.get()->SetScale({800,800,800});
-			alpha = 1.0f;
-			timer = 60;
-		}
-	};
-
-	std::unique_ptr<Model> flontModel;
-	std::unique_ptr<Object3d> flont;
-
 	//被ダメージ
 	void Damage(float damage);
 	//無敵
 	bool isInvincible;
-	
-	
 	//時間
 	int invincibleCounter;
 
@@ -81,24 +62,21 @@ private: // メンバ変数
 	//スタート位置
 	XMFLOAT3 startPos;
 	//スケールに対する吸引比率
-	const float suctionRatio = 300.0f;
+	const float suctionRatio = 600.0f;
 	//吸引範囲
 	float suction;
 	//サイズ
 	float scalef;//大きさ
 
-	//回収フラグ
-	bool canReturn;
-	//再回収可能までのカウンター
-	int returnCounter;
 
-	//自爆タイプ
-	DESTRUCT_TYPE destructType;
 	//自爆力
-	const int  destructPow = 10;
+	const int destructPow = 10;
 
 	//コライダー
-	SphereCollider *broadSphereCollider;	//衝突判定用
+	SphereCollider *broadSphereCollider;	//ブロード
+	SphereCollider * pushBackCollider;	//押し返し用
+	SphereCollider *attackCollider;	//攻撃用
+
 	Box2DCollider *toMapChipCollider;
 
 

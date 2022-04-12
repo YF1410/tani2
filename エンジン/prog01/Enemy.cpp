@@ -19,31 +19,48 @@ Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 	)
 {
 	isAlive = true;
-	scale = 1.0f;
-	HP = 3;
+	scale = 20.0f;
 	minTargetLength = holmingLength;
-	state = HOMING;
 	this->player = player;
-	//乱数初期化
-	srand(time(NULL));
+	state = HOMING;
+	maxHP = 1;
+	
 	//当たり判定初期化
 	float radius = 100;
-	SetBroadCollider(new SphereCollider("hitCollider",XMVECTOR{ 0,radius,0 }, radius));
+	broadSphereCollider = new SphereCollider("BroadSphere", XMVECTOR{ 0,radius,0 }, radius);
+	SetBroadCollider(broadSphereCollider);
 
+	pushBackCollider = new SphereCollider("pushBackCollider", XMVECTOR{ 0,radius,0 }, radius);
+	SetNarrowCollider(pushBackCollider);
 
 	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, 100, 100);
 	SetNarrowCollider(toMapChipCollider);
 
+	Initialize();
 }
 
 
 void Enemy::Initialize()
 {
+	//攻撃関係
+	attack = {
+		true,
+		false,
+		20,
+		0
+	};
+	HP = maxHP;
+
 }
 
 void Enemy::Update() {
 	//移動量初期化
-	velocity = { 0,0,0 };
+	if (velocity.Length() > maxMoveSpeed) {
+		velocity = velocity.Normal() * maxMoveSpeed;
+	}
+	else {
+		VelocityReset(0.9f);
+	}
 
 	//State別処理
 	switch (state)
@@ -97,11 +114,6 @@ void Enemy::Update() {
 		}*/
 
 		break;
-	case Enemy::ATTACK:
-		if (true) {
-			state = STAY;
-		}
-		break;
 	case Enemy::DEAD:
 		isAlive = false;
 
@@ -115,31 +127,50 @@ void Enemy::Update() {
 	if (isInvincible) {
 		InvincibleTimer++;
 		if (InvincibleTimer <= 20) {
-			scale = Ease(In, Back, (float)(InvincibleTimer / 20.0f), 1.0f, 0.7f);
+			scale = Ease(In, Back, (float)(InvincibleTimer / 20.0f), 1.0f * 20.0f, 0.7f * 20.0f);
 		}
 		if (20 < InvincibleTimer && InvincibleTimer <= 40) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 20.0f) / 20.0f), 0.7f, 1.2f);
+			scale = Ease(In, Back, (float)((InvincibleTimer - 20.0f) / 20.0f), 0.7f * 20.0f, 1.2f * 20.0f);
 		}
 		if (40 < InvincibleTimer && InvincibleTimer <= 60) {
-			scale = Ease(Out, Bounce, (float)((InvincibleTimer - 40.0f) / 20.0f), 1.2f, 1.0f);
+			scale = Ease(Out, Bounce, (float)((InvincibleTimer - 40.0f) / 20.0f), 1.2f * 20.0f, 1.0f * 2.0f);
 		}
 
-		//タイマーが30になったら無敵を解除
+		//タイマーが60になったら無敵を解除
 		if (InvincibleTimer >= 60) {
 			isInvincible = false;
+			//HPが0以下になったら死亡状態へ以降
+			if (HP <= 0) {
+				state = DEAD;
+				//一定の確率でアイテムドロップ
+				if (rand() % 101 <= 30) {
+					Debris::debris.push_back(new Debris(pos, { 0,0,0 }, 5));
+				}
+			}
 		}
 	}
+
+	//攻撃インターバル処理
+	attack.Intervel();
+
 	Move();
+
+}
+
+void Enemy::FinalUpdate()
+{
 
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();
 	Vector3 hitPos = { 0,0,0 };
-	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &velocity, &hitPos)) {
+	Vector3 moveVec = velocity + penalty;
+	//上下左右
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos)) {
 		Vector3 normal = { 0,0,0 };
 
 		if (hitPos.x != 0) {
 			int vec = 1;	//向き
-			if (0 < velocity.x) {
+			if (0 < moveVec.x) {
 				vec = -1;
 			}
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
@@ -147,7 +178,7 @@ void Enemy::Update() {
 		}
 		if (hitPos.z != 0) {
 			int vec = 1;	//向き
-			if (velocity.z < 0) {
+			if (moveVec.z < 0) {
 				vec = -1;
 			}
 			pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
@@ -156,6 +187,28 @@ void Enemy::Update() {
 		normal.Normalize();
 		HitWall(hitPos, normal);
 	}
+	//角
+	else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
+		Vector3 normal = { 0,0,0 };
+		if (hitPos.x != 0) {
+			int vec = 1;	//向き
+			if (0 < velocity.x) {
+				vec = -1;
+			}
+			pos.x = hitPos.x;
+			normal.x = vec;
+		}
+		if (hitPos.z != 0) {
+			int vec = 1;	//向き
+			if (velocity.z < 0) {
+				vec = -1;
+			}
+			pos.z = hitPos.z;
+			normal.z = vec;
+		}
+		normal.Normalize();
+		velocity = CalcWallScratchVector(velocity, normal);
+	}
 
 }
 
@@ -163,13 +216,16 @@ void Enemy::OnCollision(const CollisionInfo &info)
 {
 	Debris *debri;
 	PlayerObject *player;
+	Enemy *enemy;
+
+	Vector3 penalty = {0,0,0};
 	switch (info.object->Tag)
 	{
 	case PLAYER:
 		player = dynamic_cast<PlayerObject *>(info.object);
 		//位置修正
-		//pos = info.inter;
-		if (player->isAttack == true) {
+		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.2f;
+		if (player->attack.is) {
 			Damage(1.0f);
 		}
 		break;
@@ -181,11 +237,16 @@ void Enemy::OnCollision(const CollisionInfo &info)
 		break;
 
 	case ENEMY:
-		//pos = info.inter;
+		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length()*0.2f;
 		break;
 	default:
 		break;
 	}
+
+	penalty.y = 0;
+	pos += penalty;
+	GameObjCommon::Update();
+
 }
 
 
@@ -195,19 +256,15 @@ void Enemy::Damage(float damage)
 	if (isInvincible) { return; }
 	//ダメージを受ける
 	HP -= damage;
-	//HPが0以下になったら死亡状態へ以降
-	if (HP < 0) {
-		state = DEAD;
-		//一定の確率でアイテムドロップ
-		if (rand() % 101 <= 30) {
-			Debris::debris.push_back(new Debris(pos, {0,0,0}, 10));
-		}
-	}
-	else{
-		//無敵時間をセットする
-		isInvincible = true;
-		InvincibleTimer = 0;
-	}
+	//無敵時間をセットする
+	isInvincible = true;
+	InvincibleTimer = 0;
+}
+
+int Enemy::Attack()
+{
+	attack.Start();
+	return attackPow;
 }
 
 //void Enemy::HomingObjectCheck(Vector3 targetPos)

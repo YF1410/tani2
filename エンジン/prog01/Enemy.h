@@ -6,6 +6,7 @@
 #include "SphereCollider.h"
 #include "PlayerObject.h"
 #include "Box2DCollider.h"
+#include "State.h"
 
 class Enemy :
 	public GameObjCommon
@@ -17,17 +18,17 @@ public:
 	void Initialize() override;
 	//内部更新
 	virtual void Update() override;
+	virtual void FinalUpdate() override;
 
 	//衝突時コールバック
 	void OnCollision(const CollisionInfo &info) override;
 
 public:
-	enum STATE {
+	enum STATE_NAME {
 		NOUPDATE,		//画面外等アップデートをしない状態
 		STAY,			//何もしない
 		WANDERING,		//さまよい状態
 		HOMING,			//プレイヤーを見つけたとき
-		ATTACK,			//攻撃状態
 		DEAD,			//死亡状態
 						
 	}state;
@@ -35,8 +36,14 @@ public:
 
 public:		//当たり判定関係
 
-	//ダメージを受ける
-	void Damage(float damage);
+	//ダメージを与える
+	int Attack();
+	//攻撃フラグ
+	STATE attack;
+
+
+	//与えられるダメージ
+	int attackPow = 1;
 	
 	//追跡対象を決定
 	//void HomingObjectCheck(Vector3 targetPos);
@@ -62,16 +69,25 @@ public:		//当たり判定関係
 
 
 private: // メンバ変数
+
+	//ダメージを受ける
+	void Damage(float damage);
+
+
 	int deadTimer;
 
 	float searchPlayerLen = 5.0f;
 	bool isPlayerContact = false;	//playerを確認したか
 	bool isWandering = false;		//さまよい状態か
 	int wanderingCount = 0;
-	float moveSpeed = 10.0f;
+	float moveSpeed = 5.0f;
+	float maxMoveSpeed = 20.0f;
 
 	//体力
-	float HP;
+	int maxHP;		//最大HP
+	int HP;			//現在HP
+
+
 	//無敵時間
 	int InvincibleTimer;	//残り無敵時間
 
@@ -96,11 +112,14 @@ private: // メンバ変数
 	//現在の最近対象への距離
 	float minTargetLength;
 
+
+
 	//壁との衝突
 	void HitWall(
 		const XMVECTOR &hitPos,		//衝突位置
 		const Vector3 &normal);
 
+	SphereCollider *broadSphereCollider;
+	SphereCollider *pushBackCollider;
 	Box2DCollider *toMapChipCollider;
-
 };

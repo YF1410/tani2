@@ -18,10 +18,13 @@ void CollisionManager::CheckBroadCollisions()
 
 	//ブロードフェーズ
 	itA = broadColliders.begin();
+	
 	for (; itA != broadColliders.end(); ++itA)
 	{
 		itB = itA;
 		++itB;
+		//オブジェクトが二つ以下だったら除外
+
 		for (; itB != broadColliders.end(); ++itB)
 		{
 			BaseCollider *colA = *itA;
@@ -45,12 +48,36 @@ void CollisionManager::CheckBroadCollisions()
 			}
 
 			//判定チェック
-			CheckHitCollision(colA, colB);
+			if (CheckHitCollision(colA, colB,/*true*/false)) {
+				////ブロードが衝突していればナローの判定
+
+				//auto itC = colA->object->GetNarrowCollider().begin();
+				//for (; itC != colA->object->GetNarrowCollider().end(); ++itC)
+				//{
+				//	auto itD = colB->object->GetNarrowCollider().begin();
+				//	++itD;
+				//	for (; itD != colB->object->GetNarrowCollider().end(); ++itD)
+				//	{
+
+				//		BaseCollider* colC = itC->second;
+				//		BaseCollider* colD = itD->second;
+
+
+				//		//自分同士の衝突や、コライダー未設定の者は無視する
+				//		if (itB == itA ||
+				//			colA->GetShapeType() == SHAPE_UNKNOWN ||
+				//			colB->GetShapeType() == SHAPE_UNKNOWN) {
+				//			continue;
+				//		}
+				//		CheckHitCollision(colC, colD);
+				//	}
+				//}
+			}
 		}
 	}
 }
 
-void CollisionManager::CheckHitCollision(BaseCollider *colA, BaseCollider *colB)
+bool CollisionManager::CheckHitCollision(BaseCollider *colA, BaseCollider *colB,bool isBroad)
 {
 	int collisions = colA->GetShapeType() | colB->GetShapeType();
 
@@ -61,11 +88,16 @@ void CollisionManager::CheckHitCollision(BaseCollider *colA, BaseCollider *colB)
 		Sphere *SphereA = dynamic_cast<Sphere *>(colA);
 		Sphere *SphereB = dynamic_cast<Sphere *>(colB);
 		DirectX::XMVECTOR inter;
+		DirectX::XMVECTOR reject;
 		//判定
-		if (Collision::CheckSphere2Sphere(*SphereA, *SphereB, &inter))
+		if (Collision::CheckSphere2Sphere(*SphereA, *SphereB, &inter, &reject))
 		{
-			colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName()));
-			colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName()));
+			//ブロードなら衝突のみを返す
+			if (!isBroad) {
+				colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName(), &reject));
+				colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName(), &-reject));
+			}
+			return true;
 		}
 	}
 	//AABBとAABB
@@ -90,8 +122,12 @@ void CollisionManager::CheckHitCollision(BaseCollider *colA, BaseCollider *colB)
 		DirectX::XMVECTOR inter;
 		//判定
 		if (Collision::CheckSphere2AABB(*sohereCollider, *boxCollider)) {
-			colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName()));
-			colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName()));
+			//ブロードなら衝突のみを返す
+			if (!isBroad) {
+				colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName()));
+				colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName()));
+			}
+			return true;
 		}
 	}
 	//球とメッシュ
@@ -111,8 +147,12 @@ void CollisionManager::CheckHitCollision(BaseCollider *colA, BaseCollider *colB)
 		DirectX::XMVECTOR inter;
 		if (meshCollider->CheckCollisionSphere(*sphere, &inter))
 		{
-			colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName()));
-			colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName()));
+			//ブロードなら衝突のみを返す
+			if (!isBroad) {
+				colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName()));
+				colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName()));
+			}
+			return true;
 		}
 	}
 
@@ -134,10 +174,15 @@ void CollisionManager::CheckHitCollision(BaseCollider *colA, BaseCollider *colB)
 		DirectX::XMVECTOR inter;
 		//判定
 		if (Collision::CheckCapsule2Box(*capsuleCollider, *boxCollider)) {
-			colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName()));
-			colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName()));
+			//ブロードなら衝突のみを返す
+			if (!isBroad){
+				colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter, colA->GetCollisionName()));
+				colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter, colB->GetCollisionName()));
+			}
+			return true;
 		}
 	}
+	return false;
 }
 
 //bool CollisionManager::Raycast(const Ray& ray, RaycastHit* hitInfo, float maxDistance)

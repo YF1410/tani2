@@ -73,10 +73,10 @@ void Debris::Update()
 	case Debris::STAY:
 		break;
 	case Debris::ATTACK:
-		
+
 		break;
 	case Debris::RETURN:
-		if(velocity.Length() <= 200){
+		if (velocity.Length() <= 200) {
 			velocity = Vector3(playerData->pos - pos).Normal() * 100;
 		}
 		//
@@ -91,31 +91,33 @@ void Debris::Update()
 	//移動量を適応
 	Move();
 
-	//マップチップとの当たり判定
-	toMapChipCollider->Update();
-	Vector3 hitPos = { 0,0,0 };
-	Vector3 oldPos;
-	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &velocity, &hitPos)) {
-		Vector3 normal = { 0,0,0 };
+	if (state != RETURN) {
+		//マップチップとの当たり判定
+		toMapChipCollider->Update();
+		Vector3 hitPos = { 0,0,0 };
+		Vector3 oldPos;
+		if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &velocity, &hitPos)) {
+			Vector3 normal = { 0,0,0 };
 
-		if (hitPos.x != 0) {
-			int vec = 1;	//向き
-			if (0 < velocity.x) {
-				vec = -1;
+			if (hitPos.x != 0) {
+				int vec = 1;	//向き
+				if (0 < velocity.x) {
+					vec = -1;
+				}
+				pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
+				normal.x = vec;
 			}
-			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
-			normal.x = vec;
-		}
-		if (hitPos.z != 0) {
-			int vec = 1;	//向き
-			if (velocity.z < 0) {
-				vec = -1;
+			if (hitPos.z != 0) {
+				int vec = 1;	//向き
+				if (velocity.z < 0) {
+					vec = -1;
+				}
+				pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
+				normal.z = vec;
 			}
-			pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
-			normal.z = vec;
+			normal.Normalize();
+			HitWall(hitPos, normal);
 		}
-		normal.Normalize();
-		HitWall(hitPos, normal);
 	}
 
 }

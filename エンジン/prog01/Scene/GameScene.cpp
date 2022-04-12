@@ -12,7 +12,7 @@
 #include "Debris.h"
 #include "MapChip.h"
 #include "Easing.h"
-#include "EnemySpawnManager.h"
+#include "EnemyManager.h"
 
 using namespace DirectX;
 
@@ -92,10 +92,10 @@ void GameScene::Initialize() {
 	//プレイヤーの初期化
 	playerObject->Initialize();
 
-	//
-	EnemySpawnManager::GetIns()->SetPlayer(playerObject.get());
+	//エネミーにプレイヤーの情報を渡す
+	EnemyManager::GetIns()->SetPlayer(playerObject.get());
 
-	checkPoint = false;
+	//checkPoint = false;
 
 	//デブリリセット
 	Debris::StaticInitialize(playerObject.get());
@@ -133,13 +133,6 @@ void GameScene::Update() {
 	);
 	camera->Update();
 
-
-
-	//追加の敵
-	if (playerObject.get()->isCheckPoint && !checkPoint) {
-		checkPoint = true;
-
-	}
 	//マップチップ更新
 	//MapChip::GetInstance()->Update(MapChip::TEST_MAP);
 
@@ -165,8 +158,7 @@ void GameScene::Update() {
 	//破片更新
 	Debris::StaticUpdate();
 	//エネミー更新
-
-	EnemySpawnManager::GetIns()->Update();
+	EnemyManager::GetIns()->Update();
 
 
 	float contact_pos = 0.0f;
@@ -189,10 +181,14 @@ void GameScene::Update() {
 		}
 	}*/
 	 
+	//最終更新
+	EnemyManager::GetIns()->FinalUpdate();
+	playerObject.get()->FinalUpdate();
+
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
 	Debris::StaticAdaptation();
-	EnemySpawnManager::GetIns()->Adaptation();
+	EnemyManager::GetIns()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
 
@@ -225,7 +221,7 @@ void GameScene::Draw() {
 	//testStage->Draw(DirectXCommon::GetInstance()->GetCommandList());
 	MapChip::GetInstance()->Draw();
 	Debris::StaticDraw();
-	EnemySpawnManager::GetIns()->Draw();
+	EnemyManager::GetIns()->Draw();
 	playerObject->Draw();
 #pragma endregion 3Dオブジェクト(FBX)描画
 

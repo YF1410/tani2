@@ -296,7 +296,7 @@
     <ClCompile Include="Debris.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemySpawnManager.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="GameObject\ContactableObject.cpp" />
     <ClCompile Include="GameObject\Ease.cpp" />
     <ClCompile Include="GameObject\GameObjCommon.cpp" />
@@ -353,7 +353,7 @@
     <ClInclude Include="Debris.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemySpawnManager.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="GameObject\ContactableObject.h" />
     <ClInclude Include="GameObject\Ease.h" />
     <ClInclude Include="GameObject\GameObjCommon.h" />
@@ -372,6 +372,7 @@
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Vector3.h" />
+    <ClInclude Include="State.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -33,7 +33,7 @@ void ModelManager::Initialize()
 
 
 
-	LoadModel(ENEMY, "human"/*_break"*/);
+	LoadModel(ENEMY, "Enemy"/*_break"*/);
 }
 
 void ModelManager::LoadModel(const ModelName modelName, std::string fileName)

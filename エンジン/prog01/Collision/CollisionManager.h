@@ -31,7 +31,7 @@ public:// メンバ関数
 	void CheckBroadCollisions();
 
 	//二つの衝突チェック
-	void CheckHitCollision(BaseCollider *colA, BaseCollider *colB);
+	bool CheckHitCollision(BaseCollider *colA, BaseCollider *colB, bool isBroad = false);
 
 	// レイキャスト
 	//bool Raycast(const Ray& ray, RaycastHit* hitInfo = nullptr, float maxDistance = D3D12_FLOAT32_MAX);

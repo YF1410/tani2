@@ -275,7 +275,7 @@
     <ClCompile Include="Box2DCollider.cpp">
       <Filter>エンジンシステム\Collision\Collider2d</Filter>
     </ClCompile>
-    <ClCompile Include="EnemySpawnManager.cpp">
+    <ClCompile Include="EnemyManager.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="UI.cpp">
@@ -449,7 +449,7 @@
     <ClInclude Include="Box2DCollider.h">
       <Filter>エンジンシステム\Collision\Collider2d</Filter>
     </ClInclude>
-    <ClInclude Include="EnemySpawnManager.h">
+    <ClInclude Include="EnemyManager.h">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="UI.h">
@@ -458,5 +458,6 @@
     <ClInclude Include="GameObject\MapChip.h">
       <Filter>エンジンシステム\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="State.h" />
   </ItemGroup>
 </Project>

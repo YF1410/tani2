@@ -43,6 +43,14 @@ void GameObjCommon::Update()
 	}
 }
 
+void GameObjCommon::FixedUpdate()
+{
+}
+
+void GameObjCommon::FinalUpdate()
+{
+}
+
 void GameObjCommon::Move()
 {
 	oldPos = pos;
