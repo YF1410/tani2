@@ -13,6 +13,7 @@
 #include "MapChip.h"
 #include "Easing.h"
 #include "EnemyManager.h"
+#include "Ease.h"
 
 using namespace DirectX;
 
@@ -50,21 +51,33 @@ void GameScene::Initialize() {
 	FbxObject3d::SetCamera(camera.get());
 
 	// デバッグテキスト用テクスチャ読み込み
-	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
+	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/Sprite/debugfont.png")) {
 		assert(0);
 	}
 	// デバッグテキスト初期化
 	DebugText::GetInstance()->Initialize(debugTextTexNumber);
 
 	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(1, L"Resources/APEX_01.png")) {
+	if (!Sprite::LoadTexture(1, L"Resources/Sprite/weve1.png")) {
+		assert(0);
+	}
+	// テクスチャ読み込み
+	if (!Sprite::LoadTexture(2, L"Resources/Sprite/weve2.png")) {
+		assert(0);
+	}
+	// テクスチャ読み込み
+	if (!Sprite::LoadTexture(3, L"Resources/Sprite/weve3.png")) {
 		assert(0);
 	}
 
 	// 背景スプライト生成
-	sprite = Sprite::Create(1, { 0.0f,0.0f });
-	sprite->SetSize({ 100.0f,100.0f });
-	sprite->SetPosition({ 100.0f,100.0f });
+	for (int i = 1; i < 4; i++)
+	{
+		std::unique_ptr<Sprite> tempsprite = Sprite::Create(i, { 0.0f,0.0f });
+		tempsprite->SetSize({ 600.0f,200.0f });
+		tempsprite->SetPosition({ 1280.0f,250.0f });
+		weveSprite.push_back(std::move(tempsprite));
+	}
 
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::Create(DirectXCommon::GetInstance()->GetDevice(), camera.get());
@@ -146,9 +159,41 @@ void GameScene::Update() {
 	//入力更新
 	Input *input = Input::GetInstance();
 
-	if (input->TriggerKey(DIK_SPACE) && EnemyManager::GetIns()->GetEnemySize() <= 0)
+	if (EnemyManager::GetIns()->GetEnemySize() <= 0 && !EnemyManager::GetIns()->isEnemyAddFlag() && weveCount < 3)
 	{
-		EnemyManager::GetIns()->SetEnemyAddFlag(true);
+		weveStartTimer++;
+		float timeRate = 0.0f;
+		int countNum = 125;
+		upTimer++;
+
+		timeRate = upTimer / countNum;
+		if (!changeFlag && !endFlag)
+		{
+			weveSprite[weveCount]->SetPosition(Ease::easeOut({ 1280.0f,250.0f }, { 350.0f,250.0f }, timeRate));
+			if (upTimer > countNum)
+			{
+				upTimer = 0;
+				changeFlag = true;
+			}
+		}
+		else if (changeFlag && !endFlag)
+		{
+			weveSprite[weveCount]->SetPosition(Ease::easeIn({ 350.0f,250.0f }, { -1280.0f,250.0f }, timeRate));
+			if (upTimer > countNum)
+			{
+				upTimer = 0;
+				changeFlag = false;
+				endFlag = true;
+			}
+		}
+
+		if (weveStartTimer >= 300)
+		{
+			EnemyManager::GetIns()->SetEnemyAddFlag(true);
+			weveCount++;
+			weveStartTimer = 0;
+			endFlag = false;
+		}
 	}
 	
 	//ライト更新
@@ -205,6 +250,7 @@ void GameScene::Update() {
 	if (playerObject.get()->GetHp() == 0) {
 		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
 	}
+	DebugText::GetInstance()->VariablePrint(0, 180, "weveCount", weveCount, 3);
 
 	//カウンターを加算
 	counter++;
@@ -255,6 +301,10 @@ void GameScene::Draw() {
 	Sprite::PreDraw(cmdList);
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
+	if (weveStartTimer > 0)
+	{
+		weveSprite[weveCount]->Draw();
+	}
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画

@@ -9,7 +9,7 @@ TitleScene::~TitleScene()
 void TitleScene::Initialize()
 {
 	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(0, L"Resources/APEX_01.png"))
+	if (!Sprite::LoadTexture(0, L"Resources/Sprite/APEX_01.png"))
 	{
 		assert(0);
 	}

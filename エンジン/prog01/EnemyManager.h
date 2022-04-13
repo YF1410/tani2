@@ -21,13 +21,13 @@ public:
 	void Adaptation();
 	void Draw();
 
-	void SetEnemyAddFlag(bool _enemyAddFlag) { enemyAddFlag = _enemyAddFlag; weveCount++; }
+	void SetEnemyAddFlag(bool _enemyAddFlag) { enemyAddFlag = _enemyAddFlag; }
+	bool isEnemyAddFlag() { return enemyAddFlag; }
 	int GetEnemySize() { return enemys.size(); }
 
 public:
 	PlayerObject *player;
 	std::vector<Enemy *> enemys;
-	bool enemyAddFlag = true;
-	int weveCount = 0;
+	bool enemyAddFlag = false;
 };
 

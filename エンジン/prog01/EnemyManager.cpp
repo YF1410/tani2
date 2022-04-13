@@ -58,7 +58,6 @@ void EnemyManager::Update()
 		enemys[i]->Update();
 	}
 	DebugText::GetInstance()->VariablePrint(0, 120, "EnemySize", enemys.size(), 3);
-	DebugText::GetInstance()->VariablePrint(0, 180, "weveCount", weveCount, 3);
 }
 
 void EnemyManager::FinalUpdate()
