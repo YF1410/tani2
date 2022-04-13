@@ -22,17 +22,25 @@ void EnemyManager::Update()
 			};
 			Vector3 spawnPos = normal.Normal() * 8000 + player->GetPos();
 			//マップ外に生成しない
-			if (spawnPos.x < 400) {
-				spawnPos.x = 400;
-			}
 			if (MapChip::GetInstance()->GetMapData().wide * 200 - 400 < spawnPos.x) {
 				spawnPos.x = MapChip::GetInstance()->GetMapData().wide * 200 - 400;
 			}
 			if (-(MapChip::GetInstance()->GetMapData().high * 200 - 400) > spawnPos.z) {
 				spawnPos.z = -(MapChip::GetInstance()->GetMapData().high * 200 ) + 400;
 			}
-			if (spawnPos.z > -400) {
+
+			if (spawnPos.x <= 400) {
+				spawnPos.x = 400;
+			}
+			else if (spawnPos.x >= 11000) {
+				spawnPos.x = 11000;
+			}
+
+			if (spawnPos.z >= -400) {
 				spawnPos.z = -400;
+			}
+			else if (spawnPos.z <= -11000) {
+				spawnPos.z = -11000;
 			}
 
 			enemys.push_back(new Enemy(spawnPos, player));
