@@ -38,6 +38,12 @@ void SceneManager::Update()
 		scene->Initialize();
 	}
 	scene->Update();
+
+	if (true) {
+		scene->FixedUpdate();
+	}
+
+	scene->LastUpdate();
 }
 
 void SceneManager::Draw()

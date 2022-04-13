@@ -13,6 +13,10 @@ public: // メンバ関数
 	virtual void Finalize() = 0;
 	// 毎フレーム処理
 	virtual void Update() = 0;
+	//固定アップデート
+	virtual void FixedUpdate() {};
+	//最終更新
+	virtual void LastUpdate() {};
 	// 描画
 	virtual void Draw() = 0;
 };
