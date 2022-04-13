@@ -11,7 +11,7 @@ EnemyManager *EnemyManager::GetIns()
 void EnemyManager::Update()
 {
 	//\•b‚²‚Æ‚É“G’Ç‰Á
-	if (enemyAddFlag && weveCount <= 3) {
+	if (enemyAddFlag) {
 		float Rad;
 		for (int i = 0; i < 2; i++) {
 			Rad = XMConvertToRadians(rand() % 360);
@@ -44,10 +44,8 @@ void EnemyManager::Update()
 		}
 	}
 
-	if (GameScene::counter % 2400 == 0 && !enemyAddFlag)
+	if (!enemyAddFlag)
 	{
-		enemyAddFlag = true;
-		weveCount++;
 		enemyCount = enemys.size();
 	}
 
@@ -63,8 +61,6 @@ void EnemyManager::Update()
 		enemys[i]->Update();
 	}
 	DebugText::GetInstance()->VariablePrint(0, 120, "EnemySize", enemys.size(), 3);
-	DebugText::GetInstance()->VariablePrint(0, 180, "weveCount", weveCount, 3);
-
 }
 
 void EnemyManager::FinalUpdate()

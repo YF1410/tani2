@@ -73,6 +73,7 @@ private: // メンバ変数
 	Vector3 targetDistance = { 0,0,100 };
 	const Vector3 targetDistanceDef = { 0,0,100 };
 	//スプライト
+	std::vector<std::unique_ptr<Sprite>> weveSprite;
 	std::unique_ptr<Sprite> sprite;
 	//パーティクル
 	std::unique_ptr<ParticleManager> particleMan;
@@ -85,8 +86,12 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelPlane;
 	std::vector<std::unique_ptr<Object3d>> objects;
 
-	bool flag = false;
-
+	int weveStartTimer = 0;
+	int weveCount = -1;
+	float upTimer = 0.0f;
+	bool changeFlag = false;
+	bool endFlag = false;
+	bool showingFlag = false;
 
 	//ステージ
 	//std::unique_ptr<FbxObject3d> testStage;
