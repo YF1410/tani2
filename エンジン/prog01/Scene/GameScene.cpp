@@ -192,6 +192,8 @@ void GameScene::Update() {
 			EnemyManager::GetIns()->SetEnemyAddFlag(true);
 			weveCount++;
 			weveStartTimer = 0;
+			upTimer = 0;
+			changeFlag = false;
 			endFlag = false;
 		}
 	}

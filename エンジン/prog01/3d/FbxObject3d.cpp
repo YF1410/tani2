@@ -457,6 +457,7 @@ bool FbxObject3d::Initialize()
 	{
 		constMatSkin->bones[i] = XMMatrixIdentity();
 	}
+	constMatSkin->color = color;
 	constBuffSkin->Unmap(0, nullptr);
 
 	return true;
@@ -521,9 +522,8 @@ void FbxObject3d::Update()
 		//合成してスキニング行列に
 		constMatSkin->bones[i] = model->GetModelTransform() * bones[i].invInitialPose * matCurrentPose * XMMatrixInverse(nullptr, model->GetModelTransform());
 	}
+	constMatSkin->color = color;
 	constBuffSkin->Unmap(0, nullptr);
-
-
 }
 
 void FbxObject3d::Draw(ID3D12GraphicsCommandList* cmdList)

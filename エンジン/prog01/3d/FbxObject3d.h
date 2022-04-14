@@ -27,7 +27,7 @@ protected: // エイリアス
 
 public:// 定数
 //ボーンの最大数
-	static const int MAX_BONES = 4;
+	static const int MAX_BONES = 32;
 
 public: // サブクラス
 	// 定数バッファ用データ構造体（座標変換行列用）
@@ -42,6 +42,7 @@ public: // サブクラス
 	struct ConstBufferDataSkin
 	{
 		XMMATRIX bones[MAX_BONES];
+		XMFLOAT3 color;
 	};
 
 	struct Animation
@@ -150,6 +151,8 @@ protected: // メンバ変数
 	bool isLoop = false;
 	//アニメーションの保存
 	std::vector<Animation> animationData;
+
+	XMFLOAT3 color = { 1, 1, 1 };
 
 	//クラス名(デバック用)
 	const char *name = nullptr;

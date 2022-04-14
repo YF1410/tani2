@@ -97,6 +97,8 @@ private: // ƒƒ“ƒo•Ï”
 
 	Box2DCollider *toMapChipCollider;
 
+	int count = 3;
+
 
 	GameObjCommon *coreUp;
 };
