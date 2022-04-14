@@ -149,8 +149,9 @@ void PlayerObject::Update()
 
 	//自爆
 	if ((input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(BUTTON_A))&&
-		attack.can)
+		attack.can && count > 0)
 	{
+		count--;
 		//攻撃開始
 		attack.Start();
 
@@ -201,6 +202,7 @@ void PlayerObject::Update()
 			for (int i = 0; i < Debris::debris.size(); i++) {
 				Debris::debris[i]->ReturnStart();
 			}
+			count = 3;
 		}
 	}
 	//攻撃インターバル

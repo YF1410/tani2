@@ -167,3 +167,40 @@ void Camera::CameraMoveEyeVector(const XMFLOAT3& move)
 
 	SetEye(eye_moved);
 }
+
+void Camera::CameraShake()
+{
+	if (!shakeFlag)
+	{
+		shakeTimer = 0;
+		attenuation = 0;
+		save.x = eye.x;
+		save.y = eye.y;
+		save.z = eye.z;
+	}
+	if (shakeFlag)
+	{
+		XMFLOAT3 shake = { 0.0f, 0.0f, 0.0f };
+
+		SetEye(save);
+
+		shakeTimer++;
+		if (shakeTimer > 0)
+		{
+			shake.x = (rand() % (shakeCount - attenuation) - (shakeCount / 2)) + eye.x;
+			shake.y = (rand() % (shakeCount - attenuation) - (shakeCount / 2)) + eye.y;
+			shake.z = (rand() % (shakeCount - attenuation) - (shakeCount / 2)) + eye.z;
+		}
+
+		if (shakeTimer >= attenuation * 5)
+		{
+			attenuation += 1;
+		}
+		else if (attenuation >= 25)
+		{
+			shakeFlag = false;
+		}
+
+		SetEye(shake);
+	}
+}

@@ -90,6 +90,8 @@ private: // メンバ変数
 	//自爆力
 	const int destructPow = 10;
 
+	int count = 3;
+
 	//コライダー
 	SphereCollider *broadSphereCollider;	//ブロード
 	SphereCollider * pushBackCollider;	//押し返し用

@@ -143,6 +143,7 @@ void Enemy::Update() {
 		//タイマーが60になったら無敵を解除
 		if (InvincibleTimer >= 30) {
 			isInvincible = false;
+			objectData.get()->SetColor({ 1,1,1 });
 			//HPが0以下になったら死亡状態へ以降
 			if (HP <= 0) {
 				state = DEAD;
@@ -258,6 +259,8 @@ void Enemy::Damage(float damage)
 {
 	//無敵時間中は処理を中断
 	if (isInvincible) { return; }
+	objectData.get()->SetColor({ 1,0,0 });
+
 	//ダメージを受ける
 	HP -= damage;
 	//無敵時間をセットする

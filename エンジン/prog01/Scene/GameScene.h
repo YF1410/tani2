@@ -92,6 +92,7 @@ private: // メンバ変数
 	bool changeFlag = false;
 	bool endFlag = false;
 	bool showingFlag = false;
+	bool flag = false;
 
 	//ステージ
 	//std::unique_ptr<FbxObject3d> testStage;
