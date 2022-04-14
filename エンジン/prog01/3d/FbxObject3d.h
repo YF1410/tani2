@@ -27,7 +27,7 @@ protected: // エイリアス
 
 public:// 定数
 //ボーンの最大数
-	static const int MAX_BONES = 4;
+	static const int MAX_BONES = 32;
 
 public: // サブクラス
 	// 定数バッファ用データ構造体（座標変換行列用）
