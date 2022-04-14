@@ -142,6 +142,7 @@ void Enemy::Update() {
 
 		//タイマーが60になったら無敵を解除
 		if (InvincibleTimer >= 30) {
+			objectData.get()->SetColor({ 1,1,1 });
 			isInvincible = false;
 			//HPが0以下になったら死亡状態へ以降
 			if (HP <= 0) {
@@ -231,12 +232,14 @@ void Enemy::OnCollision(const CollisionInfo &info)
 		penalty.y = 0;
 		if (player->attack.is) {
 			Damage(1.0f);
+			objectData.get()->SetColor({ 1,0,0 });
 		}
 		break;
 	case DEBRIS:
  		debri = dynamic_cast<Debris *>(info.object);
 		if (debri->isAttack) {
 			Damage(1.0f);
+			objectData.get()->SetColor({ 1,0,0 });
 		}
 		break;
 

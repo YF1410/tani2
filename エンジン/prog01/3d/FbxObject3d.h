@@ -121,6 +121,9 @@ public: // メンバ関数
 
 	void SetAlpha(float _alpha) { model->SetAlpha(_alpha); }
 
+	// カラーの設定
+	void SetColor(XMFLOAT3 color) { this->color = color; }
+
 	
 protected: // メンバ変数
 	// 定数バッファ
