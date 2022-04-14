@@ -169,7 +169,7 @@ void GameScene::Update() {
 	//ステージ更新
 	//testStage->Update();
 
-	if (!EnemyManager::GetIns()->isEnemyAddFlag() && counter % 2400 == 0 && weveCount > 0)
+	if (!EnemyManager::GetIns()->isEnemyAddFlag() && counter % 1200 == 0 && flag && weveCount < 3)
 	{
 		showingFlag = true;
 		EnemyManager::GetIns()->SetEnemyAddFlag(true);
