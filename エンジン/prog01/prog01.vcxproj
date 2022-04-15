@@ -263,6 +263,7 @@
   <ItemGroup>
     <ClCompile Include="2d\DebugText.cpp" />
     <ClCompile Include="2d\Sprite.cpp" />
+    <ClCompile Include="2d\SpriteFactory.cpp" />
     <ClCompile Include="3d\FbxLoader.cpp" />
     <ClCompile Include="3d\FbxModel.cpp" />
     <ClCompile Include="3d\FbxObject3d.cpp" />
@@ -315,6 +316,7 @@
   <ItemGroup>
     <ClInclude Include="2d\DebugText.h" />
     <ClInclude Include="2d\Sprite.h" />
+    <ClInclude Include="2d\SpriteFactory.h" />
     <ClInclude Include="3d\DirectionalLight.h" />
     <ClInclude Include="3d\FbxLoader.h" />
     <ClInclude Include="3d\FbxModel.h" />
