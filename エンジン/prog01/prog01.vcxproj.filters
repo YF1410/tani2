@@ -281,6 +281,9 @@
     <ClCompile Include="UI.cpp">
       <Filter>ゲームシステム\Player</Filter>
     </ClCompile>
+    <ClCompile Include="2d\SpriteFactory.cpp">
+      <Filter>エンジンシステム\2d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -459,5 +462,8 @@
       <Filter>エンジンシステム\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="State.h" />
+    <ClInclude Include="2d\SpriteFactory.h">
+      <Filter>エンジンシステム\2d</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

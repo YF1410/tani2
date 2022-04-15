@@ -50,33 +50,8 @@ void GameScene::Initialize() {
 	// FBXオブジェクトにカメラをセット
 	FbxObject3d::SetCamera(camera.get());
 
-	// デバッグテキスト用テクスチャ読み込み
-	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
-		assert(0);
-	}
-	// デバッグテキスト初期化
-	DebugText::GetInstance()->Initialize(debugTextTexNumber);
-
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(1, L"Resources/APEX_01.png")) {
-		assert(0);
-	}
-
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(1, L"Resources/Sprite/weve1.png")) {
-		assert(0);
-	}
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(2, L"Resources/Sprite/weve2.png")) {
-		assert(0);
-	}
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(3, L"Resources/Sprite/weve3.png")) {
-		assert(0);
-	}
-
 	// 背景スプライト生成
-	for (int i = 1; i < 4; i++)
+	for (int i = 2; i < 5; i++)
 	{
 		std::unique_ptr<Sprite> tempsprite = Sprite::Create(i, { 0.0f,0.0f });
 		tempsprite->SetSize({ 600.0f,200.0f });
