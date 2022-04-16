@@ -47,7 +47,7 @@ void GameObjCommon::FixedUpdate()
 {
 }
 
-void GameObjCommon::FinalUpdate()
+void GameObjCommon::LustUpdate()
 {
 }
 

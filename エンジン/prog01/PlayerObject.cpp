@@ -18,7 +18,7 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 		ModelManager::SLIME,	//スライムのモデルをセット
 		GameObjCommon::PLAYER,	//プレイヤーとして扱う
 		false,					//重力の影響を受ける
-		{0,0,0},
+		startPos,
 		{0,0,0},
 		{0,0,0},
 		true
@@ -27,7 +27,6 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	srand(time(NULL));			//爆破用乱数のシード値をセット
 	//初期位置に設定
 	this->startPos = startPos;
-	pos = startPos;
 
 	//ブロード
 	broadSphereCollider = new SphereCollider("hitCollider", { 0,scalef * 180.0f,0 }, scalef * 180.0f);
@@ -44,7 +43,6 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	SetNarrowCollider(toMapChipCollider);
 
 	coreUp = new GameObjCommon(ModelManager::SLIME_CORE, Notag, false,{ 0,0,0 }, {1.5f,1.5f,1.5f });
-
 	
 }
 
@@ -94,10 +92,13 @@ void PlayerObject::Update()
 
 	//移動量減衰処理
 	VelocityReset(0.9f);
-	if (velocity.Length() >= 1000) {
-		velocity = velocity.Normal() * 1000;
+	if (!attack.is && velocity.Length() >= 60) {
+		velocity = velocity.Normal() * 60;
 	}
-	if (attack.is && velocity.Length() < 60) {
+	if (attack.is && velocity.Length() >= 360) {
+		velocity = velocity.Normal() * 360;
+	}
+	if (attack.is && velocity.Length() < 30) {
 		attack.is = false;
 	}
 
@@ -235,7 +236,7 @@ void PlayerObject::Draw() const
 	//Object3d::PostDraw();
 }
 
-void PlayerObject::FinalUpdate()
+void PlayerObject::LustUpdate()
 {
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();
@@ -253,7 +254,7 @@ void PlayerObject::FinalUpdate()
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
 			normal.x = vec;
 		}
-		if (hitPos.z != 0) {
+ 		if (hitPos.z != 0) {
 			int vec = 1;	//向き
 			if (moveVec.z < 0) {
 				vec = -1;
@@ -266,25 +267,25 @@ void PlayerObject::FinalUpdate()
 	}
 	//角
 	else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
-		Vector3 normal = { 0,0,0 };
-		if (hitPos.x != 0) {
-			int vec = 1;	//向き
-			if (0 < velocity.x) {
-				vec = -1;
-			}
-			pos.x = hitPos.x;
-			normal.x = vec;
-		}
-		if (hitPos.z != 0) {
-			int vec = 1;	//向き
-			if (velocity.z < 0) {
-				vec = -1;
-			}
-			pos.z = hitPos.z;
-			normal.z = vec;
-		}
-		normal.Normalize();
-		velocity = CalcWallScratchVector(velocity, normal);
+		//Vector3 normal = { 0,0,0 };
+		//if (hitPos.x != 0) {
+		//	int vec = 1;	//向き
+		//	if (0 < velocity.x) {
+		//		vec = -1;
+		//	}
+		//	pos.x = hitPos.x;
+		//	normal.x = vec;
+		//}
+		//if (hitPos.z != 0) {
+		//	int vec = 1;	//向き
+		//	if (velocity.z < 0) {
+		//		vec = -1;
+		//	}
+		//	pos.z = hitPos.z;
+		//	normal.z = vec;
+		//}
+		//normal.Normalize();
+		//velocity = CalcWallScratchVector(velocity, normal);
 	}
 
 }

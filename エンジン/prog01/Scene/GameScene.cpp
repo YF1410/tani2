@@ -93,7 +93,7 @@ void GameScene::Initialize() {
 	playerObject->Initialize();
 
 	//エネミーにプレイヤーの情報を渡す
-	EnemyManager::GetIns()->SetPlayer(playerObject.get());
+	EnemyManager::GetIns()->Initialize(playerObject.get());
 
 
 	//デブリリセット
@@ -191,7 +191,7 @@ void GameScene::Update() {
 	 
 	//最終更新
 	EnemyManager::GetIns()->FinalUpdate();
-	playerObject.get()->FinalUpdate();
+	playerObject.get()->LustUpdate();
 
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();

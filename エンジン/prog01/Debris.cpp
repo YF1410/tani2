@@ -179,7 +179,7 @@ void Debris::OnCollision(const CollisionInfo &info)
 		if (info.myName == "hitCollider" &&
 			info.collider->GetCollisionName() == "absorptionCollider" &&
 			!isFirstAttack) {
-			velocity += Vector3(playerData->pos - pos).Normalize() * 5.0f;
+			velocity += Vector3(playerData->GetPos() - GetPos()).Normalize() * 5.0f;
 		}
 		//当たり判定用のコライダーとプレイヤーの当たり判定コライダーが当たっていたら削除
 		if (info.myName == "hitCollider" &&

@@ -114,8 +114,11 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 	int down = (-box.center.z + box.Bottom - (chipSize / 2) - fmodf(-box.center.z + box.Bottom - (chipSize / 2), chipSize)) / chipSize + 1;
 
 	bool hit = false;
+
+
 	//上方向への移動があるとき
 	if (0 < vel->z) {
+	
 		if (GetChipNum(nowChipX, up) == 1) {
 			hitPositon.z = -up * chipSize - chipSize / 2;
 			hit = true;
@@ -123,10 +126,10 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 	}
 	//下側
 	if (0 > vel->z) {
+		
 		if (GetChipNum(nowChipX, down) == 1) {
 			hitPositon.z = -down * chipSize + chipSize / 2;
 			hit = true;
-
 		}
 	}
 	//右側
@@ -138,14 +141,35 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 	}
 	//左側
 	if (vel->x < 0) {
+		
 		if (GetChipNum(lef, nowChipY) == 1) {
 			hitPositon.x = lef * chipSize + chipSize / 2;
 			hit = true;
 		}
 	}
+
+	//マップの外にいたとき
+	if (up <= 0) {
+		hitPositon.z = -chipSize / 2;
+		hit = true;
+	}
+	else if (down >= mapData[nowMap].high - 1) {
+		hitPositon.z = -(mapData[nowMap].high - 1) * chipSize - chipSize / 2;
+		hit = true;
+	}
+	if (lef <= 0) {
+		hitPositon.x = chipSize / 2;;
+		hit = true;
+	}
+	else if (rig >= mapData[nowMap].wide - 1) {
+		hitPositon.x = (mapData[nowMap].wide - 1) * chipSize - chipSize / 2 - 1;
+		hit = true;
+	}
+	
 	if (hitpos != nullptr) {
 		*hitpos = hitPositon;
 	}
+
 
 	return hit;
 }

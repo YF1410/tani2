@@ -22,7 +22,7 @@ public:
 	//毎フレーム処理
 	void Update() override;
 	void Draw() const override;
-	void FinalUpdate() override;
+	void LustUpdate() override;
 	//衝突時コールバック
 	void OnCollision(const CollisionInfo &info) override;
 	

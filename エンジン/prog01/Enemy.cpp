@@ -20,10 +20,8 @@ Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 {
 	isAlive = true;
 	scale = 1.0f;
-	minTargetLength = holmingLength;
 	this->player = player;
-	state = HOMING;
-	maxHP = 3;
+	maxHP = 1;
 	
 	//当たり判定初期化
 	float radius = 100;
@@ -56,76 +54,27 @@ void Enemy::Initialize()
 void Enemy::Update() {
 	//移動量初期化
 	if (velocity.Length() > maxMoveSpeed) {
+		//最高速度を超えていたら制限する
 		velocity = velocity.Normal() * maxMoveSpeed;
 	}
 	else {
+		//毎フレーム持っている移動量が0.9倍になる
 		VelocityReset(0.9f);
 	}
+	//押し返し初期化
+	penalty = { 0,0,0 };
 
-	//State別処理
-	switch (state)
-	{
-	case Enemy::NOUPDATE:
-		//画面外にいるときは更新しない
-		return;
-		break;
-	case Enemy::STAY:		//待機
-		////待機時間を経過させる
-		//stayTime++;
-		//if (isPlayerContact) {		//待機時間に関係なくプレイヤーを察知していればHOMINGへ以降
-		//	state = HOMING;
-		//}
-		//else if (stayTime >= maxStayTime) {
-		//	//角度をランダムで決定
-		//	moveRad = XMConvertToRadians(static_cast<float>(rand() % 360));
-		//	stayTime = 0;
-		//	state = WANDERING;
-		//}
-		break;
+	//通常時処理（条件式があればフラグで管理する）
+	targetVec = Vector3(player->GetPos() - pos);
+	targetVec.y = 0;
+	velocity += targetVec.Normal() * moveSpeed;
 
-	case Enemy::WANDERING:	//うろうろする
-		////移動時間を経過させる
-		//moveTime++;
-		////ランダムな方向へと移動する
-		//velocity.x += cos(moveRad) * moveSpeed;
-		//velocity.z += sin(moveRad) * moveSpeed;
-		////一定時間移動したらSATYに移行
-		//if (moveTime >= maxMoveTime) {
-		//	moveTime = 0;
-		//	state = STAY;
-		//}
-		break;
-	case Enemy::HOMING:
-		//ターゲットが消滅していた場合や追跡範囲を外れたときはSTAYに移行
-
-		/*if (targetLength >= holmingLength) {
-			minTargetLength = holmingLength;
-			state = STAY;
-
-		}*/
-		//else {//if(ここにrayがオブジェクトに届けばの条件式を書く){
-			targetVec = Vector3(player->GetPos()- pos);
-			targetVec.y = 0;
-			velocity += targetVec.Normal() * moveSpeed;
-		//}
-
-		/*if (targetLength <= attackLength) {
-			state = ATTACK;
-		}*/
-
-		break;
-	case Enemy::DEAD:
-		isAlive = false;
-
-		break;
-	default:
-		break;
-	}
 
 	//共通処理
 	//無敵時間タイマーを管理
 	if (isInvincible) {
 		InvincibleTimer++;
+		//ここは後でアニメーションに変更する
 		if (InvincibleTimer <= 10) {
 			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), 1.0f, 3.0f);
 		}
@@ -136,16 +85,12 @@ void Enemy::Update() {
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
 			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 30.0f), 3.0f, 0.0f);
 		}
-		//if (40 < InvincibleTimer && InvincibleTimer <= 60) {
-		//	scale = Ease(Out, Bounce, (float)((InvincibleTimer - 40.0f) / 20.0f), 4.0f  , 0.0f);
-		//}
-
-		//タイマーが60になったら無敵を解除
+		//タイマーが30になったら無敵を解除
 		if (InvincibleTimer >= 30) {
 			isInvincible = false;
 			//HPが0以下になったら死亡状態へ以降
 			if (HP <= 0) {
-				state = DEAD;
+				isAlive = false;
 				//一定の確率でアイテムドロップ
 				if (rand() % 101 <= 30) {
 					Debris::debris.push_back(new Debris(pos, { 0,0,0 }, 5));
@@ -159,12 +104,12 @@ void Enemy::Update() {
 
 	//攻撃インターバル処理
 	attack.Intervel();
-
+	//移動をいったん適応
 	Move();
 
 }
 
-void Enemy::FinalUpdate()
+void Enemy::LustUpdate()
 {
 
 	//マップチップとの当たり判定
@@ -221,11 +166,12 @@ void Enemy::FinalUpdate()
 
 void Enemy::OnCollision(const CollisionInfo &info)
 {
+	//ダイナミックキャスト用
 	Debris *debri;
 	PlayerObject *player;
 	Enemy *enemy;
 
-	Vector3 penalty = {0,0,0};
+	//衝突したコライダーで分岐
 	switch (info.object->Tag)
 	{
 	case PLAYER:
@@ -233,11 +179,26 @@ void Enemy::OnCollision(const CollisionInfo &info)
 		//位置修正
 		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.4f;
 		penalty.y = 0;
+
+		//プレイヤーが攻撃状態なら
 		if (player->attack.is) {
+			//ダメージを受ける
 			Damage(1.0f);
+
+			//衝突軸ベクトル
+			Vector3 normal = pos - player->pos;
+			normal.Normalize();
+			//内積
+			float dot = Vector3(player->pos - pos).VDot(normal);
+			//定数ベクトル
+			Vector3 constVec = 2 * dot / 2 * normal;
+
+			velocity = 2 * constVec + velocity;
+
 		}
 		break;
 	case DEBRIS:
+		//デブリが攻撃状態ならダメージを受ける
  		debri = dynamic_cast<Debris *>(info.object);
 		if (debri->isAttack) {
 			Damage(1.0f);
@@ -245,6 +206,7 @@ void Enemy::OnCollision(const CollisionInfo &info)
 		break;
 
 	case ENEMY:
+		//エネミー同士なら押し返しあう
 		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length()*0.2f;
 		break;
 	default:
@@ -275,17 +237,9 @@ int Enemy::Attack()
 	return attackPow;
 }
 
-//void Enemy::HomingObjectCheck(Vector3 targetPos)
-//{
-//	this->targetPos = targetPos;
-//	state = HOMING;
-//}
-
 void Enemy::HitWall(const XMVECTOR &hitPos, const Vector3 &normal)
 {
-
-	Vector3 HitPos = hitPos;
-	//pos = HitPos + normal * (rect2d.Bottom - rect2d.Top);
+	//反射
 	velocity = CalcWallScratchVector(velocity, normal);
 
 }

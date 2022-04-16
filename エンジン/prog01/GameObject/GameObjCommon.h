@@ -58,7 +58,7 @@ public:
 	virtual void Initialize();		//初期化
 	virtual void Update();			//各オブジェクトの更新
 	virtual void FixedUpdate();		//一定周期での更新
-	virtual void FinalUpdate();		//必ず最後に行う処理
+	virtual void LustUpdate();		//必ず最後に行う処理
 	virtual void Move();			//移動量計算
 	virtual void VelocityReset();								//移動量初期化
 	virtual void VelocityReset(float gain = 0.9f,float dead = 0.01f);	//移動量初期化
