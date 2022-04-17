@@ -89,6 +89,7 @@ private: // メンバ変数
 
 	//自爆力
 	const int destructPow = 10;
+	bool attackFlag = false;
 
 	//コライダー
 	SphereCollider *broadSphereCollider;	//ブロード
