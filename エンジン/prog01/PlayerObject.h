@@ -89,6 +89,7 @@ private: // ƒƒ“ƒo•Ï”
 
 	//©”š—Í
 	const int destructPow = 10;
+	bool attackFlag = false;
 
 	int count = 3;
 

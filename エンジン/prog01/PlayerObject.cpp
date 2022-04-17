@@ -147,6 +147,19 @@ void PlayerObject::Update()
 		size -= 10.0f;
 	}
 
+	//爆発の仕方の変更
+	if (input->TriggerPadButton(BUTTON_RIGHT_SHOULDER))
+	{
+		if (!attackFlag)
+		{
+			attackFlag = true;
+		}
+		else if (attackFlag)
+		{
+			attackFlag = false;
+		}
+	}
+
 	//自爆
 	if ((input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(BUTTON_A))&&
 		attack.can && count > 0)
@@ -167,15 +180,30 @@ void PlayerObject::Update()
 			//残骸のサイズ
 			float shotSize = maxSize / destructPow;
 
-			//放射角度を360度で計算
-			shotRad = XMConvertToRadians(rand() % 360);
-			startVec = {
-				static_cast<float>(cos(shotRad)),
-				0,
-				static_cast<float>(sin(shotRad))
-			};
+			if (!attackFlag)
+			{
+				//放射角度を360度で計算
+				shotRad = XMConvertToRadians(rand() % 360);
+				startVec = {
+					static_cast<float>(cos(shotRad)),
+					0,
+					static_cast<float>(sin(shotRad))
+				};
 
-			velocity += velocity.Normal() * 10;
+				velocity += velocity.Normal() * 10;
+			}
+			else if (attackFlag)
+			{
+				//-15~15度で計算
+				shotRad = XMConvertToRadians(rand() % 90 - 45);
+
+				startVec = -velocity.Normal();
+
+				startVec.AddRotationY(shotRad);
+				//startVec = startVec + offset;
+
+				velocity += velocity.Normal() * 30;
+			}
 			//Debrisのコンテナに追加
 			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize, 500));
 		}
