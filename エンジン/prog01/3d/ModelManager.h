@@ -23,7 +23,7 @@ public:
 		SLIME_CORE,
 		SLIME_CORE_UNDER,
 
-		ENEMY,
+		ENEMY_MACARON,
 
 
 		//�ő吔

@@ -67,7 +67,7 @@ private: // メンバ変数
 	std::unique_ptr<Camera> camera;
 
 	Vector3 eyeDistance = { 0,2700,-500 };
-	const Vector3 eyeDistanceDef = { 0,2700,-500 };
+	const Vector3 eyeDistanceDef = { 0,2700,-1500 };
 	Vector3 targetDistance = { 0,0,100 };
 	const Vector3 targetDistanceDef = { 0,0,100 };
 	//スプライト
