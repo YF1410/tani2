@@ -11,7 +11,11 @@
 #include "RandomMoveEnemy.h"
 #include "EscapeEnemy.h"
 #include "BoundEnemy.h"
-
+#include "DefenseEnemy.h"
+#include "KiteEnemy.h"
+#include "SuctionEnemy.h"
+#include "GetawayEnemy.h"
+#include "RouteMoveEnemy.h"
 
 class EnemyManager
 {

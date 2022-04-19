@@ -52,8 +52,7 @@ void GameScene::Initialize() {
 	FbxObject3d::SetCamera(camera.get());
 
 	// 背景スプライト生成
-	for (int i = 2; i < 5; i++)
-	{
+	for (int i = 2; i < 5; i++) 	{
 		std::unique_ptr<Sprite> tempsprite = Sprite::Create(i, { 0.0f,0.0f });
 		tempsprite->SetSize({ 600.0f,200.0f });
 		tempsprite->SetPosition({ 1280.0f,250.0f });
@@ -76,13 +75,13 @@ void GameScene::Initialize() {
 	light->SetPointLightActive(2, false);
 	light->SetCircleShadowActive(0, true);
 
-	light->SetDirLightDir(0, Vector3(0,-1,-0.4).Normal());
+	light->SetDirLightDir(0, Vector3(0, -1, -0.4).Normal());
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
 	camera->SetEye({ 0,1600,-500 });
 	camera->SetUp({ 0,1,0 });
-	
+
 	//プレイヤーの初期化
 	playerObject->Initialize();
 
@@ -128,7 +127,7 @@ void GameScene::Update() {
 	//プレイヤーの少し上を焦点にする
 	targetDistance = Ease(Out, Quad, 0.05f,
 		camera.get()->GetTarget(),
-		Vector3(playerObject.get()->GetPos() + 
+		Vector3(playerObject.get()->GetPos() +
 			targetDistanceDef +
 			playerObject.get()->velocity * velocityOffset));
 	camera->SetTarget(targetDistance);
@@ -137,8 +136,69 @@ void GameScene::Update() {
 
 
 	if (Input::GetInstance()->TriggerKey(DIK_1)) {
-		EnemyManager::enemys.push_back(new AvoidanceEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new AvoidanceEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
 
+	if (Input::GetInstance()->TriggerKey(DIK_2)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new CushionEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+
+		}
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_3)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new BoundEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_4)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new AvoidanceEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_5)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new RandomMoveEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_6)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new EscapeEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_7)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new DefenseEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_8)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new KiteEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_9)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new SuctionEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_0)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new GetawayEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new RouteMoveEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
 	}
 
 	//マップチップ更新
@@ -146,15 +206,15 @@ void GameScene::Update() {
 
 
 	//入力更新
-	Input *input = Input::GetInstance();
-	
+	Input* input = Input::GetInstance();
+
 	//ライト更新
 	light->Update();
 
 	EnemyHelperManager::GetIns()->Update();
 	//ステージ更新
 	//testStage->Update();
-	
+
 	//デバックテキスト
 
 	particleMan->Update();
@@ -190,7 +250,7 @@ void GameScene::Update() {
 			}
 		}
 	}*/
-	 
+
 	//最終更新
 	EnemyManager::GetIns()->FinalUpdate();
 	playerObject.get()->LustUpdate();
@@ -210,8 +270,7 @@ void GameScene::Update() {
 	counter++;
 }
 
-void GameScene::LastUpdate()
-{
+void GameScene::LastUpdate() {
 }
 
 void GameScene::Draw() {
@@ -256,8 +315,7 @@ void GameScene::Draw() {
 	Sprite::PreDraw(cmdList);
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
-	if (weveStartTimer > 0)
-	{
+	if (weveStartTimer > 0) 	{
 		weveSprite[weveCount]->Draw();
 	}
 	// スプライト描画後処理
