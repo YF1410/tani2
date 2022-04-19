@@ -14,6 +14,7 @@
 #include "Easing.h"
 #include "EnemyManager.h"
 #include "EnemyHelperManager.h"
+#include "Ease.h"
 
 using namespace DirectX;
 
@@ -50,22 +51,14 @@ void GameScene::Initialize() {
 	// FBXオブジェクトにカメラをセット
 	FbxObject3d::SetCamera(camera.get());
 
-	// デバッグテキスト用テクスチャ読み込み
-	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
-		assert(0);
-	}
-	// デバッグテキスト初期化
-	DebugText::GetInstance()->Initialize(debugTextTexNumber);
-
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(1, L"Resources/APEX_01.png")) {
-		assert(0);
-	}
-
 	// 背景スプライト生成
-	sprite = Sprite::Create(1, { 0.0f,0.0f });
-	sprite->SetSize({ 100.0f,100.0f });
-	sprite->SetPosition({ 100.0f,100.0f });
+	for (int i = 2; i < 5; i++)
+	{
+		std::unique_ptr<Sprite> tempsprite = Sprite::Create(i, { 0.0f,0.0f });
+		tempsprite->SetSize({ 600.0f,200.0f });
+		tempsprite->SetPosition({ 1280.0f,250.0f });
+		weveSprite.push_back(std::move(tempsprite));
+	}
 
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::Create(DirectXCommon::GetInstance()->GetDevice(), camera.get());
@@ -202,13 +195,17 @@ void GameScene::Update() {
 	EnemyManager::GetIns()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
-
 	if (playerObject.get()->GetHp() == 0) {
 		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
 	}
+	DebugText::GetInstance()->VariablePrint(0, 180, "weveCount", weveCount, 3);
 
 	//カウンターを加算
 	counter++;
+}
+
+void GameScene::LastUpdate()
+{
 }
 
 void GameScene::Draw() {
@@ -253,6 +250,10 @@ void GameScene::Draw() {
 	Sprite::PreDraw(cmdList);
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
+	if (weveStartTimer > 0)
+	{
+		weveSprite[weveCount]->Draw();
+	}
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画

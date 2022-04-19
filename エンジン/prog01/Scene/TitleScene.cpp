@@ -8,12 +8,6 @@ TitleScene::~TitleScene()
 
 void TitleScene::Initialize()
 {
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(0, L"Resources/APEX_01.png"))
-	{
-		assert(0);
-	}
-
 	// 背景スプライト生成
 	sprite = Sprite::Create(0, { 0.0f,0.0f });
 	sprite->SetSize({ 100.0f,100.0f });
@@ -32,6 +26,10 @@ void TitleScene::Update()
 	{
 		SceneManager::GetInstance()->ChangeScene("GameScene");
 	}
+}
+
+void TitleScene::LastUpdate()
+{
 }
 
 void TitleScene::Draw()

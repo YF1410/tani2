@@ -263,6 +263,7 @@
   <ItemGroup>
     <ClCompile Include="2d\DebugText.cpp" />
     <ClCompile Include="2d\Sprite.cpp" />
+    <ClCompile Include="2d\SpriteFactory.cpp" />
     <ClCompile Include="3d\FbxLoader.cpp" />
     <ClCompile Include="3d\FbxModel.cpp" />
     <ClCompile Include="3d\FbxObject3d.cpp" />
@@ -310,7 +311,6 @@
     <ClCompile Include="GameObject\GameObjCommon.cpp" />
     <ClCompile Include="GameObject\MapChip.cpp" />
     <ClCompile Include="GetawayEnemy.cpp" />
-    <ClCompile Include="HomingEnemy.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="KiteEnemy.cpp" />
     <ClCompile Include="main.cpp" />
@@ -332,6 +332,7 @@
   <ItemGroup>
     <ClInclude Include="2d\DebugText.h" />
     <ClInclude Include="2d\Sprite.h" />
+    <ClInclude Include="2d\SpriteFactory.h" />
     <ClInclude Include="3d\DirectionalLight.h" />
     <ClInclude Include="3d\FbxLoader.h" />
     <ClInclude Include="3d\FbxModel.h" />
@@ -384,7 +385,6 @@
     <ClInclude Include="GameObject\GameObjCommon.h" />
     <ClInclude Include="GameObject\MapChip.h" />
     <ClInclude Include="GetawayEnemy.h" />
-    <ClInclude Include="HomingEnemy.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="KiteEnemy.h" />
     <ClInclude Include="MimicEnemy.h" />

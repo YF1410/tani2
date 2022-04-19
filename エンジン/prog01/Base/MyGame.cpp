@@ -1,5 +1,6 @@
 #include "MyGame.h"
 #include "SceneFactory.h"
+#include "SpriteFactory.h"
 
 void MyGame::Initialize()
 {
@@ -12,6 +13,8 @@ void MyGame::Initialize()
 	SceneManager::GetInstance()->SetSceneFactory(sceneFactory);
 	//シーンマネージャーに最初のシーンをセット
 	SceneManager::GetInstance()->ChangeScene("GameScene");
+
+	SpriteFactory::GetInstance()->Initialize();
 }
 
 void MyGame::Finalize()

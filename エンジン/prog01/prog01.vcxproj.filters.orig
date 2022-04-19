@@ -284,6 +284,7 @@
     <ClCompile Include="UI.cpp">
       <Filter>ゲームシステム\Player</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="RouteMoveEnemy.cpp" />
     <ClCompile Include="CushionEnemy.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
@@ -299,13 +300,6 @@
     </ClCompile>
     <ClCompile Include="StayEnemy.cpp" />
     <ClCompile Include="EscapeEnemy.cpp" />
-<<<<<<< HEAD
-    <ClCompile Include="DefenseEnemy.cpp" />
-    <ClCompile Include="KiteEnemy.cpp" />
-    <ClCompile Include="SuctionEnemy.cpp" />
-    <ClCompile Include="GetawayEnemy.cpp" />
-    <ClCompile Include="WithdrawalEnemy.cpp" />
-=======
     <ClCompile Include="EnemyHelper.cpp">
       <Filter>ゲームシステム\Enemy\Helper</Filter>
     </ClCompile>
@@ -314,7 +308,16 @@
     </ClCompile>
     <ClCompile Include="EnemyHelperManager.cpp" />
     <ClCompile Include="BoundEnemy.cpp" />
->>>>>>> 18ec1c6c240617f5069364342773b099c6206359
+    <ClCompile Include="DefenseEnemy.cpp" />
+    <ClCompile Include="KiteEnemy.cpp" />
+    <ClCompile Include="SuctionEnemy.cpp" />
+    <ClCompile Include="GetawayEnemy.cpp" />
+    <ClCompile Include="WithdrawalEnemy.cpp" />
+=======
+    <ClCompile Include="2d\SpriteFactory.cpp">
+      <Filter>エンジンシステム\2d</Filter>
+    </ClCompile>
+>>>>>>> 75ecf79beccc78170d38b12ada629d9ae8e87ad2
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -493,6 +496,7 @@
       <Filter>エンジンシステム\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="State.h" />
+<<<<<<< HEAD
     <ClInclude Include="RouteMoveEnemy.h" />
     <ClInclude Include="CushionEnemy.h">
       <Filter>ゲームシステム\Enemy</Filter>
@@ -508,13 +512,6 @@
     </ClInclude>
     <ClInclude Include="StayEnemy.h" />
     <ClInclude Include="EscapeEnemy.h" />
-<<<<<<< HEAD
-    <ClInclude Include="DefenseEnemy.h" />
-    <ClInclude Include="KiteEnemy.h" />
-    <ClInclude Include="SuctionEnemy.h" />
-    <ClInclude Include="GetawayEnemy.h" />
-    <ClInclude Include="WithdrawalEnemy.h" />
-=======
     <ClInclude Include="EnemyHelper.h">
       <Filter>ゲームシステム\Enemy\Helper</Filter>
     </ClInclude>
@@ -523,6 +520,15 @@
     </ClInclude>
     <ClInclude Include="EnemyHelperManager.h" />
     <ClInclude Include="BoundEnemy.h" />
->>>>>>> 18ec1c6c240617f5069364342773b099c6206359
+    <ClInclude Include="DefenseEnemy.h" />
+    <ClInclude Include="KiteEnemy.h" />
+    <ClInclude Include="SuctionEnemy.h" />
+    <ClInclude Include="GetawayEnemy.h" />
+    <ClInclude Include="WithdrawalEnemy.h" />
+=======
+    <ClInclude Include="2d\SpriteFactory.h">
+      <Filter>エンジンシステム\2d</Filter>
+    </ClInclude>
+>>>>>>> 75ecf79beccc78170d38b12ada629d9ae8e87ad2
   </ItemGroup>
 </Project>

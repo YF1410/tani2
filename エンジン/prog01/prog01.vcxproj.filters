@@ -284,6 +284,9 @@
     <ClCompile Include="UI.cpp">
       <Filter>ゲームシステム\Player</Filter>
     </ClCompile>
+    <ClCompile Include="2d\SpriteFactory.cpp">
+      <Filter>エンジンシステム\2d</Filter>
+    </ClCompile>
     <ClCompile Include="RouteMoveEnemy.cpp" />
     <ClCompile Include="CushionEnemy.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
@@ -490,6 +493,9 @@
       <Filter>エンジンシステム\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="State.h" />
+    <ClInclude Include="2d\SpriteFactory.h">
+      <Filter>エンジンシステム\2d</Filter>
+    </ClInclude>
     <ClInclude Include="RouteMoveEnemy.h" />
     <ClInclude Include="CushionEnemy.h">
       <Filter>ゲームシステム\Enemy</Filter>
