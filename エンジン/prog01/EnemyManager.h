@@ -31,6 +31,9 @@ public:
 		ESCAPE,
 		DEFENSE,
 		KITE,
+		SUCTION,
+		GETAWAY,
+		ROUTEMOVE,
 		MAX
 	};
 

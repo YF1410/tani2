@@ -4,9 +4,9 @@ class SuctionEnemy :
     public Enemy {
 public:
 	SuctionEnemy(XMFLOAT3 startPos, PlayerObject* targetPos);
-	void Suction();
+	void Move() override;
 private:
-	bool suctioning;
 	float suctioningRange;
+	float attackRange;
 };
 

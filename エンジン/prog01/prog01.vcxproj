@@ -305,6 +305,7 @@
     <ClCompile Include="GameObject\Ease.cpp" />
     <ClCompile Include="GameObject\GameObjCommon.cpp" />
     <ClCompile Include="GameObject\MapChip.cpp" />
+    <ClCompile Include="GetawayEnemy.cpp" />
     <ClCompile Include="HomingEnemy.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="KiteEnemy.cpp" />
@@ -322,6 +323,7 @@
     <ClCompile Include="StayEnemy.cpp" />
     <ClCompile Include="SuctionEnemy.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="WithdrawalEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\DebugText.h" />
@@ -373,6 +375,7 @@
     <ClInclude Include="GameObject\Ease.h" />
     <ClInclude Include="GameObject\GameObjCommon.h" />
     <ClInclude Include="GameObject\MapChip.h" />
+    <ClInclude Include="GetawayEnemy.h" />
     <ClInclude Include="HomingEnemy.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="KiteEnemy.h" />
@@ -395,6 +398,7 @@
     <ClInclude Include="UI.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="WithdrawalEnemy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,6 +9,9 @@
 #include "EscapeEnemy.h"
 #include "DefenseEnemy.h"
 #include "KiteEnemy.h"
+#include "SuctionEnemy.h"
+#include "GetawayEnemy.h"
+#include "RouteMoveEnemy.h"
 
 EnemyManager *EnemyManager::GetIns()
 {
@@ -20,7 +23,7 @@ void EnemyManager::Initialize(PlayerObject *player)
 {
 	this->player = player;
 	//ここでエネミーを追加しておく
-	spawnData.push_back(new SPAWN_DATA(KITE,5,Vector3(1,0,0),5));
+	spawnData.push_back(new SPAWN_DATA(ROUTEMOVE,5,Vector3(1,0,0),5));
 	
 }
 
@@ -30,7 +33,7 @@ void EnemyManager::Update()
 	if (spawnData.size() != 0) {
 		while ((int)GameScene::counter / 60 == spawnData[0]->time) {
 			for (int i = 0; i <= spawnData[0]->num; i++) {
-				Vector3 spawnPos = spawnData[0]->pos.Normal() * 2500 + Vector3((rand() % 100 - 50),0, (rand() % 100 - 50)) + player->GetPos();
+				Vector3 spawnPos =spawnData[0]->pos.Normal() * 2500 + Vector3((rand() % 100 - 50),0, (rand() % 100 - 50)) + player->GetPos();
 				switch (spawnData[0]->type)
 				{
 				case MIMIC:
@@ -53,6 +56,15 @@ void EnemyManager::Update()
 					break;
 				case KITE:
 					enemys.push_back(new KiteEnemy(spawnPos, player));
+					break;
+				case SUCTION:
+					enemys.push_back(new SuctionEnemy(spawnPos, player));
+					break;
+				case GETAWAY:
+					enemys.push_back(new GetawayEnemy(spawnPos, player));
+					break;
+				case ROUTEMOVE:
+					enemys.push_back(new RouteMoveEnemy(spawnPos, player));
 					break;
 				default:
 					enemys.push_back(new Enemy(spawnPos, player));

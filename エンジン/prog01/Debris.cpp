@@ -83,6 +83,10 @@ void Debris::Update()
 			state = STAY;
 		}
 		break;
+	case Debris::SUCTION:
+			velocity *= 10;
+		
+		break;
 	default:
 		break;
 	}

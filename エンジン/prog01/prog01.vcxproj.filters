@@ -302,6 +302,8 @@
     <ClCompile Include="DefenseEnemy.cpp" />
     <ClCompile Include="KiteEnemy.cpp" />
     <ClCompile Include="SuctionEnemy.cpp" />
+    <ClCompile Include="GetawayEnemy.cpp" />
+    <ClCompile Include="WithdrawalEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -501,5 +503,7 @@
     <ClInclude Include="DefenseEnemy.h" />
     <ClInclude Include="KiteEnemy.h" />
     <ClInclude Include="SuctionEnemy.h" />
+    <ClInclude Include="GetawayEnemy.h" />
+    <ClInclude Include="WithdrawalEnemy.h" />
   </ItemGroup>
 </Project>

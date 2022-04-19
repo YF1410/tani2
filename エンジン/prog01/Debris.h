@@ -29,6 +29,7 @@ public:
 		STAY,			//何もしない
 		ATTACK,			//攻撃状態
 		RETURN,			//回収
+		SUCTION,
 	}state;
 public:		//衝突時関係
 	//衝突時コールバック
@@ -50,6 +51,10 @@ public:		//衝突時関係
 	//サイズを取得
 	float GetSize() { return size; }
 
+	void SetVelocity(Vector3 velocity) { this->velocity = velocity; }
+	STATE GetState() { return state; }
+	void SetState(STATE state) { this->state = state; }
+
 	//生存フラグ
 	bool isAlive;
 	//攻撃状態
@@ -64,6 +69,11 @@ public:		//衝突時関係
 	static std::vector<Debris *> debris;
 
 	bool isAttackFlame;
+
+
+	//衝突用
+	//ダメージを受ける
+	void Damage(float damage);
 private:
 	//空気抵抗
 	Vector3 airResistance;
@@ -78,10 +88,6 @@ private:
 	SphereCollider *hitCollider;
 	//攻撃判定
 	SphereCollider *attackCollider;
-
-	//衝突用
-	//ダメージを受ける
-	void Damage(float damage);
 
 	bool reversFlag;
 
