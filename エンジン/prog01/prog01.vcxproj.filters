@@ -299,6 +299,9 @@
     </ClCompile>
     <ClCompile Include="StayEnemy.cpp" />
     <ClCompile Include="EscapeEnemy.cpp" />
+    <ClCompile Include="DefenseEnemy.cpp" />
+    <ClCompile Include="KiteEnemy.cpp" />
+    <ClCompile Include="SuctionEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -495,5 +498,8 @@
     </ClInclude>
     <ClInclude Include="StayEnemy.h" />
     <ClInclude Include="EscapeEnemy.h" />
+    <ClInclude Include="DefenseEnemy.h" />
+    <ClInclude Include="KiteEnemy.h" />
+    <ClInclude Include="SuctionEnemy.h" />
   </ItemGroup>
 </Project>

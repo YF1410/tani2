@@ -296,6 +296,7 @@
     <ClCompile Include="Collision\SphereCollider.cpp" />
     <ClCompile Include="CushionEnemy.cpp" />
     <ClCompile Include="Debris.cpp" />
+    <ClCompile Include="DefenseEnemy.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
@@ -306,6 +307,7 @@
     <ClCompile Include="GameObject\MapChip.cpp" />
     <ClCompile Include="HomingEnemy.cpp" />
     <ClCompile Include="Input\Input.cpp" />
+    <ClCompile Include="KiteEnemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MimicEnemy.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
@@ -318,6 +320,7 @@
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="StayEnemy.cpp" />
+    <ClCompile Include="SuctionEnemy.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -361,6 +364,7 @@
     <ClInclude Include="Collision\SphereCollider.h" />
     <ClInclude Include="CushionEnemy.h" />
     <ClInclude Include="Debris.h" />
+    <ClInclude Include="DefenseEnemy.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
@@ -371,6 +375,7 @@
     <ClInclude Include="GameObject\MapChip.h" />
     <ClInclude Include="HomingEnemy.h" />
     <ClInclude Include="Input\Input.h" />
+    <ClInclude Include="KiteEnemy.h" />
     <ClInclude Include="MimicEnemy.h" />
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="PointLight.h" />
@@ -386,6 +391,7 @@
     <ClInclude Include="SlimeMath.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StayEnemy.h" />
+    <ClInclude Include="SuctionEnemy.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="State.h" />

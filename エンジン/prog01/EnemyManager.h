@@ -29,6 +29,8 @@ public:
 		AVOIDANCE,
 		RANDOM_MOVE,
 		ESCAPE,
+		DEFENSE,
+		KITE,
 		MAX
 	};
 
