@@ -33,7 +33,13 @@ void ModelManager::Initialize()
 
 
 
-	LoadModel(ENEMY, "Enemy"/*_break"*/);
+	LoadModel(ENEMY_MACARON, "macaron"/*_break"*/);
+	model[ENEMY_MACARON].get()->SetMetalness(0.0f);
+	model[ENEMY_MACARON].get()->SetSpecular(0.1f);
+	model[ENEMY_MACARON].get()->SetRoughness(0.1f);
+	model[ENEMY_MACARON].get()->TransferMaterial();
+
+
 }
 
 void ModelManager::LoadModel(const ModelName modelName, std::string fileName)

@@ -2,17 +2,8 @@
 #include "GameScene.h"
 #include "DebugText.h"
 
-#include "MimicEnemy.h"
-#include "CushionEnemy.h"
-#include "AvoidanceEnemy.h"
-#include "RandomMoveEnemy.h"
-#include "EscapeEnemy.h"
-#include "DefenseEnemy.h"
-#include "KiteEnemy.h"
-#include "SuctionEnemy.h"
-#include "GetawayEnemy.h"
-#include "RouteMoveEnemy.h"
-#include "BoundEnemy.h"
+
+std::vector<Enemy *> EnemyManager::enemys;
 
 EnemyManager *EnemyManager::GetIns()
 {
@@ -24,7 +15,7 @@ void EnemyManager::Initialize(PlayerObject *player)
 {
 	this->player = player;
 	//ここでエネミーを追加しておく
-	spawnData.push_back(new SPAWN_DATA(BOUNCE,5,Vector3(1,0,0),1));
+	spawnData.push_back(new SPAWN_DATA(AVOIDANCE,5,Vector3(1,0,0),1));
 	//spawnData.push_back(new SPAWN_DATA(ESCAPE,5,Vector3(0,0,1),5));
 	//spawnData.push_back(new SPAWN_DATA(ESCAPE,5,Vector3(1,0,1),5));
 	//spawnData.push_back(new SPAWN_DATA(ESCAPE,5,Vector3(-1,0,0),5));

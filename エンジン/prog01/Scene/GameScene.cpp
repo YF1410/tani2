@@ -135,6 +135,12 @@ void GameScene::Update() {
 
 	camera->Update();
 
+
+	if (Input::GetInstance()->TriggerKey(DIK_1)) {
+		EnemyManager::enemys.push_back(new AvoidanceEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+
+	}
+
 	//マップチップ更新
 	//MapChip::GetInstance()->Update(MapChip::TEST_MAP);
 

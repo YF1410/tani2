@@ -5,6 +5,14 @@
 #include "Time.h"
 #include <vector>
 
+#include "MimicEnemy.h"
+#include "CushionEnemy.h"
+#include "AvoidanceEnemy.h"
+#include "RandomMoveEnemy.h"
+#include "EscapeEnemy.h"
+#include "BoundEnemy.h"
+
+
 class EnemyManager
 {
 private:
@@ -59,7 +67,7 @@ private:
 
 public:
 	PlayerObject *player;
-	std::vector<Enemy *> enemys;
+	static std::vector<Enemy *> enemys;
 
 };
 

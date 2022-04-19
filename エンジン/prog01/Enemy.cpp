@@ -11,7 +11,7 @@ using namespace DirectX;
 
 Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 	GameObjCommon(
-		ModelManager::ENEMY,	//エネミーモデルをセット
+		ModelManager::ENEMY_MACARON,	//エネミーモデルをセット
 		GameObjCommon::ENEMY,	//エネミーとして扱う
 		false,					//重力の影響を受ける
 		startPos				//初期位置をセット
@@ -244,6 +244,7 @@ void Enemy::Damage(float damage)
 
 int Enemy::CauseDamage()
 {
+	Attack();
 	return attackPow;
 }
 
