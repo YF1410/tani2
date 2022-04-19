@@ -174,7 +174,7 @@ void PlayerObject::Update()
 			startVec.AddRotationY(shotRad);
 			//startVec = startVec + offset;
 
-			velocity += velocity.Normal() * 30;
+			velocity += velocity.Normal() * 20;
 			//Debrisのコンテナに追加
 			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
 		}
@@ -204,7 +204,7 @@ void PlayerObject::Update()
 	pushBackCollider->SetRadius(scalef * 120.0f);
 	toMapChipCollider->SetRadius( scalef * 120.0f, scalef * 120.0f);
 	//移動量を適応
-	Move();
+	PosAddVelocity();
 	//移動量からブロードコライダーを更新
 	broadSphereCollider->SetRadius(/*velocity.Length() + pushBackCollider->GetRadius()*/scalef * 120.0f);
 

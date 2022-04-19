@@ -21,12 +21,26 @@ public:
 	void Adaptation();
 	void Draw();
 
+	enum ENEMY_TYPE
+	{
+		HOMING,
+		CUSHION,
+		MIMIC,
+		AVOIDANCE,
+		RANDOM_MOVE,
+		ESCAPE,
+		MAX
+	};
+
 public:
 	struct SPAWN_DATA {
+		ENEMY_TYPE type;
 		int time;
 		Vector3 pos;
 		int num;
-		SPAWN_DATA(int time,Vector3 pos,int num) {
+
+		SPAWN_DATA(ENEMY_TYPE type,int time,Vector3 pos,int num) {
+			this->type = type;
 			this->time = time;
 			this->pos = pos;
 			this->num = num;

@@ -2,6 +2,12 @@
 #include "GameScene.h"
 #include "DebugText.h"
 
+#include "MimicEnemy.h"
+#include "CushionEnemy.h"
+#include "AvoidanceEnemy.h"
+#include "RandomMoveEnemy.h"
+#include "EscapeEnemy.h"
+
 EnemyManager *EnemyManager::GetIns()
 {
 	static EnemyManager instance;
@@ -12,28 +18,39 @@ void EnemyManager::Initialize(PlayerObject *player)
 {
 	this->player = player;
 	//ここでエネミーを追加しておく
-	spawnData.push_back(new SPAWN_DATA(5,Vector3(1,0,0),5));
-	spawnData.push_back(new SPAWN_DATA(5,Vector3(-1,0,0),5));
-	spawnData.push_back(new SPAWN_DATA(7,Vector3(1,0,0),5));
-	spawnData.push_back(new SPAWN_DATA(7,Vector3(-1,0,0),5));
-	spawnData.push_back(new SPAWN_DATA(10,Vector3(1,0,0),5));
-	spawnData.push_back(new SPAWN_DATA(10,Vector3(-1,0,0),5));
+	spawnData.push_back(new SPAWN_DATA(ESCAPE,5,Vector3(1,0,0),5));
 	
-	spawnData.push_back(new SPAWN_DATA(14,Vector3(0,0,1),10));
-	spawnData.push_back(new SPAWN_DATA(14,Vector3(0,0,-1),10));
-	
-	for (int i = 15; i <= 100; i++) {
-		spawnData.push_back(new SPAWN_DATA(i, Vector3(rand() % 10 - 5, 0, rand() % 10 - 5),10));
-	}
 }
 
 void EnemyManager::Update()
 {
+	//追加
 	if (spawnData.size() != 0) {
 		while ((int)GameScene::counter / 60 == spawnData[0]->time) {
 			for (int i = 0; i <= spawnData[0]->num; i++) {
 				Vector3 spawnPos = spawnData[0]->pos.Normal() * 2500 + Vector3((rand() % 100 - 50),0, (rand() % 100 - 50)) + player->GetPos();
-				enemys.push_back(new Enemy(spawnPos, player));
+				switch (spawnData[0]->type)
+				{
+				case MIMIC:
+					enemys.push_back(new MimicEnemy(spawnPos, player));
+					break;
+				case CUSHION:
+					enemys.push_back(new CushionEnemy(spawnPos, player));
+					break;
+				case AVOIDANCE:
+					enemys.push_back(new AvoidanceEnemy(spawnPos, player));
+					break;
+				case RANDOM_MOVE:
+					enemys.push_back(new RandomMoveEnemy(spawnPos, player));
+					break;
+				case ESCAPE:
+					enemys.push_back(new EscapeEnemy(spawnPos, player));
+					break;
+				default:
+					enemys.push_back(new Enemy(spawnPos, player));
+					break;
+				}
+				
 			}
 
 			delete spawnData[0];
@@ -43,34 +60,6 @@ void EnemyManager::Update()
 			}
 		}
 	}
-	//if (GameScene::counter == spawnData.begin()->time) {
-
-		//float Rad;
-		//for (int i = 0; i < 2; i++) {
-		//	Rad = XMConvertToRadians(rand() % 360);
-		//	Vector3 normal = {
-		//		static_cast<float>(cos(Rad)),
-		//		0,
-		//		static_cast<float>(sin(Rad))
-		//	};
-		//	Vector3 spawnPos = normal.Normal() * 2000 + player->GetPos();
-		//	//マップ外に生成しない
-		//	if (spawnPos.x < 400) {
-		//		spawnPos.x = 400;
-		//	}
-		//	if (MapChip::GetInstance()->GetMapData().wide * 200 - 400 < spawnPos.x) {
-		//		spawnPos.x = MapChip::GetInstance()->GetMapData().wide * 200 - 400;
-		//	}
-		//	if (-(MapChip::GetInstance()->GetMapData().high * 200 - 400) > spawnPos.z) {
-		//		spawnPos.z = -(MapChip::GetInstance()->GetMapData().high * 200 ) + 400;
-		//	}
-		//	if (spawnPos.z > -400) {
-		//		spawnPos.z = -400;
-		//	}
-		//	enemys.push_back(new Enemy(spawnPos, player));
-		//}
-	//}
-
 
 	//削除
 	for (int i = enemys.size() - 1; i >= 0; i--) {

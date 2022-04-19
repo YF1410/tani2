@@ -51,7 +51,7 @@ void GameObjCommon::LustUpdate()
 {
 }
 
-void GameObjCommon::Move()
+void GameObjCommon::PosAddVelocity()
 {
 	oldPos = pos;
 	if (isGravity) {

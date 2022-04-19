@@ -22,7 +22,7 @@ public:
 	virtual void LustUpdate() override;
 
 	//衝突時コールバック
-	void OnCollision(const CollisionInfo &info) override;
+	virtual void OnCollision(const CollisionInfo &info) override;
 
 public:		//当たり判定関係
 	//ダメージを与える
@@ -38,7 +38,9 @@ public:		//当たり判定関係
 	bool isAlive;
 
 
-private: // メンバ変数
+protected: // メンバ変数
+	//移動処理
+	virtual void Move();
 
 	//ダメージを受ける
 	void Damage(float damage);

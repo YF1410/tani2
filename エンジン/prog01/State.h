@@ -9,10 +9,10 @@ struct STATE
 
 	bool Start() {
 		if(can){
-		can = false;
-		is = true;
-		timer = interval;
-		return true;
+			can = false;
+			is = true;
+			timer = interval;
+			return true;
 		}
 		return false;
 	}

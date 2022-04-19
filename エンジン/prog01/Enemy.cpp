@@ -65,10 +65,7 @@ void Enemy::Update() {
 	penalty = { 0,0,0 };
 
 	//通常時処理（条件式があればフラグで管理する）
-	targetVec = Vector3(player->GetPos() - pos);
-	targetVec.y = 0;
-	velocity += targetVec.Normal() * moveSpeed;
-
+	Move();
 
 	//共通処理
 	//無敵時間タイマーを管理
@@ -105,7 +102,7 @@ void Enemy::Update() {
 	//攻撃インターバル処理
 	attack.Intervel();
 	//移動をいったん適応
-	Move();
+	PosAddVelocity();
 
 }
 
@@ -219,6 +216,13 @@ void Enemy::OnCollision(const CollisionInfo &info)
 
 }
 
+
+void Enemy::Move()
+{
+	targetVec = Vector3(player->GetPos() - pos);
+	targetVec.y = 0;
+	velocity += targetVec.Normal() * moveSpeed;
+}
 
 void Enemy::Damage(float damage)
 {

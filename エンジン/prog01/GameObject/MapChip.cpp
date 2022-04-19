@@ -154,7 +154,7 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 		hit = true;
 	}
 	else if (down >= mapData[nowMap].high - 1) {
-		hitPositon.z = -(mapData[nowMap].high - 1) * chipSize - chipSize / 2;
+		hitPositon.z = -(mapData[nowMap].high - 1) * chipSize + chipSize / 2 + 1;
 		hit = true;
 	}
 	if (lef <= 0) {

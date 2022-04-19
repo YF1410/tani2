@@ -88,7 +88,7 @@ void Debris::Update()
 	}
 
 	//移動量を適応
-	Move();
+	PosAddVelocity();
 
 	if (state != RETURN) {
 		//マップチップとの当たり判定

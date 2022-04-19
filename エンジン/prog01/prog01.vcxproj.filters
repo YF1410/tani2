@@ -281,6 +281,24 @@
     <ClCompile Include="UI.cpp">
       <Filter>ゲームシステム\Player</Filter>
     </ClCompile>
+    <ClCompile Include="RouteMoveEnemy.cpp" />
+    <ClCompile Include="CushionEnemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="MimicEnemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="AvoidanceEnemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="RandomMoveEnemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HomingEnemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="StayEnemy.cpp" />
+    <ClCompile Include="EscapeEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -459,5 +477,23 @@
       <Filter>エンジンシステム\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="State.h" />
+    <ClInclude Include="RouteMoveEnemy.h" />
+    <ClInclude Include="CushionEnemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="MimicEnemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="AvoidanceEnemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomMoveEnemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HomingEnemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="StayEnemy.h" />
+    <ClInclude Include="EscapeEnemy.h" />
   </ItemGroup>
 </Project>
