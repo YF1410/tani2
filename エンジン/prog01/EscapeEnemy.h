@@ -6,6 +6,7 @@ class EscapeEnemy :
 public:
 	EscapeEnemy(XMFLOAT3 startPos, PlayerObject *targetPos);
 	void Move() override;
+	void Attack() override;
 private:
 	bool homing;
 	float homingRange;

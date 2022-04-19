@@ -7,6 +7,8 @@
 #include "PlayerObject.h"
 #include "Box2DCollider.h"
 #include "State.h"
+#include "Debris.h"
+
 
 class Enemy :
 	public GameObjCommon
@@ -26,7 +28,7 @@ public:
 
 public:		//当たり判定関係
 	//ダメージを与える
-	int Attack();
+	int CauseDamage();
 	//攻撃フラグ
 	STATE attack;
 	//与えられるダメージ
@@ -41,6 +43,7 @@ public:		//当たり判定関係
 protected: // メンバ変数
 	//移動処理
 	virtual void Move();
+	virtual void Attack();
 
 	//ダメージを受ける
 	void Damage(float damage);

@@ -92,6 +92,9 @@
     <Filter Include="エンジンシステム\GameObject\GameObject">
       <UniqueIdentifier>{3fff4a70-879f-4259-996f-4ed74b8945d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ゲームシステム\Enemy\Helper">
+      <UniqueIdentifier>{f48377bc-dd3b-4a38-b476-9b33e6605920}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -294,11 +297,16 @@
     <ClCompile Include="RandomMoveEnemy.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="HomingEnemy.cpp">
-      <Filter>ゲームシステム\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="StayEnemy.cpp" />
     <ClCompile Include="EscapeEnemy.cpp" />
+    <ClCompile Include="EnemyHelper.cpp">
+      <Filter>ゲームシステム\Enemy\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>ゲームシステム\Enemy\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyHelperManager.cpp" />
+    <ClCompile Include="BoundEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -490,10 +498,15 @@
     <ClInclude Include="RandomMoveEnemy.h">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="HomingEnemy.h">
-      <Filter>ゲームシステム\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="StayEnemy.h" />
     <ClInclude Include="EscapeEnemy.h" />
+    <ClInclude Include="EnemyHelper.h">
+      <Filter>ゲームシステム\Enemy\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>ゲームシステム\Enemy\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyHelperManager.h" />
+    <ClInclude Include="BoundEnemy.h" />
   </ItemGroup>
 </Project>
