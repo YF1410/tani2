@@ -12,6 +12,7 @@
 #include "SuctionEnemy.h"
 #include "GetawayEnemy.h"
 #include "RouteMoveEnemy.h"
+#include "BoundEnemy.h"
 
 EnemyManager *EnemyManager::GetIns()
 {
@@ -23,7 +24,12 @@ void EnemyManager::Initialize(PlayerObject *player)
 {
 	this->player = player;
 	//ここでエネミーを追加しておく
-	spawnData.push_back(new SPAWN_DATA(ROUTEMOVE,5,Vector3(1,0,0),5));
+	spawnData.push_back(new SPAWN_DATA(BOUNCE,5,Vector3(1,0,0),1));
+	//spawnData.push_back(new SPAWN_DATA(ESCAPE,5,Vector3(0,0,1),5));
+	//spawnData.push_back(new SPAWN_DATA(ESCAPE,5,Vector3(1,0,1),5));
+	//spawnData.push_back(new SPAWN_DATA(ESCAPE,5,Vector3(-1,0,0),5));
+	//spawnData.push_back(new SPAWN_DATA(ESCAPE,5,Vector3(0,0,-1),5));
+	//spawnData.push_back(new SPAWN_DATA(ESCAPE,5,Vector3(-1,0,-1),5));
 	
 }
 
@@ -32,8 +38,8 @@ void EnemyManager::Update()
 	//追加
 	if (spawnData.size() != 0) {
 		while ((int)GameScene::counter / 60 == spawnData[0]->time) {
-			for (int i = 0; i <= spawnData[0]->num; i++) {
-				Vector3 spawnPos =spawnData[0]->pos.Normal() * 2500 + Vector3((rand() % 100 - 50),0, (rand() % 100 - 50)) + player->GetPos();
+			for (int i = 0; i < spawnData[0]->num; i++) {
+				Vector3 spawnPos = spawnData[0]->pos.Normal() * 2500 + Vector3((rand() % 100 - 50),0, (rand() % 100 - 50)) + player->GetPos();
 				switch (spawnData[0]->type)
 				{
 				case MIMIC:
@@ -41,6 +47,9 @@ void EnemyManager::Update()
 					break;
 				case CUSHION:
 					enemys.push_back(new CushionEnemy(spawnPos, player));
+					break;
+				case BOUNCE:
+					enemys.push_back(new BoundEnemy(spawnPos, player));
 					break;
 				case AVOIDANCE:
 					enemys.push_back(new AvoidanceEnemy(spawnPos, player));

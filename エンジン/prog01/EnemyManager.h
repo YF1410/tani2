@@ -25,6 +25,7 @@ public:
 	{
 		HOMING,
 		CUSHION,
+		BOUNCE,
 		MIMIC,
 		AVOIDANCE,
 		RANDOM_MOVE,

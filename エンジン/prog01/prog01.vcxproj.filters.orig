@@ -80,6 +80,21 @@
     <Filter Include="ゲームシステム\Enemy">
       <UniqueIdentifier>{4f3ab6b3-ec8b-4fa4-bab6-d8a15099c876}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ゲームシステム\Stage">
+      <UniqueIdentifier>{f68a34b1-5524-416a-b6dd-c77f8ef6d308}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="エンジンシステム\Collision\Collider3d">
+      <UniqueIdentifier>{0e50f6de-3233-4dde-936c-da96a22a9fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="エンジンシステム\Collision\Collider2d">
+      <UniqueIdentifier>{2a2180a3-83be-4f6e-aaa2-613ff38ddf2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="エンジンシステム\GameObject\GameObject">
+      <UniqueIdentifier>{3fff4a70-879f-4259-996f-4ed74b8945d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ゲームシステム\Enemy\Helper">
+      <UniqueIdentifier>{f48377bc-dd3b-4a38-b476-9b33e6605920}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -122,6 +137,12 @@
     </FxCompile>
     <FxCompile Include="Resources\shaders\SpriteVS.hlsl">
       <Filter>シェーダーファイル\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PBRFBXVS.hlsl">
+      <Filter>シェーダーファイル\FBX</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PBRFBXPS.hlsl">
+      <Filter>シェーダーファイル\FBX</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -191,13 +212,7 @@
     <ClCompile Include="Collision\MeshCollider.cpp">
       <Filter>エンジンシステム\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Collision\SphereCollider.cpp">
-      <Filter>エンジンシステム\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject\ContactableObject.cpp">
-      <Filter>エンジンシステム\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject\Player.cpp">
       <Filter>エンジンシステム\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="3d\LightGroup.cpp">
@@ -236,14 +251,70 @@
     <ClCompile Include="PlayerObject.cpp">
       <Filter>ゲームシステム\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Debris.cpp" />
-<<<<<<< HEAD
-    <ClCompile Include="Enemy.cpp" />
-=======
     <ClCompile Include="Enemy.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
->>>>>>> 668177489f2abee1951198cb55ec7c7c4ffc91ea
+    <ClCompile Include="Easing.cpp">
+      <Filter>エンジンシステム</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\GameObjCommon.cpp">
+      <Filter>エンジンシステム\GameObject\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseBlock.cpp">
+      <Filter>ゲームシステム\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\SphereCollider.cpp">
+      <Filter>エンジンシステム\Collision\Collider3d</Filter>
+    </ClCompile>
+    <ClCompile Include="AABBCollider.cpp">
+      <Filter>エンジンシステム\Collision\Collider3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Debris.cpp">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckBlock.cpp">
+      <Filter>ゲームシステム\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Box2DCollider.cpp">
+      <Filter>エンジンシステム\Collision\Collider2d</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="RouteMoveEnemy.cpp" />
+    <ClCompile Include="CushionEnemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="MimicEnemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="AvoidanceEnemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="RandomMoveEnemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="StayEnemy.cpp" />
+    <ClCompile Include="EscapeEnemy.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="DefenseEnemy.cpp" />
+    <ClCompile Include="KiteEnemy.cpp" />
+    <ClCompile Include="SuctionEnemy.cpp" />
+    <ClCompile Include="GetawayEnemy.cpp" />
+    <ClCompile Include="WithdrawalEnemy.cpp" />
+=======
+    <ClCompile Include="EnemyHelper.cpp">
+      <Filter>ゲームシステム\Enemy\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>ゲームシステム\Enemy\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyHelperManager.cpp" />
+    <ClCompile Include="BoundEnemy.cpp" />
+>>>>>>> 18ec1c6c240617f5069364342773b099c6206359
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -306,9 +377,6 @@
     <ClInclude Include="Base\WinApp.h">
       <Filter>エンジンシステム\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Collision\SphereCollider.h">
-      <Filter>エンジンシステム\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="Collision\BaseCollider.h">
       <Filter>エンジンシステム\Collision</Filter>
     </ClInclude>
@@ -329,9 +397,6 @@
     </ClInclude>
     <ClInclude Include="Collision\RaycastHit.h">
       <Filter>エンジンシステム\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject\Player.h">
-      <Filter>エンジンシステム\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="GameObject\ContactableObject.h">
       <Filter>エンジンシステム\GameObject</Filter>
@@ -369,9 +434,6 @@
     <ClInclude Include="GameObject\Ease.h">
       <Filter>エンジンシステム\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject\MapChip.h">
-      <Filter>エンジンシステム\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Base\BaseScene.h">
       <Filter>ゲームシステム\Besa\Scene</Filter>
     </ClInclude>
@@ -391,13 +453,76 @@
     <ClInclude Include="PlayerObject.h">
       <Filter>ゲームシステム\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Debris.h" />
-<<<<<<< HEAD
-    <ClInclude Include="Enemy.h" />
-=======
     <ClInclude Include="Enemy.h">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
->>>>>>> 668177489f2abee1951198cb55ec7c7c4ffc91ea
+    <ClInclude Include="SlimeMath.h">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Easing.h">
+      <Filter>エンジンシステム</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\GameObjCommon.h">
+      <Filter>エンジンシステム\GameObject\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseBlock.h">
+      <Filter>ゲームシステム\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\SphereCollider.h">
+      <Filter>エンジンシステム\Collision\Collider3d</Filter>
+    </ClInclude>
+    <ClInclude Include="AABBCollider.h">
+      <Filter>エンジンシステム\Collision\Collider3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Debris.h">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckBlock.h">
+      <Filter>ゲームシステム\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Box2DCollider.h">
+      <Filter>エンジンシステム\Collision\Collider2d</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\MapChip.h">
+      <Filter>エンジンシステム\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h" />
+    <ClInclude Include="RouteMoveEnemy.h" />
+    <ClInclude Include="CushionEnemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="MimicEnemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="AvoidanceEnemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomMoveEnemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="StayEnemy.h" />
+    <ClInclude Include="EscapeEnemy.h" />
+<<<<<<< HEAD
+    <ClInclude Include="DefenseEnemy.h" />
+    <ClInclude Include="KiteEnemy.h" />
+    <ClInclude Include="SuctionEnemy.h" />
+    <ClInclude Include="GetawayEnemy.h" />
+    <ClInclude Include="WithdrawalEnemy.h" />
+=======
+    <ClInclude Include="EnemyHelper.h">
+      <Filter>ゲームシステム\Enemy\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>ゲームシステム\Enemy\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyHelperManager.h" />
+    <ClInclude Include="BoundEnemy.h" />
+>>>>>>> 18ec1c6c240617f5069364342773b099c6206359
   </ItemGroup>
 </Project>

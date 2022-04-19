@@ -312,7 +312,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 		enemy = dynamic_cast<Enemy*>(info.object);
 		//エネミーが攻撃可能状態ならダメージ処理をする
 		if (enemy->attack.can) {
-			Damage(enemy->Attack());
+			Damage(enemy->CauseDamage());
 		}
 
 		//位置修正

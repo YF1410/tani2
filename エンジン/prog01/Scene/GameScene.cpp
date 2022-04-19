@@ -13,6 +13,7 @@
 #include "MapChip.h"
 #include "Easing.h"
 #include "EnemyManager.h"
+#include "EnemyHelperManager.h"
 
 using namespace DirectX;
 
@@ -150,6 +151,8 @@ void GameScene::Update() {
 	
 	//ライト更新
 	light->Update();
+
+	EnemyHelperManager::GetIns()->Update();
 	//ステージ更新
 	//testStage->Update();
 	
@@ -199,6 +202,7 @@ void GameScene::Update() {
 	EnemyManager::GetIns()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
+
 	if (playerObject.get()->GetHp() == 0) {
 		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
 	}
@@ -230,6 +234,7 @@ void GameScene::Draw() {
 
 #pragma region 3Dオブジェクト(FBX)描画
 	//testStage->Draw(DirectXCommon::GetInstance()->GetCommandList());
+	EnemyHelperManager::GetIns()->Draw();
 	MapChip::GetInstance()->Draw();
 	Debris::StaticDraw();
 	EnemyManager::GetIns()->Draw();

@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include "Easing.h"
-#include "Debris.h"
 #include "SlimeMath.h"
 #include "MapChip.h"
 
@@ -224,6 +223,14 @@ void Enemy::Move()
 	velocity += targetVec.Normal() * moveSpeed;
 }
 
+void Enemy::Attack()
+{
+	//UŒ‚‰Â”\‚È‚ç
+	if (attack.can) {
+		attack.Start();
+	}
+}
+
 void Enemy::Damage(float damage)
 {
 	//–³“GŠÔ’†‚Íˆ—‚ğ’†’f
@@ -235,9 +242,8 @@ void Enemy::Damage(float damage)
 	InvincibleTimer = 0;
 }
 
-int Enemy::Attack()
+int Enemy::CauseDamage()
 {
-	attack.Start();
 	return attackPow;
 }
 

@@ -282,6 +282,7 @@
     <ClCompile Include="Base\MyGame.cpp" />
     <ClCompile Include="Base\WinApp.cpp" />
     <ClCompile Include="AABBCollider.cpp" />
+    <ClCompile Include="BoundEnemy.cpp" />
     <ClCompile Include="Box2DCollider.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="CheckBlock.cpp" />
@@ -299,6 +300,9 @@
     <ClCompile Include="DefenseEnemy.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
+    <ClCompile Include="EnemyHelper.cpp" />
+    <ClCompile Include="EnemyHelperManager.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="EscapeEnemy.cpp" />
     <ClCompile Include="GameObject\ContactableObject.cpp" />
@@ -350,6 +354,7 @@
     <ClInclude Include="Base\SafeDelete.h" />
     <ClInclude Include="Base\WinApp.h" />
     <ClInclude Include="AABBCollider.h" />
+    <ClInclude Include="BoundEnemy.h" />
     <ClInclude Include="Box2DCollider.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="CheckBlock.h" />
@@ -369,6 +374,9 @@
     <ClInclude Include="DefenseEnemy.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="EnemyHelper.h" />
+    <ClInclude Include="EnemyHelperManager.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EscapeEnemy.h" />
     <ClInclude Include="GameObject\ContactableObject.h" />
