@@ -21,9 +21,9 @@ void UserInterface::Initialize(int *nowWave)
 	wave[1] = Sprite::Create(3, {0,0});
 	wave[2] = Sprite::Create(4, {0,0});
 
-	moveWave[0] = Sprite::Create(2, { 0,0 });
-	moveWave[1] = Sprite::Create(3, { 0,0 });
-	moveWave[2] = Sprite::Create(4, { 0,0 });
+	moveWave[0] = Sprite::Create(2, { 0,0 }, {1,1,1,1}, {0.5f, 0.5f});
+	moveWave[1] = Sprite::Create(3, { 0,0 }, { 1,1,1,1 }, {0.5f,0.5f});
+	moveWave[2] = Sprite::Create(4, { 0,0 }, { 1,1,1,1 }, {0.5f,0.5f});
 
 	this->nowWave = nowWave;
 	oldWave = *nowWave;
@@ -43,10 +43,10 @@ void UserInterface::Update()
 	if (isChangeWave) {
 		//’†‰›‚Ü‚Å
 		if (moveWaveTimer <= 1.0f) {
-			movePosX = Ease(Out, Quint, moveWaveTimer, WinApp::window_width, WinApp::window_width / 2);
+			movePosX = Ease(Out, Quad, moveWaveTimer, WinApp::window_width + 200, WinApp::window_width / 2);
 		}
 		else if (moveWaveTimer <= 2.0f) {
-			movePosX = Ease(In, Quint, moveWaveTimer - 1.0f,  WinApp::window_width / 2,0);
+			movePosX = Ease(In, Quad, moveWaveTimer - 1.0f,  WinApp::window_width / 2,-200);
 		}
 		else {
 			isChangeWave = false;

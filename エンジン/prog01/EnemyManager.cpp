@@ -36,7 +36,9 @@ void EnemyManager::Update()
 {
 	//ウェーブ進行
 	if (GameScene::counter % CHANGE_WAVE_TIME == 0) {
-		nowWave++;
+		if (nowWave < 2) {
+			nowWave++;
+		}
 	}
 
 	//追加
