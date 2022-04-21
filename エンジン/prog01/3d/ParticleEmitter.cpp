@@ -12,9 +12,9 @@ ParticleEmitter* ParticleEmitter::Create()
 	return particleEmitter;
 }
 
-void ParticleEmitter::Add(XMFLOAT3 position)
+void ParticleEmitter::Add(int count, int life, XMFLOAT3 position)
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < count; i++)
 	{
 		//X,Y,Z‘S‚Ä[-5.0,+5.0]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
 		this->position.x = ((float)rand() / RAND_MAX * md_pos - md_pos / 2.0f) + position.x;
@@ -28,7 +28,7 @@ void ParticleEmitter::Add(XMFLOAT3 position)
 		accel.y = -(float)rand() / RAND_MAX * md_acc;
 
 		//’Ç‰Á
-		particleMan->Add(60, this->position, velocity, accel, s_scale, e_scale, s_color, e_color);
+		particleMan->Add(life, this->position, velocity, accel, s_scale, e_scale, s_color, e_color);
 	}
 }
 
@@ -40,4 +40,12 @@ void ParticleEmitter::Update()
 void ParticleEmitter::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	particleMan->Draw(cmdList);
+}
+
+void ParticleEmitter::SetParticleManager(ParticleManager* particleMan, std::wstring fName)
+{
+	this->particleMan = particleMan;
+
+	particleMan->LoadTexture(fName);
+
 }

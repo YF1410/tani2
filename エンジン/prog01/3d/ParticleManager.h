@@ -97,7 +97,7 @@ public: // メンバ関数
 	// グラフィックパイプライン生成
 	void InitializeGraphicsPipeline();
 	// テクスチャ読み込み
-	void LoadTexture();
+	void LoadTexture(std::wstring fName = L"effect1");
 	// モデル作成
 	void CreateModel();
 

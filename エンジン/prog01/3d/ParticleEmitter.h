@@ -2,6 +2,8 @@
 
 #include "ParticleManager.h"
 
+#include <string>
+
 class ParticleEmitter
 {
 private: // エイリアス
@@ -18,7 +20,7 @@ public: // 静的メンバ関数
 
 public: // メンバ関数
 	// 追加
-	void Add(XMFLOAT3 position = { 0,0,0 });
+	void Add(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
 	// 毎フレーム処理
 	void Update();
 	// 描画
@@ -35,7 +37,7 @@ public: // メンバ関数
 	//色(RGBA)最終値の設定
 	void SetEndColor(XMFLOAT4 e_color) { this->e_color = e_color; }
 	// マネージャーの設定
-	void SetParticleManager(ParticleManager* particleMan) { this->particleMan = particleMan; }
+	void SetParticleManager(ParticleManager* particleMan, std::wstring fName = L"effect1");
 
 private: // メンバ変数
 	//座標
