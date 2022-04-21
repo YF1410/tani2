@@ -46,7 +46,7 @@ void UserInterface::Update()
 			movePosX = Ease(Out, Quint, moveWaveTimer, WinApp::window_width, WinApp::window_width / 2);
 		}
 		else if (moveWaveTimer <= 2.0f) {
-			movePosX = Ease(In, Quint, moveWaveTimer,  WinApp::window_width / 2,0);
+			movePosX = Ease(In, Quint, moveWaveTimer - 1.0f,  WinApp::window_width / 2,0);
 		}
 		else {
 			isChangeWave = false;
@@ -54,7 +54,7 @@ void UserInterface::Update()
 		moveWaveTimer += 0.02f;
 	}
 	for (int i = 0; i < 3; i++) {
-		moveWave[i].get()->SetPosition({ movePosX,WinApp::window_height });
+		moveWave[i].get()->SetPosition({ movePosX,WinApp::window_height/2 });
 	}
 }
 
