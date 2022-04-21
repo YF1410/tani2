@@ -57,7 +57,7 @@ private:
 
 private: // メンバ変数
 	
-	int size;	//質量
+	float size;	//質量
 
 	//キーボード移動用
 	float moveSpead;

@@ -16,6 +16,8 @@
 #include "EnemyHelperManager.h"
 #include "Ease.h"
 
+#include "UserInterface.h"
+
 using namespace DirectX;
 
 int GameScene::counter;
@@ -91,6 +93,9 @@ void GameScene::Initialize() {
 
 	//デブリリセット
 	Debris::StaticInitialize(playerObject.get());
+
+	//UIの初期化
+	UserInterface::GetIns()->Initialize(&EnemyManager::GetIns()->nowWave);
 }
 
 void GameScene::Finalize() {
@@ -254,7 +259,7 @@ void GameScene::Update() {
 	//最終更新
 	EnemyManager::GetIns()->FinalUpdate();
 	playerObject.get()->LustUpdate();
-
+	Debris::StaticLustUpdate();
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
 	Debris::StaticAdaptation();
@@ -264,8 +269,9 @@ void GameScene::Update() {
 	if (playerObject.get()->GetHp() == 0) {
 		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
 	}
-	DebugText::GetInstance()->VariablePrint(0, 180, "weveCount", weveCount, 3);
 
+
+	UserInterface::GetIns()->Update();
 	//カウンターを加算
 	counter++;
 }
@@ -315,12 +321,12 @@ void GameScene::Draw() {
 	Sprite::PreDraw(cmdList);
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
-	if (weveStartTimer > 0) 	{
-		weveSprite[weveCount]->Draw();
-	}
+	
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画
+
+	UserInterface::GetIns()->Draw();
 
 	Input* input = Input::GetInstance();
 	if (input->TriggerKey(DIK_C)) {
@@ -329,4 +335,5 @@ void GameScene::Draw() {
 	else if (input->TriggerKey(DIK_B)) {
 		SceneManager::GetInstance()->ChangeScene("PlayerTestScene");
 	}
+
 }

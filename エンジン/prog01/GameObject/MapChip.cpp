@@ -148,6 +148,7 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 		}
 	}
 
+
 	//マップの外にいたとき
 	if (up <= 0) {
 		hitPositon.z = -chipSize / 2;
@@ -165,6 +166,8 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 		hitPositon.x = (mapData[nowMap].wide - 1) * chipSize - chipSize / 2 - 1;
 		hit = true;
 	}
+
+
 	
 	if (hitpos != nullptr) {
 		*hitpos = hitPositon;

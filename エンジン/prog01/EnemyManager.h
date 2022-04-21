@@ -58,20 +58,27 @@ public:
 		int num;
 
 		SPAWN_DATA(ENEMY_TYPE type,int time,Vector3 pos,int num) {
-			this->type = type;
-			this->time = time;
-			this->pos = pos;
-			this->num = num;
+			this->type = type;	//エネミーの種類
+			this->time = time;	//ウェーブ開始からの生成タイミング
+			this->pos = pos;	//プレイヤーから見たスポーン位置
+			this->num = num;	//スポーン数
 		}
 	};
 
 private:
 	//スポーンデータ
-	std::vector<SPAWN_DATA*> spawnData;
+	static const int MAX_WAVE = 10;
+	std::vector<SPAWN_DATA*> spawnData[MAX_WAVE];
+	//プレイヤーポインタ
+	PlayerObject *player;
+
 
 public:
-	PlayerObject *player;
+	//敵全体のデータ
 	static std::vector<Enemy *> enemys;
 
+	//現在のウェーブ数
+	int nowWave;
+	//ウェーブごとの秒数
+	const int CHANGE_WAVE_TIME = 10 * 60;
 };
-

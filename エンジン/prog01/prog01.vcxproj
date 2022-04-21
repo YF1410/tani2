@@ -326,7 +326,7 @@
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="StayEnemy.cpp" />
     <ClCompile Include="SuctionEnemy.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
     <ClCompile Include="WithdrawalEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -403,7 +403,7 @@
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StayEnemy.h" />
     <ClInclude Include="SuctionEnemy.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="UserInterface.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="WithdrawalEnemy.h" />

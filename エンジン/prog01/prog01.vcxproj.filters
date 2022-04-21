@@ -95,6 +95,9 @@
     <Filter Include="ゲームシステム\Enemy\Helper">
       <UniqueIdentifier>{f48377bc-dd3b-4a38-b476-9b33e6605920}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ゲームシステム\Player\UI">
+      <UniqueIdentifier>{a6e7db19-7878-43e9-8dde-3f3cd1f6e1a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -281,9 +284,6 @@
     <ClCompile Include="EnemyManager.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>ゲームシステム\Player</Filter>
-    </ClCompile>
     <ClCompile Include="2d\SpriteFactory.cpp">
       <Filter>エンジンシステム\2d</Filter>
     </ClCompile>
@@ -292,9 +292,6 @@
       <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="MimicEnemy.cpp">
-      <Filter>ゲームシステム\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="AvoidanceEnemy.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="RandomMoveEnemy.cpp">
@@ -315,6 +312,12 @@
     <ClCompile Include="SuctionEnemy.cpp" />
     <ClCompile Include="GetawayEnemy.cpp" />
     <ClCompile Include="WithdrawalEnemy.cpp" />
+    <ClCompile Include="AvoidanceEnemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface.cpp">
+      <Filter>ゲームシステム\Player\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -486,9 +489,6 @@
     <ClInclude Include="EnemyManager.h">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>ゲームシステム\Player</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject\MapChip.h">
       <Filter>エンジンシステム\GameObject</Filter>
     </ClInclude>
@@ -501,9 +501,6 @@
       <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="MimicEnemy.h">
-      <Filter>ゲームシステム\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="AvoidanceEnemy.h">
       <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="RandomMoveEnemy.h">
@@ -524,5 +521,11 @@
     <ClInclude Include="SuctionEnemy.h" />
     <ClInclude Include="GetawayEnemy.h" />
     <ClInclude Include="WithdrawalEnemy.h" />
+    <ClInclude Include="AvoidanceEnemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface.h">
+      <Filter>ゲームシステム\Player\UI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

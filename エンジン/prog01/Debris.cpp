@@ -27,6 +27,8 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	//最初から攻撃状態
 	state = ATTACK;
 
+	isBoost = false;
+
 	////マップチップ用コライダー
 	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, scale.x * 150.0f, scale.x*150.0f);
 	SetNarrowCollider(toMapChipCollider);
@@ -55,7 +57,7 @@ void Debris::Update()
 	if (velocity.Length() <= 10.0f && isAttack) {
 		isFirstAttack = false;
 		isAttack = false;
-
+		isBoost = false;
 	}
 	if (velocity.Length() >= 10.0f) {
 		isAttack = true;
@@ -65,11 +67,21 @@ void Debris::Update()
 		velocity = velocity.Normal() * 1000;
 	}
 
+	if (!isAttack) {
+		size *= 0.99f;
+		scale = ConvertSizeToScale(size);
+
+	}
+	if (size < 0.01f) {
+		isAlive = false;
+	}
+
 	switch (state)
 	{
 	case Debris::NOUPDATE:
 		break;
 	case Debris::STAY:
+
 		break;
 	case Debris::ATTACK:
 
@@ -94,35 +106,62 @@ void Debris::Update()
 	//移動量を適応
 	PosAddVelocity();
 
-	if (state != RETURN) {
-		//マップチップとの当たり判定
-		toMapChipCollider->Update();
-		Vector3 hitPos = { 0,0,0 };
-		Vector3 oldPos;
-		if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &velocity, &hitPos)) {
-			Vector3 normal = { 0,0,0 };
 
-			if (hitPos.x != 0) {
-				int vec = 1;	//向き
-				if (0 < velocity.x) {
-					vec = -1;
-				}
-				pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
-				normal.x = vec;
+}
+
+void Debris::LustUpdate()
+{
+
+	//マップチップとの当たり判定
+	toMapChipCollider->Update();
+	Vector3 hitPos = { 0,0,0 };
+	Vector3 moveVec = velocity + penalty;
+	//上下左右
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos)) {
+		Vector3 normal = { 0,0,0 };
+
+		if (hitPos.x != 0) {
+			int vec = 1;	//向き
+			if (0 < moveVec.x) {
+				vec = -1;
 			}
-			if (hitPos.z != 0) {
-				int vec = 1;	//向き
-				if (velocity.z < 0) {
-					vec = -1;
-				}
-				pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
-				normal.z = vec;
-			}
-			normal.Normalize();
-			HitWall(hitPos, normal);
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
+			normal.x = vec;
 		}
+		if (hitPos.z != 0) {
+			int vec = 1;	//向き
+			if (moveVec.z < 0) {
+				vec = -1;
+			}
+			pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
+			normal.z = vec;
+		}
+		normal.Normalize();
+		HitWall(hitPos, normal);
+		state = ATTACK;
 	}
-
+	//角
+	//else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
+		//Vector3 normal = { 0,0,0 };
+		//if (hitPos.x != 0) {
+		//	int vec = 1;	//向き
+		//	if (0 < velocity.x) {
+		//		vec = -1;
+		//	}
+		//	pos.x = hitPos.x;
+		//	normal.x = vec;
+		//}
+		//if (hitPos.z != 0) {
+		//	int vec = 1;	//向き
+		//	if (velocity.z < 0) {
+		//		vec = -1;
+		//	}
+		//	pos.z = hitPos.z;
+		//	normal.z = vec;
+		//}
+		//normal.Normalize();
+		//velocity = CalcWallScratchVector(velocity, normal);
+	//}
 }
 
 void Debris::VelocityReset()
@@ -150,6 +189,14 @@ void Debris::StaticUpdate()
 	//更新
 	for (int i = 0; i < debris.size(); i++) {
 		debris[i]->Update();
+	}
+}
+
+void Debris::StaticLustUpdate()
+{
+	//更新
+	for (int i = 0; i < debris.size(); i++) {
+		debris[i]->LustUpdate();
 	}
 }
 
@@ -215,6 +262,11 @@ void Debris::SuckedPlayer(const Vector3 &playerPos,const float &suckedRadius)
 void Debris::HitWall(const XMVECTOR &hitPos, const Vector3 &normal)
 {
 	velocity = CalcReflectVector(velocity, normal);
+	if (!isBoost) {
+		velocity *= 3.0f;
+		isBoost = true;
+	}
+
 }
 
 

@@ -87,7 +87,6 @@ private: // ƒƒ“ƒo•Ï”
 	std::vector<std::unique_ptr<Object3d>> objects;
 
 	int weveStartTimer = 0;
-	int weveCount = -1;
 	float upTimer = 0.0f;
 	bool changeFlag = false;
 	bool endFlag = false;

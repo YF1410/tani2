@@ -185,11 +185,11 @@ void PlayerObject::Update()
 
 	//回収
 	if (input->TriggerKey(DIK_Q)|| input->TriggerPadButton(BUTTON_B)) {
-		if (collect.Start()) {
+		//if (collect.Start()) {
 			for (int i = 0; i < Debris::debris.size(); i++) {
 				Debris::debris[i]->ReturnStart();
 			}
-		}
+		//}
 	}
 	//攻撃インターバル
 	attack.Intervel();

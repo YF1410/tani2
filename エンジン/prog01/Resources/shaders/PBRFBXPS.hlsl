@@ -159,5 +159,5 @@ float4 main(VSOutput input) : SV_TARGET
 		finalRGB += BRDF(dirLights[i].lightv, eyedir) * dirLights[i].lightcolor;
 	}
 	
-	return float4(finalRGB, alpha) * float4(color, 1);
+	return float4(finalRGB, alpha);
 }

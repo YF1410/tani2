@@ -15,11 +15,13 @@ public:
 	Debris(Vector3 startPos,Vector3 startVec,float size);
 	//内部更新
 	void Update();
+	void LustUpdate();
 	//移動量リセットをオーバーライド
 	void VelocityReset() override;
 	//コンテナ更新
 	static void StaticInitialize(PlayerObject *player);
 	static void StaticUpdate();
+	static void StaticLustUpdate();
 	static void StaticAdaptation();
 	static void StaticDraw();
 
@@ -92,5 +94,6 @@ private:
 	bool reversFlag;
 
 	Box2DCollider *toMapChipCollider;			//マップチップ計算用
+	bool isBoost;
 };
 
