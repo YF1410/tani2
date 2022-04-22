@@ -112,5 +112,5 @@ public:
 	//ウェーブごとの秒数
 	int waveStartTime = 0;
 
-	bool endFlag;
+	bool endFlag = false;
 };
