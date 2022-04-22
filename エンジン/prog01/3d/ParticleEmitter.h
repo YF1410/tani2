@@ -20,6 +20,7 @@ public: // 静的メンバ関数
 
 public: // メンバ関数
 	// 追加
+	void RandAdd(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
 	void Add(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
 	// 毎フレーム処理
 	void Update();
