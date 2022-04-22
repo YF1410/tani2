@@ -13,9 +13,9 @@ EnemyManager::EnemyManager(PlayerObject *player)
 
 EnemyManager::~EnemyManager()
 {
-	for (int i = enemys.size() - 1; i >= 0; i--) {
-		delete enemys[i];
-		enemys.erase(enemys.begin() + i);
+	for (auto& a : enemys)
+	{
+		delete a;
 	}
 }
 

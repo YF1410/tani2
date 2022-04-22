@@ -48,6 +48,11 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	
 }
 
+PlayerObject::~PlayerObject()
+{
+	delete coreUp;
+}
+
 
 void PlayerObject::Initialize()
 {

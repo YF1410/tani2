@@ -17,6 +17,7 @@ class PlayerObject :
 {
 public:
 	PlayerObject(XMFLOAT3 startPos);
+	~PlayerObject();
 	//‰Šú‰»
 	void Initialize() override;
 	//–ˆƒtƒŒ[ƒ€ˆ—
