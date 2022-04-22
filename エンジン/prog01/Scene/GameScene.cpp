@@ -99,14 +99,10 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Finalize() {
+	EnemyManager::GetIns()->Initialize(playerObject.get());
 }
 
 void GameScene::Update() {
-
-	if (EnemyManager::GetIns()->isEndFlag())
-	{
-		SceneManager::GetInstance()->ChangeScene("TitleScene");
-	}
 
 	//カメラ更新
 	//プレイヤーの少し上を焦点にする
@@ -334,12 +330,9 @@ void GameScene::Draw() {
 
 	UserInterface::GetIns()->Draw();
 
-	/*Input* input = Input::GetInstance();
-	if (input->TriggerKey(DIK_C)) {
-		SceneManager::GetInstance()->ChangeScene("EnemyTestScene");
+	if (EnemyManager::GetIns()->isEndFlag())
+	{
+		SceneManager::GetInstance()->ChangeScene("TitleScene");
 	}
-	else if (input->TriggerKey(DIK_B)) {
-		SceneManager::GetInstance()->ChangeScene("PlayerTestScene");
-	}*/
 
 }
