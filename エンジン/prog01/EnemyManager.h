@@ -34,6 +34,8 @@ public:
 	void Adaptation();
 	void Draw();
 
+	bool isEndFlag() { return endFlag; }
+
 	enum ENEMY_TYPE
 	{
 		HOMING,

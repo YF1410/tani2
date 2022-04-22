@@ -102,6 +102,12 @@ void GameScene::Finalize() {
 }
 
 void GameScene::Update() {
+
+	if (EnemyManager::GetIns()->isEndFlag())
+	{
+		SceneManager::GetInstance()->ChangeScene("TitleScene");
+	}
+
 	//カメラ更新
 	//プレイヤーの少し上を焦点にする
 	//カメラ更新
@@ -328,12 +334,12 @@ void GameScene::Draw() {
 
 	UserInterface::GetIns()->Draw();
 
-	Input* input = Input::GetInstance();
+	/*Input* input = Input::GetInstance();
 	if (input->TriggerKey(DIK_C)) {
 		SceneManager::GetInstance()->ChangeScene("EnemyTestScene");
 	}
 	else if (input->TriggerKey(DIK_B)) {
 		SceneManager::GetInstance()->ChangeScene("PlayerTestScene");
-	}
+	}*/
 
 }
