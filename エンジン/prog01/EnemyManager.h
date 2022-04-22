@@ -33,6 +33,7 @@ public:
 	void FinalUpdate();
 	void Adaptation();
 	void Draw();
+	void Finalize();
 
 	bool isEndFlag() { return endFlag; }
 

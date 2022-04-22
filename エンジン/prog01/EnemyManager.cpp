@@ -19,6 +19,7 @@ void EnemyManager::Initialize(PlayerObject *player)
 
 	//ウェーブ1
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
+	/*
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
@@ -37,13 +38,14 @@ void EnemyManager::Initialize(PlayerObject *player)
 	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
 	
 	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
+	*/
 
 	
 
@@ -157,4 +159,10 @@ void EnemyManager::Draw()
 	for (int i = 0; i < enemys.size(); i++) {
 		enemys[i]->Draw();
 	}
+}
+
+void EnemyManager::Finalize()
+{
+	enemys.clear();
+	spawnData->clear();
 }
