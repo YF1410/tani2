@@ -77,7 +77,6 @@ private: // メンバ変数
 	std::unique_ptr<Sprite> sprite;
 	//パーティクル
 	std::unique_ptr<ParticleManager> particleMan;
-	std::unique_ptr<ParticleManager> particleMan2;
 	ParticleEmitter* particle;
 	ParticleEmitter* particle2;
 	//オブジェクト

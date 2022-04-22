@@ -130,5 +130,5 @@ private: // Ã“Iƒƒ“ƒo•Ï”
 	Camera* camera = nullptr;
 
 private:
-		ParticleManager(ID3D12Device* device, Camera* camera);
+	ParticleManager(ID3D12Device* device, Camera* camera);
 };

@@ -60,15 +60,8 @@ void GameScene::Initialize() {
 	}
 
 	// パーティクルマネージャ生成
-	//particleMan = 
-	particleMan = particleMan->Create(DirectXCommon::GetInstance()->GetDevice(), camera.get());
-	particleMan2 = particleMan2->Create(DirectXCommon::GetInstance()->GetDevice(), camera.get());
-
-	particle = particle->Create();
-	particle2 = particle2->Create();
-
-	particle->SetParticleManager(particleMan.get(), L"APEX_01");
-	particle2->SetParticleManager(particleMan2.get());
+	particle = particle->Create(camera.get(), L"APEX_01");
+	particle2 = particle2->Create(camera.get());
 
 	//ライト生成
 	light = LightGroup::Create();

@@ -16,7 +16,7 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public: // 静的メンバ関数
-	ParticleEmitter* Create();
+	ParticleEmitter* Create(Camera* camera, std::wstring fName = L"effect1");
 
 public: // メンバ関数
 	// 追加
@@ -40,8 +40,6 @@ public: // メンバ関数
 	void SetStartScale(const float s_scale) { this->s_scale = s_scale; }
 	// スケール最終値の設定
 	void SetEndScale(const float e_scale) { this->e_scale = e_scale; }
-	// マネージャーの設定
-	void SetParticleManager(ParticleManager* particleMan, std::wstring fName = L"effect1");
 
 private: // メンバ変数
 	//座標
@@ -69,5 +67,5 @@ private: // メンバ変数
 	//重力に見立ててYのみ[-0.001f,0]でランダムに分布
 	float md_acc = 0.001f;
 
-	ParticleManager* particleMan = nullptr;
+	std::unique_ptr<ParticleManager> particleMan;
 };

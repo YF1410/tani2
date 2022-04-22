@@ -1,13 +1,18 @@
 #include "ParticleEmitter.h"
+#include "DirectXCommon.h"
 
 
-ParticleEmitter* ParticleEmitter::Create()
+ParticleEmitter* ParticleEmitter::Create(Camera* camera, std::wstring fName)
 {
 	ParticleEmitter* particleEmitter = new ParticleEmitter();
 	if (particleEmitter == nullptr)
 	{
 		return nullptr;
 	}
+
+	particleEmitter->particleMan = particleEmitter->particleMan->Create(DirectXCommon::GetInstance()->GetDevice(), camera);
+
+	particleEmitter->particleMan->LoadTexture(fName);
 
 	return particleEmitter;
 }
@@ -40,12 +45,4 @@ void ParticleEmitter::Update()
 void ParticleEmitter::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	particleMan->Draw(cmdList);
-}
-
-void ParticleEmitter::SetParticleManager(ParticleManager* particleMan, std::wstring fName)
-{
-	this->particleMan = particleMan;
-
-	particleMan->LoadTexture(fName);
-
 }
