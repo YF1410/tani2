@@ -39,6 +39,7 @@ public:
 	static MapChip* GetInstance();
 	//全ステージデータ読み込み
 	void Initialize();
+	void Filnalize();
 	//CSVファイル読み込み
 	void CsvLoad(MAP_NAME mapName, std::string fName, int mapChipMaxX, int mapChipMaxY);
 	
@@ -76,7 +77,7 @@ private:
 
 
 	//オブジェクトデータ
-	std::vector<BaseBlock *> mapChipObj[MAX];
+	std::vector<std::unique_ptr<BaseBlock>> mapChipObj[MAX];
 
 	//プレイヤーのスタートポジション
 	XMFLOAT3 startPos[MAX];

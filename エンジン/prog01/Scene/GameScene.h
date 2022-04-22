@@ -16,13 +16,14 @@
 #include "FbxModel.h"
 #include "FbxLoader.h"
 #include "PlayerObject.h"
-#include "Enemy.h"
 #include "MapChip.h"
 
 #include <vector>
 #include <memory>
 
+#include "EnemyManager.h"
 #include "BaseScene.h"
+#include "UserInterface.h"
 
 
 class CollisionManager;
@@ -82,6 +83,11 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelSphere;
 
 	std::unique_ptr<PlayerObject> playerObject;
+	//エネミーマネージャー
+	std::unique_ptr<EnemyManager> enemyManager;
+	//UI
+	std::unique_ptr<UserInterface> ui;
+
 
 	std::unique_ptr<Model> modelPlane;
 	std::vector<std::unique_ptr<Object3d>> objects;
@@ -93,10 +99,6 @@ private: // メンバ変数
 	bool showingFlag = false;
 	bool flag = false;
 
-	//ステージ
-	//std::unique_ptr<FbxObject3d> testStage;
-	//ステージのポリゴンデータ
-	//std::vector<Triangle> stagePolygon;
 
 	//ライト
 	std::unique_ptr<LightGroup> light;

@@ -12,11 +12,9 @@
 #include "Debris.h"
 #include "MapChip.h"
 #include "Easing.h"
-#include "EnemyManager.h"
 #include "EnemyHelperManager.h"
 #include "Ease.h"
 
-#include "UserInterface.h"
 
 using namespace DirectX;
 
@@ -24,7 +22,6 @@ int GameScene::counter;
 
 
 GameScene::GameScene() {
-	MapChip::GetInstance()->Initialize();
 	//マップ生成
 	MapChip::GetInstance()->SetMapName(MapChip::TEST_MAP);
 	MapChip::GetInstance()->CreateStage();
@@ -32,6 +29,9 @@ GameScene::GameScene() {
 
 	//プレイヤー生成
 	playerObject = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos());
+	enemyManager = std::make_unique<EnemyManager>(playerObject.get());
+	//UI生成
+	ui = std::make_unique<UserInterface>(&enemyManager->nowWave);
 }
 
 GameScene::~GameScene() {
@@ -88,18 +88,18 @@ void GameScene::Initialize() {
 	playerObject->Initialize();
 
 	//エネミーにプレイヤーの情報を渡す
-	EnemyManager::GetIns()->Initialize(playerObject.get());
+	enemyManager.get()->Initialize();
 
 
 	//デブリリセット
 	Debris::StaticInitialize(playerObject.get());
 
 	//UIの初期化
-	UserInterface::GetIns()->Initialize(&EnemyManager::GetIns()->nowWave);
+	ui->Initialize();
 }
 
 void GameScene::Finalize() {
-	EnemyManager::GetIns()->Initialize(playerObject.get());
+	Debris::Finalize();
 }
 
 void GameScene::Update() {
@@ -235,7 +235,7 @@ void GameScene::Update() {
 	//破片更新
 	Debris::StaticUpdate();
 	//エネミー更新
-	EnemyManager::GetIns()->Update();
+	enemyManager.get()->Update();
 
 
 	float contact_pos = 0.0f;
@@ -259,21 +259,20 @@ void GameScene::Update() {
 	}*/
 
 	//最終更新
-	EnemyManager::GetIns()->FinalUpdate();
+	enemyManager.get()->FinalUpdate();
 	playerObject.get()->LustUpdate();
 	Debris::StaticLustUpdate();
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
-	Debris::StaticAdaptation();
-	EnemyManager::GetIns()->Adaptation();
+	Debris::StaticAdaptation(); 
+	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
 	if (playerObject.get()->GetHp() == 0) {
 		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
 	}
 
-
-	UserInterface::GetIns()->Update();
+	enemyManager.get()->Update();
 	//カウンターを加算
 	counter++;
 }
@@ -307,7 +306,7 @@ void GameScene::Draw() {
 	EnemyHelperManager::GetIns()->Draw();
 	MapChip::GetInstance()->Draw();
 	Debris::StaticDraw();
-	EnemyManager::GetIns()->Draw();
+	enemyManager.get()->Draw();
 	playerObject->Draw();
 #pragma endregion 3Dオブジェクト(FBX)描画
 
@@ -328,9 +327,9 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画
 
-	UserInterface::GetIns()->Draw();
+	ui.get()->Draw();
 
-	if (EnemyManager::GetIns()->isEndFlag())
+	if (enemyManager.get()->isEndFlag())
 	{
 		SceneManager::GetInstance()->ChangeScene("TitleScene");
 	}

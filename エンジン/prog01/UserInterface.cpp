@@ -2,20 +2,22 @@
 #include "WinApp.h"
 #include "Easing.h"
 
-std::unique_ptr<Sprite> UserInterface::wave[3];
-std::unique_ptr<Sprite> UserInterface::moveWave[3];
 int *UserInterface::nowWave;
 int UserInterface::oldWave;
 bool UserInterface::isChangeWave;
 float UserInterface::moveWaveTimer;
 float UserInterface::movePosX;
-UserInterface *UserInterface::GetIns()
+
+UserInterface::UserInterface(int *nowWave)
 {
-	static UserInterface *instance;
-	return instance;
+	this->nowWave = nowWave;
 }
 
-void UserInterface::Initialize(int *nowWave)
+UserInterface::~UserInterface()
+{
+}
+
+void UserInterface::Initialize()
 {
 	wave[0] = Sprite::Create(2, {0,0});
 	wave[1] = Sprite::Create(3, {0,0});
@@ -25,10 +27,10 @@ void UserInterface::Initialize(int *nowWave)
 	moveWave[1] = Sprite::Create(3, { 0,0 }, { 1,1,1,1 }, {0.5f,0.5f});
 	moveWave[2] = Sprite::Create(4, { 0,0 }, { 1,1,1,1 }, {0.5f,0.5f});
 
-	this->nowWave = nowWave;
 	oldWave = *nowWave;
-	isChangeWave = false;
+	isChangeWave = true;
 }
+
 
 void UserInterface::Update()
 {

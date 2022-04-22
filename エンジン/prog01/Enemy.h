@@ -16,6 +16,7 @@ class Enemy :
 public:
 	//コンストラクタ
 	Enemy(XMFLOAT3 startPos,PlayerObject *targetPos);
+	~Enemy();
 	//初期化
 	void Initialize() override;
 	//内部更新
@@ -53,8 +54,8 @@ protected: // メンバ変数
 	float maxMoveSpeed = 15.0f;		//最大移動量
 
 	//体力
-	int maxHP;		//最大HP
-	int HP;			//現在HP
+	float maxHP;		//最大HP
+	float HP;			//現在HP
 
 
 	//無敵時間

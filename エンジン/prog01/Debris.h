@@ -13,6 +13,7 @@ class Debris :
 public:
 	//コンストラクタ
 	Debris(Vector3 startPos,Vector3 startVec,float size);
+	~Debris();
 	//内部更新
 	void Update();
 	void LustUpdate();
@@ -24,6 +25,7 @@ public:
 	static void StaticLustUpdate();
 	static void StaticAdaptation();
 	static void StaticDraw();
+	static void Finalize();
 
 public:
 	enum STATE {

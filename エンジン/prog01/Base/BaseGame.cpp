@@ -5,6 +5,7 @@
 #include "FbxLoader.h"
 #include "FbxObject3d.h"
 #include "ModelManager.h"
+#include "MapChip.h"
 
 void BaseGame::Run()
 {
@@ -63,11 +64,14 @@ void BaseGame::Initialize()
 	//全モデル読み込み
 	ModelManager::GetIns()->Initialize();
 
+	//マップチップ読み込み
+	MapChip::GetInstance()->Initialize();
 }
 
 void BaseGame::Finalize()
 {
 	delete sceneFactory;
+	ModelManager::GetIns()->Finalize();
 	Sprite::StaticFinalize();
 	Object3d::StaticFinalize();
 	FbxObject3d::StaticFinalize();

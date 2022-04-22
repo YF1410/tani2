@@ -25,7 +25,7 @@ void BoundEnemy::OnCollision(const CollisionInfo &info)
 		//プレイヤーが攻撃状態なら
 		if (player->attack.is) {
 			//ダメージを受ける
-			Damage(1.0f);
+			Damage(player->attackPow);
 			
 			////衝突軸ベクトル
 			//Vector3 normal = pos - player->pos;

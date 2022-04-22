@@ -20,7 +20,7 @@ Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 	isAlive = true;
 	scale = 1.0f;
 	this->player = player;
-	maxHP = 1;
+	maxHP = 10.0f;
 	
 	//当たり判定初期化
 	float radius = 100;
@@ -34,6 +34,10 @@ Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 	SetNarrowCollider(toMapChipCollider);
 
 	Initialize();
+}
+
+Enemy::~Enemy()
+{
 }
 
 
@@ -179,7 +183,7 @@ void Enemy::OnCollision(const CollisionInfo &info)
 		//プレイヤーが攻撃状態なら
 		if (player->attack.is) {
 			//ダメージを受ける
-			Damage(1.0f);
+			Damage(player->attackPow);
 
 			//衝突軸ベクトル
 			Vector3 normal = pos - player->pos;

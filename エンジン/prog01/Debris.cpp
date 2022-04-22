@@ -44,6 +44,12 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	attackCollider->SetOffset({ 0,attackCollider->GetRadius(),0 });
 	SetNarrowCollider(attackCollider);
 
+	
+	exclusionList.push_back(DEBRIS);
+}
+
+Debris::~Debris()
+{
 }
 
 void Debris::Update()
@@ -211,19 +217,21 @@ void Debris::StaticDraw()
 	}
 }
 
+void Debris::Finalize()
+{
+
+	//íœ
+	for (int i = debris.size() - 1; i >= 0; i--) {
+		delete debris[i];
+		debris.erase(debris.begin() + i);
+	}
+}
+
 void Debris::OnCollision(const CollisionInfo &info)
 {
 	Vector3 normal;
 	switch (info.object->Tag)
 	{
-	case DEBRIS:
-		if (!isBoost) {
-			normal = pos - info.object->pos;
-			normal.Normalize();
-			HitWall({ 0,0,0 }, normal);
-			penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.2f;
-		}
-		break;
 	case PLAYER:
 		//‰ñŽû
 		if (info.myName == "hitCollider" &&

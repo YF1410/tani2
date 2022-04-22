@@ -5,16 +5,24 @@
 
 std::vector<Enemy *> EnemyManager::enemys;
 
-EnemyManager *EnemyManager::GetIns()
+EnemyManager::EnemyManager(PlayerObject *player)
 {
-	static EnemyManager instance;
-	return &instance;
+	this->player = player;
+
 }
 
-void EnemyManager::Initialize(PlayerObject *player)
+EnemyManager::~EnemyManager()
 {
-	nowWave = -1;
-	this->player = player;
+	for (int i = enemys.size() - 1; i >= 0; i--) {
+		delete enemys[i];
+		enemys.erase(enemys.begin() + i);
+	}
+}
+
+void EnemyManager::Initialize()
+{
+	nowWave = 0;
+	waveStartTime = 0;
 	//ここでエネミーを追加
 
 	//ウェーブ1
@@ -53,7 +61,7 @@ void EnemyManager::Initialize(PlayerObject *player)
 void EnemyManager::Update()
 {
 	//ウェーブ進行
-	if (enemys.size() == 0) {
+	if (enemys.size() == 0 && spawnData[nowWave].size() == 0) {
 		if (nowWave < MAX_WAVE - 1) {
 			nowWave++;
 			waveStartTime = GameScene::counter;
@@ -162,6 +170,10 @@ void EnemyManager::Draw()
 
 void EnemyManager::Finalize()
 {
+	for (int i = enemys.size() - 1; i >= 0; i--) {
+		delete enemys[i];
+		enemys.erase(enemys.begin() + i);
+	}
 	enemys.clear();
 	spawnData->clear();
 }

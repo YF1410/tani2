@@ -199,6 +199,9 @@ void PlayerObject::Update()
 
 	//回収インターバル
 	collect.Intervel();
+	
+	//攻撃力更新
+	attackPow = velocity.Length();
 
 
 	//サイズからスケールへ変換
@@ -218,6 +221,7 @@ void PlayerObject::Update()
 	DebugText::GetInstance()->VariablePrint(0, 40, "DebrisCount", Debris::debris.size(), 3);
 	DebugText::GetInstance()->VariablePrint(0, 80, "StayTimer", collect.timer, 3);
 	DebugText::GetInstance()->VariablePrint(0, 160, "Speed", velocity.Length(), 3);
+	
 	
 }
 

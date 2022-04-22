@@ -1,7 +1,7 @@
 #include "ModelManager.h"
 #include "FbxLoader.h"
 
-std::map<ModelManager::ModelName, std::unique_ptr<FbxModel>> ModelManager::model;
+//std::map<ModelManager::ModelName, std::unique_ptr<FbxModel>> ModelManager::model;
 
 ModelManager *ModelManager::GetIns()
 {
@@ -40,6 +40,11 @@ void ModelManager::Initialize()
 	model[ENEMY_MACARON].get()->TransferMaterial();
 
 
+}
+
+void ModelManager::Finalize()
+{
+	model.clear();
 }
 
 void ModelManager::LoadModel(const ModelName modelName, std::string fileName)

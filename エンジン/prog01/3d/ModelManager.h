@@ -34,10 +34,11 @@ public:
 	static ModelManager *GetIns();		//取得用
 
 	void Initialize();
+	void Finalize();
 	void LoadModel(const ModelName modelName, std::string fileName);
 	FbxModel *GetModel(ModelName modelName) { return model[modelName].get(); }
 
 private:
-	static std::map<ModelManager::ModelName, std::unique_ptr<FbxModel>> model;	//モデル格納マップ
+	std::map<ModelManager::ModelName, std::unique_ptr<FbxModel>> model;	//モデル格納マップ
 };
 

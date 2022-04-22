@@ -14,6 +14,7 @@ GameObjCommon::~GameObjCommon()
 			++iter;
 		}
 	}
+	
 }
 
 void GameObjCommon::Initialize()

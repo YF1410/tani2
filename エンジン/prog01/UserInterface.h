@@ -5,22 +5,17 @@
 
 class UserInterface
 {
-private: //シングルトンパターン
-	UserInterface() = default;
-	~UserInterface() = default;
-	UserInterface(const UserInterface & r) = default;
-	UserInterface &operator= (const UserInterface & r) = default;
 public:
-	//インスタンス
-	static UserInterface *GetIns();
-	void Initialize(int *nowWave);
+	UserInterface(int *nowWave);
+	~UserInterface();
+	void Initialize();
 	void Update();
 	void Draw() const;
 
 private:
 	//ウェーブ変更演出
-	static std::unique_ptr<Sprite> wave[3];
-	static std::unique_ptr<Sprite> moveWave[3];
+	std::unique_ptr<Sprite> wave[3];
+	std::unique_ptr<Sprite> moveWave[3];
 
 
 	//現在のウェーブ数

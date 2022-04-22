@@ -63,7 +63,7 @@ void MapChip::CreateStage()
 			case 0:		//0には何も配置しない
 				break;
 			case 1:		//1はベースブロック
-				mapChipObj[nowMap].push_back(new BaseBlock(Vector3(chipSize * x, 0, -chipSize * z)));
+				mapChipObj[nowMap].push_back(std::make_unique<BaseBlock>(Vector3(chipSize * x, 0, -chipSize * z)));
 				break;
 
 			case 9:
@@ -71,7 +71,7 @@ void MapChip::CreateStage()
 				break;
 
 			case 10:		//1はベースブロック
-				mapChipObj[nowMap].push_back(new CheckBlock(Vector3(chipSize * x, 0, -chipSize * z)));
+				mapChipObj[nowMap].push_back(std::make_unique<BaseBlock>(Vector3(chipSize * x, 0, -chipSize * z)));
 				break;
 			default:
 				break;

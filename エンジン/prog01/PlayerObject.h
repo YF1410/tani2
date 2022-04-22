@@ -46,8 +46,12 @@ public:
 	STATE collect;
 	//攻撃フラグ
 	STATE attack;
+	//攻撃力
+	float attackPow;
 
 private:
+
+
 	//被ダメージ
 	void Damage(float damage);
 	//無敵
@@ -71,7 +75,7 @@ private: // メンバ変数
 	//サイズ
 	float scalef;//大きさ
 
-	//
+	//反射フラグ
 	bool isBounce;
 
 	//自爆力

@@ -20,15 +20,10 @@
 
 class EnemyManager
 {
-private:
-	EnemyManager() = default;
-	~EnemyManager() = default;
-	EnemyManager(const EnemyManager & mapChip) = delete;
-	EnemyManager &operator=(const EnemyManager & mapChip) = delete;
 public:
-	static EnemyManager *GetIns();
-
-	void Initialize(PlayerObject *player);
+	EnemyManager(PlayerObject *player);
+	~EnemyManager();
+	void Initialize();
 	void Update();
 	void FinalUpdate();
 	void Adaptation();
