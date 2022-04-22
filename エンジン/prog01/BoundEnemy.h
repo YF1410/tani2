@@ -7,5 +7,6 @@ class BoundEnemy :
 public:
 	BoundEnemy(XMFLOAT3 startPos, PlayerObject *targetPos);
 	void OnCollision(const CollisionInfo &info) override;
+	void Damage(float damage) override;
 };
 

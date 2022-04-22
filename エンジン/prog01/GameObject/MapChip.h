@@ -66,14 +66,14 @@ public:
 	//マップチップと球の当たり判定
 	bool CheckMapChipToSphere2d(SphereCollider *sphereCollider,Vector3 *vel,Vector3 *hitPos);
 
+	//Blockのサイズ
+	const int chipSize = 200;
 private:
 	//現在のマップ
 	MAP_NAME nowMap;
 	//マップデータ
 	MAP_DATA mapData[MAX];
 
-	//Blockのサイズ
-	const int chipSize = 200;
 
 	//オブジェクトデータ
 	std::vector<BaseBlock *> mapChipObj[MAX];

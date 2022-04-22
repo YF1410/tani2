@@ -43,9 +43,6 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	attackCollider->SetRadius(scale.x * 150.0f);
 	attackCollider->SetOffset({ 0,attackCollider->GetRadius(),0 });
 	SetNarrowCollider(attackCollider);
-	//ŽcŠ[‚Ç‚¤‚µ‚Í”»’è‚µ‚È‚¢
-	exclusionList.push_back(DEBRIS);
-	
 
 }
 
@@ -218,12 +215,8 @@ void Debris::OnCollision(const CollisionInfo &info)
 {
 	switch (info.object->Tag)
 	{
-	case ENEMY:
-		if (isAttack) {
-		}
-		else {
-
-		}
+	case DEBRIS:
+		
 		break;
 	case PLAYER:
 		//‰ñŽû

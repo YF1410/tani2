@@ -44,13 +44,13 @@ protected: // メンバ変数
 	//移動処理
 	virtual void Move();
 	virtual void Attack();
-
+	
 	//ダメージを受ける
-	void Damage(float damage);
+	virtual void Damage(float damage);
 
 	//移動系
 	float moveSpeed = 5.0f;			//移動量
-	float maxMoveSpeed = 10.0f;		//最大移動量
+	float maxMoveSpeed = 15.0f;		//最大移動量
 
 	//体力
 	int maxHP;		//最大HP

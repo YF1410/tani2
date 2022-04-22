@@ -16,6 +16,7 @@
 #include "SuctionEnemy.h"
 #include "GetawayEnemy.h"
 #include "RouteMoveEnemy.h"
+#include "MapChip.h"
 
 class EnemyManager
 {
@@ -67,11 +68,38 @@ public:
 
 private:
 	//スポーンデータ
-	static const int MAX_WAVE = 10;
+	static const int MAX_WAVE = 2;
 	std::vector<SPAWN_DATA*> spawnData[MAX_WAVE];
 	//プレイヤーポインタ
 	PlayerObject *player;
 
+	//スポーン位置
+	const Vector3 spawnPos[4] =
+	{
+		Vector3(
+			6 * MapChip::GetInstance()->chipSize,
+			0,
+			-6 * MapChip::GetInstance()->chipSize
+		),
+
+		Vector3(
+			6 * MapChip::GetInstance()->chipSize,
+			0,
+			(-63 + 6) *MapChip::GetInstance()->chipSize
+		),
+
+		Vector3(
+			(63 - 6) *MapChip::GetInstance()->chipSize,
+			0,
+			-6 * MapChip::GetInstance()->chipSize
+		),
+
+		Vector3(
+			(63 -6) * MapChip::GetInstance()->chipSize,
+			0,
+			(-63 + 6) *MapChip::GetInstance()->chipSize
+		)
+	};
 
 public:
 	//敵全体のデータ
@@ -80,5 +108,7 @@ public:
 	//現在のウェーブ数
 	int nowWave;
 	//ウェーブごとの秒数
-	const int CHANGE_WAVE_TIME = 10 * 60;
+	int waveStartTime = 0;
+
+	bool endFlag;
 };

@@ -26,16 +26,14 @@ void BoundEnemy::OnCollision(const CollisionInfo &info)
 		if (player->attack.is) {
 			//ダメージを受ける
 			Damage(1.0f);
-
-			//衝突軸ベクトル
-			Vector3 normal = pos - player->pos;
-			normal.Normalize();
-			//内積
-			float dot = Vector3(player->pos - pos).VDot(normal);
-			//定数ベクトル
-			Vector3 constVec = 2 * dot / 2 * normal;
-
-			velocity = 2 * constVec + velocity;
+			
+			////衝突軸ベクトル
+			//Vector3 normal = pos - player->pos;
+			//normal.Normalize();
+			////内積
+			//float dot = Vector3(player->pos - pos).VDot(normal);
+			////定数ベクトル
+			//Vector3 constVec = 2 * dot / 2 * normal;
 
 		}
 		break;
@@ -58,4 +56,16 @@ void BoundEnemy::OnCollision(const CollisionInfo &info)
 	penalty.y = 0;
 	pos += penalty;
 	GameObjCommon::Update();
+}
+
+void BoundEnemy::Damage(float damage)
+{
+	//無敵時間中は処理を中断
+	if (isInvincible) { return; }
+	//ダメージを受ける
+	HP -= damage;
+	//無敵時間をセットする
+	isInvincible = true;
+	InvincibleTimer = 0;
+	velocity.z *= -10;
 }

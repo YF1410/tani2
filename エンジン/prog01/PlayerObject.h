@@ -71,6 +71,8 @@ private: // メンバ変数
 	//サイズ
 	float scalef;//大きさ
 
+	//
+	bool isBounce;
 
 	//自爆力
 	const int destructPow = 10;

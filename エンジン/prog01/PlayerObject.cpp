@@ -28,6 +28,8 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	//初期位置に設定
 	this->startPos = startPos;
 
+	isBounce = false;
+
 	//ブロード
 	broadSphereCollider = new SphereCollider("hitCollider", { 0,scalef * 180.0f,0 }, scalef * 180.0f);
 	SetBroadCollider(broadSphereCollider);
@@ -100,6 +102,7 @@ void PlayerObject::Update()
 	}
 	if (attack.is && velocity.Length() < 30) {
 		attack.is = false;
+		isBounce = false;
 	}
 
 	//リセット
@@ -338,6 +341,10 @@ void PlayerObject::HitWall(
 	const Vector3 &normal)
 {
 	velocity = CalcReflectVector(velocity, normal);
+	if (!isBounce) {
+		velocity *= 3.0f;
+		isBounce = true;
+	}
 }
 
 void PlayerObject::Damage(float damage)

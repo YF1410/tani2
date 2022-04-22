@@ -18,36 +18,58 @@ void EnemyManager::Initialize(PlayerObject *player)
 	//ここでエネミーを追加
 
 	//ウェーブ1
-	spawnData[0].push_back(new SPAWN_DATA(AVOIDANCE, 1, Vector3(1, 0, 0), 5));
-	spawnData[0].push_back(new SPAWN_DATA(AVOIDANCE, 2, Vector3(-1, 0, 0), 5));
-	spawnData[0].push_back(new SPAWN_DATA(AVOIDANCE, 3, Vector3(-1, 0, 1), 5));
-	spawnData[0].push_back(new SPAWN_DATA(AVOIDANCE, 3, Vector3(-1, 0, 1), 5));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 5));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
+
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 5));
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
+
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
+	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
+
 	
-	//ウェーブ2
-	spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, Vector3(1, 0, 0), 5));
-	spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 2, Vector3(1, 0, 0), 5));
-	//ウェーブ3
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 1, Vector3(1, 0, 0), 5));
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 2, Vector3(1, 0, 0), 5));
 
 }
 
 void EnemyManager::Update()
 {
 	//ウェーブ進行
-	if (GameScene::counter % CHANGE_WAVE_TIME == 0) {
-		if (nowWave < 2) {
+	if (enemys.size() == 0) {
+		if (nowWave < MAX_WAVE) {
 			nowWave++;
+			waveStartTime = GameScene::counter;
+		}
+		else {
+			//終了フラグ
+			endFlag = true;
 		}
 	}
 
 	//追加
 	if (spawnData[nowWave].size() != 0) {
 		//ウェーブ開始から指定の秒数が経過したら
-		while (((int)GameScene::counter - nowWave * CHANGE_WAVE_TIME) / 60 == spawnData[nowWave][0]->time) {
+		while (((int)GameScene::counter - waveStartTime) / 60 == spawnData[nowWave][0]->time) {
 			//指定された数だけエネミーをスポーンさせる
 			for (int i = 0; i < spawnData[nowWave][0]->num; i++) {
-				Vector3 spawnPos = spawnData[nowWave][0]->pos.Normal() * 2500 + Vector3((rand() % 100 - 50),0, (rand() % 100 - 50)) + player->GetPos();
+				Vector3 spawnPos = spawnData[nowWave][0]->pos + Vector3((rand() % 50 - 25),0, (rand() % 50 - 25));
 				switch (spawnData[nowWave][0]->type)
 				{
 				case MIMIC:
