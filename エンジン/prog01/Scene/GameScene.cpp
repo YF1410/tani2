@@ -60,7 +60,15 @@ void GameScene::Initialize() {
 	}
 
 	// パーティクルマネージャ生成
-	particleMan = ParticleManager::Create(DirectXCommon::GetInstance()->GetDevice(), camera.get());
+	//particleMan = 
+	particleMan = particleMan->Create(DirectXCommon::GetInstance()->GetDevice(), camera.get());
+	particleMan2 = particleMan2->Create(DirectXCommon::GetInstance()->GetDevice(), camera.get());
+
+	particle = particle->Create();
+	particle2 = particle2->Create();
+
+	particle->SetParticleManager(particleMan.get(), L"APEX_01");
+	particle2->SetParticleManager(particleMan2.get());
 
 	//ライト生成
 	light = LightGroup::Create();
@@ -79,7 +87,7 @@ void GameScene::Initialize() {
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
-	camera->SetEye({ 0,1600,-500 });
+	camera->SetEye({ 0,0,-10 });
 	camera->SetUp({ 0,1,0 });
 	
 	//プレイヤーの初期化
@@ -100,157 +108,13 @@ void GameScene::Update() {
 	//カメラ更新
 	//プレイヤーの少し上を焦点にする
 	//カメラ更新
-	Vector3 camEye = camera.get()->GetEye();
-	float debrisLengthMax = 0.0f;
-	for (int i = 0; i < Debris::debris.size(); i++) {
-		if (Debris::debris[i]->isFirstAttack &&
-			debrisLengthMax <= Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length()) {
-			debrisLengthMax = Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length();
-		}
-
-		if (Debris::debris[i]->state == Debris::RETURN &&
-			debrisLengthMax <= Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length()) {
-			debrisLengthMax = Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length();
-		}
-	}
-
-	const float velocityOffset = 17.0f;
-	//カメラのイージング制御
-	eyeDistance = Ease(Out, Quad, 0.05f,
-		camera.get()->GetEye(),
-		Vector3(playerObject.get()->GetPos() +
-			eyeDistanceDef +
-			Vector3(0, debrisLengthMax * 0.7f, 0)
-		));
-	camera->SetEye(eyeDistance);
-	//プレイヤーの少し上を焦点にする
-	targetDistance = Ease(Out, Quad, 0.05f,
-		camera.get()->GetTarget(),
-		Vector3(playerObject.get()->GetPos() + 
-			targetDistanceDef));
-	camera->SetTarget(targetDistance);
-
-	camera->Update();
-
-	//マップチップ更新
-	//MapChip::GetInstance()->Update(MapChip::TEST_MAP);
-
-
-	//入力更新
-	Input *input = Input::GetInstance();
-	
-	//ライト更新
-	light->Update();
-	//ステージ更新
-	//testStage->Update();
-
-	if (!EnemyManager::GetIns()->isEnemyAddFlag() && counter % 1200 == 0 && flag && weveCount < 3)
-	{
-		showingFlag = true;
-		EnemyManager::GetIns()->SetEnemyAddFlag(true);
-		weveCount++;
-	}
-	else if (!EnemyManager::GetIns()->isEnemyAddFlag() && counter <= 150 && weveCount <= -1)
-	{
-		showingFlag = true;
-		weveCount++;
-	}
-	else if (!EnemyManager::GetIns()->isEnemyAddFlag() && counter >= 150 && weveCount <= 0 && !flag)
-	{
-		EnemyManager::GetIns()->SetEnemyAddFlag(true);
-		flag = true;
-	}
-
-	if (weveCount < 3 && showingFlag)
-	{
-		weveStartTimer++;
-		float timeRate = 0.0f;
-		int countNum = 125;
-		upTimer++;
-
-		timeRate = upTimer / countNum;
-		if (!changeFlag && !endFlag)
-		{
-			weveSprite[weveCount]->SetPosition(Ease::easeOut({ 1280.0f,250.0f }, { 350.0f,250.0f }, timeRate));
-			if (upTimer > countNum)
-			{
-				upTimer = 0;
-				changeFlag = true;
-			}
-		}
-		else if (changeFlag && !endFlag)
-		{
-			weveSprite[weveCount]->SetPosition(Ease::easeIn({ 350.0f,250.0f }, { -1280.0f,250.0f }, timeRate));
-			if (upTimer > countNum)
-			{
-				upTimer = 0;
-				changeFlag = false;
-				endFlag = true;
-			}
-		}
-
-		if (weveStartTimer >= 300)
-		{
-			weveStartTimer = 0;
-			upTimer = 0;
-			endFlag = false;
-			showingFlag = false;
-		}
-	}
 	
 	//デバックテキスト
+	particle->Add();
+	particle2->Add();
 
-	particleMan->Update();
-
-	for (auto& object : objects) {
-		object->Update();
-	}
-
-	//プレイヤー更新
-	playerObject->Update();
-	//破片更新
-	Debris::StaticUpdate();
-	//エネミー更新
-	EnemyManager::GetIns()->Update();
-
-
-	float contact_pos = 0.0f;
-
-	// 全ての衝突をチェック
-	collisionManager->CheckBroadCollisions();
-
-	/*line.startPos = Enemy::enemys[0]->GetPos();
-	line.endPos = playerObject->GetPos();
-	aabb.length = { 200,0,200 };
-
-	for (int z = 0; z < 34; z++) {
-		for (int x = 0; x < 57; x++) {
-			if (MapChip::GetInstance()->GetChipNum(x, z) == 1) {
-				aabb.center = { 200.0f * x - 100.0f ,0.0f,-200.0f * z + 100.0f };
-				if (Collision::CheckLine2Box(line, aabb)) {
-					DebugText::GetInstance()->Print("hit", 0, 80, 3);
-				}
-			}
-		}
-	}*/
-	 
-	//最終更新
-	EnemyManager::GetIns()->FinalUpdate();
-	playerObject.get()->FinalUpdate();
-
-	//全ての移動最終適応処理
-	playerObject.get()->Adaptation();
-	Debris::StaticAdaptation();
-	EnemyManager::GetIns()->Adaptation();
-	MapChip::GetInstance()->Adaptation();
-
-	if (playerObject.get()->GetHp() == 0) {
-		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
-	}
-	DebugText::GetInstance()->VariablePrint(0, 180, "weveCount", weveCount, 3);
-
-	//カウンターを加算
-	counter++;
+	particle->Update();
+	particle2->Update();
 }
 
 void GameScene::LastUpdate()
@@ -279,17 +143,14 @@ void GameScene::Draw() {
 
 
 #pragma region 3Dオブジェクト(FBX)描画
-	//testStage->Draw(DirectXCommon::GetInstance()->GetCommandList());
-	MapChip::GetInstance()->Draw();
-	Debris::StaticDraw();
-	EnemyManager::GetIns()->Draw();
-	playerObject->Draw();
+	
 #pragma endregion 3Dオブジェクト(FBX)描画
 
 
 #pragma region パーティクル
 	// パーティクルの描画
-	particleMan->Draw(cmdList);
+	particle->Draw(cmdList);
+	particle2->Draw(cmdList);
 #pragma endregion パーティクル
 
 

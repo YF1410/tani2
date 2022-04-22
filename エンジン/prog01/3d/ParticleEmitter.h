@@ -16,7 +16,7 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public: // 静的メンバ関数
-	static ParticleEmitter* Create();
+	ParticleEmitter* Create();
 
 public: // メンバ関数
 	// 追加
