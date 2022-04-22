@@ -69,7 +69,7 @@ public:
 private:
 	//スポーンデータ
 	static const int MAX_WAVE = 2;
-	std::vector<SPAWN_DATA*> spawnData[MAX_WAVE];
+	std::vector<SPAWN_DATA*> spawnData[MAX_WAVE + 1];
 	//プレイヤーポインタ
 	PlayerObject *player;
 

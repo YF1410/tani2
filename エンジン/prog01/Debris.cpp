@@ -213,10 +213,16 @@ void Debris::StaticDraw()
 
 void Debris::OnCollision(const CollisionInfo &info)
 {
+	Vector3 normal;
 	switch (info.object->Tag)
 	{
 	case DEBRIS:
-		
+		if (!isBoost) {
+			normal = pos - info.object->pos;
+			normal.Normalize();
+			HitWall({ 0,0,0 }, normal);
+			penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.2f;
+		}
 		break;
 	case PLAYER:
 		//‰ñŽû
