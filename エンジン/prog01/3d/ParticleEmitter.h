@@ -36,6 +36,10 @@ public: // メンバ関数
 	void SetStartColor(XMFLOAT4 s_color) { this->s_color = s_color; }
 	//色(RGBA)最終値の設定
 	void SetEndColor(XMFLOAT4 e_color) { this->e_color = e_color; }
+	// スケール初期値の設定
+	void SetStartScale(const float s_scale) { this->s_scale = s_scale; }
+	// スケール最終値の設定
+	void SetEndScale(const float e_scale) { this->e_scale = e_scale; }
 	// マネージャーの設定
 	void SetParticleManager(ParticleManager* particleMan, std::wstring fName = L"effect1");
 
