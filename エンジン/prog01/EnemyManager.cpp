@@ -13,10 +13,7 @@ EnemyManager::EnemyManager(PlayerObject *player)
 
 EnemyManager::~EnemyManager()
 {
-	for (auto& a : enemys)
-	{
-		delete a;
-	}
+	Finalize();
 }
 
 void EnemyManager::Initialize()
@@ -170,10 +167,13 @@ void EnemyManager::Draw()
 
 void EnemyManager::Finalize()
 {
-	for (int i = enemys.size() - 1; i >= 0; i--) {
-		delete enemys[i];
-		enemys.erase(enemys.begin() + i);
+	for (auto& a : spawnData)
+	{
+		a.clear();
+	}
+	for (auto& a : enemys)
+	{
+		delete a;
 	}
 	enemys.clear();
-	spawnData->clear();
 }

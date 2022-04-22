@@ -101,7 +101,7 @@ private:
 
 public:
 	//敵全体のデータ
-	static std::vector<Enemy *> enemys;
+	static std::vector<Enemy*> enemys;
 
 	//現在のウェーブ数
 	int nowWave;

@@ -221,10 +221,11 @@ void Debris::Finalize()
 {
 
 	//íœ
-	for (int i = debris.size() - 1; i >= 0; i--) {
-		delete debris[i];
-		debris.erase(debris.begin() + i);
+	for (auto& a : debris)
+	{
+		delete a;
 	}
+	debris.clear();
 }
 
 void Debris::OnCollision(const CollisionInfo &info)
