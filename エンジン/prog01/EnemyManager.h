@@ -34,6 +34,8 @@ public:
 	void Adaptation();
 	void Draw();
 
+	bool isEndFlag() { return endFlag; }
+
 	enum ENEMY_TYPE
 	{
 		HOMING,
@@ -68,7 +70,7 @@ public:
 
 private:
 	//スポーンデータ
-	static const int MAX_WAVE = 2;
+	static const int MAX_WAVE = 3;
 	std::vector<SPAWN_DATA*> spawnData[MAX_WAVE];
 	//プレイヤーポインタ
 	PlayerObject *player;

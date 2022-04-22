@@ -9,7 +9,7 @@ TitleScene::~TitleScene()
 void TitleScene::Initialize()
 {
 	// ”wŒiƒXƒvƒ‰ƒCƒg¶¬
-	sprite = Sprite::Create(0, { 0.0f,0.0f });
+	sprite = Sprite::Create(1, { 0.0f,0.0f });
 	sprite->SetSize({ 100.0f,100.0f });
 	sprite->SetPosition({ 100.0f,100.0f });
 }
