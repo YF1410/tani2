@@ -19,7 +19,7 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 		GameObjCommon::PLAYER,	//プレイヤーとして扱う
 		false,					//重力の影響を受ける
 		startPos,
-		{0,0,0},
+		{1,1,1},
 		{0,0,0},
 		true
 	)
@@ -31,13 +31,13 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	isBounce = false;
 
 	//ブロード
-	broadSphereCollider = new SphereCollider("hitCollider", { 0,scalef * 180.0f,0 }, scalef * 180.0f);
+	broadSphereCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f,0 }, scale.x * 180.0f);
 	SetBroadCollider(broadSphereCollider);
 	//押し返し用
-	pushBackCollider = new SphereCollider("hitCollider", { 0,scalef * 180.0f,0 }, scalef * 180.0f);
+	pushBackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f,0 }, scale.x * 180.0f);
 	SetNarrowCollider(pushBackCollider);
 	//攻撃用
-	attackCollider = new SphereCollider("hitCollider", { 0,scalef * 180.0f,0 }, scalef * 180.0f + 50.0f);
+	attackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f,0 }, scale.x * 180.0f + 50.0f);
 	SetNarrowCollider(pushBackCollider);
 
 	//マップチップ用
@@ -57,13 +57,9 @@ PlayerObject::~PlayerObject()
 void PlayerObject::Initialize()
 {
 	//サイズ初期化
-	size = 500.0f;
+	energy = 2000.0f;
 	//サイズ初期化
-	scalef = ConvertSizeToScale(size);
-	objectData->SetScale(scalef);
-	toMapChipCollider->SetRadius(scalef * 180.0f, scalef * 180.0f);
-	//吸引範囲
-	suction = scalef * suctionRatio;
+	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
 	//ポジション初期化
 	pos = startPos;
 
@@ -93,7 +89,7 @@ void PlayerObject::Update()
 {
 	Input *input = Input::GetInstance();
 	//スケールから移動量決定
-	moveSpead = scalef * 5;
+	moveSpead = scale.x * 5;
 	//ペナルティリセット
 	penalty = { 0,0,0 };
 
@@ -102,10 +98,10 @@ void PlayerObject::Update()
 	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
-	if (attack.is && velocity.Length() >= 360) {
-		velocity = velocity.Normal() * 360;
+	if (attack.is && velocity.Length() >= 300) {
+		velocity = velocity.Normal() * 300;
 	}
-	if (attack.is && velocity.Length() < 30) {
+	if (attack.is && velocity.Length() < energy / 500 * 60) {
 		attack.is = false;
 		isBounce = false;
 	}
@@ -149,10 +145,10 @@ void PlayerObject::Update()
 
 	//デバッグ用サイズ変更
 	if (input->PushKey(DIK_UP)) {
-		size += 10.0f;
+		energy += 10.0f;
 	}
 	if (input->PushKey(DIK_DOWN)) {
-		size -= 10.0f;
+		energy -= 10.0f;
 	}
 
 	//自爆
@@ -162,17 +158,14 @@ void PlayerObject::Update()
 		//攻撃開始
 		attack.Start();
 
-		//ショットに使う総合サイズ
-		float maxSize = size * 0.5f;
-
 		//破片生成
-		for (int i = 0; i < destructPow; i++) {
+		for (int i = 0; i < DESTRUCT_POW; i++) {
 			Vector3 startVec;		//速度*向きベクトル
 			float shotRad;			//角度決定用
 			//発射スピード
-			float shotSpeed = rand() % 20 + scalef * 60;
+			float shotSpeed = rand() % 20 + energy / 500 * 30;
 			//残骸のサイズ
-			float shotSize = maxSize / destructPow;
+			float shotSize = SHOT_ENERGY / DESTRUCT_POW;
 
 			//-15~15度で計算
 			shotRad = XMConvertToRadians(rand() % 90 - 45);
@@ -182,12 +175,12 @@ void PlayerObject::Update()
 			startVec.AddRotationY(shotRad);
 			//startVec = startVec + offset;
 
-			velocity += velocity.Normal() * 20;
+			velocity += velocity.Normal() * 100;
 			//Debrisのコンテナに追加
 			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
 		}
 		//爆発終了
-		size -= maxSize;
+		energy -= SHOT_ENERGY;
 		
 	}
 
@@ -210,19 +203,16 @@ void PlayerObject::Update()
 
 
 	//サイズからスケールへ変換
-	scalef = ConvertSizeToScale(size);
-	scale = scalef;
-	pushBackCollider->SetRadius(scalef * 120.0f);
-	toMapChipCollider->SetRadius( scalef * 120.0f, scalef * 120.0f);
 	//移動量を適応
 	PosAddVelocity();
 	//移動量からブロードコライダーを更新
-	broadSphereCollider->SetRadius(/*velocity.Length() + pushBackCollider->GetRadius()*/scalef * 120.0f);
+	broadSphereCollider->SetRadius(/*velocity.Length() + pushBackCollider->GetRadius()*/scale.x * 120.0f);
+	toMapChipCollider->SetRadius(scale.x * 120.0f, scale.x * 120.0f);
 
 	DebugText::GetInstance()->Print("WASD stick : Move",600,0,3);
 	DebugText::GetInstance()->Print("Qkey Bbutton: ReturnDebri",600,40,3);
 	DebugText::GetInstance()->Print("SPACEkey Abutton : Boom",600,80,3);
-	DebugText::GetInstance()->VariablePrint(0, 0, "playerSize", size, 3);
+	DebugText::GetInstance()->VariablePrint(0, 0, "playerSize", energy, 3);
 	DebugText::GetInstance()->VariablePrint(0, 40, "DebrisCount", Debris::debris.size(), 3);
 	DebugText::GetInstance()->VariablePrint(0, 80, "StayTimer", collect.timer, 3);
 	DebugText::GetInstance()->VariablePrint(0, 160, "Speed", velocity.Length(), 3);
@@ -254,28 +244,18 @@ void PlayerObject::LustUpdate()
 	toMapChipCollider->Update();
 	Vector3 hitPos = { 0,0,0 };
 	Vector3 moveVec = velocity + penalty;
+	Vector3 normal = { 0,0,0 };
 	//上下左右
-	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos)) {
-		Vector3 normal = { 0,0,0 };
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
 
 		if (hitPos.x != 0) {
-			int vec = 1;	//向き
-			if (0 < moveVec.x) {
-				vec = -1;
-			}
-			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
-			normal.x = vec;
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
 		}
- 		if (hitPos.z != 0) {
-			int vec = 1;	//向き
-			if (moveVec.z < 0) {
-				vec = -1;
-			}
-			pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
-			normal.z = vec;
+		if (hitPos.z != 0) {
+			pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
 		}
 		normal.Normalize();
-		HitWall(hitPos, normal);
+		HitWall(hitPos, normal.Normal());
 	}
 	//角
 	else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
@@ -299,7 +279,6 @@ void PlayerObject::LustUpdate()
 		//normal.Normalize();
 		//velocity = CalcWallScratchVector(velocity, normal);
 	}
-
 }
 
 
@@ -317,7 +296,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 			info.collider->GetCollisionName() == "hitCollider" &&
 			(!debri->isFirstAttack || debri->state == Debris::RETURN)) {
 			//吸収
-			size += debri->GetSize();
+			energy += debri->GetSize();
 		}
 		break;
 	case ENEMY:
@@ -350,7 +329,7 @@ void PlayerObject::HitWall(
 	const Vector3 &normal)
 {
 	velocity = CalcReflectVector(velocity, normal);
-	if (!isBounce) {
+	if (!isBounce && attack.is) {
 		velocity *= 3.0f;
 		isBounce = true;
 	}
@@ -361,12 +340,12 @@ void PlayerObject::Damage(float damage)
 	//無敵だったらダメージを受けない
 	if (isInvincible) return;
 	//isInvincible = true;
-	size -= damage;
+	energy -= damage;
 	invincibleCounter = 60;
 
 	//sizeが0になったら死亡処理
-	if (size <= 0) {
-		size = 0;
+	if (energy <= 0) {
+		energy = 0;
 		
 	}
 

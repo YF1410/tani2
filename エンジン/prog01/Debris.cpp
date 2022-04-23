@@ -21,7 +21,7 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	reversFlag(false)
 {
 	//サイズからスケールへコンバート
-	scale = ConvertSizeToScale(size);
+	scale = ConvertSizeToScale(size) * 2;
 	//初期加速度セット
 	velocity = startVec;
 	//最初から攻撃状態
@@ -72,7 +72,7 @@ void Debris::Update()
 
 	if (!isAttack) {
 		size *= 0.99f;
-		scale = ConvertSizeToScale(size);
+		scale = ConvertSizeToScale(size) * 2;
 
 	}
 	if (size < 0.01f) {
@@ -119,28 +119,17 @@ void Debris::LustUpdate()
 	toMapChipCollider->Update();
 	Vector3 hitPos = { 0,0,0 };
 	Vector3 moveVec = velocity + penalty;
+	Vector3 normal = { 0,0,0 };
 	//上下左右
-	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos)) {
-		Vector3 normal = { 0,0,0 };
-
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos,&normal)) {
 		if (hitPos.x != 0) {
-			int vec = 1;	//向き
-			if (0 < moveVec.x) {
-				vec = -1;
-			}
-			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
-			normal.x = vec;
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
 		}
 		if (hitPos.z != 0) {
-			int vec = 1;	//向き
-			if (moveVec.z < 0) {
-				vec = -1;
-			}
-			pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
-			normal.z = vec;
+			pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
 		}
 		normal.Normalize();
-		HitWall(hitPos, normal);
+		HitWall(hitPos, normal.Normal());
 		state = ATTACK;
 	}
 	//角

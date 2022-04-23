@@ -54,7 +54,7 @@ int MapChip::GetChipNum(int x, int y)
 {
 	if (x < 0 || x >= mapData[nowMap].wide || y < 0 || y >= mapData[nowMap].high)
 	{
-		return NULL;
+		return -1;
 	}
 
 	std::vector<int> map = mapData[nowMap].mapChip;
@@ -109,7 +109,7 @@ void MapChip::Draw()
 	}
 }
 
-bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vector3 *hitpos)
+bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos, Vector3 *normal)
 {
 	Vector3 hitPositon = { 0,0,0 };
 	Box2DCollider box = *boxCollider;
@@ -129,6 +129,7 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 	
 		if (GetChipNum(nowChipX, up) == 1) {
 			hitPositon.z = -up * chipSize - chipSize / 2;
+			normal->z = -1.0f;
 			hit = true;
 		}
 	}
@@ -137,6 +138,7 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 		
 		if (GetChipNum(nowChipX, down) == 1) {
 			hitPositon.z = -down * chipSize + chipSize / 2;
+			normal->z = 1.0f;
 			hit = true;
 		}
 	}
@@ -144,6 +146,7 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 	if (0 < vel->x) {
 		if (GetChipNum(rig, nowChipY) == 1) {
 			hitPositon.x = rig * chipSize - chipSize / 2;
+			normal->x = -1.0f;
 			hit = true;
 		}
 	}
@@ -152,10 +155,33 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 		
 		if (GetChipNum(lef, nowChipY) == 1) {
 			hitPositon.x = lef * chipSize + chipSize / 2;
+			normal->x = 1.0f;
 			hit = true;
 		}
 	}
 
+
+	if (hitpos != nullptr) {
+		*hitpos = hitPositon;
+	}
+
+
+	return hit;
+}
+
+bool MapChip::CheckMapChipAreaToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos)
+{
+	Vector3 hitPositon = { 0,0,0 };
+	Box2DCollider box = *boxCollider;
+	int nowChipX = (box.center.x + (chipSize / 2) - fmodf(box.center.x + (chipSize / 2), chipSize)) / chipSize;
+	int nowChipY = (-box.center.z - (chipSize / 2) - fmodf(-box.center.z - (chipSize / 2), chipSize)) / chipSize + 1;
+
+	int rig = ((box.center.x + box.Right) - (chipSize / 2) - fmodf((box.center.x + box.Right) - (chipSize / 2), chipSize)) / chipSize + 1;
+	int lef = ((box.center.x + box.Left) + (chipSize / 2) - fmodf((box.center.x + box.Left) + (chipSize / 2), chipSize)) / chipSize;
+	int up = (-box.center.z + box.Top + (chipSize / 2) - fmodf(-box.center.z + box.Top + (chipSize / 2), chipSize)) / chipSize;
+	int down = (-box.center.z + box.Bottom - (chipSize / 2) - fmodf(-box.center.z + box.Bottom - (chipSize / 2), chipSize)) / chipSize + 1;
+
+	bool hit = false;
 
 	//マップの外にいたとき
 	if (up <= 0) {
@@ -163,7 +189,7 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 		hit = true;
 	}
 	else if (down >= mapData[nowMap].high - 1) {
-		hitPositon.z = -(mapData[nowMap].high - 1) * chipSize + chipSize / 2 + 1;
+		hitPositon.z = -(mapData[nowMap].high - 1) * chipSize /*+ chipSize / 2 + 1*/;
 		hit = true;
 	}
 	if (lef <= 0) {
@@ -176,12 +202,10 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider,Vector3 *vel, Vecto
 	}
 
 
-	
+
 	if (hitpos != nullptr) {
 		*hitpos = hitPositon;
 	}
-
-
 	return hit;
 }
 
