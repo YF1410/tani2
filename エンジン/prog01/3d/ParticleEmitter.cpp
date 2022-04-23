@@ -68,9 +68,10 @@ void ParticleEmitter::AddHeal(int count, int life, XMFLOAT3 position, Vector3 ve
 		this->position.y = position.y + 200.0f;
 		this->position.z = ((float)rand() / RAND_MAX * md_pos - md_pos / 2.0f) + position.z;
 		//X,Y,Z全て[-0.05,+0.05]でランダムに分布
-		this->velocity.x = velocity.x;
+		//this->velocity.x = velocity.x;
 		//velocity.y = (float)rand() / RAND_MAX * md_vel - md_vel / 2.0f;
-		this->velocity.z = velocity.z+((float)rand() / RAND_MAX * md_vel / 2.0f);
+		//this->velocity.z = velocity.z + ((float)rand() / RAND_MAX * md_vel / 2.0f);
+		this->velocity.z = (float)rand() / RAND_MAX * md_vel / 2.0f;
 		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
 		accel.z = (float)rand() / RAND_MAX * 0.5;
 
