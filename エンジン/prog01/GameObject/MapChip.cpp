@@ -190,7 +190,7 @@ bool MapChip::CheckMapChipAreaToBox2d(Box2DCollider *boxCollider, Vector3 *vel, 
 		hit = true;
 	}
 	else if (down >= mapData[nowMap].high - 1) {
-		hitPositon.z = -(mapData[nowMap].high - 1) * chipSize /*+ chipSize / 2 + 1*/;
+		hitPositon.z = -(mapData[nowMap].high - 1) * chipSize + chipSize / 2 + 1;
 		normal->z = 1.0f;
 		hit = true;
 	}
@@ -205,6 +205,9 @@ bool MapChip::CheckMapChipAreaToBox2d(Box2DCollider *boxCollider, Vector3 *vel, 
 		hit = true;
 	}
 
+	if (hit) {
+		normal->Normalize();
+	}
 
 
 	if (hitpos != nullptr) {
