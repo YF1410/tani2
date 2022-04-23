@@ -88,19 +88,22 @@ void PlayerObject::Initialize()
 	// パーティクルマネージャ生成
 	healParticle1 = healParticle1->Create(L"heal3");
 	healParticle2 = healParticle2->Create(L"heal4");
-	healParticle1->SetStartScale(200.0f);
-	healParticle2->SetStartScale(200.0f);
-	healParticle1->SetCenter(400.0f);
-	healParticle2->SetCenter(400.0f);
+	healParticle1->SetStartScale(300.0f);
+	healParticle2->SetStartScale(300.0f);
+	healParticle1->SetCenter(500.0f);
+	healParticle2->SetCenter(500.0f);
 
 	boomParticle = boomParticle->Create(L"boom");
 	boomParticle->SetStartScale(300.0f);
-	boomParticle->SetCenter(400.0f);
+	boomParticle->SetCenter(500.0f);
 
 	refParticle = refParticle->Create();
 	refParticle->SetStartScale(300.0f);
 	refParticle->SetCenter(400.0f);
 
+	atkParticle = atkParticle->Create();
+	atkParticle->SetStartScale(300.0f);
+	atkParticle->SetCenter(400.0f);
 }
 
 void PlayerObject::Update()
@@ -257,15 +260,15 @@ void PlayerObject::Update()
 	//	frameF = false;
 	//	frame = 0;
 	//}
-	//if (attack.is) {
-	//	refParticle->AddRef(2, 40, pos, velocity);
-	//}
+	if (attack.is) {
+		atkParticle->AddRef(5,20,pos,-velocity);
+	}
 
 	healParticle1->Update();
 	healParticle2->Update();
 	boomParticle->Update();
 	refParticle->Update();
-	
+	atkParticle->Update();
 }
 
 void PlayerObject::Draw() const
@@ -286,7 +289,7 @@ void PlayerObject::Draw() const
 	healParticle2->Draw(cmdList);
 	boomParticle->Draw(cmdList);
 	refParticle->Draw(cmdList);
-
+	atkParticle->Draw(cmdList);
 	//Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 	//flont.get()->Draw();
 	//Object3d::PostDraw();
@@ -417,6 +420,7 @@ void PlayerObject::HitWall(
 	if (!isBounce && attack.is) {
 		velocity *= 3.0f;
 		isBounce = true;
+		refParticle->AddRef(20, 60, pos, velocity);
 	}
 }
 

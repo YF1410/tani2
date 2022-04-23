@@ -89,6 +89,7 @@ private: // ƒƒ“ƒo•Ï”
 	ParticleEmitter* healParticle2;
 	ParticleEmitter* boomParticle;
 	ParticleEmitter* refParticle;
+	ParticleEmitter* atkParticle;
 
 	int nowHealFrame = 0;
 	int nowBoomFrame = 0;
