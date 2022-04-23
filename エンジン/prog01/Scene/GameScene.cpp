@@ -52,6 +52,8 @@ void GameScene::Initialize() {
 	Object3d::SetCamera(camera.get());
 	// FBXオブジェクトにカメラをセット
 	FbxObject3d::SetCamera(camera.get());
+	//
+	ParticleEmitter::SetCamera(camera.get());
 
 	// 背景スプライト生成
 	for (int i = 2; i < 5; i++) {
@@ -60,22 +62,6 @@ void GameScene::Initialize() {
 		tempsprite->SetPosition({ 1280.0f,250.0f });
 		weveSprite.push_back(std::move(tempsprite));
 	}
-
-	// パーティクルマネージャ生成
-	healParticle1 = healParticle1->Create(camera.get(), L"heal3");
-	healParticle2 = healParticle2->Create(camera.get(), L"heal4");
-	healParticle1->SetStartScale(200.0f);
-	healParticle2->SetStartScale(200.0f);
-	healParticle1->SetCenter(400.0f);
-	healParticle2->SetCenter(400.0f);
-
-	boomParticle = boomParticle->Create(camera.get(), L"boom");
-	boomParticle->SetStartScale(300.0f);
-	boomParticle->SetCenter(400.0f);
-
-	refParticle = refParticle->Create(camera.get());
-	refParticle->SetStartScale(300.0f);
-	refParticle->SetCenter(400.0f);
 
 	//ライト生成
 	light = LightGroup::Create();
@@ -231,42 +217,11 @@ void GameScene::Update() {
 	//ライト更新
 	light->Update();
 
-	//EnemyHelperManager::GetIns()->Update();
+	EnemyHelperManager::GetIns()->Update();
 	//ステージ更新
 	//testStage->Update();
 
 	//デバックテキスト
-	if (input->TriggerKey(DIK_J)) {
-		frameF = true;
-	}
-
-	if (frameF) {
-		frame++;
-	}
-
-	if (frame <= 2 && frameF) {
-		healParticle1->AddHeal(3, 40, playerObject->GetPos());
-		healParticle2->AddHeal(4, 40, playerObject->GetPos());
-		//boomParticle->AddBoom(2, 40, playerObject->GetPos());
-		//refParticle->AddRef(2, 40, playerObject->GetPos(),playerObject->GetVelocity());
-	}
-	else {
-		frameF = false;
-		frame = 0;
-	}
-	if (playerObject->GetIsBounce()) {
-		refParticle->AddRef(2, 40, playerObject->GetPos(), playerObject->GetVelocity());
-	}
-
-	healParticle1->Update();
-	healParticle2->Update();
-	//boomParticle->Update();
-	refParticle->Update();
-	/*healParticle1->AddHeal(2, 30, playerObject->GetPos());
-	healParticle2->AddHeal(4, 30, playerObject->GetPos());
-
-	healParticle1->Update();
-	healParticle2->Update();*/
 
 	for (auto& object : objects) {
 		object->Update();
@@ -277,7 +232,7 @@ void GameScene::Update() {
 	//破片更新
 	Debris::StaticUpdate();
 	//エネミー更新
-	//enemyManager.get()->Update();
+	enemyManager.get()->Update();
 
 
 	float contact_pos = 0.0f;
@@ -301,20 +256,20 @@ void GameScene::Update() {
 	}*/
 
 	//最終更新
-	//enemyManager.get()->FinalUpdate();
+	enemyManager.get()->FinalUpdate();
 	playerObject.get()->LustUpdate();
 	Debris::StaticLustUpdate();
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
 	Debris::StaticAdaptation();
-	//enemyManager.get()->Adaptation();
+	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
 	if (playerObject.get()->GetHp() == 0) {
 		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
 	}
 
-	//enemyManager.get()->Update();
+	enemyManager.get()->Update();
 	//カウンターを加算
 	counter++;
 }
@@ -345,21 +300,17 @@ void GameScene::Draw() {
 
 #pragma region 3Dオブジェクト(FBX)描画
 	//testStage->Draw(DirectXCommon::GetInstance()->GetCommandList());
-	//EnemyHelperManager::GetIns()->Draw();
+	EnemyHelperManager::GetIns()->Draw();
 	MapChip::GetInstance()->Draw();
 	Debris::StaticDraw();
-	//enemyManager.get()->Draw();
+	enemyManager.get()->Draw();
 	playerObject->Draw();
 	
 #pragma endregion 3Dオブジェクト(FBX)描画
 
 
 #pragma region パーティクル
-	// パーティクルの描画
-	healParticle1->Draw(cmdList);
-	healParticle2->Draw(cmdList);
-	//boomParticle->Draw(cmdList);
-	refParticle->Draw(cmdList);
+
 #pragma endregion パーティクル
 
 

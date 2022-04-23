@@ -76,11 +76,6 @@ private: // メンバ変数
 	//スプライト
 	std::vector<std::unique_ptr<Sprite>> weveSprite;
 	std::unique_ptr<Sprite> sprite;
-	//パーティクル
-	ParticleEmitter* healParticle1;
-	ParticleEmitter* healParticle2;
-	ParticleEmitter* boomParticle;
-	ParticleEmitter* refParticle;
 	//オブジェクト
 	std::unique_ptr<Model> slimeModel;
 	std::unique_ptr<Model> modelSphere;

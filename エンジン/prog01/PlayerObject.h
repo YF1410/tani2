@@ -35,8 +35,6 @@ public:
 	float GetSuction() { return suction; }
 	float GetSpeed() { return velocity.Length(); }
 	float GetScale() { return scalef; }
-	Vector3 GetVelocity() { return velocity; }
-	bool GetIsBounce() { return isBounce; }
 
 	//壁との衝突
 	void HitWall(
@@ -92,7 +90,18 @@ private: // メンバ変数
 
 	Box2DCollider *toMapChipCollider;
 
+	//パーティクル
+	ParticleEmitter* healParticle1;
+	ParticleEmitter* healParticle2;
+	ParticleEmitter* boomParticle;
 	ParticleEmitter* refParticle;
+
+	int nowHealFrame = 0;
+	int nowBoomFrame = 0;
+	bool isHealFrameIncrease = false;
+	bool isBoomFrameIncrease = false;
+	int maxHealFrame = 3;
+	int maxBoomFrame = 2;
 
 	GameObjCommon *coreUp;
 };

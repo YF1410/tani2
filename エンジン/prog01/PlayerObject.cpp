@@ -86,6 +86,21 @@ void PlayerObject::Initialize()
 	//アニメーション開始
 	objectData->PlayAnimation();
 
+	// パーティクルマネージャ生成
+	healParticle1 = healParticle1->Create(L"heal3");
+	healParticle2 = healParticle2->Create(L"heal4");
+	healParticle1->SetStartScale(200.0f);
+	healParticle2->SetStartScale(200.0f);
+	healParticle1->SetCenter(400.0f);
+	healParticle2->SetCenter(400.0f);
+
+	boomParticle = boomParticle->Create(L"boom");
+	boomParticle->SetStartScale(300.0f);
+	boomParticle->SetCenter(400.0f);
+
+	refParticle = refParticle->Create();
+	refParticle->SetStartScale(300.0f);
+	refParticle->SetCenter(400.0f);
 
 }
 
@@ -227,12 +242,39 @@ void PlayerObject::Update()
 	DebugText::GetInstance()->VariablePrint(0, 80, "StayTimer", collect.timer, 3);
 	DebugText::GetInstance()->VariablePrint(0, 160, "Speed", velocity.Length(), 3);
 	
+	//if (input->TriggerKey(DIK_H)) {
+	//	frameF = true;
+	//}
+
+	//if (frameF) {
+	//	frame++;
+	//}
+
+	//if (frame <= 2 && frameF) {
+	//	healParticle1->AddHeal(3, 40, pos);
+	//	healParticle2->AddHeal(4, 40, pos);
+	//	//boomParticle->AddBoom(2, 40, pos);
+	//	//refParticle->AddRef(2, 40, pos,velocity);
+	//}
+	//else {
+	//	frameF = false;
+	//	frame = 0;
+	//}
+	//if (attack.is) {
+	//	refParticle->AddRef(2, 40, pos, velocity);
+	//}
+
+	healParticle1->Update();
+	healParticle2->Update();
+	boomParticle->Update();
+	refParticle->Update();
 	
 }
 
 void PlayerObject::Draw() const
 {
-	Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
+	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
+	Object3d::PreDraw(cmdList);
 
 	coreUp->pos = pos;
 	coreUp->Adaptation();
@@ -242,6 +284,11 @@ void PlayerObject::Draw() const
 
 	GameObjCommon::Draw();
 
+	// パーティクルの描画
+	healParticle1->Draw(cmdList);
+	healParticle2->Draw(cmdList);
+	boomParticle->Draw(cmdList);
+	refParticle->Draw(cmdList);
 
 	//Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 	//flont.get()->Draw();
@@ -319,6 +366,24 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 			//吸収
 			size += debri->GetSize();
 		}
+
+		isHealFrameIncrease = true;
+
+		if (isHealFrameIncrease) {
+			nowHealFrame++;
+		}
+
+		if (nowHealFrame <= maxHealFrame && isHealFrameIncrease){
+			healParticle1->AddHeal(3, 40, pos, velocity);
+			healParticle2->AddHeal(4, 40, pos, velocity);
+			//boomParticle->AddBoom(2, 40, pos);
+			//refParticle->AddRef(2, 40, pos,velocity);
+		}
+		else {
+			isHealFrameIncrease = false;
+			nowHealFrame = 0;
+		}
+
 		break;
 	case ENEMY:
 		enemy = dynamic_cast<Enemy*>(info.object);
@@ -367,9 +432,9 @@ void PlayerObject::Damage(float damage)
 	//sizeが0になったら死亡処理
 	if (size <= 0) {
 		size = 0;
-		
 	}
 
+	boomParticle->AddBoom(2, 10, pos);
 }
 
 
