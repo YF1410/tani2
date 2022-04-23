@@ -16,7 +16,12 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public: // 静的メンバ関数
-	ParticleEmitter* Create(Camera* camera, std::wstring fName = L"effect1");
+	ParticleEmitter* Create(std::wstring fName = L"effect1");
+
+	static void SetCamera(Camera* _camera) { camera = _camera; };
+
+private: //  静的メンバ変数
+	static Camera* camera;
 
 public: // メンバ関数
 	// 追加

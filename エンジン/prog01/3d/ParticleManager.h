@@ -81,6 +81,8 @@ public: // 静的メンバ関数
 	std::unique_ptr<ParticleManager> Create(ID3D12Device* device, Camera* camera);
 
 public: // メンバ関数
+	//コンストラクタ
+	ParticleManager(ID3D12Device* device, Camera* camera);
 	//デストラクタ
 	~ParticleManager();
 	// 初期化
@@ -130,5 +132,5 @@ private: // 静的メンバ変数
 	Camera* camera = nullptr;
 
 private:
-	ParticleManager(ID3D12Device* device, Camera* camera);
+	
 };

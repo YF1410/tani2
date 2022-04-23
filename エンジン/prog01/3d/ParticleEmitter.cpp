@@ -1,8 +1,9 @@
 #include "ParticleEmitter.h"
 #include "DirectXCommon.h"
 
+Camera* ParticleEmitter::camera = nullptr;
 
-ParticleEmitter* ParticleEmitter::Create(Camera* camera, std::wstring fName)
+ParticleEmitter* ParticleEmitter::Create(std::wstring fName)
 {
 	ParticleEmitter* particleEmitter = new ParticleEmitter();
 	if (particleEmitter == nullptr)
