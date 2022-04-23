@@ -94,7 +94,7 @@ void GameScene::Initialize() {
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
-	camera->SetEye({ 0,1600,-500 });
+	camera->SetEye({ 0,0,-5 });
 	camera->SetUp({ 0,1,0 });
 
 	//プレイヤーの初期化
@@ -113,13 +113,13 @@ void GameScene::Initialize() {
 
 void GameScene::Finalize() {
 	Debris::Finalize();
+	MapChip::GetInstance()->Filnalize();
 }
 
 void GameScene::Update() {
-
 	//カメラ更新
-	//プレイヤーの少し上を焦点にする
-	//カメラ更新
+		//プレイヤーの少し上を焦点にする
+		//カメラ更新
 	Vector3 camEye = camera.get()->GetEye();
 	float debrisLengthMax = 0.0f;
 	for (int i = 0; i < Debris::debris.size(); i++) {
@@ -350,6 +350,7 @@ void GameScene::Draw() {
 	Debris::StaticDraw();
 	//enemyManager.get()->Draw();
 	playerObject->Draw();
+	
 #pragma endregion 3Dオブジェクト(FBX)描画
 
 

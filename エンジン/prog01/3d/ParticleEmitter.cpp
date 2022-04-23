@@ -1,8 +1,10 @@
 #include "ParticleEmitter.h"
 #include "DirectXCommon.h"
 
+Camera* ParticleEmitter::camera = nullptr;
 
-ParticleEmitter* ParticleEmitter::Create(Camera* camera, std::wstring fName)
+ParticleEmitter* ParticleEmitter::Create(std::wstring fName)
+
 {
 	ParticleEmitter* particleEmitter = new ParticleEmitter();
 	if (particleEmitter == nullptr)
@@ -130,6 +132,7 @@ void ParticleEmitter::AddRef(int count, int life, XMFLOAT3 position, Vector3 vel
 
 		//’Ç‰Á
 		particleMan->Add(life, this->position, this->velocity, accel, s_scale, e_scale, s_color, e_color);
+
 	}
 }
 

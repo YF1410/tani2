@@ -7,7 +7,7 @@ class ModelManager final
 {
 private:
 	ModelManager() = default;
-	~ModelManager() = default;
+	~ModelManager();
 	ModelManager(const ModelManager &r) = default;
 	ModelManager &operator= (const ModelManager &r) = default;
 

@@ -3,6 +3,11 @@
 
 //std::map<ModelManager::ModelName, std::unique_ptr<FbxModel>> ModelManager::model;
 
+ModelManager::~ModelManager()
+{
+	Finalize();
+}
+
 ModelManager *ModelManager::GetIns()
 {
 	static ModelManager instans;
@@ -44,6 +49,10 @@ void ModelManager::Initialize()
 
 void ModelManager::Finalize()
 {
+	for (auto& a : model)
+	{
+		a.second.reset();
+	}
 	model.clear();
 }
 

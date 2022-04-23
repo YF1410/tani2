@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include <string>
+
 class ParticleEmitter
 {
 private: // エイリアス
@@ -17,7 +19,12 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public: // 静的メンバ関数
-	ParticleEmitter* Create(Camera* camera, std::wstring fName = L"effect1");
+	ParticleEmitter* Create(std::wstring fName = L"effect1");
+
+	static void SetCamera(Camera* _camera) { camera = _camera; };
+
+private: //  静的メンバ変数
+	static Camera* camera;
 
 public: // メンバ関数
 	// 追加
@@ -62,7 +69,7 @@ private: // メンバ変数
 	// スケール最終値
 	float e_scale = 0.0f;
 	// 色(RGBA)初期値
-	XMFLOAT4 s_color = { 1, 1, 1, 1};
+	XMFLOAT4 s_color = { 1, 1, 1, 1 };
 	// 色(RGBA)最終値
 	XMFLOAT4 e_color = {};
 	//X,Y,Z全て[-5.0,+5.0]でランダムに分布
