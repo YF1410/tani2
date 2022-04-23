@@ -189,11 +189,11 @@ void PlayerObject::Update()
 
 	//‰ñŽû
 	if (input->TriggerKey(DIK_Q)|| input->TriggerPadButton(BUTTON_B)) {
-		//if (collect.Start()) {
+		if (collect.Start()) {
 			for (int i = 0; i < Debris::debris.size(); i++) {
 				Debris::debris[i]->ReturnStart();
 			}
-		//}
+		}
 	}
 
 
@@ -253,8 +253,9 @@ void PlayerObject::LustUpdate()
 	Vector3 moveVec = velocity + penalty;
 	Vector3 normal = { 0,0,0 };
 	//ã‰º¶‰E
-	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
-
+	//ã‰º¶‰E
+	if (MapChip::GetInstance()->CheckMapChipAreaToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
+		normal.Normalize();
 		if (hitPos.x != 0) {
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
 		}
@@ -264,6 +265,21 @@ void PlayerObject::LustUpdate()
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
 	}
+	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
+
+		normal.Normalize();
+		if (hitPos.x != 0) {
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
+		}
+		if (hitPos.z != 0) {
+			pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
+		}
+		normal.Normalize();
+		HitWall(hitPos, normal.Normal());
+	}
+	
+
+
 	//Šp
 	else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
 		//Vector3 normal = { 0,0,0 };

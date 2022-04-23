@@ -169,7 +169,7 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vect
 	return hit;
 }
 
-bool MapChip::CheckMapChipAreaToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos)
+bool MapChip::CheckMapChipAreaToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos, Vector3 *normal)
 {
 	Vector3 hitPositon = { 0,0,0 };
 	Box2DCollider box = *boxCollider;
@@ -186,18 +186,22 @@ bool MapChip::CheckMapChipAreaToBox2d(Box2DCollider *boxCollider, Vector3 *vel, 
 	//マップの外にいたとき
 	if (up <= 0) {
 		hitPositon.z = -chipSize / 2;
+		normal->z = -1.0f;
 		hit = true;
 	}
 	else if (down >= mapData[nowMap].high - 1) {
 		hitPositon.z = -(mapData[nowMap].high - 1) * chipSize /*+ chipSize / 2 + 1*/;
+		normal->z = 1.0f;
 		hit = true;
 	}
 	if (lef <= 0) {
 		hitPositon.x = chipSize / 2;;
+		normal->x = 1.0f;
 		hit = true;
 	}
 	else if (rig >= mapData[nowMap].wide - 1) {
 		hitPositon.x = (mapData[nowMap].wide - 1) * chipSize - chipSize / 2 - 1;
+		normal->x = -1.0f;
 		hit = true;
 	}
 
