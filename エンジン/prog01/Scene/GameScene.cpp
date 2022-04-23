@@ -100,6 +100,7 @@ void GameScene::Initialize() {
 
 void GameScene::Finalize() {
 	Debris::Finalize();
+	MapChip::GetInstance()->Filnalize();
 }
 
 void GameScene::Update() {

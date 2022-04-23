@@ -14,7 +14,7 @@ class MapChip
 {
 private:
 	MapChip() = default;
-	~MapChip() = default;
+	~MapChip();
 	MapChip(const MapChip & mapChip) = delete;
 	MapChip &operator=(const MapChip & mapChip) = delete;
 

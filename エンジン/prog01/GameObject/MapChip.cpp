@@ -12,6 +12,14 @@ void MapChip::Initialize()
 	CsvLoad(TEST_MAP, "testMap",63,63);
 }
 
+void MapChip::Filnalize()
+{
+	for (auto& a : mapChipObj)
+	{
+		a.clear();
+	}
+}
+
 void MapChip::CsvLoad(MAP_NAME nowMap, std::string fName, int mapChipMaxX, int mapChipMaxY)
 {
 	std::ifstream ifs(baseDirectory + fName + ".csv");
@@ -292,6 +300,11 @@ bool MapChip::CheckMapChipToSphere2d(SphereCollider *sphereCollider, Vector3 *ve
 		*hitPos = hitPosition;
 	}
 	return hit;
+}
+
+MapChip::~MapChip()
+{
+	Filnalize();
 }
 
 MapChip* MapChip::GetInstance()
