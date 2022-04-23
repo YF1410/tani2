@@ -62,8 +62,8 @@ void GameScene::Initialize() {
 	}
 
 	// パーティクルマネージャ生成
-	ParticleEmitter::SetCamera(camera.get());
-	particleMan = particleMan->Create(L"APEX_01");
+	/*ParticleEmitter::SetCamera(camera.get());
+	particleMan = particleMan->Create(L"APEX_01");*/
 
 	//ライト生成
 	light = LightGroup::Create();
@@ -105,12 +105,177 @@ void GameScene::Finalize() {
 }
 
 void GameScene::Update() {
+	//カメラ更新
+		//プレイヤーの少し上を焦点にする
+		//カメラ更新
+	Vector3 camEye = camera.get()->GetEye();
+	float debrisLengthMax = 0.0f;
+	for (int i = 0; i < Debris::debris.size(); i++) {
+		if (Debris::debris[i]->isFirstAttack &&
+			debrisLengthMax <= Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length()) {
+			debrisLengthMax = Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length();
+		}
 
-	
-	particleMan->RandAdd();
-	particleMan->Update();
+		if (Debris::debris[i]->state == Debris::RETURN &&
+			debrisLengthMax <= Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length()) {
+			debrisLengthMax = Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length();
+		}
+	}
 
-	
+	const float velocityOffset = 17.0f;
+	//カメラのイージング制御
+	eyeDistance = Ease(Out, Quad, 0.05f,
+		camera.get()->GetEye(),
+		Vector3(playerObject.get()->GetPos() +
+			eyeDistanceDef +
+			Vector3(0, debrisLengthMax * 0.7f, 0) +
+			playerObject.get()->velocity * velocityOffset
+		));
+	camera->SetEye(eyeDistance);
+	//プレイヤーの少し上を焦点にする
+	targetDistance = Ease(Out, Quad, 0.05f,
+		camera.get()->GetTarget(),
+		Vector3(playerObject.get()->GetPos() +
+			targetDistanceDef +
+			playerObject.get()->velocity * velocityOffset));
+	camera->SetTarget(targetDistance);
+
+	camera->Update();
+
+
+	if (Input::GetInstance()->TriggerKey(DIK_1)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new AvoidanceEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_2)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new CushionEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+
+		}
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_3)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new BoundEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_4)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new AvoidanceEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_5)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new RandomMoveEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_6)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new EscapeEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_7)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new DefenseEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_8)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new KiteEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_9)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new SuctionEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_0)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new GetawayEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+		for (int i = 0; i < 3; i++) {
+			EnemyManager::enemys.push_back(new RouteMoveEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+		}
+	}
+
+	//マップチップ更新
+	//MapChip::GetInstance()->Update(MapChip::TEST_MAP);
+
+
+	//入力更新
+	Input* input = Input::GetInstance();
+
+	//ライト更新
+	light->Update();
+
+	EnemyHelperManager::GetIns()->Update();
+	//ステージ更新
+	//testStage->Update();
+
+	//デバックテキスト
+
+	//particleMan->Update();
+
+	for (auto& object : objects) {
+		object->Update();
+	}
+
+	//プレイヤー更新
+	playerObject->Update();
+	//破片更新
+	Debris::StaticUpdate();
+	//エネミー更新
+	enemyManager.get()->Update();
+
+
+	float contact_pos = 0.0f;
+
+	// 全ての衝突をチェック
+	collisionManager->CheckBroadCollisions();
+
+	/*line.startPos = Enemy::enemys[0]->GetPos();
+	line.endPos = playerObject->GetPos();
+	aabb.length = { 200,0,200 };
+
+	for (int z = 0; z < 34; z++) {
+		for (int x = 0; x < 57; x++) {
+			if (MapChip::GetInstance()->GetChipNum(x, z) == 1) {
+				aabb.center = { 200.0f * x - 100.0f ,0.0f,-200.0f * z + 100.0f };
+				if (Collision::CheckLine2Box(line, aabb)) {
+					DebugText::GetInstance()->Print("hit", 0, 80, 3);
+				}
+			}
+		}
+	}*/
+
+	//最終更新
+	enemyManager.get()->FinalUpdate();
+	playerObject.get()->LustUpdate();
+	Debris::StaticLustUpdate();
+	//全ての移動最終適応処理
+	playerObject.get()->Adaptation();
+	Debris::StaticAdaptation();
+	enemyManager.get()->Adaptation();
+	MapChip::GetInstance()->Adaptation();
+
+	if (playerObject.get()->GetHp() == 0) {
+		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
+	}
+
+	enemyManager.get()->Update();
+	//カウンターを加算
+	counter++;
 }
 
 void GameScene::LastUpdate() {
@@ -139,13 +304,18 @@ void GameScene::Draw() {
 
 #pragma region 3Dオブジェクト(FBX)描画
 	//testStage->Draw(DirectXCommon::GetInstance()->GetCommandList());
+	EnemyHelperManager::GetIns()->Draw();
+	MapChip::GetInstance()->Draw();
+	Debris::StaticDraw();
+	enemyManager.get()->Draw();
+	playerObject->Draw();
 	
 #pragma endregion 3Dオブジェクト(FBX)描画
 
 
 #pragma region パーティクル
 	// パーティクルの描画
-	particleMan->Draw(cmdList);
+	//particleMan->Draw(cmdList);
 #pragma endregion パーティクル
 
 
@@ -159,7 +329,7 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画
 
-	//ui.get()->Draw();
+	ui.get()->Draw();
 
 	if (enemyManager.get()->isEndFlag())
 	{
