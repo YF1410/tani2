@@ -25,6 +25,9 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	)
 {
 	srand(time(NULL));			//爆破用乱数のシード値をセット
+	
+	scale = ConvertSizeToScale(energy / 2.0f);
+
 	//初期位置に設定
 	this->startPos = startPos;
 
@@ -94,7 +97,7 @@ void PlayerObject::Update()
 	penalty = { 0,0,0 };
 
 	//移動量減衰処理
-	VelocityReset(0.9f);
+	VelocityReset(0.95f);
 	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
@@ -175,7 +178,7 @@ void PlayerObject::Update()
 			startVec.AddRotationY(shotRad);
 			//startVec = startVec + offset;
 
-			velocity += velocity.Normal() * 100;
+			velocity += velocity.Normal() * 60;
 			//Debrisのコンテナに追加
 			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
 		}
@@ -192,6 +195,9 @@ void PlayerObject::Update()
 			}
 		//}
 	}
+
+
+
 	//攻撃インターバル
 	attack.Intervel();
 
@@ -203,6 +209,7 @@ void PlayerObject::Update()
 
 
 	//サイズからスケールへ変換
+	scale = ConvertSizeToScale(energy / 2.0f);
 	//移動量を適応
 	PosAddVelocity();
 	//移動量からブロードコライダーを更新
@@ -302,7 +309,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 	case ENEMY:
 		enemy = dynamic_cast<Enemy*>(info.object);
 		//エネミーが攻撃可能状態ならダメージ処理をする
-		if (enemy->attack.can) {
+		if (enemy->attack.can && !attack.is) {
 			Damage(enemy->CauseDamage());
 		}
 

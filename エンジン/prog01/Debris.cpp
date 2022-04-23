@@ -21,7 +21,7 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	reversFlag(false)
 {
 	//サイズからスケールへコンバート
-	scale = ConvertSizeToScale(size) * 2;
+	scale = ConvertSizeToScale(size);
 	//初期加速度セット
 	velocity = startVec;
 	//最初から攻撃状態
@@ -72,7 +72,7 @@ void Debris::Update()
 
 	if (!isAttack) {
 		size *= 0.99f;
-		scale = ConvertSizeToScale(size) * 2;
+		scale = ConvertSizeToScale(size);
 
 	}
 	if (size < 0.01f) {

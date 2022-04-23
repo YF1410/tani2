@@ -24,7 +24,6 @@ void EnemyManager::Initialize()
 
 	//ウェーブ1
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
-	/*
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
@@ -50,7 +49,7 @@ void EnemyManager::Initialize()
 	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
 	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
 	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
-	*/
+	
 	endFlag = false;
 
 }

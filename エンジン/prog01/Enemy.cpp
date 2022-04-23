@@ -47,7 +47,7 @@ void Enemy::Initialize()
 	attack = {
 		true,
 		false,
-		20,
+		40,
 		0
 	};
 	HP = maxHP;
