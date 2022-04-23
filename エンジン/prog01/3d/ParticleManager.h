@@ -74,11 +74,11 @@ public: // サブクラス
 	};
 
 private: // 定数
-	static const int vertexCount = 65536; // 頂点数
+	const int vertexCount = 65536; // 頂点数
 
 public: // 静的メンバ関数
 	// 3Dオブジェクト生成
-	static std::unique_ptr<ParticleManager> Create(ID3D12Device* device, Camera* camera);
+	std::unique_ptr<ParticleManager> Create(ID3D12Device* device, Camera* camera);
 
 public: // メンバ関数
 	//デストラクタ
@@ -97,7 +97,7 @@ public: // メンバ関数
 	// グラフィックパイプライン生成
 	void InitializeGraphicsPipeline();
 	// テクスチャ読み込み
-	void LoadTexture();
+	void LoadTexture(std::wstring fName = L"effect1");
 	// モデル作成
 	void CreateModel();
 
@@ -130,5 +130,5 @@ private: // 静的メンバ変数
 	Camera* camera = nullptr;
 
 private:
-		ParticleManager(ID3D12Device* device, Camera* camera);
+	ParticleManager(ID3D12Device* device, Camera* camera);
 };

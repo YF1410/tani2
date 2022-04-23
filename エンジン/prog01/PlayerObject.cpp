@@ -105,7 +105,7 @@ void PlayerObject::Update()
 	if (attack.is && velocity.Length() >= 360) {
 		velocity = velocity.Normal() * 360;
 	}
-	if (attack.is && velocity.Length() < 30) {
+	if (attack.is && velocity.Length() < scalef*60) {
 		attack.is = false;
 		isBounce = false;
 	}
@@ -350,7 +350,7 @@ void PlayerObject::HitWall(
 	const Vector3 &normal)
 {
 	velocity = CalcReflectVector(velocity, normal);
-	if (!isBounce) {
+	if (!isBounce && attack.is) {
 		velocity *= 3.0f;
 		isBounce = true;
 	}

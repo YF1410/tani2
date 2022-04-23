@@ -436,7 +436,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 	}
 }
 
-void ParticleManager::LoadTexture()
+void ParticleManager::LoadTexture(std::wstring fName)
 {
 	HRESULT result = S_FALSE;
 
@@ -444,9 +444,11 @@ void ParticleManager::LoadTexture()
 	TexMetadata metadata{};
 	ScratchImage scratchImg{};
 
+	std::wstring name = L"Resources/" + fName + L".png";
+
 	result = LoadFromWICFile
 	(
-		L"Resources/effect1.png", WIC_FLAGS_NONE,
+		name.c_str(), WIC_FLAGS_NONE,
 		&metadata, scratchImg
 	);
 	if (FAILED(result))

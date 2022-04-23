@@ -147,6 +147,12 @@
     <FxCompile Include="Resources\shaders\PBRFBXPS.hlsl">
       <Filter>シェーダーファイル\FBX</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ToonMapPS.hlsl">
+      <Filter>シェーダーファイル\FBX</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ToonMapVS.hlsl">
+      <Filter>シェーダーファイル\FBX</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="2d\DebugText.cpp">

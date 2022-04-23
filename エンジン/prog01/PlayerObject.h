@@ -6,6 +6,7 @@
 #include "Box2DCollider.h"
 #include "GameObjCommon.h"
 #include "State.h"
+#include "ParticleEmitter.h"
 
 enum REVERSE_Range {
 	MIN = 800,
@@ -34,6 +35,8 @@ public:
 	float GetSuction() { return suction; }
 	float GetSpeed() { return velocity.Length(); }
 	float GetScale() { return scalef; }
+	Vector3 GetVelocity() { return velocity; }
+	bool GetIsBounce() { return isBounce; }
 
 	//•Ç‚Æ‚ÌÕ“Ë
 	void HitWall(
@@ -89,6 +92,7 @@ private: // ƒƒ“ƒo•Ï”
 
 	Box2DCollider *toMapChipCollider;
 
+	ParticleEmitter* refParticle;
 
 	GameObjCommon *coreUp;
 };

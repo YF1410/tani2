@@ -77,7 +77,10 @@ private: // メンバ変数
 	std::vector<std::unique_ptr<Sprite>> weveSprite;
 	std::unique_ptr<Sprite> sprite;
 	//パーティクル
-	std::unique_ptr<ParticleManager> particleMan;
+	ParticleEmitter* healParticle1;
+	ParticleEmitter* healParticle2;
+	ParticleEmitter* boomParticle;
+	ParticleEmitter* refParticle;
 	//オブジェクト
 	std::unique_ptr<Model> slimeModel;
 	std::unique_ptr<Model> modelSphere;
@@ -91,6 +94,11 @@ private: // メンバ変数
 
 	std::unique_ptr<Model> modelPlane;
 	std::vector<std::unique_ptr<Object3d>> objects;
+
+	int frame = 0;
+	bool frameF = false;
+	int healFrame = 3;
+	int boomFrame = 2;
 
 	int weveStartTimer = 0;
 	float upTimer = 0.0f;
