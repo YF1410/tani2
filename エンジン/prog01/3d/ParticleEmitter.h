@@ -2,6 +2,8 @@
 
 #include "ParticleManager.h"
 
+#include <string>
+
 class ParticleEmitter
 {
 private: // エイリアス
@@ -14,11 +16,12 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public: // 静的メンバ関数
-	static ParticleEmitter* Create();
+	ParticleEmitter* Create(Camera* camera, std::wstring fName = L"effect1");
 
 public: // メンバ関数
 	// 追加
-	void Add(XMFLOAT3 position = { 0,0,0 });
+	void RandAdd(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
+	void Add(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
 	// 毎フレーム処理
 	void Update();
 	// 描画
@@ -34,8 +37,10 @@ public: // メンバ関数
 	void SetStartColor(XMFLOAT4 s_color) { this->s_color = s_color; }
 	//色(RGBA)最終値の設定
 	void SetEndColor(XMFLOAT4 e_color) { this->e_color = e_color; }
-	// マネージャーの設定
-	void SetParticleManager(ParticleManager* particleMan) { this->particleMan = particleMan; }
+	// スケール初期値の設定
+	void SetStartScale(const float s_scale) { this->s_scale = s_scale; }
+	// スケール最終値の設定
+	void SetEndScale(const float e_scale) { this->e_scale = e_scale; }
 
 private: // メンバ変数
 	//座標
@@ -53,7 +58,7 @@ private: // メンバ変数
 	// スケール最終値
 	float e_scale = 0.0f;
 	// 色(RGBA)初期値
-	XMFLOAT4 s_color = { 1, 1, 1, 1};
+	XMFLOAT4 s_color = { 1, 1, 1, 1 };
 	// 色(RGBA)最終値
 	XMFLOAT4 e_color = {};
 	//X,Y,Z全て[-5.0,+5.0]でランダムに分布
@@ -63,5 +68,5 @@ private: // メンバ変数
 	//重力に見立ててYのみ[-0.001f,0]でランダムに分布
 	float md_acc = 0.001f;
 
-	ParticleManager* particleMan = nullptr;
+	std::unique_ptr<ParticleManager> particleMan;
 };

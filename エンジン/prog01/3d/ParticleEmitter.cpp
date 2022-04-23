@@ -1,7 +1,8 @@
 #include "ParticleEmitter.h"
+#include "DirectXCommon.h"
 
 
-ParticleEmitter* ParticleEmitter::Create()
+ParticleEmitter* ParticleEmitter::Create(Camera* camera, std::wstring fName)
 {
 	ParticleEmitter* particleEmitter = new ParticleEmitter();
 	if (particleEmitter == nullptr)
@@ -9,12 +10,16 @@ ParticleEmitter* ParticleEmitter::Create()
 		return nullptr;
 	}
 
+	particleEmitter->particleMan = particleEmitter->particleMan->Create(DirectXCommon::GetInstance()->GetDevice(), camera);
+
+	particleEmitter->particleMan->LoadTexture(fName);
+
 	return particleEmitter;
 }
 
-void ParticleEmitter::Add(XMFLOAT3 position)
+void ParticleEmitter::RandAdd(int count, int life, XMFLOAT3 position)
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < count; i++)
 	{
 		//X,Y,Z全て[-5.0,+5.0]でランダムに分布
 		this->position.x = ((float)rand() / RAND_MAX * md_pos - md_pos / 2.0f) + position.x;
@@ -28,7 +33,27 @@ void ParticleEmitter::Add(XMFLOAT3 position)
 		accel.y = -(float)rand() / RAND_MAX * md_acc;
 
 		//追加
-		particleMan->Add(60, this->position, velocity, accel, s_scale, e_scale, s_color, e_color);
+		particleMan->Add(life, this->position, velocity, accel, s_scale, e_scale, s_color, e_color);
+	}
+}
+
+void ParticleEmitter::Add(int count, int life, XMFLOAT3 position)
+{
+	for (int i = 0; i < count; i++)
+	{
+		//X,Y,Z全て[-5.0,+5.0]でランダムに分布
+		this->position.x = position.x;
+		this->position.y = position.y;
+		this->position.z = position.z;
+		//X,Y,Z全て[-0.05,+0.05]でランダムに分布
+		velocity.x = md_vel;
+		velocity.y = md_vel;
+		velocity.z = md_vel;
+		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+		accel.y = md_acc;
+
+		//追加
+		particleMan->Add(life, this->position, velocity, accel, s_scale, e_scale, s_color, e_color);
 	}
 }
 

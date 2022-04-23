@@ -62,7 +62,6 @@ void GameScene::Initialize() {
 	}
 
 	// パーティクルマネージャ生成
-	particleMan = ParticleManager::Create(DirectXCommon::GetInstance()->GetDevice(), camera.get());
 
 	//ライト生成
 	light = LightGroup::Create();
