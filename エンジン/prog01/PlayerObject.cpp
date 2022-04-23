@@ -305,6 +305,17 @@ void PlayerObject::LustUpdate()
 	//ã‰º¶‰E
 	if (MapChip::GetInstance()->CheckMapChipAreaToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
 		if (hitPos.x != 0) {
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x + normal.x;
+		}
+		if (hitPos.z != 0) {
+			pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z + normal.z;
+		}
+		normal.Normalize();
+		HitWall(hitPos, normal.Normal());
+	}
+	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
+
+		if (hitPos.x != 0) {
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
 		}
 		if (hitPos.z != 0) {
@@ -312,17 +323,6 @@ void PlayerObject::LustUpdate()
 		}
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
-	}
-	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
-
-		//if (hitPos.x != 0) {
-		//	pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
-		//}
-		//if (hitPos.z != 0) {
-		//	pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
-		//}
-		//normal.Normalize();
-		//HitWall(hitPos, normal.Normal());
 	}
 	
 
