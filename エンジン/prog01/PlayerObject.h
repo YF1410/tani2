@@ -8,10 +8,6 @@
 #include "State.h"
 #include "ParticleEmitter.h"
 
-enum REVERSE_Range {
-	MIN = 800,
-	MAX = 1000
-};
 
 class PlayerObject :
 	public GameObjCommon
@@ -32,16 +28,14 @@ public:
 	//ゲッター
 	Vector3 GetPos() { return pos; }
 	Vector3 *GetPosPointer() { return &pos; }
-	float GetSuction() { return suction; }
 	float GetSpeed() { return velocity.Length(); }
-	float GetScale() { return scalef; }
 
 	//壁との衝突
 	void HitWall(
 		const XMVECTOR &hitPos,		//衝突位置
 		const Vector3 &normal);
 
-	int GetHp() { return size; }
+	int GetHp() { return energy; }
 
 
 	//回収フラグ
@@ -63,7 +57,6 @@ private:
 
 private: // メンバ変数
 	
-	float size;	//質量
 
 	//キーボード移動用
 	float moveSpead;
@@ -72,16 +65,17 @@ private: // メンバ変数
 	XMFLOAT3 startPos;
 	//スケールに対する吸引比率
 	const float suctionRatio = 600.0f;
-	//吸引範囲
-	float suction;
-	//サイズ
-	float scalef;//大きさ
 
 	//反射フラグ
 	bool isBounce;
+	
+	//エネルギー
+	float energy;	//質量
+	//自爆で飛ばす数
+	const int DESTRUCT_POW = 5;
+	//爆発に使う合計エネルギー
+	const float SHOT_ENERGY = 100;
 
-	//自爆力
-	const int destructPow = 10;
 
 	//コライダー
 	SphereCollider *broadSphereCollider;	//ブロード

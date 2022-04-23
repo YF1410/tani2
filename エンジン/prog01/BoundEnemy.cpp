@@ -22,26 +22,22 @@ void BoundEnemy::OnCollision(const CollisionInfo &info)
 		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.4f;
 		penalty.y = 0;
 
+		velocity = CalcReflectVector(velocity, Vector3(pos - player->pos));
+		
+
+
 		//プレイヤーが攻撃状態なら
 		if (player->attack.is) {
 			//ダメージを受ける
 			Damage(player->attackPow);
 			
-			////衝突軸ベクトル
-			//Vector3 normal = pos - player->pos;
-			//normal.Normalize();
-			////内積
-			//float dot = Vector3(player->pos - pos).VDot(normal);
-			////定数ベクトル
-			//Vector3 constVec = 2 * dot / 2 * normal;
-
 		}
 		break;
 	case DEBRIS:
 		//デブリが攻撃状態ならダメージを受ける
 		debri = dynamic_cast<Debris *>(info.object);
 		if (debri->isAttack) {
-			Damage(1.0f);
+			Damage(debri->velocity.Length());
 		}
 		break;
 

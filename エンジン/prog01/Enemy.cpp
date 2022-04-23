@@ -20,7 +20,7 @@ Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 	isAlive = true;
 	scale = 1.0f;
 	this->player = player;
-	maxHP = 10.0f;
+	maxHP = 100.0f;
 	
 	//当たり判定初期化
 	float radius = 100;
@@ -47,7 +47,7 @@ void Enemy::Initialize()
 	attack = {
 		true,
 		false,
-		20,
+		40,
 		0
 	};
 	HP = maxHP;
@@ -116,50 +116,39 @@ void Enemy::LustUpdate()
 	toMapChipCollider->Update();
 	Vector3 hitPos = { 0,0,0 };
 	Vector3 moveVec = velocity + penalty;
+	Vector3 normal = { 0,0,0 };
 	//上下左右
-	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos)) {
-		Vector3 normal = { 0,0,0 };
-
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos,&normal)) {
 		if (hitPos.x != 0) {
-			int vec = 1;	//向き
-			if (0 < moveVec.x) {
-				vec = -1;
-			}
-			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * vec;
-			normal.x = vec;
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
 		}
 		if (hitPos.z != 0) {
-			int vec = 1;	//向き
-			if (moveVec.z < 0) {
-				vec = -1;
-			}
-			pos.z = hitPos.z - toMapChipCollider->GetRadiusY() * vec;
-			normal.z = vec;
+			pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
 		}
 		normal.Normalize();
-		HitWall(hitPos, normal);
+		HitWall(hitPos, normal.Normal());
 	}
 	//角
 	else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
-		Vector3 normal = { 0,0,0 };
-		if (hitPos.x != 0) {
-			int vec = 1;	//向き
-			if (0 < velocity.x) {
-				vec = -1;
-			}
-			pos.x = hitPos.x;
-			normal.x = vec;
-		}
-		if (hitPos.z != 0) {
-			int vec = 1;	//向き
-			if (velocity.z < 0) {
-				vec = -1;
-			}
-			pos.z = hitPos.z;
-			normal.z = vec;
-		}
-		normal.Normalize();
-		velocity = CalcWallScratchVector(velocity, normal);
+		//Vector3 normal = { 0,0,0 };
+		//if (hitPos.x != 0) {
+		//	int vec = 1;	//向き
+		//	if (0 < velocity.x) {
+		//		vec = -1;
+		//	}
+		//	pos.x = hitPos.x;
+		//	normal.x = vec;
+		//}
+		//if (hitPos.z != 0) {
+		//	int vec = 1;	//向き
+		//	if (velocity.z < 0) {
+		//		vec = -1;
+		//	}
+		//	pos.z = hitPos.z;
+		//	normal.z = vec;
+		//}
+		//normal.Normalize();
+		//velocity = CalcWallScratchVector(velocity, normal);
 	}
 
 }
@@ -201,7 +190,7 @@ void Enemy::OnCollision(const CollisionInfo &info)
 		//デブリが攻撃状態ならダメージを受ける
  		debri = dynamic_cast<Debris *>(info.object);
 		if (debri->isAttack) {
-			Damage(1.0f);
+			Damage(debri->velocity.Length());
 		}
 		break;
 

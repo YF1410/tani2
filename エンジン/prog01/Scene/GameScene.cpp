@@ -256,6 +256,7 @@ void GameScene::Update() {
 	}*/
 
 	//最終更新
+	ui.get()->Update();
 	enemyManager.get()->FinalUpdate();
 	playerObject.get()->LustUpdate();
 	Debris::StaticLustUpdate();
@@ -269,7 +270,6 @@ void GameScene::Update() {
 		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
 	}
 
-	enemyManager.get()->Update();
 	//カウンターを加算
 	counter++;
 }
