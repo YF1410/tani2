@@ -20,7 +20,12 @@ private:
 	std::unique_ptr<Sprite> wave[3];
 	std::unique_ptr<Sprite> moveWave;
 	//エネミーの数
-	std::unique_ptr<Sprite> enemyCount;
+	std::unique_ptr<Sprite> enemy;
+	std::unique_ptr<Sprite> enemyWaveMax[3][10];
+	std::unique_ptr<Sprite> enemyResidue[3][10];
+	std::vector<int> enemyWaveCon;
+	std::vector<int> enemyWaveMaxCon;
+
 	//ウェーブ数
 	std::unique_ptr<Sprite> waveNum[10];
 	std::unique_ptr<Sprite> waveMaxNum[10];

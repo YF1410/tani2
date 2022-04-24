@@ -412,7 +412,6 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 		}
 
 		//ˆÊ’uC³
-		DebugText::GetInstance()->Print("HitEnemy", 0, 80, 3);
 		
 		//UŒ‚’†‚Å‚È‚¯‚ê‚Î‰Ÿ‚µ•Ô‚µˆ—
 		if (!attack.is) {

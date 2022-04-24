@@ -151,7 +151,7 @@ void EnemyManager::Update()
 	for (int i = 0; i < enemys.size(); i++) {
 		enemys[i]->Update();
 	}
-	DebugText::GetInstance()->VariablePrint(0, 120, "EnemyCount", enemys.size(), 3);
+	//DebugText::GetInstance()->VariablePrint(0, 120, "EnemyCount", enemys.size(), 3);
 
 
 }
