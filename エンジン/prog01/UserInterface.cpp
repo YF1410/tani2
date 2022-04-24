@@ -57,8 +57,12 @@ void UserInterface::Initialize()
 		}
 	}
 
+	//HP
 	playerHp = Sprite::Create(6, { WinApp::window_width,0}, { 1,1,1,1 }, {1.0f,0.0f});
-	
+	//Enemy
+	enemyCount = Sprite::Create(7, { WinApp::window_width/2,WinApp::window_height - 120 }, { 1,1,1,1 }, { 0.5f,0.5f });
+	enemyCount.get()->SetSize({ 150,150 });
+
 	for (int i = 0; i < 4; i++) {
 		expGauge[i] = Sprite::Create(i + 20, { WinApp::window_width - 20,220 }, { 1,1,1,1 }, { 1.0f,0.0f });
 	}
@@ -176,6 +180,7 @@ void UserInterface::Draw() const
 	moveWaveNum[*nowWave + 1].get()->Draw();
 	moveWaveMaxNum[enemys->MAX_WAVE+1].get()->Draw();
 	playerHp.get()->Draw();
+	enemyCount.get()->Draw();
 	for (int i = 0; i < 4; i++) {
 		energyNum[i][energyCon[i]].get()->Draw();
 	}

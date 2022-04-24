@@ -40,6 +40,10 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(6, L"Resources/Sprite/UI/playerHp.png")) {
 		assert(0);
 	}
+	//Enemy
+	if (!Sprite::LoadTexture(7, L"Resources/Sprite/UI/enemyNum.png")) {
+		assert(0);
+	}
 	//‰ñŽû
 	if (!Sprite::LoadTexture(8, L"Resources/Sprite/UI/recover/recovery.png")) {
 		assert(0);

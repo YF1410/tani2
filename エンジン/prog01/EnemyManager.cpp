@@ -32,6 +32,11 @@ void EnemyManager::Initialize()
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
 
+	for (int i = 0; i < spawnData[0].size(); i++) {
+		waveEnemyNum[0] += spawnData[0][i]->num;
+	}
+
+
 	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
 	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
 	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
@@ -40,7 +45,12 @@ void EnemyManager::Initialize()
 	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
 	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
 	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
-	
+
+	for (int i = 0; i < spawnData[1].size(); i++) {
+		waveEnemyNum[1] += spawnData[1][i]->num;
+	}
+
+
 	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
 	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
 	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
@@ -49,7 +59,12 @@ void EnemyManager::Initialize()
 	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
 	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
 	spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
-	
+
+	for (int i = 0; i < spawnData[2].size(); i++) {
+		waveEnemyNum[2] += spawnData[2][i]->num;
+	}
+
+
 	endFlag = false;
 
 }

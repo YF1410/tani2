@@ -65,6 +65,7 @@ public:
 	};
 
 	static const int MAX_WAVE = 2;
+	int waveEnemyNum[MAX_WAVE + 1];
 private:
 	//スポーンデータ
 	std::vector<SPAWN_DATA*> spawnData[MAX_WAVE + 1];
