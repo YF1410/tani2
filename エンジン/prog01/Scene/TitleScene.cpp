@@ -9,9 +9,8 @@ TitleScene::~TitleScene()
 void TitleScene::Initialize()
 {
 	// ”wŒiƒXƒvƒ‰ƒCƒg¶¬
-	sprite = Sprite::Create(1, { 0.0f,0.0f });
-	sprite->SetSize({ 100.0f,100.0f });
-	sprite->SetPosition({ 100.0f,100.0f });
+	sprite = Sprite::Create(30, { 0.0f,0.0f });
+	sprite->SetSize({ 1280.0f,720.0f });
 }
 
 void TitleScene::Finalize()
@@ -22,7 +21,7 @@ void TitleScene::Update()
 {
 	Input* input = Input::GetInstance();
 
-	if (input->TriggerKey(DIK_RETURN))
+	if (input->TriggerPadButton(BUTTON_A))
 	{
 		SceneManager::GetInstance()->ChangeScene("GameScene");
 	}

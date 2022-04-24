@@ -61,7 +61,7 @@ PlayerObject::~PlayerObject()
 void PlayerObject::Initialize()
 {
 	//サイズ初期化
-	energy = 2000.0f;
+	energy = 1520.0f;
 	//サイズ初期化
 	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
 	//ポジション初期化
@@ -149,40 +149,12 @@ void PlayerObject::Update()
 		}
 	}
 
-
-	//キーボード移動
-	if (input->PushKey(DIK_A))	//左
-	{
-		velocity.x -= moveSpead;
-	}
-	else if (input->PushKey(DIK_D))	//右
-	{
-		velocity.x += moveSpead;
-	}
-	if (input->PushKey(DIK_S))	//後ろ
-	{
-		velocity.z -= moveSpead;
-	}
-	else if (input->PushKey(DIK_W))	//前
-	{
-		velocity.z += moveSpead;
-
-	}
 	//コントローラーでの移動
 	velocity.x += input->PadStickGradient().x * moveSpead;
 	velocity.z += -input->PadStickGradient().y * moveSpead;
 
-
-	//デバッグ用サイズ変更
-	if (input->PushKey(DIK_UP)) {
-		energy += 10.0f;
-	}
-	if (input->PushKey(DIK_DOWN)) {
-		energy -= 10.0f;
-	}
-
 	//自爆
-	if ((input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(BUTTON_A))&&
+	if ((input->TriggerPadButton(BUTTON_A))&&
 		attack.can&&
 		attackCount > 0)
 	{
@@ -226,7 +198,7 @@ void PlayerObject::Update()
 
 
 	//回収
-	if (input->TriggerKey(DIK_Q)|| input->TriggerPadButton(BUTTON_B)) {
+	if (input->TriggerPadButton(BUTTON_B)) {
 		if (recovery.Start()) {
 			for (int i = 0; i < Debris::debris.size(); i++) {
 				Debris::debris[i]->ReturnStart();

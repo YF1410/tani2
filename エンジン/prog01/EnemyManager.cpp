@@ -73,7 +73,7 @@ void EnemyManager::Update()
 {
 	//ウェーブ進行
 	if (enemys.size() == 0 && spawnData[nowWave].size() == 0) {
-		if (nowWave < MAX_WAVE - 1) {
+		if (nowWave < MAX_WAVE) {
 			nowWave++;
 			waveStartTime = GameScene::counter;
 		}

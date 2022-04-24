@@ -249,10 +249,6 @@ void GameScene::Update() {
 	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
-	if (playerObject.get()->GetEnergy() == 0) {
-		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
-	}
-
 	//カウンターを加算
 	counter++;
 }
@@ -309,7 +305,11 @@ void GameScene::Draw() {
 
 	if (enemyManager.get()->isEndFlag())
 	{
-		SceneManager::GetInstance()->ChangeScene("TitleScene");
+		SceneManager::GetInstance()->ChangeScene("ClearScene");
+	}
+
+	if (playerObject.get()->GetEnergy() == 0) {
+		SceneManager::GetInstance()->ChangeScene("GameOverScene");
 	}
 
 }

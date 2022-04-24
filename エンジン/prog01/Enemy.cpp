@@ -18,7 +18,7 @@ Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 	)
 {
 	isAlive = true;
-	scale = 1.0f;
+	scale = 2.0f;
 	this->player = player;
 	maxHP = 100.0f;
 	
