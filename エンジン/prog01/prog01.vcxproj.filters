@@ -324,6 +324,9 @@
     <ClCompile Include="UserInterface.cpp">
       <Filter>ゲームシステム\Player\UI</Filter>
     </ClCompile>
+    <ClCompile Include="SelectScene.cpp">
+      <Filter>ゲームシステム\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -532,6 +535,9 @@
     </ClInclude>
     <ClInclude Include="UserInterface.h">
       <Filter>ゲームシステム\Player\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectScene.h">
+      <Filter>ゲームシステム\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

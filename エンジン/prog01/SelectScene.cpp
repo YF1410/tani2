@@ -1,37 +1,37 @@
-#include "TitleScene.h"
+#include "SelectScene.h"
 #include "SceneManager.h"
 
-TitleScene::~TitleScene()
+SelectScene::~SelectScene()
 {
 	Finalize();
 }
 
-void TitleScene::Initialize()
+void SelectScene::Initialize()
 {
 	// 背景スプライト生成
-	sprite = Sprite::Create(30, { 0.0f,0.0f });
+	sprite = Sprite::Create(33, { 0.0f,0.0f });
 	sprite->SetSize({ 1280.0f,720.0f });
 }
 
-void TitleScene::Finalize()
+void SelectScene::Finalize()
 {
 }
 
-void TitleScene::Update()
+void SelectScene::Update()
 {
 	Input* input = Input::GetInstance();
 
 	if (input->TriggerPadButton(BUTTON_A))
 	{
-		SceneManager::GetInstance()->ChangeScene("SelectScene");
+		SceneManager::GetInstance()->ChangeScene("GameScene");
 	}
 }
 
-void TitleScene::LastUpdate()
+void SelectScene::LastUpdate()
 {
 }
 
-void TitleScene::Draw()
+void SelectScene::Draw()
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();

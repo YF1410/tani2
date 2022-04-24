@@ -80,6 +80,9 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(32, L"Resources/Sprite/gameover.png")) {
 		assert(0);
 	}
+	if (!Sprite::LoadTexture(33, L"Resources/Sprite/stageSelect.png")) {
+		assert(0);
+	}
 
 
 

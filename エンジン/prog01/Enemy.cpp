@@ -97,7 +97,7 @@ void Enemy::Update() {
 				}
 			}
 			else {
-				scale = 1.0f;
+				scale = 2.0f;
 			}
 		}
 	}
