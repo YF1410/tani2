@@ -40,6 +40,7 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	pushBackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f,0 }, scale.x * 180.0f);
 	SetNarrowCollider(pushBackCollider);
 	//攻撃用
+	attackCount = 2;
 	attackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f,0 }, scale.x * 180.0f + 50.0f);
 	SetNarrowCollider(pushBackCollider);
 
@@ -73,11 +74,19 @@ void PlayerObject::Initialize()
 		30,
 		0
 	};
+	attackCount = 3;
 	//回収関係
-	collect = {
+	recovery = {
 		true,
 		false,
 		300,
+		0
+	};
+	//
+	attackGage = {
+		true,
+		false,
+		60 * 2,
 		0
 	};
 
@@ -174,7 +183,8 @@ void PlayerObject::Update()
 
 	//自爆
 	if ((input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(BUTTON_A))&&
-		attack.can)
+		attack.can&&
+		attackCount > 0)
 	{
 		//攻撃開始
 		attack.Start();
@@ -201,16 +211,29 @@ void PlayerObject::Update()
 			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
 		}
 		//爆発終了
+		attackCount--;
 		energy -= SHOT_ENERGY;
-		
+		attackGage.Start();
 	}
+
+	if (attackCount < 3) {
+		if (attackGage.can) {
+			attackCount++;
+			attackGage.Start();
+		}
+		attackGage.Intervel();
+	}
+
 
 	//回収
 	if (input->TriggerKey(DIK_Q)|| input->TriggerPadButton(BUTTON_B)) {
-		if (collect.Start()) {
+		if (recovery.Start()) {
 			for (int i = 0; i < Debris::debris.size(); i++) {
 				Debris::debris[i]->ReturnStart();
 			}
+		}
+		else {
+			dontRecovery = true;
 		}
 	}
 
@@ -220,7 +243,7 @@ void PlayerObject::Update()
 	attack.Intervel();
 
 	//回収インターバル
-	collect.Intervel();
+	recovery.Intervel();
 	
 	//攻撃力更新
 	attackPow = velocity.Length();
@@ -234,7 +257,7 @@ void PlayerObject::Update()
 	broadSphereCollider->SetRadius(/*velocity.Length() + pushBackCollider->GetRadius()*/scale.x * 120.0f);
 	toMapChipCollider->SetRadius(scale.x * 120.0f, scale.x * 120.0f);
 
-	DebugText::GetInstance()->VariablePrint(0, 80, "StayTimer", collect.timer, 3);
+	//DebugText::GetInstance()->VariablePrint(0, 80, "StayTimer", recovery.timer, 3);
 	
 	//if (input->TriggerKey(DIK_H)) {
 	//	frameF = true;

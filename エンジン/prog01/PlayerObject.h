@@ -36,15 +36,21 @@ public:
 		const XMVECTOR &hitPos,		//衝突位置
 		const Vector3 &normal);
 
-	int GetHp() { return energy; }
 
 
 	//回収フラグ
-	STATE collect;
+	STATE recovery;
+	bool dontRecovery;
+
+	//攻撃回数
+	int attackCount;
 	//攻撃フラグ
 	STATE attack;
 	//攻撃力
 	float attackPow;
+
+	//
+	STATE attackGage;
 
 private:
 

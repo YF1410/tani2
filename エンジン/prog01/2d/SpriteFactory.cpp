@@ -40,15 +40,66 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(6, L"Resources/Sprite/UI/playerHp.png")) {
 		assert(0);
 	}
-	//ëÃìñÇΩÇË
-	if (!Sprite::LoadTexture(7, L"Resources/Sprite/UI/exGauge/expGaugeEmpty.png")) {
-		assert(0);
-	}
 	//âÒé˚
 	if (!Sprite::LoadTexture(8, L"Resources/Sprite/UI/recover/recovery.png")) {
 		assert(0);
 	}
+	if (!Sprite::LoadTexture(9, L"Resources/Sprite/UI/recover/recoveryGauge.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(10, L"Resources/Sprite/UI/recover/recovery1.png")) {
+		assert(0);
+	}
 
+	//ëÃìñÇΩÇË
+	if (!Sprite::LoadTexture(20, L"Resources/Sprite/UI/exGauge/expGaugeEmpty.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(21, L"Resources/Sprite/UI/exGauge/expGauge1.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(22, L"Resources/Sprite/UI/exGauge/expGauge2.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(23, L"Resources/Sprite/UI/exGauge/expGauge3.png")) {
+		assert(0);
+	}
+
+
+
+	//êîéö
+	if (!Sprite::LoadTexture(100, L"Resources/Sprite/UI/font/0.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(101, L"Resources/Sprite/UI/font/1.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(102, L"Resources/Sprite/UI/font/2.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(103, L"Resources/Sprite/UI/font/3.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(104, L"Resources/Sprite/UI/font/4.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(105, L"Resources/Sprite/UI/font/5.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(106, L"Resources/Sprite/UI/font/6.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(107, L"Resources/Sprite/UI/font/7.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(108, L"Resources/Sprite/UI/font/8.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(109, L"Resources/Sprite/UI/font/9.png")) {
+		assert(0);
+	}
+
+	
 
 
 

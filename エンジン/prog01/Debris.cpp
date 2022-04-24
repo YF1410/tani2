@@ -71,7 +71,7 @@ void Debris::Update()
 	}
 
 	if (!isAttack) {
-		size *= 0.99f;
+		size *= 0.999f;
 		scale = ConvertSizeToScale(size);
 
 	}

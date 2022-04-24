@@ -113,6 +113,9 @@ void GameScene::Update() {
 			debrisLengthMax = Vector3(Debris::debris[i]->pos - playerObject.get()->GetPos()).Length();
 		}
 	}
+	if (debrisLengthMax > 5000) {
+		debrisLengthMax = 5000;
+	}
 
 	const float velocityOffset = 17.0f;
 	//カメラのイージング制御
@@ -246,7 +249,7 @@ void GameScene::Update() {
 	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
-	if (playerObject.get()->GetHp() == 0) {
+	if (playerObject.get()->GetEnergy() == 0) {
 		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
 	}
 
