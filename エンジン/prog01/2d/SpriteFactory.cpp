@@ -28,6 +28,30 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(4, L"Resources/Sprite/weve3.png")) {
 		assert(0);
 	}
+
+
+	if (!Sprite::LoadTexture(5, L"Resources/Sprite/UI/wave.png")) {
+		assert(0);
+	}
+
+
+	//UIŽü‚è
+	//HP
+	if (!Sprite::LoadTexture(6, L"Resources/Sprite/UI/playerHp.png")) {
+		assert(0);
+	}
+	//‘Ì“–‚½‚è
+	if (!Sprite::LoadTexture(7, L"Resources/Sprite/UI/exGauge/expGaugeEmpty.png")) {
+		assert(0);
+	}
+	//‰ñŽû
+	if (!Sprite::LoadTexture(8, L"Resources/Sprite/UI/recover/recovery.png")) {
+		assert(0);
+	}
+
+
+
+
 }
 
 SpriteFactory* SpriteFactory::GetInstance()

@@ -138,8 +138,6 @@ void EnemyManager::Update()
 	}
 	DebugText::GetInstance()->VariablePrint(0, 120, "EnemyCount", enemys.size(), 3);
 
-	//ウェーブ数
-	DebugText::GetInstance()->VariablePrint(0, 200, "weveCount", nowWave, 3);
 
 }
 

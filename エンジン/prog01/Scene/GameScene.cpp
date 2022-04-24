@@ -31,7 +31,8 @@ GameScene::GameScene() {
 	playerObject = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos());
 	enemyManager = std::make_unique<EnemyManager>(playerObject.get());
 	//UI生成
-	ui = std::make_unique<UserInterface>(&enemyManager->nowWave);
+	ui = std::make_unique<UserInterface>(&enemyManager->nowWave,playerObject.get(),enemyManager.get());
+	//背景セット
 }
 
 GameScene::~GameScene() {
@@ -55,13 +56,6 @@ void GameScene::Initialize() {
 	//
 	ParticleEmitter::SetCamera(camera.get());
 
-	// 背景スプライト生成
-	for (int i = 2; i < 5; i++) {
-		std::unique_ptr<Sprite> tempsprite = Sprite::Create(i, { 0.0f,0.0f });
-		tempsprite->SetSize({ 600.0f,200.0f });
-		tempsprite->SetPosition({ 1280.0f,250.0f });
-		weveSprite.push_back(std::move(tempsprite));
-	}
 
 	//ライト生成
 	light = LightGroup::Create();
@@ -136,6 +130,7 @@ void GameScene::Update() {
 		Vector3(playerObject.get()->GetPos() +
 			targetDistanceDef +
 			playerObject.get()->velocity * velocityOffset));
+
 	camera->SetTarget(targetDistance);
 
 	camera->Update();
@@ -240,21 +235,6 @@ void GameScene::Update() {
 	// 全ての衝突をチェック
 	collisionManager->CheckBroadCollisions();
 
-	/*line.startPos = Enemy::enemys[0]->GetPos();
-	line.endPos = playerObject->GetPos();
-	aabb.length = { 200,0,200 };
-
-	for (int z = 0; z < 34; z++) {
-		for (int x = 0; x < 57; x++) {
-			if (MapChip::GetInstance()->GetChipNum(x, z) == 1) {
-				aabb.center = { 200.0f * x - 100.0f ,0.0f,-200.0f * z + 100.0f };
-				if (Collision::CheckLine2Box(line, aabb)) {
-					DebugText::GetInstance()->Print("hit", 0, 80, 3);
-				}
-			}
-		}
-	}*/
-
 	//最終更新
 	ui.get()->Update();
 	enemyManager.get()->FinalUpdate();
@@ -283,8 +263,6 @@ void GameScene::Draw() {
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
-	// 背景スプライト描画
-	//sprite->Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
 	// 深度バッファクリア
@@ -316,6 +294,7 @@ void GameScene::Draw() {
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
+	ui.get()->Draw();
 	Sprite::PreDraw(cmdList);
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
@@ -324,7 +303,6 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画
 
-	ui.get()->Draw();
 
 	if (enemyManager.get()->isEndFlag())
 	{

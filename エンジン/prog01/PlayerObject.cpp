@@ -234,13 +234,7 @@ void PlayerObject::Update()
 	broadSphereCollider->SetRadius(/*velocity.Length() + pushBackCollider->GetRadius()*/scale.x * 120.0f);
 	toMapChipCollider->SetRadius(scale.x * 120.0f, scale.x * 120.0f);
 
-	DebugText::GetInstance()->Print("WASD stick : Move",600,0,3);
-	DebugText::GetInstance()->Print("Qkey Bbutton: ReturnDebri",600,40,3);
-	DebugText::GetInstance()->Print("SPACEkey Abutton : Boom",600,80,3);
-	DebugText::GetInstance()->VariablePrint(0, 0, "playerSize", energy, 3);
-	DebugText::GetInstance()->VariablePrint(0, 40, "DebrisCount", Debris::debris.size(), 3);
 	DebugText::GetInstance()->VariablePrint(0, 80, "StayTimer", collect.timer, 3);
-	DebugText::GetInstance()->VariablePrint(0, 160, "Speed", velocity.Length(), 3);
 	
 	//if (input->TriggerKey(DIK_H)) {
 	//	frameF = true;

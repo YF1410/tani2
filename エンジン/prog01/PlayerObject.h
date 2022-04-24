@@ -29,6 +29,7 @@ public:
 	Vector3 GetPos() { return pos; }
 	Vector3 *GetPosPointer() { return &pos; }
 	float GetSpeed() { return velocity.Length(); }
+	float GetEnergy() { return energy; }
 
 	//�ǂƂ̏Փ�
 	void HitWall(

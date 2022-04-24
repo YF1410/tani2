@@ -74,7 +74,6 @@ private: // メンバ変数
 	Vector3 targetDistance = { 0,0,100 };
 	const Vector3 targetDistanceDef = { 0,0,100 };
 	//スプライト
-	std::vector<std::unique_ptr<Sprite>> weveSprite;
 	std::unique_ptr<Sprite> sprite;
 	//オブジェクト
 	std::unique_ptr<Model> slimeModel;
@@ -85,6 +84,8 @@ private: // メンバ変数
 	std::unique_ptr<EnemyManager> enemyManager;
 	//UI
 	std::unique_ptr<UserInterface> ui;
+	//背景
+	std::unique_ptr<Sprite> bg;
 
 
 	std::unique_ptr<Model> modelPlane;

@@ -38,11 +38,11 @@ void ModelManager::Initialize()
 
 
 
-	LoadModel(ENEMY_MACARON, "macaron"/*_break"*/);
-	model[ENEMY_MACARON].get()->SetMetalness(0.0f);
-	model[ENEMY_MACARON].get()->SetSpecular(0.1f);
-	model[ENEMY_MACARON].get()->SetRoughness(0.1f);
-	model[ENEMY_MACARON].get()->TransferMaterial();
+	LoadModel(ENEMY_ROBO, "robo_2"/*_break"*/);
+	model[ENEMY_ROBO].get()->SetMetalness(0.0f);
+	model[ENEMY_ROBO].get()->SetSpecular(0.1f);
+	model[ENEMY_ROBO].get()->SetRoughness(0.1f);
+	model[ENEMY_ROBO].get()->TransferMaterial();
 
 
 }

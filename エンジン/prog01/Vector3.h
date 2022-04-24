@@ -79,10 +79,11 @@ struct Vector3 : public XMFLOAT3 {
 	float LengthSq() const {
 		return powf(this->Length(),2);
 	}
-	//ê≥ãKâª
+	//ê≥ãKï\åª
 	Vector3 Normal() {
 		return XMVector3Normalize(XMVECTOR(*this));
 	}
+	//ê≥ãKâª
 	Vector3 Normalize() {
 		*this = XMVector3Normalize(XMVECTOR(*this));
 		return *this;
