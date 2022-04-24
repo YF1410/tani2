@@ -22,7 +22,7 @@ UserInterface::~UserInterface()
 
 void UserInterface::Initialize()
 {
-	waveText = Sprite::Create(5, { 0,250 });
+	waveText = Sprite::Create(5, { 10,210 });
 
 	wave[0] = Sprite::Create(2, {0,0});
 	wave[1] = Sprite::Create(3, {0,0});
@@ -33,11 +33,11 @@ void UserInterface::Initialize()
 
 	//ウェーブ数
 	for (int i = 0; i < 10; i++) {
-		waveNum[i] = Sprite::Create(100 + i, { 110,350 }, { 1,1,1,1 }, {0,1.0f});
+		waveNum[i] = Sprite::Create(100 + i, { 125,315 }, { 1,1,1,1 }, {0,1.0f});
 		waveNum[i].get()->SetSize({80,80});
 	}
 	for (int i = 0; i < 10; i++) {
-		waveMaxNum[i] = Sprite::Create(100 + i, { 180,350 }, { 1,1,1,1 }, { 0,1.0f });
+		waveMaxNum[i] = Sprite::Create(100 + i, { 185,315 }, { 1,1,1,1 }, { 0,1.0f });
 		waveMaxNum[i].get()->SetSize({ 80,80 });
 	}
 
@@ -52,13 +52,13 @@ void UserInterface::Initialize()
 	//エネミーの数
 	for (int j = 0; j < 3; j++) {
 		for (int i = 0; i < 10; i++) {
-			enemyResidue[j][i] = Sprite::Create(100 + i, { (float)(80 + j * 30),120 }, { 1,1,1,1 }, { 0.5f,0.5f });
+			enemyResidue[j][i] = Sprite::Create(100 + i, { (float)(80 + j * 30),90 }, { 1,1,1,1 }, { 0.5f,0.5f });
 			enemyResidue[j][i].get()->SetSize({ 80 * 0.7f,80 * 0.7f });
 		}
 	}
 	for (int j = 0; j < 3; j++) {
 		for (int i = 0; i < 10; i++) {
-			enemyWaveMax[j][i] = Sprite::Create(100 + i, { (float)(160 + j * 30),190 }, { 1,1,1,1 }, { 0.5f,0.5f });
+			enemyWaveMax[j][i] = Sprite::Create(100 + i, { (float)(160 + j * 30),160 }, { 1,1,1,1 }, { 0.5f,0.5f });
 			enemyWaveMax[j][i].get()->SetSize({ 80 * 0.7f,80 * 0.7f });
 		}
 	}
@@ -74,7 +74,7 @@ void UserInterface::Initialize()
 	}
 
 	//Enemy
-	enemy = Sprite::Create(7, { 0, 0 }, { 1,1,1,1 }, { 0,0 });
+	enemy = Sprite::Create(7, { 0, -30 }, { 1,1,1,1 }, { 0,0 });
 	enemy.get()->SetSize({ 300,300 });
 
 	for (int i = 0; i < 4; i++) {
