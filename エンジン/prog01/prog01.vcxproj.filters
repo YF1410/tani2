@@ -203,7 +203,7 @@
     <ClCompile Include="3d\ParticleEmitter.cpp">
       <Filter>エンジンシステム\3d\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="3d\ParticleManager.cpp">
+    <ClCompile Include="3d\ParticleFactory.cpp">
       <Filter>エンジンシステム\3d\Particle</Filter>
     </ClCompile>
     <ClCompile Include="Base\WinApp.cpp">
@@ -327,6 +327,9 @@
     <ClCompile Include="SelectScene.cpp">
       <Filter>ゲームシステム\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleManager.cpp">
+      <Filter>エンジンシステム\3d\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -374,7 +377,7 @@
     <ClInclude Include="3d\ParticleEmitter.h">
       <Filter>エンジンシステム\3d\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="3d\ParticleManager.h">
+    <ClInclude Include="3d\ParticleFactory.h">
       <Filter>エンジンシステム\3d\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Base\SafeDelete.h">
@@ -538,6 +541,9 @@
     </ClInclude>
     <ClInclude Include="SelectScene.h">
       <Filter>ゲームシステム\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleManager.h">
+      <Filter>エンジンシステム\3d\Particle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@
 
 #include "Camera.h"
 
-class ParticleManager
+class ParticleFactory
 {
 private: // エイリアス
 	// Microsoft::WRL::を省略
@@ -78,13 +78,13 @@ private: // 定数
 
 public: // 静的メンバ関数
 	// 3Dオブジェクト生成
-	std::unique_ptr<ParticleManager> Create(ID3D12Device* device, Camera* camera);
+	std::unique_ptr<ParticleFactory> Create(ID3D12Device* device, Camera* camera);
 
 public: // メンバ関数
 	//コンストラクタ
-	ParticleManager(ID3D12Device* device, Camera* camera);
+	ParticleFactory(ID3D12Device* device, Camera* camera);
 	//デストラクタ
-	~ParticleManager();
+	~ParticleFactory();
 	// 初期化
 	void Initialize();
 	// 毎フレーム処理

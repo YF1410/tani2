@@ -97,6 +97,7 @@ void GameScene::Initialize() {
 void GameScene::Finalize() {
 	Debris::Finalize();
 	MapChip::GetInstance()->Filnalize();
+	ParticleManager::GetInstance()->Finalize();
 }
 
 void GameScene::Update() {
@@ -252,6 +253,9 @@ void GameScene::Update() {
 	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
+	//パーティクル全てのアップデート
+	ParticleManager::GetInstance()->Update();
+
 	//カウンターを加算
 	counter++;
 }
@@ -303,6 +307,7 @@ void GameScene::Draw() {
 	Sprite::PreDraw(cmdList);
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
+	ParticleManager::GetInstance()->Draw(cmdList);
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
