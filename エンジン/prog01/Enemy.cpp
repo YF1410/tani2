@@ -9,19 +9,18 @@
 
 using namespace DirectX;
 
-Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
+Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 	GameObjCommon(
 		ModelManager::ENEMY_ROBO,	//エネミーモデルをセット
 		GameObjCommon::ENEMY,	//エネミーとして扱う
 		false,					//重力の影響を受ける
 		startPos				//初期位置をセット
-	)
-{
+	) {
 	isAlive = true;
 	scale = 2.0f;
 	this->player = player;
 	maxHP = 100.0f;
-	
+
 	//当たり判定初期化
 	float radius = 100;
 	broadSphereCollider = new SphereCollider("BroadSphere", XMVECTOR{ 0,radius,0 }, radius);
@@ -36,13 +35,11 @@ Enemy::Enemy(XMFLOAT3 startPos,PlayerObject *player) :
 	Initialize();
 }
 
-Enemy::~Enemy()
-{
+Enemy::~Enemy() {
 }
 
 
-void Enemy::Initialize()
-{
+void Enemy::Initialize() {
 	//攻撃関係
 	attack = {
 		true,
@@ -51,7 +48,6 @@ void Enemy::Initialize()
 		0
 	};
 	HP = maxHP;
-
 }
 
 void Enemy::Update() {
@@ -79,7 +75,7 @@ void Enemy::Update() {
 			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), 1.0f, 3.0f);
 		}
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 30.0f), 3.0f  , 1.0f  );
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 30.0f), 3.0f, 1.0f);
 		}
 
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
@@ -106,11 +102,9 @@ void Enemy::Update() {
 	attack.Intervel();
 	//移動をいったん適応
 	PosAddVelocity();
-
 }
 
-void Enemy::LustUpdate()
-{
+void Enemy::LustUpdate() {
 
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();
@@ -118,7 +112,7 @@ void Enemy::LustUpdate()
 	Vector3 moveVec = velocity + penalty;
 	Vector3 normal = { 0,0,0 };
 	//上下左右
-	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos,&normal)) {
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
 		if (hitPos.x != 0) {
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
 		}
@@ -153,18 +147,16 @@ void Enemy::LustUpdate()
 
 }
 
-void Enemy::OnCollision(const CollisionInfo &info)
-{
+void Enemy::OnCollision(const CollisionInfo& info) {
 	//ダイナミックキャスト用
-	Debris *debri;
-	PlayerObject *player;
-	Enemy *enemy;
+	Debris* debri;
+	PlayerObject* player;
+	Enemy* enemy;
 
 	//衝突したコライダーで分岐
-	switch (info.object->Tag)
-	{
+	switch (info.object->Tag) {
 	case PLAYER:
-		player = dynamic_cast<PlayerObject *>(info.object);
+		player = dynamic_cast<PlayerObject*>(info.object);
 		//位置修正
 		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.4f;
 		penalty.y = 0;
@@ -183,12 +175,11 @@ void Enemy::OnCollision(const CollisionInfo &info)
 			Vector3 constVec = 2 * dot / 2 * normal;
 
 			velocity = 2 * constVec + velocity;
-
 		}
 		break;
 	case DEBRIS:
 		//デブリが攻撃状態ならダメージを受ける
- 		debri = dynamic_cast<Debris *>(info.object);
+		debri = dynamic_cast<Debris*>(info.object);
 		if (debri->isAttack) {
 			Damage(debri->velocity.Length());
 		}
@@ -196,7 +187,7 @@ void Enemy::OnCollision(const CollisionInfo &info)
 
 	case ENEMY:
 		//エネミー同士なら押し返しあう
-		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length()*0.2f;
+		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.2f;
 		break;
 	default:
 		break;
@@ -209,23 +200,20 @@ void Enemy::OnCollision(const CollisionInfo &info)
 }
 
 
-void Enemy::Move()
-{
+void Enemy::Move() {
 	targetVec = Vector3(player->GetPos() - pos);
 	targetVec.y = 0;
 	velocity += targetVec.Normal() * moveSpeed;
 }
 
-void Enemy::Attack()
-{
+void Enemy::Attack() {
 	//攻撃可能なら
 	if (attack.can) {
 		attack.Start();
 	}
 }
 
-void Enemy::Damage(float damage)
-{
+void Enemy::Damage(float damage) {
 	//無敵時間中は処理を中断
 	if (isInvincible) { return; }
 	//ダメージを受ける
@@ -235,14 +223,12 @@ void Enemy::Damage(float damage)
 	InvincibleTimer = 0;
 }
 
-int Enemy::CauseDamage()
-{
+int Enemy::CauseDamage() {
 	Attack();
 	return attackPow;
 }
 
-void Enemy::HitWall(const XMVECTOR &hitPos, const Vector3 &normal)
-{
+void Enemy::HitWall(const XMVECTOR& hitPos, const Vector3& normal) {
 	//反射
 	velocity = CalcWallScratchVector(velocity, normal);
 

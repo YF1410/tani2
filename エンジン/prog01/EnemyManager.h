@@ -110,4 +110,6 @@ public:
 	int waveStartTime = 0;
 
 	bool endFlag = false;
+	ParticleEmitter* defeatParticle1;
+	ParticleEmitter* defeatParticle2;
 };

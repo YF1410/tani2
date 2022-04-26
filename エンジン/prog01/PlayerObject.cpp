@@ -97,6 +97,8 @@ void PlayerObject::Initialize()
 	// パーティクルマネージャ生成
 	healParticle1 = healParticle1->Create(L"heal3");
 	healParticle2 = healParticle2->Create(L"heal4");
+	/*healParticle1 = healParticle1->Create(L"defeat1");
+	healParticle2 = healParticle2->Create(L"defeat2");*/
 	healParticle1->SetStartScale(300.0f);
 	healParticle2->SetStartScale(300.0f);
 	healParticle1->SetCenter(500.0f);
@@ -250,7 +252,7 @@ void PlayerObject::Update()
 	//	frame = 0;
 	//}
 	if (attack.is) {
-		atkParticle->AddRef(5,20,pos,-velocity);
+		atkParticle->AddAttack(5,20,pos,velocity);
 	}
 
 	healParticle1->Update();
@@ -274,11 +276,11 @@ void PlayerObject::Draw() const
 	GameObjCommon::Draw();
 
 	// パーティクルの描画
-	healParticle1->Draw(cmdList);
+	/*healParticle1->Draw(cmdList);
 	healParticle2->Draw(cmdList);
 	boomParticle->Draw(cmdList);
 	refParticle->Draw(cmdList);
-	atkParticle->Draw(cmdList);
+	atkParticle->Draw(cmdList);*/
 	//Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 	//flont.get()->Draw();
 	//Object3d::PostDraw();

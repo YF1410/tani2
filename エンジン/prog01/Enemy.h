@@ -23,10 +23,10 @@ public:
 	virtual void Update() override;
 	//最終更新
 	virtual void LustUpdate() override;
-
 	//衝突時コールバック
 	virtual void OnCollision(const CollisionInfo &info) override;
 
+	bool GetIsAlive() { return isAlive; }
 public:		//当たり判定関係
 	//ダメージを与える
 	int CauseDamage();
@@ -39,7 +39,6 @@ public:		//当たり判定関係
 	bool isInvincible;		//無敵状態か
 
 	bool isAlive;
-
 
 protected: // メンバ変数
 	//移動処理
