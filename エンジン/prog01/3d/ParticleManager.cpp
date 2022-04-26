@@ -161,7 +161,7 @@ void ParticleManager::Update()
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	constMap->mat = camera->GetViewProjectionMatrix(); //s—ñ‚Ì‡¬
-	constMap->matBillboard = camera->GetBillboardMatrix();
+	constMap->matBillboard = XMMatrixRotationZ(rotation) * camera->GetBillboardMatrix();
 	constBuff->Unmap(0, nullptr);
 }
 

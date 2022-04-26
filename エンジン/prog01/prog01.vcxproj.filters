@@ -20,9 +20,6 @@
     <Filter Include="エンジンシステム\3d">
       <UniqueIdentifier>{facbd0f1-b870-43b8-b2f4-f68a14429014}</UniqueIdentifier>
     </Filter>
-    <Filter Include="エンジンシステム\Audio">
-      <UniqueIdentifier>{dbc7d3ba-dd12-4b18-94db-22332798cde0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="エンジンシステム\Base">
       <UniqueIdentifier>{478997a9-1375-4611-a1c8-b82bedd233a0}</UniqueIdentifier>
     </Filter>
@@ -97,6 +94,9 @@
     </Filter>
     <Filter Include="ゲームシステム\Player\UI">
       <UniqueIdentifier>{a6e7db19-7878-43e9-8dde-3f3cd1f6e1a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="エンジンシステム\Audio">
+      <UniqueIdentifier>{dbc7d3ba-dd12-4b18-94db-22332798cde0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

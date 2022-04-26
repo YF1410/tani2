@@ -113,6 +113,8 @@ void PlayerObject::Initialize()
 	atkParticle = atkParticle->Create();
 	atkParticle->SetStartScale(300.0f);
 	atkParticle->SetCenter(400.0f);
+
+	atkParticle->SetStartColor({ 0.8f, 0.8f, 2.0f, 1.0f });
 }
 
 void PlayerObject::Update()

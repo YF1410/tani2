@@ -130,4 +130,7 @@ private: // Ã“Iƒƒ“ƒo•Ï”
 	std::forward_list<Particle> particles;
 	// ƒJƒƒ‰
 	Camera* camera = nullptr;
+
+	// Z²‰ñ‚è‚Ì‰ñ“]Šp
+	float rotation = 0.0f;
 };
