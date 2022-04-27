@@ -118,7 +118,6 @@ private: // ƒƒ“ƒo•Ï”
 
 	//“–‚½‚è”»’è
 	CollisionManager* collisionManager = nullptr;
-	std::unique_ptr<ParticleManager> particleManager;
 
 	bool checkPoint;
 };

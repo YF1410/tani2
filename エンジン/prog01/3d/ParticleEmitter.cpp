@@ -12,7 +12,7 @@ ParticleEmitter* ParticleEmitter::Create(std::wstring fName)
 		return nullptr;
 	}
 
-	//particleEmitter->particleMan = particleEmitter->particleMan->Create(DirectXCommon::GetInstance()->GetDevice(), camera);
+	particleEmitter->particleMan = particleEmitter->particleMan->Create(DirectXCommon::GetInstance()->GetDevice(), camera);
 
 	particleEmitter->particleMan->LoadTexture(fName);
 

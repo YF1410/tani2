@@ -72,6 +72,8 @@ void EnemyManager::Initialize() {
 
 	endFlag = false;
 
+	ParticleManager::GetInstance()->SetParticleEmitter(defeatParticle1);
+	ParticleManager::GetInstance()->SetParticleEmitter(defeatParticle2);
 }
 
 void EnemyManager::Update() {
