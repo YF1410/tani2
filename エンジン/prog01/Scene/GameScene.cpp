@@ -84,6 +84,9 @@ void GameScene::Initialize() {
 	enemyManager.get()->Initialize();
 
 
+	sprite = Sprite::Create(35, { 0,0 });
+	sprite->SetSize({ 1280.0f,720.0f });
+
 	//デブリリセット
 	Debris::StaticInitialize(playerObject.get());
 
@@ -94,6 +97,7 @@ void GameScene::Initialize() {
 void GameScene::Finalize() {
 	Debris::Finalize();
 	MapChip::GetInstance()->Filnalize();
+	ParticleManager::GetInstance()->Finalize();
 }
 
 void GameScene::Update() {
@@ -249,6 +253,9 @@ void GameScene::Update() {
 	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
+	//パーティクル全てのアップデート
+	ParticleManager::GetInstance()->Update();
+
 	//カウンターを加算
 	counter++;
 }
@@ -262,6 +269,9 @@ void GameScene::Draw() {
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
+
+	sprite->Draw();
+
 	// スプライト描画後処理
 	Sprite::PostDraw();
 	// 深度バッファクリア
@@ -297,6 +307,7 @@ void GameScene::Draw() {
 	Sprite::PreDraw(cmdList);
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
+	ParticleManager::GetInstance()->Draw(cmdList);
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

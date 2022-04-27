@@ -9,6 +9,7 @@
 #include "DebugText.h"
 #include "MapChip.h"
 #include "Enemy.h"
+#include "ParticleManager.h"
 
 
 using namespace DirectX;
@@ -115,6 +116,16 @@ void PlayerObject::Initialize()
 	atkParticle = atkParticle->Create();
 	atkParticle->SetStartScale(300.0f);
 	atkParticle->SetCenter(400.0f);
+
+	atkParticle->SetStartColor({ 0.8f, 0.8f, 2.0f, 1.0f });
+
+
+
+	ParticleManager::GetInstance()->SetParticleEmitter(healParticle1);
+	ParticleManager::GetInstance()->SetParticleEmitter(healParticle2);
+	ParticleManager::GetInstance()->SetParticleEmitter(boomParticle);
+	ParticleManager::GetInstance()->SetParticleEmitter(refParticle);
+	ParticleManager::GetInstance()->SetParticleEmitter(atkParticle);
 }
 
 void PlayerObject::Update()
@@ -255,11 +266,11 @@ void PlayerObject::Update()
 		atkParticle->AddAttack(5,20,pos,velocity);
 	}
 
-	healParticle1->Update();
+	/*healParticle1->Update();
 	healParticle2->Update();
 	boomParticle->Update();
 	refParticle->Update();
-	atkParticle->Update();
+	atkParticle->Update();*/
 }
 
 void PlayerObject::Draw() const

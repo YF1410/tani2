@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ParticleManager.h"
+#include "ParticleFactory.h"
 #include "Vector3.h"
 
 #include <string>
@@ -86,5 +86,5 @@ private: // メンバ変数
 	//重力に見立ててYのみ[-0.001f,0]でランダムに分布
 	float md_acc = 0.001f;
 
-	std::unique_ptr<ParticleManager> particleMan;
+	std::unique_ptr<ParticleFactory> particleMan;
 };

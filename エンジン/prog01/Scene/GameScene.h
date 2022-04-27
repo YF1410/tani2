@@ -9,7 +9,6 @@
 #include "DebugText.h"
 #include "Audio.h"
 #include "ParticleManager.h"
-#include "ParticleEmitter.h"
 #include "Camera.h"
 #include "LightGroup.h"
 #include "FbxObject3d.h"
