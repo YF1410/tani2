@@ -106,5 +106,10 @@ private: // ƒƒ“ƒo•Ï”
 	int maxBoomFrame = 2;
 
 	GameObjCommon *coreUp;
+
+	int timer=0;
+	int maxTimer = 30;
+	Vector3 shakePos = pos;
+	XMFLOAT2 shake;
 };
 

@@ -20,13 +20,13 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 		GameObjCommon::PLAYER,	//プレイヤーとして扱う
 		false,					//重力の影響を受ける
 		startPos,
-		{1,1,1},
-		{0,0,0},
+		{ 1,1,1 },
+		{ 0,0,0 },
 		true
 	)
 {
 	srand(time(NULL));			//爆破用乱数のシード値をセット
-	
+
 	scale = ConvertSizeToScale(energy / 2.0f);
 
 	//初期位置に設定
@@ -49,8 +49,8 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, 100, 100);
 	SetNarrowCollider(toMapChipCollider);
 
-	coreUp = new GameObjCommon(ModelManager::SLIME_CORE, Notag, false,{ 0,0,0 }, {1.5f,1.5f,1.5f });
-	
+	coreUp = new GameObjCommon(ModelManager::SLIME_CORE, Notag, false, { 0,0,0 }, { 1.5f,1.5f,1.5f });
+
 }
 
 PlayerObject::~PlayerObject()
@@ -113,7 +113,7 @@ void PlayerObject::Initialize()
 	refParticle->SetStartScale(300.0f);
 	refParticle->SetCenter(400.0f);
 
-	atkParticle = atkParticle->Create();
+	atkParticle = atkParticle->Create(L"heal3");
 	atkParticle->SetStartScale(300.0f);
 	atkParticle->SetCenter(400.0f);
 
@@ -130,7 +130,7 @@ void PlayerObject::Initialize()
 
 void PlayerObject::Update()
 {
-	Input *input = Input::GetInstance();
+	Input* input = Input::GetInstance();
 	//スケールから移動量決定
 	moveSpead = scale.x * 5;
 	//ペナルティリセット
@@ -167,8 +167,8 @@ void PlayerObject::Update()
 	velocity.z += -input->PadStickGradient().y * moveSpead;
 
 	//自爆
-	if ((input->TriggerPadButton(BUTTON_A))&&
-		attack.can&&
+	if ((input->TriggerPadButton(BUTTON_A)) &&
+		attack.can &&
 		attackCount > 0)
 	{
 		//攻撃開始
@@ -218,18 +218,36 @@ void PlayerObject::Update()
 			}
 		}
 		else {
+			if (!dontRecovery) {
+				shakePos = pos;
+			}
 			dontRecovery = true;
 		}
 	}
 
+	if(dontRecovery){
+		timer++;
+		if (timer >= maxTimer) {
+			timer = 0;
+			shake = { 0,0 };
+			pos = shakePos;
+		}
 
+		shake = {
+			(float)((rand() % ((timer - maxTimer) - (timer - maxTimer) / 2)) * 5),
+			(float)((rand() % ((timer - maxTimer) - (timer - maxTimer) / 2)) * 5)
+		};
+
+		pos = { pos.x + shake.x ,shakePos.y,pos.z + shake.y };
+		shakePos += velocity;
+	}
 
 	//攻撃インターバル
 	attack.Intervel();
 
 	//回収インターバル
 	recovery.Intervel();
-	
+
 	//攻撃力更新
 	attackPow = velocity.Length();
 
@@ -243,7 +261,7 @@ void PlayerObject::Update()
 	toMapChipCollider->SetRadius(scale.x * 120.0f, scale.x * 120.0f);
 
 	//DebugText::GetInstance()->VariablePrint(0, 80, "StayTimer", recovery.timer, 3);
-	
+
 	//if (input->TriggerKey(DIK_H)) {
 	//	frameF = true;
 	//}
@@ -262,8 +280,9 @@ void PlayerObject::Update()
 	//	frameF = false;
 	//	frame = 0;
 	//}
+	Vector3 afterpos = pos + velocity;
 	if (attack.is) {
-		atkParticle->AddAttack(5,20,pos,velocity);
+		atkParticle->AddAttack(5, 20, pos, velocity, XMConvertToRadians(atan2(afterpos.z - pos.z, afterpos.x - pos.x)));
 	}
 
 	/*healParticle1->Update();
@@ -326,7 +345,7 @@ void PlayerObject::LustUpdate()
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
 	}
-	
+
 
 
 	//角
@@ -355,15 +374,15 @@ void PlayerObject::LustUpdate()
 
 
 
-void PlayerObject::OnCollision(const CollisionInfo &info)
+void PlayerObject::OnCollision(const CollisionInfo& info)
 {
-	Debris *debri;
-	Enemy *enemy;
+	Debris* debri;
+	Enemy* enemy;
 	switch (info.object->Tag)
 	{
 	case DEBRIS:
 		//破片が吸収範囲と衝突したら
-		debri = dynamic_cast<Debris *>(info.object);
+		debri = dynamic_cast<Debris*>(info.object);
 		if (info.myName == "hitCollider" &&
 			info.collider->GetCollisionName() == "hitCollider" &&
 			(!debri->isFirstAttack || debri->state == Debris::RETURN)) {
@@ -377,7 +396,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 			nowHealFrame++;
 		}
 
-		if (nowHealFrame <= maxHealFrame && isHealFrameIncrease){
+		if (nowHealFrame <= maxHealFrame && isHealFrameIncrease) {
 			healParticle1->AddHeal(3, 40, pos, velocity);
 			healParticle2->AddHeal(4, 40, pos, velocity);
 			//boomParticle->AddBoom(2, 40, pos);
@@ -397,7 +416,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 		}
 
 		//位置修正
-		
+
 		//攻撃中でなければ押し返し処理
 		if (!attack.is) {
 			penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.02f;
@@ -414,8 +433,8 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 }
 
 void PlayerObject::HitWall(
-	const XMVECTOR &hitPos,		//衝突位置
-	const Vector3 &normal)
+	const XMVECTOR& hitPos,		//衝突位置
+	const Vector3& normal)
 {
 	velocity = CalcReflectVector(velocity, normal);
 	if (!isBounce && attack.is) {

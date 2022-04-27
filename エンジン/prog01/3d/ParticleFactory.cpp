@@ -201,7 +201,7 @@ void ParticleFactory::Draw(ID3D12GraphicsCommandList* cmdList)
 }
 
 void ParticleFactory::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
-	float start_scale, float end_scale, XMFLOAT4 start_color, XMFLOAT4 end_color)
+	float start_scale, float end_scale, XMFLOAT4 start_color, XMFLOAT4 end_color,float rotation)
 {
 	//ƒŠƒXƒg‚É—v‘f‚ð’Ç‰Á
 	particles.emplace_front();
@@ -216,6 +216,7 @@ void ParticleFactory::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOA
 	p.e_scale = end_scale;
 	p.s_color = start_color;
 	p.e_color = end_color;
+	this->rotation = rotation;
 }
 
 void ParticleFactory::InitializeDescriptorHeap()

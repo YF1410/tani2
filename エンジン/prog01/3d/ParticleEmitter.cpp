@@ -101,7 +101,7 @@ void ParticleEmitter::AddBoom(int count, int life, XMFLOAT3 position)
 	}
 }
 
-void ParticleEmitter::AddAttack(int count, int life, XMFLOAT3 position, Vector3 velocity)
+void ParticleEmitter::AddAttack(int count, int life, XMFLOAT3 position, Vector3 velocity,float rotation)
 {
 	for (int i = 0; i < count; i++)
 	{
@@ -132,7 +132,7 @@ void ParticleEmitter::AddAttack(int count, int life, XMFLOAT3 position, Vector3 
 		accel.z = -(float)rand() / RAND_MAX * 0.5;*/
 
 		//’Ç‰Á
-		particleMan->Add(life, this->position, this->velocity, accel, s_scale, e_scale, s_color, e_color);
+		particleMan->Add(life, this->position, this->velocity, accel, s_scale, e_scale, s_color, e_color,rotation);
 
 	}
 }
@@ -168,8 +168,8 @@ void ParticleEmitter::AddRef(int count, int life, XMFLOAT3 position, Vector3 vel
 		//’Ç‰Á
 		particleMan->Add(life, this->position, this->velocity, accel, s_scale, e_scale, s_color, e_color);
 	}
-	camera->SetShakeFlag(true, 20);
-	camera->CameraShake();
+	/*camera->SetShakeFlag(true, 20);
+	camera->CameraShake();*/
 }
 
 void ParticleEmitter::AddDefeat(int count, int life, XMFLOAT3 position,DEFEAT_TYPE defeatType) {

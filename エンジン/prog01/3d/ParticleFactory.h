@@ -71,6 +71,8 @@ public: // サブクラス
 		XMFLOAT4 s_color = {};
 		// 色(RGBA)最終値
 		XMFLOAT4 e_color = {};
+		//回転
+		float rotation = 0.0f;
 	};
 
 private: // 定数
@@ -93,7 +95,7 @@ public: // メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//パーティクルの追加
 	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
-		float start_scale, float end_scale, XMFLOAT4 start_color, XMFLOAT4 end_color);
+		float start_scale, float end_scale, XMFLOAT4 start_color, XMFLOAT4 end_color,float rotation = 0.0f);
 	// デスクリプタヒープの初期化
 	void InitializeDescriptorHeap();
 	// グラフィックパイプライン生成
@@ -131,6 +133,6 @@ private: // 静的メンバ変数
 	// カメラ
 	Camera* camera = nullptr;
 
-	// Z軸回りの回転角
+	// Z軸回りの回転角(radian
 	float rotation = 0.0f;
 };
