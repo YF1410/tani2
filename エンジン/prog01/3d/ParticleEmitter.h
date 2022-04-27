@@ -23,7 +23,7 @@ public: // 静的メンバ関数
 
 	static void SetCamera(Camera* _camera) { camera = _camera; };
 
-	enum DEFEAT_TYPE 	{
+	enum DEFEAT_TYPE {
 		SHOCKWAVE,
 		STAR
 	};
@@ -37,9 +37,9 @@ public: // メンバ関数
 	void Add(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
 	void AddHeal(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, Vector3 velocity = { 0,0,0 });
 	void AddBoom(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
-	void AddAttack(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 },Vector3 velocity = {0,0,0});
+	void AddAttack(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, Vector3 velocity = { 0,0,0 });
 	void AddRef(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, Vector3 velocity = { 0,0,0 });
-	void AddDefeat(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 },DEFEAT_TYPE defeatType = SHOCKWAVE);
+	void AddDefeat(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, DEFEAT_TYPE defeatType = SHOCKWAVE);
 	// 毎フレーム処理
 	void Update();
 	// 描画

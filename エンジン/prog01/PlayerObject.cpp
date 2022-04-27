@@ -421,7 +421,7 @@ void PlayerObject::HitWall(
 	if (!isBounce && attack.is) {
 		velocity *= 3.0f;
 		isBounce = true;
-		refParticle->AddRef(20, 60, pos, velocity);
+		refParticle->AddRef(20, 40, pos, velocity);
 	}
 }
 
