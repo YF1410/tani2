@@ -130,7 +130,7 @@ void GameScene::Update() {
 			Vector3(0, debrisLengthMax * 0.7f, 0) +
 			playerObject.get()->velocity * velocityOffset
 		));
-	camera->SetEye(eyeDistance);
+	camera->CameraMoveEyeVector(Vector3(eyeDistance - Vector3(camera.get()->GetEye())));
 	//プレイヤーの少し上を焦点にする
 	targetDistance = Ease(Out, Quad, 0.05f,
 		camera.get()->GetTarget(),
@@ -138,7 +138,7 @@ void GameScene::Update() {
 			targetDistanceDef +
 			playerObject.get()->velocity * velocityOffset));
 
-	camera->SetTarget(targetDistance);
+	camera->CameraMoveTargetVector(Vector3(targetDistance - Vector3(camera.get()->GetTarget())));
 
 	camera->Update();
 
@@ -258,6 +258,8 @@ void GameScene::Update() {
 
 	//カウンターを加算
 	counter++;
+
+	camera->CameraShake();
 }
 
 void GameScene::LastUpdate() {

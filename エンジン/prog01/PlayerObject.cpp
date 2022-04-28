@@ -113,7 +113,7 @@ void PlayerObject::Initialize()
 	refParticle->SetStartScale(300.0f);
 	refParticle->SetCenter(400.0f);
 
-	atkParticle = atkParticle->Create(L"heal3");
+	atkParticle = atkParticle->Create(L"attack");
 	atkParticle->SetStartScale(300.0f);
 	atkParticle->SetCenter(400.0f);
 
@@ -230,7 +230,6 @@ void PlayerObject::Update()
 		if (timer >= maxTimer) {
 			timer = 0;
 			shake = { 0,0 };
-			pos = shakePos;
 		}
 
 		shake = {
@@ -238,8 +237,7 @@ void PlayerObject::Update()
 			(float)((rand() % ((timer - maxTimer) - (timer - maxTimer) / 2)) * 5)
 		};
 
-		pos = { pos.x + shake.x ,shakePos.y,pos.z + shake.y };
-		shakePos += velocity;
+		shakePos = { pos.x + shake.x ,shakePos.y,pos.z + shake.y };
 	}
 
 	//攻撃インターバル
@@ -280,10 +278,6 @@ void PlayerObject::Update()
 	//	frameF = false;
 	//	frame = 0;
 	//}
-	Vector3 afterpos = pos + velocity;
-	if (attack.is) {
-		atkParticle->AddAttack(5, 20, pos, velocity, XMConvertToRadians(atan2(afterpos.z - pos.z, afterpos.x - pos.x)));
-	}
 
 	/*healParticle1->Update();
 	healParticle2->Update();
@@ -369,6 +363,11 @@ void PlayerObject::LustUpdate()
 		//}
 		//normal.Normalize();
 		//velocity = CalcWallScratchVector(velocity, normal);
+	}
+
+	Vector3 beforePos = pos + velocity;
+	if (attack.is) {
+		atkParticle->AddAttack(3, 20, pos, velocity, (atan2(pos.z - beforePos.z, pos.x - beforePos.x) + 3.14/2));
 	}
 }
 
