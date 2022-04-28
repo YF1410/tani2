@@ -228,7 +228,7 @@ void UserInterface::Draw() const
 
 	moveWave.get()->Draw();
 	moveWaveNum[*nowWave + 1].get()->Draw();
-	moveWaveMaxNum[enemys->MAX_WAVE+1].get()->Draw();
+	moveWaveMaxNum[enemys->MAX_WAVE].get()->Draw();
 	playerHp.get()->Draw();
 	enemy.get()->Draw();
 	//“G‚Ìc”
