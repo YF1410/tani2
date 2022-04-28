@@ -224,7 +224,7 @@ void UserInterface::Draw() const
 	Sprite::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 	waveText.get()->Draw();
 	waveNum[*nowWave + 1].get()->Draw();
-	waveMaxNum[enemys->MAX_WAVE+1].get()->Draw();
+	waveMaxNum[enemys->MAX_WAVE].get()->Draw();
 
 	moveWave.get()->Draw();
 	moveWaveNum[*nowWave + 1].get()->Draw();

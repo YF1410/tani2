@@ -64,7 +64,7 @@ public:
 		}
 	};
 
-	static const int MAX_WAVE = 2;
+	static const int MAX_WAVE = 3;
 	int waveEnemyNum[MAX_WAVE + 1];
 private:
 	//スポーンデータ

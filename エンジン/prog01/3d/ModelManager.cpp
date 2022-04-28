@@ -38,12 +38,53 @@ void ModelManager::Initialize()
 
 
 
-	LoadModel(ENEMY_ROBO, "robo_2"/*_break"*/);
-	model[ENEMY_ROBO].get()->SetMetalness(0.0f);
-	model[ENEMY_ROBO].get()->SetSpecular(0.1f);
-	model[ENEMY_ROBO].get()->SetRoughness(0.1f);
-	model[ENEMY_ROBO].get()->TransferMaterial();
+	LoadModel(ENEMY_ROBO_1, "robo_1"/*_break"*/);
+	model[ENEMY_ROBO_1].get()->SetMetalness(0.0f);
+	model[ENEMY_ROBO_1].get()->SetSpecular(0.1f);
+	model[ENEMY_ROBO_1].get()->SetRoughness(0.1f);
+	model[ENEMY_ROBO_1].get()->TransferMaterial();
 
+	LoadModel(ENEMY_ROBO_2, "robo_2"/*_break"*/);
+	model[ENEMY_ROBO_2].get()->SetMetalness(0.0f);
+	model[ENEMY_ROBO_2].get()->SetSpecular(0.1f);
+	model[ENEMY_ROBO_2].get()->SetRoughness(0.1f);
+	model[ENEMY_ROBO_2].get()->TransferMaterial();
+
+	LoadModel(ENEMY_ROBO_3, "robo_3"/*_break"*/);
+	model[ENEMY_ROBO_3].get()->SetMetalness(0.0f);
+	model[ENEMY_ROBO_3].get()->SetSpecular(0.1f);
+	model[ENEMY_ROBO_3].get()->SetRoughness(0.1f);
+	model[ENEMY_ROBO_3].get()->TransferMaterial();
+
+	LoadModel(ENEMY_ROBO_4, "robo_4"/*_break"*/);
+	model[ENEMY_ROBO_4].get()->SetMetalness(0.0f);
+	model[ENEMY_ROBO_4].get()->SetSpecular(0.1f);
+	model[ENEMY_ROBO_4].get()->SetRoughness(0.1f);
+	model[ENEMY_ROBO_4].get()->TransferMaterial();
+
+	LoadModel(ENEMY_ROBO_5, "robo_5"/*_break"*/);
+	model[ENEMY_ROBO_5].get()->SetMetalness(0.0f);
+	model[ENEMY_ROBO_5].get()->SetSpecular(0.1f);
+	model[ENEMY_ROBO_5].get()->SetRoughness(0.1f);
+	model[ENEMY_ROBO_5].get()->TransferMaterial();
+
+	LoadModel(ENEMY_ROBO_6, "robo_6"/*_break"*/);
+	model[ENEMY_ROBO_6].get()->SetMetalness(0.0f);
+	model[ENEMY_ROBO_6].get()->SetSpecular(0.1f);
+	model[ENEMY_ROBO_6].get()->SetRoughness(0.1f);
+	model[ENEMY_ROBO_6].get()->TransferMaterial();
+
+	LoadModel(ENEMY_ROBO_7, "robo_7"/*_break"*/);
+	model[ENEMY_ROBO_7].get()->SetMetalness(0.0f);
+	model[ENEMY_ROBO_7].get()->SetSpecular(0.1f);
+	model[ENEMY_ROBO_7].get()->SetRoughness(0.1f);
+	model[ENEMY_ROBO_7].get()->TransferMaterial();
+
+	LoadModel(ENEMY_ROBO_8, "robo_8"/*_break"*/);
+	model[ENEMY_ROBO_8].get()->SetMetalness(0.0f);
+	model[ENEMY_ROBO_8].get()->SetSpecular(0.1f);
+	model[ENEMY_ROBO_8].get()->SetRoughness(0.1f);
+	model[ENEMY_ROBO_8].get()->TransferMaterial();
 
 }
 
