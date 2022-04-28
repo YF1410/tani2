@@ -74,6 +74,10 @@ public:		//Õ“ËŠÖŒW
 
 	bool isAttackFlame;
 
+	//“–‚½‚è”»’è
+	SphereCollider *hitCollider;
+	//UŒ‚”»’è
+	SphereCollider *attackCollider;
 
 	//Õ“Ë—p
 	//ƒ_ƒ[ƒW‚ğó‚¯‚é
@@ -88,10 +92,6 @@ private:
 	//‚¢‚Â‚Ü‚Å–ß‚é—Í‚ğ‚Â‚©
 	int returnTimer;
 
-	//“–‚½‚è”»’è
-	SphereCollider *hitCollider;
-	//UŒ‚”»’è
-	SphereCollider *attackCollider;
 
 	bool reversFlag;
 

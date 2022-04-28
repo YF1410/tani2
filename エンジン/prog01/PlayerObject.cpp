@@ -62,7 +62,7 @@ PlayerObject::~PlayerObject()
 void PlayerObject::Initialize()
 {
 	//サイズ初期化
-	energy = 1520.0f;
+	energy = 2000.0f;
 	//サイズ初期化
 	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
 	//ポジション初期化
@@ -98,8 +98,6 @@ void PlayerObject::Initialize()
 	// パーティクルマネージャ生成
 	healParticle1 = healParticle1->Create(L"heal3");
 	healParticle2 = healParticle2->Create(L"heal4");
-	/*healParticle1 = healParticle1->Create(L"defeat1");
-	healParticle2 = healParticle2->Create(L"defeat2");*/
 	healParticle1->SetStartScale(300.0f);
 	healParticle2->SetStartScale(300.0f);
 	healParticle1->SetCenter(500.0f);
@@ -130,7 +128,7 @@ void PlayerObject::Initialize()
 
 void PlayerObject::Update()
 {
-	Input* input = Input::GetInstance();
+	Input *input = Input::GetInstance();
 	//スケールから移動量決定
 	moveSpead = scale.x * 5;
 	//ペナルティリセット
@@ -141,10 +139,10 @@ void PlayerObject::Update()
 	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
-	if (attack.is && velocity.Length() >= 300) {
-		velocity = velocity.Normal() * 300;
+	if (attack.is && velocity.Length() >= 180) {
+		velocity = velocity.Normal() * 180;
 	}
-	if (attack.is && velocity.Length() < energy / 500 * 60) {
+	if (attack.is && velocity.Length() < 100) {
 		attack.is = false;
 		isBounce = false;
 	}
@@ -162,45 +160,77 @@ void PlayerObject::Update()
 		}
 	}
 
+
+	//キーボード移動
+	if (input->PushKey(DIK_A))	//左
+	{
+		velocity.x -= moveSpead;
+	}
+	else if (input->PushKey(DIK_D))	//右
+	{
+		velocity.x += moveSpead;
+	}
+	if (input->PushKey(DIK_S))	//後ろ
+	{
+		velocity.z -= moveSpead;
+	}
+	else if (input->PushKey(DIK_W))	//前
+	{
+		velocity.z += moveSpead;
+
+	}
 	//コントローラーでの移動
 	velocity.x += input->PadStickGradient().x * moveSpead;
 	velocity.z += -input->PadStickGradient().y * moveSpead;
 
+
+	//デバッグ用サイズ変更
+	if (input->PushKey(DIK_UP)) {
+		energy += 10.0f;
+	}
+	if (input->PushKey(DIK_DOWN)) {
+		energy -= 10.0f;
+	}
+
 	//自爆
-	if ((input->TriggerPadButton(BUTTON_A)) &&
+	if ((input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(BUTTON_A)) &&
 		attack.can &&
 		attackCount > 0)
 	{
 		//攻撃開始
 		attack.Start();
 
-		//破片生成
-		for (int i = 0; i < DESTRUCT_POW; i++) {
-			Vector3 startVec;		//速度*向きベクトル
-			float shotRad;			//角度決定用
-			//発射スピード
-			float shotSpeed = rand() % 20 + energy / 500 * 30;
-			//残骸のサイズ
-			float shotSize = SHOT_ENERGY / DESTRUCT_POW;
 
-			//-15~15度で計算
-			shotRad = XMConvertToRadians(rand() % 90 - 45);
+		////破片生成
+		//for (int i = 0; i < DESTRUCT_POW; i++) {
+		//	Vector3 startVec;		//速度*向きベクトル
+		//	float shotRad;			//角度決定用
+		//	//発射スピード
+		//	float shotSpeed = rand() % 20 + energy / 500 * 30;
+		//	//残骸のサイズ
+		//	float shotSize = SHOT_ENERGY / DESTRUCT_POW;
 
-			startVec = -velocity.Normal();
+		//	//-15~15度で計算
+		//	shotRad = XMConvertToRadians(rand() % 90 - 45);
 
-			startVec.AddRotationY(shotRad);
-			//startVec = startVec + offset;
+		//	startVec = -velocity.Normal();
 
-			velocity += velocity.Normal() * 60;
-			//Debrisのコンテナに追加
-			Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
-		}
+		//	startVec.AddRotationY(shotRad);
+		//	//startVec = startVec + offset;
+
+		//	velocity += velocity.Normal() * 60;2
+		//	//Debrisのコンテナに追加
+		//	Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
+		//}
+		//energy -= SHOT_ENERGY;
+
+		velocity += velocity.Normal() * 600;
 		//爆発終了
 		attackCount--;
-		energy -= SHOT_ENERGY;
 		attackGage.Start();
 	}
 
+	
 	if (attackCount < 3) {
 		if (attackGage.can) {
 			attackCount++;
@@ -317,16 +347,17 @@ void PlayerObject::LustUpdate()
 	Vector3 hitPos = { 0,0,0 };
 	Vector3 moveVec = velocity + penalty;
 	Vector3 normal = { 0,0,0 };
-	//上下左右
+	//上下
 	if (MapChip::GetInstance()->CheckMapChipAreaToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
 		if (hitPos.x != 0) {
-			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x + normal.x;
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
 		}
 		if (hitPos.z != 0) {
-			pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z + normal.z;
+			pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
 		}
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
+
 	}
 	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
 
@@ -339,11 +370,11 @@ void PlayerObject::LustUpdate()
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
 	}
-
+	
 
 
 	//角
-	else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
+	//else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
 		//Vector3 normal = { 0,0,0 };
 		//if (hitPos.x != 0) {
 		//	int vec = 1;	//向き
@@ -363,6 +394,24 @@ void PlayerObject::LustUpdate()
 		//}
 		//normal.Normalize();
 		//velocity = CalcWallScratchVector(velocity, normal);
+	//}
+
+
+	//移動中残骸生成
+	if (attack.is) {
+		//残骸のサイズ
+		float shotSize = energy / SHOT_ENERGY;
+		float shotRad = (rand() % 90) - 45;
+		Vector3 shotVec = -velocity.Normal();
+		shotVec.AddRotationY(shotRad);
+		Vector3 offsetS = velocity.Normal();
+		offsetS.AddRotationY(90.0f);
+		offsetS = offsetS * (rand() % 400 - 200);
+		//startVec = startVec + offset;
+
+		//Debrisのコンテナに追加
+		Debris::debris.push_back(new Debris(pos/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
+		energy -= shotSize;
 	}
 
 	Vector3 beforePos = pos + velocity;
@@ -372,39 +421,42 @@ void PlayerObject::LustUpdate()
 }
 
 
-
-void PlayerObject::OnCollision(const CollisionInfo& info)
+void PlayerObject::OnCollision(const CollisionInfo &info)
 {
-	Debris* debri;
-	Enemy* enemy;
+	Debris *debri;
+	Enemy *enemy;
 	switch (info.object->Tag)
 	{
 	case DEBRIS:
 		//破片が吸収範囲と衝突したら
-		debri = dynamic_cast<Debris*>(info.object);
-		if (info.myName == "hitCollider" &&
-			info.collider->GetCollisionName() == "hitCollider" &&
-			(!debri->isFirstAttack || debri->state == Debris::RETURN)) {
-			//吸収
-			energy += debri->GetSize();
-		}
+		debri = dynamic_cast<Debris *>(info.object);
+		if (!debri->isFirstAttack)
+		{
+			if (info.myName == "hitCollider" &&
+				info.collider->GetCollisionName() == "hitCollider" &&
+				(!debri->isFirstAttack || debri->state == Debris::RETURN)) {
+				//吸収
+				energy += debri->GetSize();
+			}
 
-		isHealFrameIncrease = true;
+			isHealFrameIncrease = true;
 
-		if (isHealFrameIncrease) {
-			nowHealFrame++;
-		}
+			if (isHealFrameIncrease) {
+				nowHealFrame++;
+			}
 
-		if (nowHealFrame <= maxHealFrame && isHealFrameIncrease) {
-			healParticle1->AddHeal(3, 40, pos, velocity);
-			healParticle2->AddHeal(4, 40, pos, velocity);
-			//boomParticle->AddBoom(2, 40, pos);
-			//refParticle->AddRef(2, 40, pos,velocity);
+			if (nowHealFrame <= maxHealFrame && isHealFrameIncrease) {
+				healParticle1->AddHeal(3, 40, pos, velocity);
+				healParticle2->AddHeal(4, 40, pos, velocity);
+				//boomParticle->AddBoom(2, 40, pos);
+				//refParticle->AddRef(2, 40, pos,velocity);
+			}
+			else {
+				isHealFrameIncrease = false;
+				nowHealFrame = 0;
+			}
 		}
-		else {
-			isHealFrameIncrease = false;
-			nowHealFrame = 0;
-		}
+		
 
 		break;
 	case ENEMY:
@@ -420,6 +472,12 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 		if (!attack.is) {
 			penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.02f;
 		}
+		else {
+			Vector3 nextPos = info.inter + Vector3(pos - info.object->pos).Normal() * (broadSphereCollider->GetRadius() /*+ enemy->pushBackCollider->GetRadius()*/);
+			nextPos.y = 0;
+			velocity = CalcReflectVector(velocity, Vector3(pos - enemy->pos).Normal());
+			pos = nextPos;
+		}
 
 		break;
 	default:
@@ -432,8 +490,8 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 }
 
 void PlayerObject::HitWall(
-	const XMVECTOR& hitPos,		//衝突位置
-	const Vector3& normal)
+	const XMVECTOR &hitPos,		//衝突位置
+	const Vector3 &normal)
 {
 	velocity = CalcReflectVector(velocity, normal);
 	if (!isBounce && attack.is) {

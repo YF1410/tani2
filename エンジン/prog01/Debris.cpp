@@ -223,17 +223,20 @@ void Debris::OnCollision(const CollisionInfo &info)
 	switch (info.object->Tag)
 	{
 	case PLAYER:
-		//回収
-		if (info.myName == "hitCollider" &&
-			info.collider->GetCollisionName() == "absorptionCollider" &&
-			!isFirstAttack) {
-			velocity += Vector3(playerData->GetPos() - GetPos()).Normalize() * 5.0f;
-		}
-		//当たり判定用のコライダーとプレイヤーの当たり判定コライダーが当たっていたら削除
-		if (info.myName == "hitCollider" &&
-			info.collider->GetCollisionName() == "hitCollider" &&
-			(!isFirstAttack || state == RETURN)) {
-			isAlive = false;
+		if (!isFirstAttack)
+		{
+			//回収
+			if (info.myName == "hitCollider" &&
+				info.collider->GetCollisionName() == "absorptionCollider" &&
+				!isFirstAttack) {
+				velocity += Vector3(playerData->GetPos() - GetPos()).Normalize() * 5.0f;
+			}
+			//当たり判定用のコライダーとプレイヤーの当たり判定コライダーが当たっていたら削除
+			if (info.myName == "hitCollider" &&
+				info.collider->GetCollisionName() == "hitCollider" &&
+				(!isFirstAttack || state == RETURN)) {
+				isAlive = false;
+			}
 		}
 		break;
 	}

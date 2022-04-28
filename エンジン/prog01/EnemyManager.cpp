@@ -3,59 +3,62 @@
 #include "DebugText.h"
 
 
-std::vector<Enemy*> EnemyManager::enemys;
+std::vector<Enemy *> EnemyManager::enemys;
 
-EnemyManager::EnemyManager(PlayerObject* player) {
+EnemyManager::EnemyManager(PlayerObject *player)
+{
 	this->player = player;
 
 }
 
-EnemyManager::~EnemyManager() {
+EnemyManager::~EnemyManager()
+{
 	Finalize();
 }
 
-void EnemyManager::Initialize() {
+void EnemyManager::Initialize()
+{
 	nowWave = 0;
 	waveStartTime = 0;
 	//ここでエネミーを追加
 
 	//ウェーブ1
-	spawnData[0].push_back(new SPAWN_DATA(HOMING, 0, spawnPos[0], 5));
-	spawnData[0].push_back(new SPAWN_DATA(HOMING, 0, spawnPos[1], 5));
-	spawnData[0].push_back(new SPAWN_DATA(HOMING, 0, spawnPos[2], 5));
-	spawnData[0].push_back(new SPAWN_DATA(HOMING, 0, spawnPos[3], 5));
-	spawnData[0].push_back(new SPAWN_DATA(HOMING, 1, spawnPos[0], 5));
-	spawnData[0].push_back(new SPAWN_DATA(HOMING, 1, spawnPos[1], 5));
-	spawnData[0].push_back(new SPAWN_DATA(HOMING, 1, spawnPos[2], 5));
-	spawnData[0].push_back(new SPAWN_DATA(HOMING, 1, spawnPos[3], 5));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 2));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 2));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 2));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 2));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 2));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 2));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 2));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 2));
 
 	for (int i = 0; i < spawnData[0].size(); i++) {
 		waveEnemyNum[0] += spawnData[0][i]->num;
 	}
 
 
-	spawnData[1].push_back(new SPAWN_DATA(HOMING, 0, spawnPos[0], 5));
-	spawnData[1].push_back(new SPAWN_DATA(HOMING, 0, spawnPos[1], 5));
-	spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[2], 5));
-	spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[3], 5));
-	spawnData[1].push_back(new SPAWN_DATA(HOMING, 1, spawnPos[0], 5));
-	spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[1], 5));
-	spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[2], 5));
-	spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[3], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
 
 	for (int i = 0; i < spawnData[1].size(); i++) {
 		waveEnemyNum[1] += spawnData[1][i]->num;
 	}
 
 
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[0], 5));
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[1], 5));
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[2], 5));
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[3], 5));
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[0], 5));
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[1], 5));
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[2], 5));
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[3], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
 
 	for (int i = 0; i < spawnData[2].size(); i++) {
 		waveEnemyNum[2] += spawnData[2][i]->num;
@@ -76,10 +79,11 @@ void EnemyManager::Initialize() {
 	ParticleManager::GetInstance()->SetParticleEmitter(defeatParticle2);
 }
 
-void EnemyManager::Update() {
+void EnemyManager::Update()
+{
 	//ウェーブ進行
 	if (enemys.size() == 0 && spawnData[nowWave].size() == 0) {
-		if (nowWave < MAX_WAVE) {
+		if (nowWave < MAX_WAVE - 1) {
 			nowWave++;
 			waveStartTime = GameScene::counter;
 		}
@@ -95,8 +99,9 @@ void EnemyManager::Update() {
 		while (((int)GameScene::counter - waveStartTime) / 60 == spawnData[nowWave][0]->time) {
 			//指定された数だけエネミーをスポーンさせる
 			for (int i = 0; i < spawnData[nowWave][0]->num; i++) {
-				Vector3 spawnPos = spawnData[nowWave][0]->pos + Vector3((rand() % 50 - 25), 0, (rand() % 50 - 25));
-				switch (spawnData[nowWave][0]->type) 				{
+				Vector3 spawnPos = spawnData[nowWave][0]->pos + Vector3((rand() % 50 - 25),0, (rand() % 50 - 25));
+				switch (spawnData[nowWave][0]->type)
+				{
 				case MIMIC:
 					enemys.push_back(new MimicEnemy(spawnPos, player));
 					break;
@@ -163,13 +168,15 @@ void EnemyManager::Update() {
 	defeatParticle2->Update();
 }
 
-void EnemyManager::FinalUpdate() {
+void EnemyManager::FinalUpdate()
+{
 	for (int i = 0; i < enemys.size(); i++) {
 		enemys[i]->LustUpdate();
 	}
 }
 
-void EnemyManager::Adaptation() {
+void EnemyManager::Adaptation()
+{
 	for (int i = 0; i < enemys.size(); i++) {
 		enemys[i]->Adaptation();
 	}
@@ -184,11 +191,14 @@ void EnemyManager::Draw() {
 	}
 }
 
-void EnemyManager::Finalize() {
-	for (auto& a : spawnData) 	{
+void EnemyManager::Finalize()
+{
+	for (auto& a : spawnData)
+	{
 		a.clear();
 	}
-	for (auto& a : enemys) 	{
+	for (auto& a : enemys)
+	{
 		delete a;
 	}
 	enemys.clear();

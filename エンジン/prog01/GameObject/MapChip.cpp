@@ -205,9 +205,6 @@ bool MapChip::CheckMapChipAreaToBox2d(Box2DCollider *boxCollider, Vector3 *vel, 
 		hit = true;
 	}
 
-	if (hit) {
-		normal->Normalize();
-	}
 
 
 	if (hitpos != nullptr) {

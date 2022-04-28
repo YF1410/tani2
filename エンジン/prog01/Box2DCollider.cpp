@@ -3,7 +3,7 @@
 void Box2DCollider::Update()
 {
 	// ワールド行列から座標を抽出
-	const Vector3 &matWorld = object->GetObjectDate()->GetPos();
+	const Vector3 &matWorld = object->pos;
 
 	// 球のメンバ変数を更新
 	Box2D::center = matWorld + offset;

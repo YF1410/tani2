@@ -253,6 +253,13 @@ void GameScene::Update() {
 	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
+	if (playerObject.get()->GetEnergy() <= 0) {
+		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)||
+			Input::GetInstance()->TriggerPadButton(BUTTON_A)){
+
+		}
+	}
 	//パーティクル全てのアップデート
 	ParticleManager::GetInstance()->Update();
 
@@ -324,5 +331,10 @@ void GameScene::Draw() {
 	if (playerObject.get()->GetEnergy() == 0) {
 		SceneManager::GetInstance()->ChangeScene("GameOverScene");
 	}
-
+	if (playerObject.get()->GetEnergy() <= 0) {
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+			Input::GetInstance()->TriggerPadButton(BUTTON_A)) {
+			SceneManager::GetInstance()->ChangeScene("TitleScene");
+		}
+	}
 }
