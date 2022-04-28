@@ -52,6 +52,9 @@ public:
 	//
 	STATE attackGage;
 
+	//デブリ生成
+	STATE debrisCooldown;
+
 	//コライダー
 	SphereCollider *broadSphereCollider;	//ブロード
 	SphereCollider *pushBackCollider;	//押し返し用

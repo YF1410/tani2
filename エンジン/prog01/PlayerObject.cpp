@@ -90,7 +90,12 @@ void PlayerObject::Initialize()
 		60 * 2,
 		0
 	};
-
+	debrisCooldown = {
+		true,
+		false,
+		5,
+		0
+	};
 
 	//アニメーション開始
 	objectData->PlayAnimation();
@@ -397,21 +402,20 @@ void PlayerObject::LustUpdate()
 
 
 	//移動中残骸生成
-	if (attack.is) {
+	if (attack.is && debrisCooldown.can) {
+		debrisCooldown.Start();
+
 		//残骸のサイズ
 		float shotSize = energy / SHOT_ENERGY;
-		float shotRad = (rand() % 90) - 45;
 		Vector3 shotVec = -velocity.Normal();
-		shotVec.AddRotationY(shotRad);
-		Vector3 offsetS = velocity.Normal();
-		offsetS.AddRotationY(90.0f);
-		offsetS = offsetS * (rand() % 400 - 200);
 		//startVec = startVec + offset;
 
 		//Debrisのコンテナに追加
 		Debris::debris.push_back(new Debris(pos/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
 		energy -= shotSize;
+
 	}
+	debrisCooldown.Intervel();
 
 	Input* input = Input::GetInstance();
 	Vector3 beforePos = pos + velocity;
