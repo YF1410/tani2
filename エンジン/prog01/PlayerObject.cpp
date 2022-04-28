@@ -262,6 +262,11 @@ void PlayerObject::Update()
 	//}
 	if (attack.is) {
 		atkParticle->AddRef(5,20,pos,-velocity);
+		input->GetInstance()->SetVibration(true);
+	}
+	if (!attack.is) {
+		atkParticle->AddRef(5, 20, pos, -velocity);
+		input->GetInstance()->SetVibration(false);
 	}
 
 	/*healParticle1->Update();

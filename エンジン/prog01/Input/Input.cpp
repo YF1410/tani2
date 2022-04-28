@@ -217,6 +217,8 @@ void Input::Update()
 		// ゲームパッドの入力情報取得
 		result = devGamePad->GetDeviceState(sizeof(padData), &padData);
 	}
+	XInputGetState(0, &state);
+	Vibration();
 #pragma endregion
 }
 
@@ -339,7 +341,7 @@ bool Input::TriggerPadRight()
 bool Input::PushPadButton(PadKey keyNumber)
 {
 	// 0でなければ押している
-	if (padData.rgbButtons[keyNumber])
+	if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A)
 	{
 		return true;
 	}
@@ -350,8 +352,9 @@ bool Input::PushPadButton(PadKey keyNumber)
 
 bool Input::TriggerPadButton(PadKey keyNumber)
 {
+
 	// 前回が0で、今回が0でなければトリガー
-	if (!padDataPre.rgbButtons[keyNumber] && padData.rgbButtons[keyNumber])
+	if (!padDataPre.rgbButtons[keyNumber] && state.Gamepad.wButtons & XINPUT_GAMEPAD_A)
 	{
 		return true;
 	}
@@ -447,6 +450,20 @@ Input::Input()
 
 Input::~Input()
 {
+}
+
+void Input::Vibration()
+{
+	if (!vibrationFlag)
+	{
+		vibration.wLeftMotorSpeed = 0;
+		XInputSetState(0, &vibration);
+	}
+	else if (vibrationFlag)
+	{
+		vibration.wLeftMotorSpeed = vibrationPower;
+		XInputSetState(0, &vibration);
+	}
 }
 
 Input* Input::GetInstance()
