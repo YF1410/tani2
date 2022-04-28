@@ -308,7 +308,6 @@ void PlayerObject::Update()
 	//	frameF = false;
 	//	frame = 0;
 	//}
-
 	/*healParticle1->Update();
 	healParticle2->Update();
 	boomParticle->Update();
@@ -414,9 +413,14 @@ void PlayerObject::LustUpdate()
 		energy -= shotSize;
 	}
 
+	Input* input = Input::GetInstance();
 	Vector3 beforePos = pos + velocity;
 	if (attack.is) {
 		atkParticle->AddAttack(3, 20, pos, velocity, (atan2(pos.z - beforePos.z, pos.x - beforePos.x) + 3.14/2));
+		input->GetInstance()->SetVibration(true);
+	}
+	else if (!attack.is) {
+		input->GetInstance()->SetVibration(false);
 	}
 }
 

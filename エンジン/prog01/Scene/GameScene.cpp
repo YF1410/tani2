@@ -303,7 +303,7 @@ void GameScene::Draw() {
 	playerObject->Draw();
 	
 #pragma endregion 3Dオブジェクト(FBX)描画
-
+	ParticleManager::GetInstance()->Draw(cmdList);
 
 #pragma region パーティクル
 
@@ -316,7 +316,7 @@ void GameScene::Draw() {
 	Sprite::PreDraw(cmdList);
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
-	ParticleManager::GetInstance()->Draw(cmdList);
+	
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
