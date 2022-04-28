@@ -52,6 +52,12 @@ public:
 	//
 	STATE attackGage;
 
+	//コライダー
+	SphereCollider *broadSphereCollider;	//ブロード
+	SphereCollider *pushBackCollider;	//押し返し用
+	SphereCollider *attackCollider;	//攻撃用
+
+
 private:
 
 
@@ -84,11 +90,8 @@ private: // メンバ変数
 	const float SHOT_ENERGY = 100;
 
 
-	//コライダー
-	SphereCollider *broadSphereCollider;	//ブロード
-	SphereCollider * pushBackCollider;	//押し返し用
-	SphereCollider *attackCollider;	//攻撃用
 
+	
 	Box2DCollider *toMapChipCollider;
 
 	//パーティクル

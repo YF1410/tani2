@@ -249,8 +249,12 @@ void GameScene::Update() {
 	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
-	if (playerObject.get()->GetEnergy() == 0) {
+	if (playerObject.get()->GetEnergy() <= 0) {
 		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)||
+			Input::GetInstance()->TriggerPadButton(BUTTON_A)){
+
+		}
 	}
 
 	//カウンターを加算
@@ -311,5 +315,10 @@ void GameScene::Draw() {
 	{
 		SceneManager::GetInstance()->ChangeScene("TitleScene");
 	}
-
+	if (playerObject.get()->GetEnergy() <= 0) {
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+			Input::GetInstance()->TriggerPadButton(BUTTON_A)) {
+			SceneManager::GetInstance()->ChangeScene("TitleScene");
+		}
+	}
 }

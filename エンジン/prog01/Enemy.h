@@ -40,6 +40,10 @@ public:		//当たり判定関係
 
 	bool isAlive;
 
+	//コライダー
+	SphereCollider *broadSphereCollider;	//予測用コライダー
+	SphereCollider *pushBackCollider;		//厳密なコライダー（現状未使用）
+	Box2DCollider *toMapChipCollider;		//マップチップ用コライダー
 
 protected: // メンバ変数
 	//移動処理
@@ -73,8 +77,4 @@ protected: // メンバ変数
 		const XMVECTOR &hitPos,		//衝突位置
 		const Vector3 &normal);
 
-	//コライダー
-	SphereCollider *broadSphereCollider;	//予測用コライダー
-	SphereCollider *pushBackCollider;		//厳密なコライダー（現状未使用）
-	Box2DCollider *toMapChipCollider;		//マップチップ用コライダー
 };

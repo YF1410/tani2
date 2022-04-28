@@ -22,7 +22,6 @@ void BoundEnemy::OnCollision(const CollisionInfo &info)
 		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.4f;
 		penalty.y = 0;
 
-		velocity = CalcReflectVector(velocity, Vector3(pos - player->pos));
 		
 
 
@@ -30,7 +29,16 @@ void BoundEnemy::OnCollision(const CollisionInfo &info)
 		if (player->attack.is) {
 			//ダメージを受ける
 			Damage(player->attackPow);
-			
+
+			Vector3 nextPos = info.inter + Vector3(pos - info.object->pos).Normal() * (broadSphereCollider->GetRadius() /*+ player->broadSphereCollider->GetRadius()*/);
+			nextPos.y = 0;
+			velocity = CalcReflectVector(velocity, Vector3(pos - player->pos).Normal());
+			pos = nextPos;
+		}
+		else {
+			//位置修正
+			penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.4f;
+			penalty.y = 0;
 		}
 		break;
 	case DEBRIS:
@@ -38,6 +46,11 @@ void BoundEnemy::OnCollision(const CollisionInfo &info)
 		debri = dynamic_cast<Debris *>(info.object);
 		if (debri->isAttack) {
 			Damage(debri->velocity.Length());
+
+			Vector3 nextPos = info.inter + Vector3(pos - info.object->pos).Normal() * (broadSphereCollider->GetRadius() /*+ debri->hitCollider->GetRadius()*/);
+			nextPos.y = 0;
+			velocity = CalcReflectVector(velocity, Vector3(pos - debri->pos).Normal()) * 15.0f;
+			pos = nextPos;
 		}
 		break;
 
@@ -63,5 +76,4 @@ void BoundEnemy::Damage(float damage)
 	//無敵時間をセットする
 	isInvincible = true;
 	InvincibleTimer = 0;
-	velocity.z *= -10;
 }
