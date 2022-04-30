@@ -470,14 +470,16 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 }
 
 void PlayerObject::HitWall(
-	const XMVECTOR &hitPos,		//�Փˈʒu
-	const Vector3 &normal)
+	const XMVECTOR& hitPos,		//�Փˈʒu
+	const Vector3& normal)
 {
 	velocity = CalcReflectVector(velocity, normal);
-	if (!isBounce && attack.is) {
-		velocity *= 3.0f;
-		isBounce = true;
+	if (attack.is) {
 		refParticle->AddRef(20, 40, pos, velocity);
+		if (isBounce) {
+			velocity *= 3.0f;
+			isBounce = true;
+		}
 	}
 }
 
