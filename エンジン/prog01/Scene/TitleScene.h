@@ -50,4 +50,9 @@ private: // ƒƒ“ƒo•Ï”
 	std::unique_ptr<Object3d> endObject3d;
 
 	bool flag = true;
+	bool shakeTimerFlag = false;
+	int shakeTimer = 0;
+	int attenuation = 0;
+
+	XMFLOAT3 savePos = {};
 };

@@ -38,13 +38,13 @@ void TitleScene::Initialize()
 	startObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("start"));
 	startObject3d->SetRotation({ -90,25,0 });
 	startObject3d->SetScale({ 30, 1, 10 });
-	startObject3d->SetPosition({ 30,-10,0 });
+	startObject3d->SetPosition({ 30,-7,0 });
 	startObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 
 	endObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("end"));
 	endObject3d->SetRotation({ -90,25,0 });
 	endObject3d->SetScale({ 10, 1, 5 });
-	endObject3d->SetPosition({ 30,-20,0 });
+	endObject3d->SetPosition({ 30,-17,0 });
 
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
@@ -62,45 +62,109 @@ void TitleScene::Update()
 
 	if (input->TriggerPadButton(BUTTON_A))
 	{
-		SceneManager::GetInstance()->ChangeScene("SelectScene");
+		if (flag)
+		{
+			SceneManager::GetInstance()->ChangeScene("SelectScene");
+		}
+		else if (!flag)
+		{
+			exit(1);
+		}
 	}
 
-	if (input->TriggerUp())
+	if (input->TriggerUp() && !shakeTimerFlag)
 	{
 		if (!flag)
 		{
 			flag = true;
+			savePos = { 30,-7,0 };
 		}
 		else if (flag)
 		{
 			flag = false;
+			savePos = { 30,-17,0 };
 		}
+		shakeTimerFlag = true;
 	}
-	else if (input->TriggerDown())
+	else if (input->TriggerDown() && !shakeTimerFlag)
 	{
 		if (!flag)
 		{
 			flag = true;
+			savePos = { 30,-7,0 };
 		}
 		else if (flag)
 		{
 			flag = false;
+			savePos = { 30,-17,0 };
 		}
+		shakeTimerFlag = true;
 	}
 
 	if (!flag)
+	{
+		startObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		startObject3d->SetScale({ 10, 1, 5 });
+		endObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+		endObject3d->SetScale({ 30, 1, 10 });
+	}
+	else if (flag)
 	{
 		startObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 		startObject3d->SetScale({ 30, 1, 10 });
 		endObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		endObject3d->SetScale({ 10, 1, 5 });
 	}
-	else if (flag)
+
+	if (!flag && shakeTimerFlag)
 	{
-		startObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-		startObject3d->SetScale({ 10, 1, 5 });
-		endObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
-		endObject3d->SetScale({ 30, 1, 10 });
+		XMFLOAT3 shake = {};
+		shakeTimer++;
+
+		if (shakeTimer > 0)
+		{
+			shake.x = (rand() % (7 - attenuation) - 3) + savePos.x;
+			shake.y = (rand() % (7 - attenuation) - 3) + savePos.y;
+			shake.z = savePos.z;
+		}
+
+		if (shakeTimer >= attenuation * 2)
+		{
+			attenuation += 1;
+			endObject3d->SetPosition(shake);
+		}
+		else if (attenuation >= 6)
+		{
+			shakeTimer = 0;
+			attenuation = 0;
+			shakeTimerFlag = 0;
+			endObject3d->SetPosition(savePos);
+		}
+	}
+	else if (flag && shakeTimerFlag)
+	{
+		XMFLOAT3 shake = {};
+		shakeTimer++;
+
+		if (shakeTimer > 0)
+		{
+			shake.x = (rand() % (7 - attenuation) - 3) + savePos.x;
+			shake.y = (rand() % (7 - attenuation) - 3) + savePos.y;
+			shake.z = savePos.z;
+		}
+
+		if (shakeTimer >= attenuation * 2)
+		{
+			attenuation += 1;
+			startObject3d->SetPosition(shake);
+		}
+		else if (attenuation >= 6)
+		{
+			shakeTimer = 0;
+			attenuation = 0;
+			shakeTimerFlag = 0;
+			startObject3d->SetPosition(savePos);
+		}
 	}
 
 	titleObject3d->Update();

@@ -85,6 +85,8 @@ public: // ƒƒ“ƒoŠÖ”
 	void UpdateWorldMatrix();
 	// À•W‚ÌŽæ“¾
 	const XMFLOAT3& GetPos() { return position; }
+	// X,Y,ZŽ²‰ñ‚è‚ÌŽæ“¾
+	const XMFLOAT3& GetPosition() { return position; }
 	// À•W‚ÌÝ’è
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 	// X,Y,ZŽ²‰ñ‚è‚ÌŽæ“¾
