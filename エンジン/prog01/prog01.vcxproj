@@ -285,6 +285,7 @@
     <ClCompile Include="3d\Model.cpp" />
     <ClCompile Include="3d\ModelManager.cpp" />
     <ClCompile Include="3d\Object3d.cpp" />
+    <ClCompile Include="3d\ObjFactory.cpp" />
     <ClCompile Include="3d\ParticleEmitter.cpp" />
     <ClCompile Include="3d\ParticleFactory.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
@@ -357,6 +358,7 @@
     <ClInclude Include="3d\Model.h" />
     <ClInclude Include="3d\ModelManager.h" />
     <ClInclude Include="3d\Object3d.h" />
+    <ClInclude Include="3d\ObjFactory.h" />
     <ClInclude Include="3d\ParticleEmitter.h" />
     <ClInclude Include="3d\ParticleFactory.h" />
     <ClInclude Include="Audio\Audio.h" />

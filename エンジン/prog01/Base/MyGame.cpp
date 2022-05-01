@@ -1,11 +1,14 @@
 #include "MyGame.h"
 #include "SceneFactory.h"
 #include "SpriteFactory.h"
+#include "ObjFactory.h"
 
 void MyGame::Initialize()
 {
 	//基底クラスの初期化
 	BaseGame::Initialize();
+
+	ObjFactory::GetInstance()->Initialize();
 
 	// シーンの初期化
 	//シーンファクトリを生成し、マネージャーにセット
@@ -21,6 +24,7 @@ void MyGame::Finalize()
 {
 	// シーンの終了
 	SceneManager::GetInstance()->Finalize();
+	ObjFactory::GetInstance()->Finalize();
 	//基底クラスの解放
 	BaseGame::Finalize();
 }

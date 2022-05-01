@@ -123,6 +123,8 @@ float4 main(VSOutput input) : SV_TARGET
 		}
 	}
 
+	shadecolor *= color;
+
 	// シェーディングによる色で描画
 	return shadecolor * texcolor;
 }

@@ -32,6 +32,8 @@ public: // サブクラス
 		XMMATRIX viewproj;  //ビュープロジェクション行列
 		XMMATRIX world;     //ワールド行列
 		XMFLOAT3 cameraPos; //カメラ座標(ワールド座標)
+		float pad1;         //パディング
+		XMFLOAT4 color;     // 色
 	};
 
 private: // 定数
@@ -107,6 +109,8 @@ public: // メンバ関数
 	XMFLOAT3 GetWorldPosition();
 	// モデルを取得
 	inline Model* GetModel() { return model; }
+	// X,Y,Z軸回りの設定
+	void SetColor(XMFLOAT4 _color) { this->color = _color; }
 
 protected: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ

@@ -87,6 +87,9 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(35, L"Resources/Sprite/stage.png")) {
 		assert(0);
 	}
+	if (!Sprite::LoadTexture(36, L"Resources/Sprite/background.png")) {
+		assert(0);
+	}
 
 	//êîéö
 	if (!Sprite::LoadTexture(100, L"Resources/Sprite/UI/font/0.png")) {
