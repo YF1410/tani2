@@ -139,71 +139,71 @@ void GameScene::Update() {
 	camera->Update();
 
 
-	if (Input::GetInstance()->TriggerKey(DIK_1)) {
-		for (int i = 0; i < 3; i++) {
-			EnemyManager::enemys.push_back(new Enemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-		}
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_1)) {
+	//	for (int i = 0; i < 3; i++) {
+	//		EnemyManager::enemys.push_back(new Enemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+	//	}
+	//}
 
-	if (Input::GetInstance()->TriggerKey(DIK_2)) {
-		for (int i = 0; i < 3; i++) {
-			EnemyManager::enemys.push_back(new CushionEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+	//if (Input::GetInstance()->TriggerKey(DIK_2)) {
+	//	for (int i = 0; i < 3; i++) {
+	//		EnemyManager::enemys.push_back(new CushionEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
 
-		}
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_3)) {
-		for (int i = 0; i < 3; i++) {
-			EnemyManager::enemys.push_back(new BoundEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-		}
-	}
+	//	}
+	//}
+	//if (Input::GetInstance()->TriggerKey(DIK_3)) {
+	//	for (int i = 0; i < 3; i++) {
+	//		EnemyManager::enemys.push_back(new BoundEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+	//	}
+	//}
 
-	if (Input::GetInstance()->TriggerKey(DIK_4)) {
-		for (int i = 0; i < 3; i++) {
-			EnemyManager::enemys.push_back(new AvoidanceEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-		}
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_4)) {
+	//	for (int i = 0; i < 3; i++) {
+	//		EnemyManager::enemys.push_back(new AvoidanceEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+	//	}
+	//}
 
-	if (Input::GetInstance()->TriggerKey(DIK_5)) {
-		for (int i = 0; i < 3; i++) {
-			EnemyManager::enemys.push_back(new RandomMoveEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-		}
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_5)) {
+	//	for (int i = 0; i < 3; i++) {
+	//		EnemyManager::enemys.push_back(new RandomMoveEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+	//	}
+	//}
 
-	if (Input::GetInstance()->TriggerKey(DIK_6)) {
-		for (int i = 0; i < 3; i++) {
-			EnemyManager::enemys.push_back(new EscapeEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-		}
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_6)) {
+	//	for (int i = 0; i < 3; i++) {
+	//		EnemyManager::enemys.push_back(new EscapeEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+	//	}
+	//}
 
-	if (Input::GetInstance()->TriggerKey(DIK_7)) {
-		for (int i = 0; i < 3; i++) {
-			EnemyManager::enemys.push_back(new DefenseEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-		}
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_7)) {
+	//	for (int i = 0; i < 3; i++) {
+	//		EnemyManager::enemys.push_back(new DefenseEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+	//	}
+	//}
 
-	if (Input::GetInstance()->TriggerKey(DIK_8)) {
-		for (int i = 0; i < 3; i++) {
-			EnemyManager::enemys.push_back(new KiteEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-		}
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_8)) {
+	//	for (int i = 0; i < 3; i++) {
+	//		EnemyManager::enemys.push_back(new KiteEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+	//	}
+	//}
 
-	if (Input::GetInstance()->TriggerKey(DIK_9)) {
-		for (int i = 0; i < 3; i++) {
-			EnemyManager::enemys.push_back(new SuctionEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-		}
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_9)) {
+	//	for (int i = 0; i < 3; i++) {
+	//		EnemyManager::enemys.push_back(new SuctionEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+	//	}
+	//}
 
-	if (Input::GetInstance()->TriggerKey(DIK_0)) {
-		for (int i = 0; i < 3; i++) {
-			EnemyManager::enemys.push_back(new GetawayEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-		}
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_0)) {
+	//	for (int i = 0; i < 3; i++) {
+	//		EnemyManager::enemys.push_back(new GetawayEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+	//	}
+	//}
 
-	if (Input::GetInstance()->TriggerKey(DIK_P)) {
-		for (int i = 0; i < 3; i++) {
-			EnemyManager::enemys.push_back(new RouteMoveEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-		}
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_P)) {
+	//	for (int i = 0; i < 3; i++) {
+	//		EnemyManager::enemys.push_back(new RouteMoveEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
+	//	}
+	//}
 
 	//マップチップ更新
 	//MapChip::GetInstance()->Update(MapChip::TEST_MAP);

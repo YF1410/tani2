@@ -41,7 +41,7 @@ public:
 	void Initialize();
 	void Filnalize();
 	//CSVファイル読み込み
-	void CsvLoad(MAP_NAME mapName, std::string fName, int mapChipMaxX, int mapChipMaxY);
+	void CsvLoad(MAP_NAME mapName, std::string fName);
 	
 	//マップをセット
 	void SetMapName(MAP_NAME mapName) { nowMap = mapName; }
@@ -70,9 +70,9 @@ public:
 
 	//Blockのサイズ
 	const int chipSize = 200;
-private:
 	//現在のマップ
 	MAP_NAME nowMap;
+private:
 	//マップデータ
 	MAP_DATA mapData[MAX];
 
