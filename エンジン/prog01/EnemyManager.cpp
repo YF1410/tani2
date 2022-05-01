@@ -18,47 +18,51 @@ EnemyManager::~EnemyManager()
 
 void EnemyManager::Initialize()
 {
+	CsvLoad(MapChip::MAP_NAME::TEST_MAP, "testSpawn");
 	nowWave = 0;
 	waveStartTime = 0;
 	//ここでエネミーを追加
 
 	//ウェーブ1
-	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 2));
+	/*spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 2));
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 2));
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 2));
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 2));
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 2));
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 2));
 	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 2));
-	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 2));
+	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 2));*/
 
-	for (int i = 0; i < spawnData[0].size(); i++) {
-		waveEnemyNum[0] += spawnData[0][i]->num;
+	int spawnDataSize = spawnData->size() / spawnData[0].size();
+	for (int size = 0; size < spawnDataSize; size++) {
+		for (int i = 0; i < spawnData[size].size(); i++) {
+			waveEnemyNum[size] += spawnData[size][i]->num;
+		}
 	}
 
 
-	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
-	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
-	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
-	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
-	spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[0], 5));
-	spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[1], 5));
-	spawnData[1].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[2], 5));
-	spawnData[1].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[3], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[0], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[1], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[2], 5));
+	//spawnData[1].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[3], 5));
 
 	/*for (int i = 0; i < spawnData[1].size(); i++) {
 		waveEnemyNum[1] += spawnData[1][i]->num;
 	}*/
 
 
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[0], 5));
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[1], 5));
-	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[2], 5));
-	spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 0, spawnPos[3], 5));
-	spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[0], 5));
-	spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[1], 5));
-	spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[2], 5));
-	spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[3], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[0], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[1], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[2], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 0, spawnPos[3], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[0], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[1], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[2], 5));
+	//spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[3], 5));
 
 	/*for (int i = 0; i < spawnData[2].size(); i++) {
 		waveEnemyNum[2] += spawnData[2][i]->num;
@@ -151,19 +155,12 @@ void EnemyManager::Update()
 	}
 
 	//削除
-<<<<<<< HEAD
 	for (int i = enemys[MapChip::GetInstance()->nowMap].size() - 1; i >= 0; i--) {
 		if (!enemys[MapChip::GetInstance()->nowMap][i]->isAlive) {
+			defeatParticle1->AddDefeat(1, 40, enemys[MapChip::GetInstance()->nowMap][i]->pos, ParticleEmitter::SHOCKWAVE);
+			defeatParticle2->AddDefeat(3, 40, enemys[MapChip::GetInstance()->nowMap][i]->pos, ParticleEmitter::STAR);
 			delete enemys[MapChip::GetInstance()->nowMap][i];
 			enemys[MapChip::GetInstance()->nowMap].erase(enemys[MapChip::GetInstance()->nowMap].begin() + i);
-=======
-	for (int i = enemys.size() - 1; i >= 0; i--) {
-		if (!enemys[i]->isAlive) {
-			defeatParticle1->AddDefeat(1, 40, enemys[i]->pos, ParticleEmitter::SHOCKWAVE);
-			defeatParticle2->AddDefeat(3, 40, enemys[i]->pos, ParticleEmitter::STAR);
-			delete enemys[i];
-			enemys.erase(enemys.begin() + i);
->>>>>>> 058198b0024bf7bae0037d76ef686d38c62aeb44
 		}
 	}
 	//更新
@@ -189,19 +186,12 @@ void EnemyManager::Adaptation()
 	}
 }
 
-<<<<<<< HEAD
-void EnemyManager::Draw()
-{
-	for (int i = 0; i < enemys[MapChip::GetInstance()->nowMap].size(); i++) {
-		enemys[MapChip::GetInstance()->nowMap][i]->Draw();
-=======
 void EnemyManager::Draw() {
 	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
-	for (int i = 0; i < enemys.size(); i++) {
-		enemys[i]->Draw();
+	for (int i = 0; i < enemys[MapChip::GetInstance()->nowMap].size(); i++) {
+		enemys[MapChip::GetInstance()->nowMap][i]->Draw();
 		defeatParticle1->Draw(cmdList);
 		defeatParticle2->Draw(cmdList);
->>>>>>> 058198b0024bf7bae0037d76ef686d38c62aeb44
 	}
 }
 
@@ -221,25 +211,25 @@ void EnemyManager::Finalize()
 void EnemyManager::CsvLoad(MapChip::MAP_NAME mapName, std::string fName)
 {
 
-	//std::ifstream ifs("" + fName + ".csv");
-	////MAP_DATA loadData;
-	//std::string line;
-	//while (getline(ifs, line))
-	//{
-	//	std::istringstream stream(line);
-	//	std::string field;
-	//	std::vector<int> result;
-	//	while (std::getline(stream, field, ','))
-	//	{
-	//		result.push_back(stoi(field));
-	//		//x++;
-	//	}
-	//	for (auto i : result)
-	//	{
-	//		loadData.mapChip.push_back(i);
-	//	}
-	//	y++;
-	//}
+	std::ifstream ifs("Resources/EnemySpawnData/" + fName + ".csv");
+	//MAP_DATA loadData;
+	std::string line;
+	while (getline(ifs, line))
+	{
+		std::istringstream stream(line);
+		std::string field;
+		std::vector<int> result;
+		while (std::getline(stream, field, ','))
+		{
+			result.push_back(stoi(field));
+		}
+		spawnData[result[0]].push_back(new SPAWN_DATA((ENEMY_TYPE)result[1], result[2], Vector3(result[3],0, result[4]), result[5]));
+
+		/*for (auto i : result)
+		{
+			loadData.mapChip.push_back(i);
+		}*/
+	}
 	////ファイル名を保存
 	//loadData.mapName = "Resources/EnemySpawnData/" + fName + ".csv";
 	////Xの最大値を保存
