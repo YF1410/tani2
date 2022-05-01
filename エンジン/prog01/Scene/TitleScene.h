@@ -48,4 +48,6 @@ private: // ƒƒ“ƒo•Ï”
 	std::unique_ptr<Object3d> titleObject3d;
 	std::unique_ptr<Object3d> startObject3d;
 	std::unique_ptr<Object3d> endObject3d;
+
+	bool flag = true;
 };

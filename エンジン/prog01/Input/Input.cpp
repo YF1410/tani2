@@ -217,6 +217,8 @@ void Input::Update()
 		// ゲームパッドの入力情報取得
 		result = devGamePad->GetDeviceState(sizeof(padData), &padData);
 	}
+	// 前回のキー入力を保存
+	memcpy(&statePre, &state, sizeof(state));
 	XInputGetState(0, &state);
 	Vibration();
 #pragma endregion
@@ -290,6 +292,26 @@ bool Input::PushPadStickRight()
 bool Input::PushPadStickLeft()
 {
 	if (padData.lX < -angle)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::TriggerUp()
+{
+	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_UP && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_UP)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::TriggerDown()
+{
+	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_DOWN && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_DOWN)
 	{
 		return true;
 	}

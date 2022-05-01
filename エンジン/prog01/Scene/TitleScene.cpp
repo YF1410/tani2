@@ -65,6 +65,44 @@ void TitleScene::Update()
 		SceneManager::GetInstance()->ChangeScene("SelectScene");
 	}
 
+	if (input->TriggerUp())
+	{
+		if (!flag)
+		{
+			flag = true;
+		}
+		else if (flag)
+		{
+			flag = false;
+		}
+	}
+	else if (input->TriggerDown())
+	{
+		if (!flag)
+		{
+			flag = true;
+		}
+		else if (flag)
+		{
+			flag = false;
+		}
+	}
+
+	if (!flag)
+	{
+		startObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+		startObject3d->SetScale({ 30, 1, 10 });
+		endObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		endObject3d->SetScale({ 10, 1, 5 });
+	}
+	else if (flag)
+	{
+		startObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		startObject3d->SetScale({ 10, 1, 5 });
+		endObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+		endObject3d->SetScale({ 30, 1, 10 });
+	}
+
 	titleObject3d->Update();
 	startObject3d->Update();
 	endObject3d->Update();

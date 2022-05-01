@@ -65,6 +65,9 @@ public: //ƒƒ“ƒoŠÖ”
 	bool PushPadStickRight();
 	bool PushPadStickLeft();
 
+	bool TriggerUp();
+	bool TriggerDown();
+
 	XMFLOAT2& PadStickGradient(const float &deadzone = 0.2f);
 	double PadStickAngle();
 
@@ -131,6 +134,7 @@ private: //ƒƒ“ƒo•Ï”
 	bool padFlag = true;
 
 	XINPUT_STATE state;
+	XINPUT_STATE statePre;
 	bool vibrationFlag = false;
 	XINPUT_VIBRATION vibration;
 	int vibrationPower = 65535;
