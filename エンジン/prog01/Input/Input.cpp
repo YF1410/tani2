@@ -341,7 +341,7 @@ bool Input::TriggerPadRight()
 bool Input::PushPadButton(PadKey keyNumber)
 {
 	// 0‚Å‚È‚¯‚ê‚Î‰Ÿ‚µ‚Ä‚¢‚é
-	if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A)
+	if (padDataPre.rgbButtons[keyNumber])
 	{
 		return true;
 	}
