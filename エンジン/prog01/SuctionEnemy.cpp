@@ -6,6 +6,7 @@ SuctionEnemy::SuctionEnemy(XMFLOAT3 startPos, PlayerObject* targetPos) :
 	Enemy(startPos, targetPos) {
 	suctioningRange = 5000;
 	attackRange = 300;
+	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_5));
 }
 
 void SuctionEnemy::Move() {
@@ -14,7 +15,7 @@ void SuctionEnemy::Move() {
 		float debrisRange = Vector3((Debris::debris[debrisNum]->pos-pos)).Length();
 		if (!Debris::debris[debrisNum]->isAttack) {
 			if (suctioningRange > debrisRange && Debris::debris[debrisNum]->GetState() != Debris::RETURN) {
-				Debris::debris[debrisNum]->SetVelocity(Vector3(pos-Debris::debris[debrisNum]->pos).Normal());
+				Debris::debris[debrisNum]->SetVelocity(Vector3(pos-Debris::debris[debrisNum]->pos).Normal() * 3.0f);
 				Debris::debris[debrisNum]->SetState(Debris::SUCTION);
 			}
 			if (attackRange > debrisRange) {

@@ -37,36 +37,46 @@ void EnemyManager::Initialize()
 	}
 
 
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
+	spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
+	spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[0], 5));
+	spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[1], 5));
+	spawnData[1].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[2], 5));
+	spawnData[1].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[3], 5));
 
 	/*for (int i = 0; i < spawnData[1].size(); i++) {
 		waveEnemyNum[1] += spawnData[1][i]->num;
 	}*/
 
 
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 5));
+	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[0], 5));
+	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[1], 5));
+	spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[2], 5));
+	spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 0, spawnPos[3], 5));
+	spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[0], 5));
+	spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[1], 5));
+	spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[2], 5));
+	spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[3], 5));
 
 	/*for (int i = 0; i < spawnData[2].size(); i++) {
 		waveEnemyNum[2] += spawnData[2][i]->num;
 	}*/
 
+	defeatParticle1 = defeatParticle1->Create(L"defeat1");
+	defeatParticle2 = defeatParticle2->Create(L"defeat2");
+	defeatParticle1->SetStartScale(100.0f);
+	defeatParticle1->SetEndScale(700.0f);
+	defeatParticle1->SetStartColor({1,1,1,1});
+	defeatParticle1->SetEndColor({ 1,1,1,0 });
+	defeatParticle2->SetStartScale(300.0f);
+	defeatParticle2->SetCenter(500.0f);
 
 	endFlag = false;
 
+	ParticleManager::GetInstance()->SetParticleEmitter(defeatParticle1);
+	ParticleManager::GetInstance()->SetParticleEmitter(defeatParticle2);
 }
 
 void EnemyManager::Update()
@@ -129,7 +139,7 @@ void EnemyManager::Update()
 					enemys[MapChip::GetInstance()->nowMap].push_back(new Enemy(spawnPos, player));
 					break;
 				}
-				
+
 			}
 
 			delete spawnData[nowWave][0];
@@ -141,10 +151,19 @@ void EnemyManager::Update()
 	}
 
 	//çÌèú
+<<<<<<< HEAD
 	for (int i = enemys[MapChip::GetInstance()->nowMap].size() - 1; i >= 0; i--) {
 		if (!enemys[MapChip::GetInstance()->nowMap][i]->isAlive) {
 			delete enemys[MapChip::GetInstance()->nowMap][i];
 			enemys[MapChip::GetInstance()->nowMap].erase(enemys[MapChip::GetInstance()->nowMap].begin() + i);
+=======
+	for (int i = enemys.size() - 1; i >= 0; i--) {
+		if (!enemys[i]->isAlive) {
+			defeatParticle1->AddDefeat(1, 40, enemys[i]->pos, ParticleEmitter::SHOCKWAVE);
+			defeatParticle2->AddDefeat(3, 40, enemys[i]->pos, ParticleEmitter::STAR);
+			delete enemys[i];
+			enemys.erase(enemys.begin() + i);
+>>>>>>> 058198b0024bf7bae0037d76ef686d38c62aeb44
 		}
 	}
 	//çXêV
@@ -152,8 +171,8 @@ void EnemyManager::Update()
 		enemys[MapChip::GetInstance()->nowMap][i]->Update();
 	}
 	//DebugText::GetInstance()->VariablePrint(0, 120, "EnemyCount", enemys.size(), 3);
-
-
+	defeatParticle1->Update();
+	defeatParticle2->Update();
 }
 
 void EnemyManager::FinalUpdate()
@@ -170,10 +189,19 @@ void EnemyManager::Adaptation()
 	}
 }
 
+<<<<<<< HEAD
 void EnemyManager::Draw()
 {
 	for (int i = 0; i < enemys[MapChip::GetInstance()->nowMap].size(); i++) {
 		enemys[MapChip::GetInstance()->nowMap][i]->Draw();
+=======
+void EnemyManager::Draw() {
+	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
+	for (int i = 0; i < enemys.size(); i++) {
+		enemys[i]->Draw();
+		defeatParticle1->Draw(cmdList);
+		defeatParticle2->Draw(cmdList);
+>>>>>>> 058198b0024bf7bae0037d76ef686d38c62aeb44
 	}
 }
 

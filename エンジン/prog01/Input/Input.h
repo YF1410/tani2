@@ -6,6 +6,9 @@
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#include <xinput.h>
+
+#pragma comment (lib, "xinput.lib")
 
 enum PadKey
 {
@@ -74,7 +77,9 @@ public: //メンバ関数
 	bool PushPadButton(PadKey keyNumber);
 	// キーのトリガーをチェック
 	bool TriggerPadButton(PadKey keyNumber);
-
+	//振動のフラグ設定
+	void SetVibration(bool _vibration) { vibrationFlag = _vibration; }
+	void SetVibrationPower(int _vibrationPower) { vibrationPower = _vibrationPower; }
 	// キーの左ボタン押下をチェック
 	bool PushMouseLeft();
 	// キーの中ボタン押下をチェック
@@ -93,6 +98,8 @@ public: //メンバ関数
 private:
 	Input();
 	~Input();
+
+	void Vibration();
 
 public:
 	Input(const Input& input) = delete;
@@ -122,6 +129,11 @@ private: //メンバ変数
 	DIJOYSTATE padDataPre;
 	//接続確認
 	bool padFlag = true;
+
+	XINPUT_STATE state;
+	bool vibrationFlag = false;
+	XINPUT_VIBRATION vibration;
+	int vibrationPower = 65535;
 
 	//マウス
 	ComPtr<IDirectInputDevice8> devMouse;

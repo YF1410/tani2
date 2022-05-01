@@ -70,6 +70,23 @@ void SpriteFactory::Initialize()
 	}
 
 
+	//scene‚Ì‰æ‘œ
+	if (!Sprite::LoadTexture(30, L"Resources/Sprite/title.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(31, L"Resources/Sprite/clear.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(32, L"Resources/Sprite/gameover.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(33, L"Resources/Sprite/stageSelect.png")) {
+		assert(0);
+	}
+
+	if (!Sprite::LoadTexture(35, L"Resources/Sprite/stage.png")) {
+		assert(0);
+	}
 
 	//”š
 	if (!Sprite::LoadTexture(100, L"Resources/Sprite/UI/font/0.png")) {

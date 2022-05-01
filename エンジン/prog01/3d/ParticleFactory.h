@@ -10,7 +10,7 @@
 
 #include "Camera.h"
 
-class ParticleManager
+class ParticleFactory
 {
 private: // エイリアス
 	// Microsoft::WRL::を省略
@@ -71,6 +71,8 @@ public: // サブクラス
 		XMFLOAT4 s_color = {};
 		// 色(RGBA)最終値
 		XMFLOAT4 e_color = {};
+		//回転
+		float rotation = 0.0f;
 	};
 
 private: // 定数
@@ -78,13 +80,13 @@ private: // 定数
 
 public: // 静的メンバ関数
 	// 3Dオブジェクト生成
-	std::unique_ptr<ParticleManager> Create(ID3D12Device* device, Camera* camera);
+	std::unique_ptr<ParticleFactory> Create(ID3D12Device* device, Camera* camera);
 
 public: // メンバ関数
 	//コンストラクタ
-	ParticleManager(ID3D12Device* device, Camera* camera);
+	ParticleFactory(ID3D12Device* device, Camera* camera);
 	//デストラクタ
-	~ParticleManager();
+	~ParticleFactory();
 	// 初期化
 	void Initialize();
 	// 毎フレーム処理
@@ -93,7 +95,7 @@ public: // メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//パーティクルの追加
 	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
-		float start_scale, float end_scale, XMFLOAT4 start_color, XMFLOAT4 end_color);
+		float start_scale, float end_scale, XMFLOAT4 start_color, XMFLOAT4 end_color,float rotation = 0.0f);
 	// デスクリプタヒープの初期化
 	void InitializeDescriptorHeap();
 	// グラフィックパイプライン生成
@@ -130,4 +132,7 @@ private: // 静的メンバ変数
 	std::forward_list<Particle> particles;
 	// カメラ
 	Camera* camera = nullptr;
+
+	// Z軸回りの回転角(radian
+	float rotation = 0.0f;
 };

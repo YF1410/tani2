@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include "Vector3.h"
 
 class Camera
 {
@@ -46,6 +47,7 @@ public: // 静的メンバ関数
 	// ベクトルによる移動
 	void CameraMoveVector(const XMFLOAT3& move);
 	void CameraMoveEyeVector(const XMFLOAT3& move);
+	void CameraMoveTargetVector(const XMFLOAT3& move);
 
 	void CameraShake();
 
@@ -69,17 +71,18 @@ protected: // メンバ変数
 	// 射影行列ダーティフラグ
 	bool projectionDirty = false;
 	// 視点座標
-	XMFLOAT3 eye = { 0, 0, -50 };
+	Vector3 eye = { 0, 0, -50 };
 	// 注視点座標
-	XMFLOAT3 target = { 0, 0, 0 };
+	Vector3 target = { 0, 0, 0 };
 	// 上方向ベクトル
-	XMFLOAT3 up = { 0, 1, 0 };
+	Vector3 up = { 0, 1, 0 };
 	// アスペクト比
 	float aspectRatio = 1.0f;
 
 	//シェイクフラグ
 	bool shakeFlag = false;
-	XMFLOAT3 save = { 0.0f, 0.0f, 0.0f };
+	Vector3 saveEye = { 0.0f, 0.0f, 0.0f };
+	Vector3 saveTarget = { 0.0f, 0.0f, 0.0f };
 	int shakeTimer = 0;
 	int attenuation = 0;
 	int shakeCount = 0;

@@ -9,9 +9,8 @@ ClearScene::~ClearScene()
 void ClearScene::Initialize()
 {
 	// ”wŒiƒXƒvƒ‰ƒCƒg¶¬
-	sprite = Sprite::Create(1, { 0.0f,0.0f });
-	sprite->SetSize({ 100.0f,100.0f });
-	sprite->SetPosition({ 500.0f,500.0f });
+	sprite = Sprite::Create(31, { 0.0f,0.0f });
+	sprite->SetSize({ 1280.0f,720.0f });
 }
 
 void ClearScene::Finalize()
@@ -22,7 +21,7 @@ void ClearScene::Update()
 {
 	Input* input = Input::GetInstance();
 
-	if (input->TriggerKey(DIK_RETURN))
+	if (input->TriggerPadButton(BUTTON_B))
 	{
 		SceneManager::GetInstance()->ChangeScene("TitleScene");
 	}

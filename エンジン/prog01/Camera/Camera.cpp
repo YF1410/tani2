@@ -1,6 +1,7 @@
 #include "Camera.h"
 #include <cstdlib>
 #include <time.h>
+#include "Easing.h"
 
 using namespace DirectX;
 
@@ -16,6 +17,7 @@ Camera::Camera(int window_width, int window_height)
 
 	// ビュープロジェクションの合成
 	matViewProjection = matView * matProjection;
+	srand(time(NULL));
 }
 
 void Camera::Update()
@@ -149,9 +151,15 @@ void Camera::CameraMoveVector(const XMFLOAT3& move)
 	eye_moved.y += move.y;
 	eye_moved.z += move.z;
 
+	saveEye.x += move.x;
+	saveEye.y += move.y;
+	saveEye.z += move.z;
+
 	target_moved.x += move.x;
 	target_moved.y += move.y;
 	target_moved.z += move.z;
+
+	saveTarget += move;
 
 	SetEye(eye_moved);
 	SetTarget(target_moved);
@@ -161,46 +169,71 @@ void Camera::CameraMoveEyeVector(const XMFLOAT3& move)
 {
 	XMFLOAT3 eye_moved = GetEye();
 
+	//saveEye += eye;
+
 	eye_moved.x += move.x;
 	eye_moved.y += move.y;
 	eye_moved.z += move.z;
 
+	saveEye.x += move.x;
+	saveEye.y += move.y;
+	saveEye.z += move.z;
+
 	SetEye(eye_moved);
+}
+void Camera::CameraMoveTargetVector(const XMFLOAT3& move) {
+
+	XMFLOAT3 target_moved = GetTarget();
+
+	saveTarget += move;
+
+	target_moved.x += move.x;
+	target_moved.y += move.y;
+	target_moved.z += move.z;
+
+	SetTarget(target_moved);
 }
 
 void Camera::CameraShake()
 {
 	if (!shakeFlag)
 	{
+		saveEye = eye;
+		saveTarget = target;
 		shakeTimer = 0;
 		attenuation = 0;
-		save.x = eye.x;
-		save.y = eye.y;
-		save.z = eye.z;
+		SetEye(saveEye);
+		SetTarget(target);
 	}
 	if (shakeFlag)
 	{
-		XMFLOAT3 shake = { 0.0f, 0.0f, 0.0f };
+		Vector3 shake = { 0.0f, 0.0f, 0.0f };
+		Vector3 shakeEye = { 0.0f, 0.0f, 0.0f };
+		Vector3 shakeTarget = { 0.0f, 0.0f, 0.0f };
 
-		SetEye(save);
+		SetEye(saveEye);
+		SetTarget(saveTarget);
 
 		shakeTimer++;
 		if (shakeTimer > 0)
 		{
-			shake.x = (rand() % (shakeCount - attenuation) - (shakeCount / 2)) + eye.x;
-			shake.y = (rand() % (shakeCount - attenuation) - (shakeCount / 2)) + eye.y;
-			shake.z = (rand() % (shakeCount - attenuation) - (shakeCount / 2)) + eye.z;
+			shake.x = (rand() % (shakeCount - attenuation) - (shakeCount / 2));//(rand() % (int)(Ease(In,Quad,(float)(shakeTimer /20),100,1)));
+			//shake.y = (rand() % (shakeCount - attenuation) - (shakeCount / 2));
+			shake.z = (rand() % (shakeCount - attenuation) - (shakeCount / 2));//(rand() % (int)Ease(In, Quad, (float)(shakeTimer / 20), 100, 1));
+			shakeEye = shake + eye;
+			shakeTarget = shake + target;
 		}
 
-		if (shakeTimer >= attenuation * 5)
+		if (shakeTimer >= attenuation * 4)
 		{
 			attenuation += 1;
 		}
-		else if (attenuation >= 25)
+		else if (attenuation > 3)
 		{
 			shakeFlag = false;
 		}
 
-		SetEye(shake);
+		SetEye(shakeEye);
+		SetTarget(shakeTarget);
 	}
 }

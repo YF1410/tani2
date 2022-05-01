@@ -23,7 +23,6 @@ public:
 	virtual void Update() override;
 	//最終更新
 	virtual void LustUpdate() override;
-
 	//衝突時コールバック
 	virtual void OnCollision(const CollisionInfo &info) override;
 

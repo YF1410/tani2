@@ -286,7 +286,7 @@
     <ClCompile Include="3d\ModelManager.cpp" />
     <ClCompile Include="3d\Object3d.cpp" />
     <ClCompile Include="3d\ParticleEmitter.cpp" />
-    <ClCompile Include="3d\ParticleManager.cpp" />
+    <ClCompile Include="3d\ParticleFactory.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="AvoidanceEnemy.cpp" />
     <ClCompile Include="BaseBlock.cpp" />
@@ -327,6 +327,7 @@
     <ClCompile Include="KiteEnemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MimicEnemy.cpp" />
+    <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="RandomMoveEnemy.cpp" />
     <ClCompile Include="RouteMoveEnemy.cpp" />
@@ -336,6 +337,7 @@
     <ClCompile Include="Scene\SceneFactory.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="StayEnemy.cpp" />
     <ClCompile Include="SuctionEnemy.cpp" />
     <ClCompile Include="UserInterface.cpp" />
@@ -356,7 +358,7 @@
     <ClInclude Include="3d\ModelManager.h" />
     <ClInclude Include="3d\Object3d.h" />
     <ClInclude Include="3d\ParticleEmitter.h" />
-    <ClInclude Include="3d\ParticleManager.h" />
+    <ClInclude Include="3d\ParticleFactory.h" />
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="AvoidanceEnemy.h" />
     <ClInclude Include="BaseBlock.h" />
@@ -400,6 +402,7 @@
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="KiteEnemy.h" />
     <ClInclude Include="MimicEnemy.h" />
+    <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RandomMoveEnemy.h" />
@@ -411,6 +414,7 @@
     <ClInclude Include="Scene\SceneFactory.h" />
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="SelectScene.h" />
     <ClInclude Include="SlimeMath.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StayEnemy.h" />

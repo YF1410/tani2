@@ -84,6 +84,9 @@ void GameScene::Initialize() {
 	enemyManager.get()->Initialize();
 
 
+	sprite = Sprite::Create(35, { 0,0 });
+	sprite->SetSize({ 1280.0f,720.0f });
+
 	//デブリリセット
 	Debris::StaticInitialize(playerObject.get());
 
@@ -94,6 +97,7 @@ void GameScene::Initialize() {
 void GameScene::Finalize() {
 	Debris::Finalize();
 	MapChip::GetInstance()->Filnalize();
+	ParticleManager::GetInstance()->Finalize();
 }
 
 void GameScene::Update() {
@@ -126,7 +130,7 @@ void GameScene::Update() {
 			Vector3(0, debrisLengthMax * 0.7f, 0) +
 			playerObject.get()->velocity * velocityOffset
 		));
-	camera->SetEye(eyeDistance);
+	camera->CameraMoveEyeVector(Vector3(eyeDistance - Vector3(camera.get()->GetEye())));
 	//プレイヤーの少し上を焦点にする
 	targetDistance = Ease(Out, Quad, 0.05f,
 		camera.get()->GetTarget(),
@@ -134,7 +138,7 @@ void GameScene::Update() {
 			targetDistanceDef +
 			playerObject.get()->velocity * velocityOffset));
 
-	camera->SetTarget(targetDistance);
+	camera->CameraMoveTargetVector(Vector3(targetDistance - Vector3(camera.get()->GetTarget())));
 
 	camera->Update();
 
@@ -256,9 +260,13 @@ void GameScene::Update() {
 
 		}
 	}
+	//パーティクル全てのアップデート
+	ParticleManager::GetInstance()->Update();
 
 	//カウンターを加算
 	counter++;
+
+	camera->CameraShake();
 }
 
 void GameScene::LastUpdate() {
@@ -270,6 +278,9 @@ void GameScene::Draw() {
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
+
+	sprite->Draw();
+
 	// スプライト描画後処理
 	Sprite::PostDraw();
 	// 深度バッファクリア
@@ -292,7 +303,7 @@ void GameScene::Draw() {
 	playerObject->Draw();
 	
 #pragma endregion 3Dオブジェクト(FBX)描画
-
+	ParticleManager::GetInstance()->Draw(cmdList);
 
 #pragma region パーティクル
 
@@ -305,6 +316,7 @@ void GameScene::Draw() {
 	Sprite::PreDraw(cmdList);
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
+	
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -313,7 +325,11 @@ void GameScene::Draw() {
 
 	if (enemyManager.get()->isEndFlag())
 	{
-		SceneManager::GetInstance()->ChangeScene("TitleScene");
+		SceneManager::GetInstance()->ChangeScene("ClearScene");
+	}
+
+	if (playerObject.get()->GetEnergy() == 0) {
+		SceneManager::GetInstance()->ChangeScene("GameOverScene");
 	}
 	if (playerObject.get()->GetEnergy() <= 0) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||

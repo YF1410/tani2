@@ -9,21 +9,20 @@
 
 using namespace DirectX;
 
-Enemy::Enemy(XMFLOAT3 startPos, PlayerObject *player) :
+Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 	GameObjCommon(
-		ModelManager::ENEMY_ROBO,	//エネミーモデルをセット
+		ModelManager::ENEMY_ROBO_1,	//エネミーモデルをセット
 		GameObjCommon::ENEMY,	//エネミーとして扱う
 		false,					//重力の影響を受ける
 		startPos				//初期位置をセット
-	)
-{
+	) {
 	isAlive = true;
-	scale = 1.0f;
 	this->player = player;
 	maxHP = 100.0f;
+
 	scale = 2.5f;
 	//当たり判定初期化
-	float radius = 100 * scale.x;
+	float radius = 100;
 	broadSphereCollider = new SphereCollider("BroadSphere", XMVECTOR{ 0,radius,0 }, radius);
 	SetBroadCollider(broadSphereCollider);
 
@@ -36,13 +35,11 @@ Enemy::Enemy(XMFLOAT3 startPos, PlayerObject *player) :
 	Initialize();
 }
 
-Enemy::~Enemy()
-{
+Enemy::~Enemy() {
 }
 
 
-void Enemy::Initialize()
-{
+void Enemy::Initialize() {
 	//攻撃関係
 	attack = {
 		true,
@@ -51,7 +48,6 @@ void Enemy::Initialize()
 		0
 	};
 	HP = maxHP;
-
 }
 
 void Enemy::Update() {
@@ -106,11 +102,9 @@ void Enemy::Update() {
 	attack.Intervel();
 	//移動をいったん適応
 	PosAddVelocity();
-
 }
 
-void Enemy::LustUpdate()
-{
+void Enemy::LustUpdate() {
 
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();

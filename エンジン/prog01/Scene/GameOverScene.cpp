@@ -9,9 +9,8 @@ GameOverScene::~GameOverScene()
 void GameOverScene::Initialize()
 {
 	// ”wŒiƒXƒvƒ‰ƒCƒg¶¬
-	sprite = Sprite::Create(1, { 0.0f,0.0f });
-	sprite->SetSize({ 100.0f,100.0f });
-	sprite->SetPosition({ 1000.0f,100.0f });
+	sprite = Sprite::Create(32, { 0.0f,0.0f });
+	sprite->SetSize({ 1280.0f,720.0f });
 }
 
 void GameOverScene::Finalize()
@@ -22,12 +21,12 @@ void GameOverScene::Update()
 {
 	Input* input = Input::GetInstance();
 
-	if (input->TriggerKey(DIK_RETURN))
+	if (input->TriggerPadButton(BUTTON_B))
 	{
 		SceneManager::GetInstance()->ChangeScene("TitleScene");
 	}
-	if (input->TriggerKey(DIK_C)) 	{
-		SceneManager::GetInstance()->ChangeScene("EnemyTestScene");
+	if (input->TriggerPadButton(BUTTON_A)) 	{
+		SceneManager::GetInstance()->ChangeScene("GameScene");
 	}
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ParticleManager.h"
+#include "ParticleFactory.h"
 #include "Vector3.h"
 
 #include <string>
@@ -23,6 +23,11 @@ public: // 静的メンバ関数
 
 	static void SetCamera(Camera* _camera) { camera = _camera; };
 
+	enum DEFEAT_TYPE {
+		SHOCKWAVE,
+		STAR
+	};
+
 private: //  静的メンバ変数
 	static Camera* camera;
 
@@ -32,7 +37,9 @@ public: // メンバ関数
 	void Add(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
 	void AddHeal(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, Vector3 velocity = { 0,0,0 });
 	void AddBoom(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
-	void AddRef(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 },Vector3 velocity = {0,0,0});
+	void AddAttack(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, Vector3 velocity = { 0,0,0 },float rotation = 0.0f);
+	void AddRef(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, Vector3 velocity = { 0,0,0 });
+	void AddDefeat(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, DEFEAT_TYPE defeatType = SHOCKWAVE);
 	// 毎フレーム処理
 	void Update();
 	// 描画
@@ -79,5 +86,5 @@ private: // メンバ変数
 	//重力に見立ててYのみ[-0.001f,0]でランダムに分布
 	float md_acc = 0.001f;
 
-	std::unique_ptr<ParticleManager> particleMan;
+	std::unique_ptr<ParticleFactory> particleMan;
 };

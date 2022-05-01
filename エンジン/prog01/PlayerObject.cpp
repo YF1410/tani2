@@ -9,6 +9,7 @@
 #include "DebugText.h"
 #include "MapChip.h"
 #include "Enemy.h"
+#include "ParticleManager.h"
 
 
 using namespace DirectX;
@@ -19,13 +20,13 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 		GameObjCommon::PLAYER,	//プレイヤーとして扱う
 		false,					//重力の影響を受ける
 		startPos,
-		{1,1,1},
-		{0,0,0},
+		{ 1,1,1 },
+		{ 0,0,0 },
 		true
 	)
 {
 	srand(time(NULL));			//爆破用乱数のシード値をセット
-	
+
 	scale = ConvertSizeToScale(energy / 2.0f);
 
 	//初期位置に設定
@@ -48,8 +49,8 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, 100, 100);
 	SetNarrowCollider(toMapChipCollider);
 
-	coreUp = new GameObjCommon(ModelManager::SLIME_CORE, Notag, false,{ 0,0,0 }, {1.5f,1.5f,1.5f });
-	
+	coreUp = new GameObjCommon(ModelManager::SLIME_CORE, Notag, false, { 0,0,0 }, { 1.5f,1.5f,1.5f });
+
 }
 
 PlayerObject::~PlayerObject()
@@ -61,7 +62,7 @@ PlayerObject::~PlayerObject()
 void PlayerObject::Initialize()
 {
 	//サイズ初期化
-	energy = 2000.0f;
+	energy = 1508.0f;
 	//サイズ初期化
 	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
 	//ポジション初期化
@@ -89,7 +90,12 @@ void PlayerObject::Initialize()
 		60 * 2,
 		0
 	};
-
+	debrisCooldown = {
+		true,
+		false,
+		5,
+		0
+	};
 
 	//アニメーション開始
 	objectData->PlayAnimation();
@@ -110,9 +116,19 @@ void PlayerObject::Initialize()
 	refParticle->SetStartScale(300.0f);
 	refParticle->SetCenter(400.0f);
 
-	atkParticle = atkParticle->Create();
+	atkParticle = atkParticle->Create(L"attack");
 	atkParticle->SetStartScale(300.0f);
 	atkParticle->SetCenter(400.0f);
+
+	atkParticle->SetStartColor({ 0.8f, 0.8f, 2.0f, 1.0f });
+
+
+
+	ParticleManager::GetInstance()->SetParticleEmitter(healParticle1);
+	ParticleManager::GetInstance()->SetParticleEmitter(healParticle2);
+	ParticleManager::GetInstance()->SetParticleEmitter(boomParticle);
+	ParticleManager::GetInstance()->SetParticleEmitter(refParticle);
+	ParticleManager::GetInstance()->SetParticleEmitter(atkParticle);
 }
 
 void PlayerObject::Update()
@@ -149,40 +165,12 @@ void PlayerObject::Update()
 		}
 	}
 
-
-	//キーボード移動
-	if (input->PushKey(DIK_A))	//左
-	{
-		velocity.x -= moveSpead;
-	}
-	else if (input->PushKey(DIK_D))	//右
-	{
-		velocity.x += moveSpead;
-	}
-	if (input->PushKey(DIK_S))	//後ろ
-	{
-		velocity.z -= moveSpead;
-	}
-	else if (input->PushKey(DIK_W))	//前
-	{
-		velocity.z += moveSpead;
-
-	}
 	//コントローラーでの移動
 	velocity.x += input->PadStickGradient().x * moveSpead;
 	velocity.z += -input->PadStickGradient().y * moveSpead;
 
-
-	//デバッグ用サイズ変更
-	if (input->PushKey(DIK_UP)) {
-		energy += 10.0f;
-	}
-	if (input->PushKey(DIK_DOWN)) {
-		energy -= 10.0f;
-	}
-
 	//自爆
-	if ((input->TriggerKey(DIK_SPACE) || input->TriggerPadButton(BUTTON_A)) &&
+	if ((input->TriggerPadButton(BUTTON_A)) &&
 		attack.can &&
 		attackCount > 0)
 	{
@@ -230,25 +218,41 @@ void PlayerObject::Update()
 
 
 	//回収
-	if (input->TriggerKey(DIK_Q)|| input->TriggerPadButton(BUTTON_B)) {
+	if (input->TriggerPadButton(BUTTON_B)) {
 		if (recovery.Start()) {
 			for (int i = 0; i < Debris::debris.size(); i++) {
 				Debris::debris[i]->ReturnStart();
 			}
 		}
 		else {
+			if (!dontRecovery) {
+				shakePos = pos;
+			}
 			dontRecovery = true;
 		}
 	}
 
+	if(dontRecovery){
+		timer++;
+		if (timer >= maxTimer) {
+			timer = 0;
+			shake = { 0,0 };
+		}
 
+		shake = {
+			(float)((rand() % ((timer - maxTimer) - (timer - maxTimer) / 2)) * 5),
+			(float)((rand() % ((timer - maxTimer) - (timer - maxTimer) / 2)) * 5)
+		};
+
+		shakePos = { pos.x + shake.x ,shakePos.y,pos.z + shake.y };
+	}
 
 	//攻撃インターバル
 	attack.Intervel();
 
 	//回収インターバル
 	recovery.Intervel();
-	
+
 	//攻撃力更新
 	attackPow = velocity.Length();
 
@@ -262,7 +266,7 @@ void PlayerObject::Update()
 	toMapChipCollider->SetRadius(scale.x * 120.0f, scale.x * 120.0f);
 
 	//DebugText::GetInstance()->VariablePrint(0, 80, "StayTimer", recovery.timer, 3);
-	
+
 	//if (input->TriggerKey(DIK_H)) {
 	//	frameF = true;
 	//}
@@ -281,15 +285,11 @@ void PlayerObject::Update()
 	//	frameF = false;
 	//	frame = 0;
 	//}
-	if (attack.is) {
-		atkParticle->AddRef(5,20,pos,-velocity);
-	}
-
-	healParticle1->Update();
+	/*healParticle1->Update();
 	healParticle2->Update();
 	boomParticle->Update();
 	refParticle->Update();
-	atkParticle->Update();
+	atkParticle->Update();*/
 }
 
 void PlayerObject::Draw() const
@@ -306,11 +306,11 @@ void PlayerObject::Draw() const
 	GameObjCommon::Draw();
 
 	// パーティクルの描画
-	healParticle1->Draw(cmdList);
+	/*healParticle1->Draw(cmdList);
 	healParticle2->Draw(cmdList);
 	boomParticle->Draw(cmdList);
 	refParticle->Draw(cmdList);
-	atkParticle->Draw(cmdList);
+	atkParticle->Draw(cmdList);*/
 	//Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 	//flont.get()->Draw();
 	//Object3d::PostDraw();
@@ -345,8 +345,8 @@ void PlayerObject::LustUpdate()
 		}
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
-		
 	}
+	
 
 
 	//角
@@ -374,20 +374,29 @@ void PlayerObject::LustUpdate()
 
 
 	//移動中残骸生成
-	if (attack.is) {
+	if (attack.is && debrisCooldown.can) {
+		debrisCooldown.Start();
+
 		//残骸のサイズ
 		float shotSize = energy / SHOT_ENERGY;
-		float shotRad = (rand() % 90) - 45;
 		Vector3 shotVec = -velocity.Normal();
-		shotVec.AddRotationY(shotRad);
-		Vector3 offsetS = velocity.Normal();
-		offsetS.AddRotationY(90.0f);
-		offsetS = offsetS * (rand() % 400 - 200);
 		//startVec = startVec + offset;
 
 		//Debrisのコンテナに追加
 		Debris::debris.push_back(new Debris(pos/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
 		energy -= shotSize;
+
+	}
+	debrisCooldown.Intervel();
+
+	Input* input = Input::GetInstance();
+	Vector3 beforePos = pos + velocity;
+	if (attack.is) {
+		atkParticle->AddAttack(3, 20, pos, velocity, (atan2(pos.z - beforePos.z, pos.x - beforePos.x) + 3.14/2));
+		input->GetInstance()->SetVibration(true);
+	}
+	else if (!attack.is) {
+		input->GetInstance()->SetVibration(false);
 	}
 }
 
@@ -438,7 +447,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 		}
 
 		//位置修正
-		
+
 		//攻撃中でなければ押し返し処理
 		if (!attack.is) {
 			penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.02f;
@@ -468,7 +477,7 @@ void PlayerObject::HitWall(
 	if (!isBounce && attack.is) {
 		velocity *= 3.0f;
 		isBounce = true;
-		refParticle->AddRef(20, 60, pos, velocity);
+		refParticle->AddRef(20, 40, pos, velocity);
 	}
 }
 

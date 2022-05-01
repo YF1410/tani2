@@ -67,7 +67,7 @@ public:
 		}
 	};
 
-	static const int MAX_WAVE = 2;
+	static const int MAX_WAVE = 3;
 	int waveEnemyNum[MAX_WAVE + 1];
 private:
 	//スポーンデータ
@@ -113,4 +113,6 @@ public:
 	int waveStartTime = 0;
 
 	bool endFlag = false;
+	ParticleEmitter* defeatParticle1;
+	ParticleEmitter* defeatParticle2;
 };

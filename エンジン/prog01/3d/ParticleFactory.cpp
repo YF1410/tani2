@@ -1,4 +1,4 @@
-#include "ParticleManager.h"
+#include "ParticleFactory.h"
 #include <d3dcompiler.h>
 #include <DirectXTex.h>
 
@@ -34,10 +34,10 @@ const DirectX::XMFLOAT3 operator/(const DirectX::XMFLOAT3& lhs, const float rhs)
 	return result;
 }
 
-std::unique_ptr<ParticleManager> ParticleManager::Create(ID3D12Device* device, Camera* camera)
+std::unique_ptr<ParticleFactory> ParticleFactory::Create(ID3D12Device* device, Camera* camera)
 {
 	// 3Dオブジェクトのインスタンスを生成
-	ParticleManager* partMan = new ParticleManager(device, camera);
+	ParticleFactory* partMan = new ParticleFactory(device, camera);
 	if (partMan == nullptr)
 	{
 		return nullptr;
@@ -46,10 +46,10 @@ std::unique_ptr<ParticleManager> ParticleManager::Create(ID3D12Device* device, C
 	// 初期化
 	partMan->Initialize();
 
-	return std::unique_ptr<ParticleManager>(partMan);
+	return std::unique_ptr<ParticleFactory>(partMan);
 }
 
-ParticleManager::~ParticleManager()
+ParticleFactory::~ParticleFactory()
 {
 	rootsignature.Reset();
 	pipelinestate.Reset();
@@ -60,7 +60,7 @@ ParticleManager::~ParticleManager()
 	descHeap.Reset();
 }
 
-void ParticleManager::Initialize()
+void ParticleFactory::Initialize()
 {
 	// nullptrチェック
 	assert(device);
@@ -96,7 +96,7 @@ void ParticleManager::Initialize()
 	}
 }
 
-void ParticleManager::Update()
+void ParticleFactory::Update()
 {
 	HRESULT result;
 
@@ -161,11 +161,11 @@ void ParticleManager::Update()
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	constMap->mat = camera->GetViewProjectionMatrix(); //行列の合成
-	constMap->matBillboard = camera->GetBillboardMatrix();
+	constMap->matBillboard = XMMatrixRotationZ(rotation) * camera->GetBillboardMatrix();
 	constBuff->Unmap(0, nullptr);
 }
 
-void ParticleManager::Draw(ID3D12GraphicsCommandList* cmdList)
+void ParticleFactory::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	UINT drawNum = (UINT)std::distance(particles.begin(), particles.end());
 	if (drawNum > vertexCount)
@@ -200,8 +200,8 @@ void ParticleManager::Draw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->DrawInstanced(drawNum, 1, 0, 0);
 }
 
-void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
-	float start_scale, float end_scale, XMFLOAT4 start_color, XMFLOAT4 end_color)
+void ParticleFactory::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
+	float start_scale, float end_scale, XMFLOAT4 start_color, XMFLOAT4 end_color,float rotation)
 {
 	//リストに要素を追加
 	particles.emplace_front();
@@ -216,9 +216,10 @@ void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOA
 	p.e_scale = end_scale;
 	p.s_color = start_color;
 	p.e_color = end_color;
+	this->rotation = rotation;
 }
 
-void ParticleManager::InitializeDescriptorHeap()
+void ParticleFactory::InitializeDescriptorHeap()
 {
 	HRESULT result = S_FALSE;
 
@@ -237,7 +238,7 @@ void ParticleManager::InitializeDescriptorHeap()
 	descriptorHandleIncrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
-void ParticleManager::InitializeGraphicsPipeline()
+void ParticleFactory::InitializeGraphicsPipeline()
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
@@ -436,7 +437,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 	}
 }
 
-void ParticleManager::LoadTexture(std::wstring fName)
+void ParticleFactory::LoadTexture(std::wstring fName)
 {
 	HRESULT result = S_FALSE;
 
@@ -517,7 +518,7 @@ void ParticleManager::LoadTexture(std::wstring fName)
 	);
 }
 
-void ParticleManager::CreateModel()
+void ParticleFactory::CreateModel()
 {
 	HRESULT result = S_FALSE;
 
@@ -543,7 +544,7 @@ void ParticleManager::CreateModel()
 	vbView.StrideInBytes = sizeof(VertexPos);
 }
 
-ParticleManager::ParticleManager(ID3D12Device* device, Camera* camera)
+ParticleFactory::ParticleFactory(ID3D12Device* device, Camera* camera)
 {
 	this->device = device;
 	this->camera = camera;
