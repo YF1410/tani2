@@ -142,7 +142,7 @@ void UserInterface::Update()
 	//今のエネミーの量
 	enemyWaveCon.clear();
 	b = 0;
-	for (int temp = enemys->enemys.size(); temp > 0;) {
+	for (int temp = enemys->enemys[MapChip::GetInstance()->nowMap].size(); temp > 0;) {
 		enemyWaveCon.push_back(temp % 10);
 		temp /= 10;
 		b++;

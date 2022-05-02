@@ -32,6 +32,9 @@ public:
 
 	bool isEndFlag() { return endFlag; }
 
+	//スポーンデータ読み込み
+	void CsvLoad(MapChip::MAP_NAME mapName, std::string fName);
+
 	enum ENEMY_TYPE
 	{
 		HOMING,
@@ -102,7 +105,7 @@ private:
 
 public:
 	//敵全体のデータ
-	static std::vector<Enemy*> enemys;
+	static std::vector<Enemy*> enemys[MapChip::MAP_NAME::MAX];
 
 	//現在のウェーブ数
 	int nowWave;

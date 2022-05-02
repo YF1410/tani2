@@ -9,7 +9,7 @@ const std::string MapChip::baseDirectory = "Resources/Map/";
 
 void MapChip::Initialize()
 {
-	CsvLoad(TEST_MAP, "testMap",63,63);
+	CsvLoad(TEST_MAP, "testMap");
 }
 
 void MapChip::Filnalize()
@@ -20,8 +20,11 @@ void MapChip::Filnalize()
 	}
 }
 
-void MapChip::CsvLoad(MAP_NAME nowMap, std::string fName, int mapChipMaxX, int mapChipMaxY)
+void MapChip::CsvLoad(MAP_NAME nowMap, std::string fName)
 {
+	//データの縦横
+	int x = 0;
+	int y = 0;
 	std::ifstream ifs(baseDirectory + fName + ".csv");
 	MAP_DATA loadData;
 	std::string line;
@@ -33,18 +36,20 @@ void MapChip::CsvLoad(MAP_NAME nowMap, std::string fName, int mapChipMaxX, int m
 		while (std::getline(stream, field, ','))
 		{
 			result.push_back(stoi(field));
+			x++;
 		}
 		for (auto i : result)
 		{
 			loadData.mapChip.push_back(i);
 		}
+		y++;
 	}
 	//ファイル名を保存
 	loadData.mapName = baseDirectory + fName + ".csv";
 	//Xの最大値を保存
-	loadData.wide = mapChipMaxX;
+	loadData.wide = x / y;
 	//Yの最大値を保存
-	loadData.high = mapChipMaxY;
+	loadData.high = y;
 
 	//マップネームに対応した位置に格納
 	mapData[nowMap] = loadData;
