@@ -8,7 +8,6 @@
 #include "Sprite.h"
 #include "DebugText.h"
 #include "Object3d.h"
-#include "Model.h"
 
 #include <memory>
 
@@ -41,4 +40,19 @@ public: // メンバ関数
 private: // メンバ変数
 	//スプライト
 	std::unique_ptr<Sprite> sprite;
+	//カメラ
+	std::unique_ptr<Camera> camera;
+	//ライト
+	std::unique_ptr<LightGroup> light;
+
+	std::unique_ptr<Object3d> titleObject3d;
+	std::unique_ptr<Object3d> startObject3d;
+	std::unique_ptr<Object3d> endObject3d;
+
+	bool flag = true;
+	bool shakeTimerFlag = false;
+	int shakeTimer = 0;
+	int attenuation = 0;
+
+	XMFLOAT3 savePos = {};
 };
