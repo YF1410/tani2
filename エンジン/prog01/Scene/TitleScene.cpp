@@ -72,7 +72,7 @@ void TitleScene::Update()
 		}
 	}
 
-	if (input->TriggerUp() && !shakeTimerFlag)
+	if (input->TriggerUp() && !shakeTimerFlag || input->PushPadStickUp() && !shakeTimerFlag)
 	{
 		if (!flag)
 		{
@@ -86,7 +86,7 @@ void TitleScene::Update()
 		}
 		shakeTimerFlag = true;
 	}
-	else if (input->TriggerDown() && !shakeTimerFlag)
+	else if (input->TriggerDown() && !shakeTimerFlag || input->PushPadStickDown() && !shakeTimerFlag)
 	{
 		if (!flag)
 		{
@@ -121,6 +121,8 @@ void TitleScene::Update()
 		XMFLOAT3 shake = {};
 		shakeTimer++;
 
+		input->SetVibration(true);
+
 		if (shakeTimer > 0)
 		{
 			shake.x = (rand() % (7 - attenuation) - 3) + savePos.x;
@@ -138,6 +140,7 @@ void TitleScene::Update()
 			shakeTimer = 0;
 			attenuation = 0;
 			shakeTimerFlag = 0;
+			input->SetVibration(false);
 			endObject3d->SetPosition(savePos);
 		}
 	}
@@ -145,6 +148,7 @@ void TitleScene::Update()
 	{
 		XMFLOAT3 shake = {};
 		shakeTimer++;
+		input->SetVibration(true);
 
 		if (shakeTimer > 0)
 		{
@@ -163,6 +167,7 @@ void TitleScene::Update()
 			shakeTimer = 0;
 			attenuation = 0;
 			shakeTimerFlag = 0;
+			input->SetVibration(false);
 			startObject3d->SetPosition(savePos);
 		}
 	}
