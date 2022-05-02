@@ -98,7 +98,7 @@ void PlayerObject::Initialize()
 	};
 
 	//アニメーション開始
-	objectData->PlayAnimation();
+	//objectData->PlayAnimation();
 
 	// パーティクルマネージャ生成
 	healParticle1 = healParticle1->Create(L"heal3");
