@@ -137,6 +137,28 @@ void ParticleEmitter::AddAttack(int count, int life, XMFLOAT3 position, Vector3 
 	}
 }
 
+void ParticleEmitter::AddAtkStock(int count, int life, XMFLOAT3 position)
+{
+	for (int i = 0; i < count; i++)
+	{
+		//X,Y,Z全て[-5.0,+5.0]でランダムに分布
+		this->position.x = position.x;
+		this->position.y = position.y + 250.0f;
+		this->position.z = position.z;
+		//X,Y,Z全て[-0.05,+0.05]でランダムに分布
+		//this->velocity.x = velocity.x;
+		//velocity.y = (float)rand() / RAND_MAX * md_vel - md_vel / 2.0f;
+		//this->velocity.z = velocity.z + ((float)rand() / RAND_MAX * md_vel / 2.0f);
+		//this->velocity.z = (float)rand() / RAND_MAX * md_vel / 2.0f;
+		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+		//accel.z = 0.1;
+
+		//追加
+		particleMan->Add(life, this->position, this->velocity, accel, s_scale, e_scale, s_color, e_color);
+	}
+}
+
+
 void ParticleEmitter::AddRef(int count, int life, XMFLOAT3 position, Vector3 velocity) {
 	for (int i = 0; i < count; i++) 	{
 

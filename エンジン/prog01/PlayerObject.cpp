@@ -120,7 +120,12 @@ void PlayerObject::Initialize()
 	atkParticle->SetStartScale(300.0f);
 	atkParticle->SetCenter(400.0f);
 
-	atkParticle->SetStartColor({ 0.8f, 0.8f, 2.0f, 1.0f });
+	//atkParticle->SetStartColor({ 0.8f, 0.8f, 2.0f, 1.0f });
+
+	atkStockParticle = atkStockParticle->Create(L"atkStock");
+	atkStockParticle->SetStartScale(0.0f);
+	atkStockParticle->SetEndScale(300.0f);
+	atkStockParticle->SetStartColor({ 1, 1, 1, 0.3f });
 
 
 
@@ -129,11 +134,12 @@ void PlayerObject::Initialize()
 	ParticleManager::GetInstance()->SetParticleEmitter(boomParticle);
 	ParticleManager::GetInstance()->SetParticleEmitter(refParticle);
 	ParticleManager::GetInstance()->SetParticleEmitter(atkParticle);
+	ParticleManager::GetInstance()->SetParticleEmitter(atkStockParticle);
 }
 
 void PlayerObject::Update()
 {
-	Input *input = Input::GetInstance();
+	Input* input = Input::GetInstance();
 	//スケールから移動量決定
 	moveSpead = scale.x * 5;
 	//ペナルティリセット
@@ -207,7 +213,7 @@ void PlayerObject::Update()
 		attackGage.Start();
 	}
 
-	
+
 	if (attackCount < 3) {
 		if (attackGage.can) {
 			attackCount++;
@@ -216,6 +222,15 @@ void PlayerObject::Update()
 		attackGage.Intervel();
 	}
 
+	if (attackCount <= 3) {
+		atkStockParticleTimer++;
+		if (atkStockParticleTimer >= atkStockParticleMaxTimer) {
+			for (int i = 0; i < attackCount; i++) {
+				atkStockParticle->AddAtkStock(attackCount, 20, { pos.x, pos.y, pos.z + (80 * (attackCount - (i + 2))) - 100 });
+			}
+			atkStockParticleTimer = 0;
+		}
+	}
 
 	//回収
 	if (input->TriggerPadButton(BUTTON_B)) {
@@ -232,7 +247,7 @@ void PlayerObject::Update()
 		}
 	}
 
-	if(dontRecovery){
+	if (dontRecovery) {
 		timer++;
 		if (timer >= maxTimer) {
 			timer = 0;
@@ -346,7 +361,7 @@ void PlayerObject::LustUpdate()
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
 	}
-	
+
 
 
 	//角
@@ -392,8 +407,9 @@ void PlayerObject::LustUpdate()
 	Input* input = Input::GetInstance();
 	Vector3 beforePos = pos + velocity;
 	if (attack.is) {
-		atkParticle->AddAttack(3, 20, pos, velocity, (atan2(pos.z - beforePos.z, pos.x - beforePos.x) + 3.14/2));
+		atkParticle->AddAttack(3, 20, pos, velocity, (atan2(pos.z - beforePos.z, pos.x - beforePos.x) + 3.14 / 2));
 		input->GetInstance()->SetVibration(true);
+		input->GetInstance()->SetVibrationPower(10000);
 	}
 	else if (!attack.is) {
 		input->GetInstance()->SetVibration(false);
@@ -401,15 +417,15 @@ void PlayerObject::LustUpdate()
 }
 
 
-void PlayerObject::OnCollision(const CollisionInfo &info)
+void PlayerObject::OnCollision(const CollisionInfo& info)
 {
-	Debris *debri;
-	Enemy *enemy;
+	Debris* debri;
+	Enemy* enemy;
 	switch (info.object->Tag)
 	{
 	case DEBRIS:
 		//破片が吸収範囲と衝突したら
-		debri = dynamic_cast<Debris *>(info.object);
+		debri = dynamic_cast<Debris*>(info.object);
 		if (!debri->isFirstAttack)
 		{
 			if (info.myName == "hitCollider" &&
@@ -436,7 +452,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 				nowHealFrame = 0;
 			}
 		}
-		
+
 
 		break;
 	case ENEMY:
@@ -473,9 +489,11 @@ void PlayerObject::HitWall(
 	const XMVECTOR& hitPos,		//衝突位置
 	const Vector3& normal)
 {
+	Input* input = Input::GetInstance();
 	velocity = CalcReflectVector(velocity, normal);
 	if (attack.is) {
 		refParticle->AddRef(20, 40, pos, velocity);
+		input->GetInstance()->SetVibrationPower(65535);
 		if (isBounce) {
 			velocity *= 3.0f;
 			isBounce = true;
