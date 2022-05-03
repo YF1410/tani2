@@ -44,7 +44,7 @@ private: // 静的メンバ変数
 
 public: // メンバ関数
 	//コンストラクタ
-	GameScene();
+	GameScene(int parameter = 0);
 	// デストラクタ
 	~GameScene();
 	// 初期化
@@ -120,4 +120,7 @@ private: // メンバ変数
 	CollisionManager* collisionManager = nullptr;
 
 	bool checkPoint;
+
+	//ステージ番号
+	int nowStageNum;
 };

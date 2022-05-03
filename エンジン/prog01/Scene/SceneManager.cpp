@@ -51,10 +51,10 @@ void SceneManager::Draw()
 	scene->Draw();
 }
 
-void SceneManager::ChangeScene(const std::string& sceneName)
+void SceneManager::ChangeScene(const std::string& sceneName, int parameter)
 {
 	assert(sceneFactory);
 	assert(nextScene == nullptr);
 
-	nextScene = sceneFactory->CreateScene(sceneName);
+	nextScene = sceneFactory->CreateScene(sceneName,parameter);
 }

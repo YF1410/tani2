@@ -5,5 +5,5 @@ class SceneFactory : public AbstractSceneFactory
 {
 public:
 	//ƒV[ƒ“¶¬
-	BaseScene* CreateScene(const std::string& sceneName) override;
+	BaseScene* CreateScene(const std::string& sceneName, int parameter = 0) override;
 };

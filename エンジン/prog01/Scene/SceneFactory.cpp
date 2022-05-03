@@ -5,7 +5,7 @@
 #include "GameOverScene.h"
 #include "SelectScene.h"
 
-BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
+BaseScene* SceneFactory::CreateScene(const std::string& sceneName, int parameter)
 {
 	//Ÿ‚ÌƒV[ƒ“‚ğ¶¬
 	BaseScene* newScene = nullptr;
@@ -20,7 +20,7 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 	}
 	else if (sceneName == "GameScene")
 	{
-		newScene = new GameScene();
+		newScene = new GameScene(parameter);
 	}
 	else if (sceneName == "ClearScene")
 	{

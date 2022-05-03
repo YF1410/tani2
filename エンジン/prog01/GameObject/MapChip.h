@@ -21,6 +21,11 @@ private:
 public:
 	enum MAP_NAME {
 		TEST_MAP,
+		Stage1,
+		Stage2,
+		Stage3,
+		Stage4,
+		Stage5,
 		MAX
 	};
 
