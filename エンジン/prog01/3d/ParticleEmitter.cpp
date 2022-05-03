@@ -101,7 +101,7 @@ void ParticleEmitter::AddBoom(int count, int life, XMFLOAT3 position)
 	}
 }
 
-void ParticleEmitter::AddAttack(int count, int life, XMFLOAT3 position, Vector3 velocity,float rotation)
+void ParticleEmitter::AddAttack(int count, int life, XMFLOAT3 position, Vector3 velocity, float rotation)
 {
 	for (int i = 0; i < count; i++)
 	{
@@ -110,7 +110,7 @@ void ParticleEmitter::AddAttack(int count, int life, XMFLOAT3 position, Vector3 
 		float shotRad;			//角度決定
 
 		//発射スピード
-		float shotSpeed = (rand() % 20)*3;
+		float shotSpeed = (rand() % 20) * 3;
 
 		//-15~15度で計算
 		shotRad = XMConvertToRadians(rand() % 90 - 45);
@@ -132,7 +132,7 @@ void ParticleEmitter::AddAttack(int count, int life, XMFLOAT3 position, Vector3 
 		accel.z = -(float)rand() / RAND_MAX * 0.5;*/
 
 		//追加
-		particleMan->Add(life, this->position, this->velocity, accel, s_scale, e_scale, s_color, e_color,rotation);
+		particleMan->Add(life, this->position, this->velocity, accel, s_scale, e_scale, s_color, e_color, rotation);
 
 	}
 }
@@ -160,7 +160,7 @@ void ParticleEmitter::AddAtkStock(int count, int life, XMFLOAT3 position)
 
 
 void ParticleEmitter::AddRef(int count, int life, XMFLOAT3 position, Vector3 velocity) {
-	for (int i = 0; i < count; i++) 	{
+	for (int i = 0; i < count; i++) {
 
 		Vector3 startVec;		//速度*向きベクトル
 		float shotRad;			//角度決定
@@ -193,8 +193,8 @@ void ParticleEmitter::AddRef(int count, int life, XMFLOAT3 position, Vector3 vel
 	camera->SetShakeFlag(true, 401);
 }
 
-void ParticleEmitter::AddDefeat(int count, int life, XMFLOAT3 position,DEFEAT_TYPE defeatType) {
-	switch (defeatType) 	{
+void ParticleEmitter::AddDefeat(int count, int life, XMFLOAT3 position, DEFEAT_TYPE defeatType) {
+	switch (defeatType) {
 	case SHOCKWAVE:
 		//X,Y,Z全て[-5.0,+5.0]でランダムに分布
 		this->position.x = position.x;
@@ -218,6 +218,24 @@ void ParticleEmitter::AddDefeat(int count, int life, XMFLOAT3 position,DEFEAT_TY
 		}
 	default:
 		break;
+	}
+}
+
+void ParticleEmitter::AddRecovery(int count, int life, XMFLOAT3 position)
+{
+	for (int i = 0; i < count; i++) {
+		//X,Y,Z全て[-5.0,+5.0]でランダムに分布
+		this->position.x = ((float)rand() / RAND_MAX * md_pos - md_pos / 2.0f) + position.x;
+		this->position.y = position.y + 200.0f;
+		this->position.z = ((float)rand() / RAND_MAX * md_pos - md_pos / 2.0f) + position.z;
+		//X,Y,Z全て[-0.05,+0.05]でランダムに分布
+		velocity.x = (float)rand() / RAND_MAX * md_vel - md_vel / 2.0f;
+		//velocity.y = (float)rand() / RAND_MAX * md_vel - md_vel / 2.0f;
+		velocity.z = (float)rand() / RAND_MAX * md_vel - md_vel / 2.0f;
+
+		accel = { 0.1f, 0, 0.1f };
+		//追加
+		particleMan->Add(life, this->position, velocity, accel, s_scale, e_scale, s_color, e_color);
 	}
 }
 

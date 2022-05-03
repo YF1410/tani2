@@ -41,6 +41,7 @@ public: // ƒƒ“ƒoŠÖ”
 	void AddAtkStock(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
 	void AddRef(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, Vector3 velocity = { 0,0,0 });
 	void AddDefeat(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, DEFEAT_TYPE defeatType = SHOCKWAVE);
+	void AddRecovery(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
 	// –ˆƒtƒŒ[ƒ€ˆ—
 	void Update();
 	// •`‰æ

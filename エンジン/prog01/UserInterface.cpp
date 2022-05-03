@@ -193,7 +193,6 @@ void UserInterface::Update()
 		}
 		recoverFrame.get()->SetPosition({ WinApp::window_width - 300+shake.x,290 +shake.y});
 		recoverGauge.get()->SetPosition({ WinApp::window_width - 220+shake.x,290 +shake.y});
-
 	}
 	else {
 		recoverGauge.get()->SetColor({ 1,1,1,1 });
@@ -205,7 +204,6 @@ void UserInterface::Update()
 	if (player->recovery.can) {
 		recoverFrame.get()->SetColor({ 1,1,0.5f,1 });
 		recoverGauge.get()->SetColor({ 1,1,0.5f,1 });
-
 	}
 
 
