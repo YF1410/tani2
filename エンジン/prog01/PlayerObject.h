@@ -106,6 +106,7 @@ private: // ƒƒ“ƒo•Ï”
 	ParticleEmitter* atkStockParticle;
 	int atkStockParticleTimer = 0;
 	int atkStockParticleMaxTimer = 40;
+	ParticleEmitter* recoveryParticle;
 
 	int nowHealFrame = 0;
 	int nowBoomFrame = 0;
@@ -118,7 +119,8 @@ private: // ƒƒ“ƒo•Ï”
 
 	int timer=0;
 	int maxTimer = 30;
-	Vector3 shakePos = pos;
+	int shakeCount = 201;
+	int attenuation = 0;
 	XMFLOAT2 shake;
 };
 

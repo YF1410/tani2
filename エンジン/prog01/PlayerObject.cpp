@@ -67,6 +67,7 @@ void PlayerObject::Initialize()
 	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
 	//ポジション初期化
 	pos = startPos;
+	savePos = startPos;
 
 	//攻撃関係
 	attack = {
@@ -127,7 +128,9 @@ void PlayerObject::Initialize()
 	atkStockParticle->SetEndScale(300.0f);
 	atkStockParticle->SetStartColor({ 1, 1, 1, 0.3f });
 
-
+	recoveryParticle = atkStockParticle->Create(L"recovery");
+	recoveryParticle->SetStartScale(150.0f);
+	recoveryParticle->SetCenter(400.0f);
 
 	ParticleManager::GetInstance()->SetParticleEmitter(healParticle1);
 	ParticleManager::GetInstance()->SetParticleEmitter(healParticle2);
@@ -135,6 +138,7 @@ void PlayerObject::Initialize()
 	ParticleManager::GetInstance()->SetParticleEmitter(refParticle);
 	ParticleManager::GetInstance()->SetParticleEmitter(atkParticle);
 	ParticleManager::GetInstance()->SetParticleEmitter(atkStockParticle);
+	ParticleManager::GetInstance()->SetParticleEmitter(recoveryParticle);
 }
 
 void PlayerObject::Update()
@@ -183,7 +187,6 @@ void PlayerObject::Update()
 		//攻撃開始
 		attack.Start();
 
-
 		////破片生成
 		//for (int i = 0; i < DESTRUCT_POW; i++) {
 		//	Vector3 startVec;		//速度*向きベクトル
@@ -201,7 +204,7 @@ void PlayerObject::Update()
 		//	startVec.AddRotationY(shotRad);
 		//	//startVec = startVec + offset;
 
-		//	velocity += velocity.Normal() * 60;2
+		//	velocity += velocity.Normal() * 60;
 		//	//Debrisのコンテナに追加
 		//	Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
 		//}
@@ -213,7 +216,6 @@ void PlayerObject::Update()
 		attackGage.Start();
 	}
 
-
 	if (attackCount < 3) {
 		if (attackGage.can) {
 			attackCount++;
@@ -222,7 +224,7 @@ void PlayerObject::Update()
 		attackGage.Intervel();
 	}
 
-	if (attackCount <= 3) {
+	/*if (attackCount <= 3) {
 		atkStockParticleTimer++;
 		if (atkStockParticleTimer >= atkStockParticleMaxTimer) {
 			for (int i = 0; i < attackCount; i++) {
@@ -230,7 +232,7 @@ void PlayerObject::Update()
 			}
 			atkStockParticleTimer = 0;
 		}
-	}
+	}*/
 
 	//回収
 	if (input->TriggerPadButton(BUTTON_B)) {
@@ -241,13 +243,13 @@ void PlayerObject::Update()
 		}
 		else {
 			if (!dontRecovery) {
-				shakePos = pos;
+				savePos = pos;
 			}
 			dontRecovery = true;
 		}
 	}
 
-	if (dontRecovery) {
+	/*if (dontRecovery) {
 		timer++;
 		if (timer >= maxTimer) {
 			timer = 0;
@@ -260,7 +262,7 @@ void PlayerObject::Update()
 		};
 
 		shakePos = { pos.x + shake.x ,shakePos.y,pos.z + shake.y };
-	}
+	}*/
 
 	//攻撃インターバル
 	attack.Intervel();
@@ -270,7 +272,6 @@ void PlayerObject::Update()
 
 	//攻撃力更新
 	attackPow = velocity.Length();
-
 
 	//サイズからスケールへ変換
 	scale = ConvertSizeToScale(energy / 2.0f);
@@ -362,8 +363,6 @@ void PlayerObject::LustUpdate()
 		HitWall(hitPos, normal.Normal());
 	}
 
-
-
 	//角
 	//else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
 		//Vector3 normal = { 0,0,0 };
@@ -414,6 +413,35 @@ void PlayerObject::LustUpdate()
 	else if (!attack.is) {
 		input->GetInstance()->SetVibration(false);
 	}
+
+	//回収できる時のエフェクト
+	//if (recovery.can) {
+	//	recoveryParticle->AddRecovery(1, 8, pos);
+	//}
+
+	//if (dontRecovery)
+	//{
+	//	Vector3 shake = { 0.0f, 0.0f, 0.0f };
+	//	Vector3 shakePos = { 0.0f, 0.0f, 0.0f };
+
+	//	pos = savePos;
+
+	//	timer++;
+	//	if (timer <= maxTimer)
+	//	{
+	//		shake.x = (((float)(rand() % (maxTimer - timer) - (maxTimer - timer) / 2))*5);//(rand() % (int)(Ease(In,Quad,(float)(shakeTimer /20),100,1)));
+	//		//shake.y = (rand() % (shakeCount - attenuation) - (shakeCount / 2));
+	//		shake.z = (((float)(rand() % (maxTimer - timer) - (maxTimer - timer) / 2)) * 5);//(rand() % (int)Ease(In, Quad, (float)(shakeTimer / 20), 100, 1));
+	//		shakePos = shake + pos;
+	//	}
+
+	//	pos = shakePos;
+	//}
+	//if (!dontRecovery)
+	//{
+	//	timer = 0;
+	//	attenuation = 0;
+	//}
 }
 
 
@@ -461,7 +489,6 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 		if (enemy->attack.can && !attack.is) {
 			Damage(enemy->CauseDamage());
 		}
-
 		//位置修正
 
 		//攻撃中でなければ押し返し処理

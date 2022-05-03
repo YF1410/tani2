@@ -84,6 +84,7 @@ public:
 
 	Vector3 pos;		//À•W
 	Vector3 oldPos = { 0,0,0 };		//À•W
+	Vector3 savePos;
 	Vector3 rotate;		//Œü‚«
 	float gravityPow;	//d—Í‚Ì‹­‚³
 	Vector3 velocity;	//ˆÚ“®—Ê
