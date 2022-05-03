@@ -37,6 +37,13 @@ public: // メンバ関数
 	// 描画
 	void Draw() override;
 
+	//ボタン関係
+	void Select();
+	void Shake();
+
+	//タイトル関係
+	void Swimming();
+
 private: // メンバ変数
 	//スプライト
 	std::unique_ptr<Sprite> sprite;
@@ -53,6 +60,9 @@ private: // メンバ変数
 	bool shakeTimerFlag = false;
 	int shakeTimer = 0;
 	int attenuation = 0;
+
+	float swimmingTimer = 0.0f;
+	bool swimmingFlag = true;
 
 	XMFLOAT3 savePos = {};
 };
