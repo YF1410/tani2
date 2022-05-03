@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "SceneManager.h"
 #include "ObjFactory.h"
+#include "Ease.h"
 
 TitleScene::~TitleScene()
 {
@@ -101,6 +102,51 @@ void TitleScene::Update()
 		shakeTimerFlag = true;
 	}
 
+	Select();
+	Swimming();
+
+	titleObject3d->Update();
+	startObject3d->Update();
+	endObject3d->Update();
+}
+
+void TitleScene::LastUpdate()
+{
+}
+
+void TitleScene::Draw()
+{
+	// コマンドリストの取得
+	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
+#pragma region 背景スプライト描画
+	// 背景スプライト描画前処理
+	Sprite::PreDraw(cmdList);
+	// 背景スプライト描画
+	sprite->Draw();
+	// スプライト描画後処理
+	Sprite::PostDraw();
+	// 深度バッファクリア
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
+#pragma endregion 背景スプライト描画
+#pragma region 3Dオブジェクト描画
+	// 3Dオブクジェクトの描画
+	Object3d::PreDraw(cmdList);
+	titleObject3d->Draw();
+	startObject3d->Draw();
+	endObject3d->Draw();
+	Object3d::PostDraw();
+#pragma endregion 3Dオブジェクト描画
+#pragma region 前景スプライト描画
+	// 前景スプライト描画前処理
+	Sprite::PreDraw(cmdList);
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
+#pragma endregion 前景スプライト描画
+}
+
+void TitleScene::Select()
+{
 	if (!flag)
 	{
 		startObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
@@ -115,6 +161,13 @@ void TitleScene::Update()
 		endObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		endObject3d->SetScale({ 10, 1, 5 });
 	}
+
+	Shake();
+}
+
+void TitleScene::Shake()
+{
+	Input* input = Input::GetInstance();
 
 	if (!flag && shakeTimerFlag)
 	{
@@ -171,43 +224,39 @@ void TitleScene::Update()
 			startObject3d->SetPosition(savePos);
 		}
 	}
-
-	titleObject3d->Update();
-	startObject3d->Update();
-	endObject3d->Update();
 }
 
-void TitleScene::LastUpdate()
+void TitleScene::Swimming()
 {
-}
+	float timeRate = 0.0f;
+	int countNum = 60;
 
-void TitleScene::Draw()
-{
-	// コマンドリストの取得
-	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
-#pragma region 背景スプライト描画
-	// 背景スプライト描画前処理
-	Sprite::PreDraw(cmdList);
-	// 背景スプライト描画
-	sprite->Draw();
-	// スプライト描画後処理
-	Sprite::PostDraw();
-	// 深度バッファクリア
-	DirectXCommon::GetInstance()->ClearDepthBuffer();
-#pragma endregion 背景スプライト描画
-#pragma region 3Dオブジェクト描画
-	// 3Dオブクジェクトの描画
-	Object3d::PreDraw(cmdList);
-	titleObject3d->Draw();
-	startObject3d->Draw();
-	endObject3d->Draw();
-	Object3d::PostDraw();
-#pragma endregion 3Dオブジェクト描画
-#pragma region 前景スプライト描画
-	// 前景スプライト描画前処理
-	Sprite::PreDraw(cmdList);
+	if (swimmingFlag)
+	{
+		XMFLOAT3 pos = titleObject3d->GetPosition();
 
-	// スプライト描画後処理
-	Sprite::PostDraw();
-#pragma endregion 前景スプライト描画
+		pos.y += 0.1f;
+
+		titleObject3d->SetPosition(pos);
+
+
+		if (pos.y >= 8)
+		{
+			swimmingFlag = false;
+		}
+	}
+	if (!swimmingFlag)
+	{
+		XMFLOAT3 pos = titleObject3d->GetPosition();
+
+		pos.y -= 0.1f;
+
+		titleObject3d->SetPosition(pos);
+
+
+		if (pos.y <= 2)
+		{
+			swimmingFlag = true;
+		}
+	}
 }
