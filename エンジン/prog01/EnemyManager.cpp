@@ -8,6 +8,8 @@ std::vector<Enemy *> EnemyManager::enemys[MapChip::MAP_NAME::MAX];
 EnemyManager::EnemyManager(PlayerObject *player)
 {
 	this->player = player;
+	CsvLoad(MapChip::MAP_NAME::TEST_MAP, "testSpawn");
+	CsvLoad(MapChip::MAP_NAME::TEST_MAP_1, "testSpawn1");
 
 }
 
@@ -18,55 +20,16 @@ EnemyManager::~EnemyManager()
 
 void EnemyManager::Initialize()
 {
-	CsvLoad(MapChip::MAP_NAME::TEST_MAP, "testSpawn");
 	nowWave = 0;
 	waveStartTime = 0;
 	//ここでエネミーを追加
 
-	//ウェーブ1
-	/*spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 2));
-	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 2));
-	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 2));
-	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 2));
-	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[0], 2));
-	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[1], 2));
-	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[2], 2));
-	spawnData[0].push_back(new SPAWN_DATA(BOUNCE, 1, spawnPos[3], 2));*/
-
-	int spawnDataSize = spawnData->size() / spawnData[0].size();
+	int spawnDataSize = spawnData[MapChip::GetInstance()->nowMap]->size() / spawnData[MapChip::GetInstance()->nowMap][0].size();
 	for (int size = 0; size < spawnDataSize; size++) {
-		for (int i = 0; i < spawnData[size].size(); i++) {
-			waveEnemyNum[size] += spawnData[size][i]->num;
+		for (int i = 0; i < spawnData[MapChip::GetInstance()->nowMap][size].size(); i++) {
+			waveEnemyNum[size] += spawnData[MapChip::GetInstance()->nowMap][size][i]->num;
 		}
 	}
-
-
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[0], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[1], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[2], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(BOUNCE, 0, spawnPos[3], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[0], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(AVOIDANCE, 1, spawnPos[1], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[2], 5));
-	//spawnData[1].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[3], 5));
-
-	/*for (int i = 0; i < spawnData[1].size(); i++) {
-		waveEnemyNum[1] += spawnData[1][i]->num;
-	}*/
-
-
-	//spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[0], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[1], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(AVOIDANCE, 0, spawnPos[2], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 0, spawnPos[3], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[0], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[1], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[2], 5));
-	//spawnData[2].push_back(new SPAWN_DATA(RANDOM_MOVE, 1, spawnPos[3], 5));
-
-	/*for (int i = 0; i < spawnData[2].size(); i++) {
-		waveEnemyNum[2] += spawnData[2][i]->num;
-	}*/
 
 	defeatParticle1 = defeatParticle1->Create(L"defeat1");
 	defeatParticle2 = defeatParticle2->Create(L"defeat2");
@@ -86,7 +49,7 @@ void EnemyManager::Initialize()
 void EnemyManager::Update()
 {
 	//ウェーブ進行
-	if (enemys[MapChip::GetInstance()->nowMap].size() == 0 && spawnData[nowWave].size() == 0) {
+	if (enemys[MapChip::GetInstance()->nowMap].size() == 0 && spawnData[MapChip::GetInstance()->nowMap][nowWave].size() == 0) {
 		if (nowWave < MAX_WAVE - 1) {
 			nowWave++;
 			waveStartTime = GameScene::counter;
@@ -98,13 +61,13 @@ void EnemyManager::Update()
 	}
 
 	//追加
-	if (spawnData[nowWave].size() != 0) {
+	if (spawnData[MapChip::GetInstance()->nowMap][nowWave].size() != 0) {
 		//ウェーブ開始から指定の秒数が経過したら
-		while (((int)GameScene::counter - waveStartTime) / 60 == spawnData[nowWave][0]->time) {
+		while (((int)GameScene::counter - waveStartTime) / 60 == spawnData[MapChip::GetInstance()->nowMap][nowWave][0]->time) {
 			//指定された数だけエネミーをスポーンさせる
-			for (int i = 0; i < spawnData[nowWave][0]->num; i++) {
-				Vector3 spawnPos = spawnData[nowWave][0]->pos + Vector3((rand() % 50 - 25),0, (rand() % 50 - 25));
-				switch (spawnData[nowWave][0]->type)
+			for (int i = 0; i < spawnData[MapChip::GetInstance()->nowMap][nowWave][0]->num; i++) {
+				Vector3 spawnPos = spawnData[MapChip::GetInstance()->nowMap][nowWave][0]->pos + Vector3((rand() % 50 - 25),0, (rand() % 50 - 25));
+				switch (spawnData[MapChip::GetInstance()->nowMap][nowWave][0]->type)
 				{
 				case MIMIC:
 					enemys[MapChip::GetInstance()->nowMap].push_back(new MimicEnemy(spawnPos, player));
@@ -146,9 +109,9 @@ void EnemyManager::Update()
 
 			}
 
-			delete spawnData[nowWave][0];
-			spawnData[nowWave].erase(spawnData[nowWave].begin());
-			if (spawnData[nowWave].size() == 0) {
+			delete spawnData[MapChip::GetInstance()->nowMap][nowWave][0];
+			spawnData[MapChip::GetInstance()->nowMap][nowWave].erase(spawnData[MapChip::GetInstance()->nowMap][nowWave].begin());
+			if (spawnData[MapChip::GetInstance()->nowMap][nowWave].size() == 0) {
 				break;
 			}
 		}
@@ -199,7 +162,7 @@ void EnemyManager::Finalize()
 {
 	for (auto& a : spawnData)
 	{
-		a.clear();
+		a[MapChip::GetInstance()->nowMap].clear();
 	}
 	for (auto& a : enemys[MapChip::GetInstance()->nowMap])
 	{
@@ -223,7 +186,7 @@ void EnemyManager::CsvLoad(MapChip::MAP_NAME mapName, std::string fName)
 		{
 			result.push_back(stoi(field));
 		}
-		spawnData[result[0]].push_back(new SPAWN_DATA((ENEMY_TYPE)result[1], result[2], Vector3(result[3],0, result[4]), result[5]));
+		spawnData[mapName][result[0]].push_back(new SPAWN_DATA((ENEMY_TYPE)result[1], result[2], Vector3(result[3],0, result[4]), result[5]));
 
 		/*for (auto i : result)
 		{

@@ -21,9 +21,11 @@ using namespace DirectX;
 int GameScene::counter;
 
 
-GameScene::GameScene() {
+GameScene::GameScene(int parameter) {
+	//ステージセット
+	nowStageNum = parameter;
 	//マップ生成
-	MapChip::GetInstance()->SetMapName(MapChip::TEST_MAP);
+	MapChip::GetInstance()->SetMapName((MapChip::MAP_NAME)nowStageNum);
 	MapChip::GetInstance()->CreateStage();
 
 
@@ -33,6 +35,7 @@ GameScene::GameScene() {
 	//UI生成
 	ui = std::make_unique<UserInterface>(&enemyManager->nowWave,playerObject.get(),enemyManager.get());
 	//背景セット
+
 }
 
 GameScene::~GameScene() {

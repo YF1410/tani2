@@ -21,6 +21,7 @@ private:
 public:
 	enum MAP_NAME {
 		TEST_MAP,
+		TEST_MAP_1,
 		MAX
 	};
 

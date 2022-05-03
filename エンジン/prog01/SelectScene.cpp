@@ -23,7 +23,15 @@ void SelectScene::Update()
 
 	if (input->TriggerPadButton(BUTTON_A))
 	{
-		SceneManager::GetInstance()->ChangeScene("GameScene");
+		SceneManager::GetInstance()->ChangeScene("GameScene",0);
+	}
+
+	if (input->TriggerKey(DIK_0)) {
+		SceneManager::GetInstance()->ChangeScene("GameScene", 0);
+	}
+
+	if (input->TriggerKey(DIK_1)) {
+		SceneManager::GetInstance()->ChangeScene("GameScene", 1);
 	}
 }
 

@@ -10,6 +10,7 @@ const std::string MapChip::baseDirectory = "Resources/Map/";
 void MapChip::Initialize()
 {
 	CsvLoad(TEST_MAP, "testMap");
+	CsvLoad(TEST_MAP_1, "testMap1");
 }
 
 void MapChip::Filnalize()

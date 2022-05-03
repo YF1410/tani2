@@ -8,5 +8,5 @@ class AbstractSceneFactory
 public:
 	virtual ~AbstractSceneFactory() = default;
 	//ÉVÅ[Éìê∂ê¨
-	virtual BaseScene* CreateScene(const std::string& sceneName) = 0;
+	virtual BaseScene* CreateScene(const std::string& sceneName, int parameter = 0) = 0;
 };

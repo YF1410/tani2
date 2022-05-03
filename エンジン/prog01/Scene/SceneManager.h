@@ -21,7 +21,7 @@ public:
 	// •`‰æ
 	void Draw();
 	//ŽŸƒV[ƒ“‚Ì—\–ñ
-	void ChangeScene(const std::string& sceneName);
+	void ChangeScene(const std::string& sceneName,int parameter = 0);
 
 	void SetSceneFactory(AbstractSceneFactory* sceneFactory) { this->sceneFactory = sceneFactory; }
 
