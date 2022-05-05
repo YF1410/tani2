@@ -36,6 +36,14 @@ GameScene::GameScene(int parameter) {
 	ui = std::make_unique<UserInterface>(&enemyManager->nowWave,playerObject.get(),enemyManager.get());
 	//背景セット
 
+
+	//カメラ生成
+	camera = std::make_unique<Camera>(WinApp::window_width, WinApp::window_height);
+
+	// カメラ注視点をセット
+	camera->SetTarget(Vector3(playerObject.get()->GetPos() + targetDistanceDef));
+	camera->SetEye(Vector3(playerObject.get()->GetPos() + eyeDistanceDef));
+	camera->SetUp({ 0,1,0 });
 }
 
 GameScene::~GameScene() {
@@ -48,9 +56,6 @@ void GameScene::Initialize() {
 	counter = 0;
 
 	collisionManager = CollisionManager::GetInstance();
-
-	// カメラ生成
-	camera = std::make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera.get());
@@ -74,11 +79,6 @@ void GameScene::Initialize() {
 	light->SetCircleShadowActive(0, true);
 
 	light->SetDirLightDir(0, Vector3(0, -1, -0.4).Normal());
-
-	// カメラ注視点をセット
-	camera->SetTarget({ 0, 0, 0 });
-	camera->SetEye({ 0,0,-5 });
-	camera->SetUp({ 0,1,0 });
 
 	//プレイヤーの初期化
 	playerObject->Initialize();
