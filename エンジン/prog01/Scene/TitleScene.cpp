@@ -73,7 +73,7 @@ void TitleScene::Update()
 		}
 	}
 
-	if (input->TriggerUp() && !shakeTimerFlag || input->PushPadStickUp() && !shakeTimerFlag)
+	if (input->TriggerUp() && !shakeTimerFlag)
 	{
 		if (!flag)
 		{
@@ -87,7 +87,7 @@ void TitleScene::Update()
 		}
 		shakeTimerFlag = true;
 	}
-	else if (input->TriggerDown() && !shakeTimerFlag || input->PushPadStickDown() && !shakeTimerFlag)
+	else if (input->TriggerDown() && !shakeTimerFlag)
 	{
 		if (!flag)
 		{

@@ -90,6 +90,22 @@ void GameScene::Initialize() {
 	sprite = Sprite::Create(35, { 0,0 });
 	sprite->SetSize({ 1280.0f,720.0f });
 
+	clearScreen.stateSprite = Sprite::Create(41, { 0,0 });
+	clearScreen.selectSprite = Sprite::Create(43, { 0,250 });
+	clearScreen.selectSprite->SetSize({ 750, 180 });
+	clearScreen.endSprite = Sprite::Create(45, { -80,400 });
+	clearScreen.endSprite->SetSize({ 750, 180 });
+
+	gameOverScreen.stateSprite = Sprite::Create(42, { 0,0 });
+	gameOverScreen.selectSprite = Sprite::Create(44, { 0,250 });
+	gameOverScreen.selectSprite->SetSize({ 750, 180 });
+	gameOverScreen.endSprite = Sprite::Create(45, { 0,400 });
+	gameOverScreen.endSprite->SetSize({ 750, 180 });
+
+	backSprite = Sprite::Create(40, { 0,0 });
+	backSprite->SetSize({ 1280.0f,720.0f });
+	backSprite->SetColor({ 1.0f, 1.0f, 1.0f, 0.7f });
+
 	//デブリリセット
 	Debris::StaticInitialize(playerObject.get());
 
@@ -145,88 +161,23 @@ void GameScene::Update() {
 
 	camera->Update();
 
+	if (enemyManager.get()->isEndFlag())
+	{
+		clearFlag = true;
+	}
+	else if (playerObject.get()->GetEnergy() <= 0)
+	{
+		gameOverFlag = true;
+	}
 
-	//if (Input::GetInstance()->TriggerKey(DIK_1)) {
-	//	for (int i = 0; i < 3; i++) {
-	//		EnemyManager::enemys.push_back(new Enemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-	//	}
-	//}
+	playerObject->SetEndFlag(clearFlag, gameOverFlag);
 
-	//if (Input::GetInstance()->TriggerKey(DIK_2)) {
-	//	for (int i = 0; i < 3; i++) {
-	//		EnemyManager::enemys.push_back(new CushionEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-
-	//	}
-	//}
-	//if (Input::GetInstance()->TriggerKey(DIK_3)) {
-	//	for (int i = 0; i < 3; i++) {
-	//		EnemyManager::enemys.push_back(new BoundEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-	//	}
-	//}
-
-	//if (Input::GetInstance()->TriggerKey(DIK_4)) {
-	//	for (int i = 0; i < 3; i++) {
-	//		EnemyManager::enemys.push_back(new AvoidanceEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-	//	}
-	//}
-
-	//if (Input::GetInstance()->TriggerKey(DIK_5)) {
-	//	for (int i = 0; i < 3; i++) {
-	//		EnemyManager::enemys.push_back(new RandomMoveEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-	//	}
-	//}
-
-	//if (Input::GetInstance()->TriggerKey(DIK_6)) {
-	//	for (int i = 0; i < 3; i++) {
-	//		EnemyManager::enemys.push_back(new EscapeEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-	//	}
-	//}
-
-	//if (Input::GetInstance()->TriggerKey(DIK_7)) {
-	//	for (int i = 0; i < 3; i++) {
-	//		EnemyManager::enemys.push_back(new DefenseEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-	//	}
-	//}
-
-	//if (Input::GetInstance()->TriggerKey(DIK_8)) {
-	//	for (int i = 0; i < 3; i++) {
-	//		EnemyManager::enemys.push_back(new KiteEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-	//	}
-	//}
-
-	//if (Input::GetInstance()->TriggerKey(DIK_9)) {
-	//	for (int i = 0; i < 3; i++) {
-	//		EnemyManager::enemys.push_back(new SuctionEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-	//	}
-	//}
-
-	//if (Input::GetInstance()->TriggerKey(DIK_0)) {
-	//	for (int i = 0; i < 3; i++) {
-	//		EnemyManager::enemys.push_back(new GetawayEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-	//	}
-	//}
-
-	//if (Input::GetInstance()->TriggerKey(DIK_P)) {
-	//	for (int i = 0; i < 3; i++) {
-	//		EnemyManager::enemys.push_back(new RouteMoveEnemy(Vector3(playerObject.get()->pos + playerObject.get()->velocity.Normal() * 1500.0f), playerObject.get()));
-	//	}
-	//}
-
-	//マップチップ更新
-	//MapChip::GetInstance()->Update(MapChip::TEST_MAP);
-
-
-	//入力更新
-	Input* input = Input::GetInstance();
+	Select();
 
 	//ライト更新
 	light->Update();
 
 	EnemyHelperManager::GetIns()->Update();
-	//ステージ更新
-	//testStage->Update();
-
-	//デバックテキスト
 
 	for (auto& object : objects) {
 		object->Update();
@@ -239,12 +190,13 @@ void GameScene::Update() {
 	//エネミー更新
 	enemyManager.get()->Update();
 
+	camera->CameraShake();
+}
 
-	float contact_pos = 0.0f;
-
+void GameScene::LastUpdate()
+{
 	// 全ての衝突をチェック
 	collisionManager->CheckBroadCollisions();
-
 	//最終更新
 	ui.get()->Update();
 	enemyManager.get()->FinalUpdate();
@@ -255,24 +207,11 @@ void GameScene::Update() {
 	Debris::StaticAdaptation();
 	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
-
-	if (playerObject.get()->GetEnergy() <= 0) {
-		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE)||
-			Input::GetInstance()->TriggerPadButton(BUTTON_A)){
-
-		}
-	}
 	//パーティクル全てのアップデート
 	ParticleManager::GetInstance()->Update();
 
 	//カウンターを加算
 	counter++;
-
-	camera->CameraShake();
-}
-
-void GameScene::LastUpdate() {
 }
 
 void GameScene::Draw() {
@@ -315,10 +254,33 @@ void GameScene::Draw() {
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
-	ui.get()->Draw();
+
+	if (!clearFlag && !gameOverFlag)
+	{
+		ui.get()->Draw();
+	}
+	
 	Sprite::PreDraw(cmdList);
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
+
+	if (clearFlag || gameOverFlag)
+	{
+		backSprite->Draw();
+
+		if (clearFlag)
+		{
+			clearScreen.stateSprite->Draw();
+			clearScreen.selectSprite->Draw();
+			clearScreen.endSprite->Draw();
+		}
+		else if (gameOverFlag)
+		{
+			gameOverScreen.stateSprite->Draw();
+			gameOverScreen.selectSprite->Draw();
+			gameOverScreen.endSprite->Draw();
+		}
+	}
 	
 
 	// スプライト描画後処理
@@ -326,7 +288,7 @@ void GameScene::Draw() {
 #pragma endregion 前景スプライト描画
 
 
-	if (enemyManager.get()->isEndFlag())
+	/*if (enemyManager.get()->isEndFlag())
 	{
 		SceneManager::GetInstance()->ChangeScene("ClearScene");
 	}
@@ -338,6 +300,68 @@ void GameScene::Draw() {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
 			Input::GetInstance()->TriggerPadButton(BUTTON_A)) {
 			SceneManager::GetInstance()->ChangeScene("TitleScene");
+		}
+	}*/
+}
+
+void GameScene::Select()
+{
+	//入力更新
+	Input* input = Input::GetInstance();
+	if (input->TriggerUp())
+	{
+		if (!selectFlag)
+		{
+			selectFlag = true;
+		}
+		else if (selectFlag)
+		{
+			selectFlag = false;
+		}
+	}
+	else if (input->TriggerDown())
+	{
+		if (!selectFlag)
+		{
+			selectFlag = true;
+		}
+		else if (selectFlag)
+		{
+			selectFlag = false;
+		}
+	}
+	if (input->TriggerPadButton(BUTTON_A))
+	{
+		if (selectFlag)
+		{
+			exit(1);
+		}
+	}
+
+	if (clearFlag)
+	{
+		if (!selectFlag)
+		{
+			clearScreen.selectSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+			clearScreen.endSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		}
+		else if (selectFlag)
+		{
+			clearScreen.selectSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+			clearScreen.endSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+		}
+	}
+	if (gameOverFlag)
+	{
+		if (!selectFlag)
+		{
+			gameOverScreen.selectSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+			gameOverScreen.endSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		}
+		else if (selectFlag)
+		{
+			gameOverScreen.selectSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+			gameOverScreen.endSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 		}
 	}
 }
