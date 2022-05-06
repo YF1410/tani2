@@ -8,6 +8,9 @@ void ObjFactory::Initialize()
 	LoadModel("title");
 	LoadModel("start");
 	LoadModel("end");
+	LoadModel("stageclear");
+	LoadModel("nextStage");
+	LoadModel("clearEscape");
 }
 
 void ObjFactory::Finalize()
