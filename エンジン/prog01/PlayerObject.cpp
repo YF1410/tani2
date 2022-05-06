@@ -405,12 +405,12 @@ void PlayerObject::LustUpdate()
 
 	Input* input = Input::GetInstance();
 	Vector3 beforePos = pos + velocity;
-	if (attack.is) {
+	if (attack.is && !endFlag) {
 		atkParticle->AddAttack(3, 20, pos, velocity, (atan2(pos.z - beforePos.z, pos.x - beforePos.x) + 3.14 / 2));
 		input->GetInstance()->SetVibration(true);
 		input->GetInstance()->SetVibrationPower(10000);
 	}
-	else if (!attack.is) {
+	else if (!attack.is && !endFlag) {
 		input->GetInstance()->SetVibration(false);
 	}
 

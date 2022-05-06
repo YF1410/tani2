@@ -337,7 +337,6 @@ void GameScene::Select()
 {
 	//“ü—ÍXV
 	Input* input = Input::GetInstance();
-	input->SetVibration(true);
 	if ((input->TriggerUp() && !shakeTimerFlag) || (input->TriggerDown() && !shakeTimerFlag))
 	{
 		if (!selectFlag)
