@@ -267,25 +267,25 @@ void GameScene::Draw() {
 	if (clearFlag || gameOverFlag)
 	{
 		backSprite->Draw();
-
-		if (clearFlag)
-		{
-			clearScreen.stateSprite->Draw();
-			clearScreen.selectSprite->Draw();
-			clearScreen.endSprite->Draw();
-		}
-		else if (gameOverFlag)
-		{
-			gameOverScreen.stateSprite->Draw();
-			gameOverScreen.selectSprite->Draw();
-			gameOverScreen.endSprite->Draw();
-		}
 	}
 	
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画
+
+
+	Object3d::PreDraw(cmdList);
+	//ここから下に書く
+	if (clearFlag)
+	{
+
+	}
+	else if (gameOverFlag)
+	{
+
+	}
+	Object3d::PostDraw();
 
 
 	/*if (enemyManager.get()->isEndFlag())
@@ -335,49 +335,6 @@ void GameScene::Select()
 		if (selectFlag)
 		{
 			exit(1);
-		}
-	}
-
-	if (clearFlag)
-	{
-		if (!selectFlag)
-		{
-			clearScreen.selectSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
-			clearScreen.selectSprite->SetPosition({ 0,250 });
-			clearScreen.selectSprite->SetSize({ 750, 180 });
-			clearScreen.endSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-			clearScreen.endSprite->SetPosition({ 0,400 });
-			clearScreen.endSprite->SetSize({ 450, 100 });
-		}
-		else if (selectFlag)
-		{
-			clearScreen.selectSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-			clearScreen.selectSprite->SetPosition({ 50,280 });
-			clearScreen.selectSprite->SetSize({ 450, 100 });
-			clearScreen.endSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
-			clearScreen.endSprite->SetPosition({ -80,350 });
-			clearScreen.endSprite->SetSize({ 750, 180 });
-		}
-	}
-	if (gameOverFlag)
-	{
-		if (!selectFlag)
-		{
-			gameOverScreen.selectSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
-			gameOverScreen.selectSprite->SetPosition({ 0,250 });
-			gameOverScreen.selectSprite->SetSize({ 750, 180 });
-			gameOverScreen.endSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-			gameOverScreen.endSprite->SetPosition({ 90,400 });
-			gameOverScreen.endSprite->SetSize({ 450, 100 });
-		}
-		else if (selectFlag)
-		{
-			gameOverScreen.selectSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-			gameOverScreen.selectSprite->SetPosition({ 80,280 });
-			gameOverScreen.selectSprite->SetSize({ 450, 100 });
-			gameOverScreen.endSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
-			gameOverScreen.endSprite->SetPosition({ 0,350 });
-			gameOverScreen.endSprite->SetSize({ 750, 180 });
 		}
 	}
 }
