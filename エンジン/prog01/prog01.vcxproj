@@ -316,6 +316,7 @@
     <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="EnemyHelper.cpp" />
     <ClCompile Include="EnemyHelperManager.cpp" />
+    <ClCompile Include="EnemyHp.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="EscapeEnemy.cpp" />
     <ClCompile Include="GameObject\ContactableObject.cpp" />
@@ -331,8 +332,8 @@
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="RandomMoveEnemy.cpp" />
     <ClCompile Include="RouteMoveEnemy.cpp" />
+    <ClCompile Include="SceneChange.cpp" />
     <ClCompile Include="Scene\ClearScene.cpp" />
-    <ClCompile Include="Scene\GameOverScene.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
     <ClCompile Include="Scene\SceneFactory.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -392,6 +393,7 @@
     <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="EnemyHelper.h" />
     <ClInclude Include="EnemyHelperManager.h" />
+    <ClInclude Include="EnemyHp.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EscapeEnemy.h" />
     <ClInclude Include="GameObject\ContactableObject.h" />
@@ -407,9 +409,9 @@
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RandomMoveEnemy.h" />
     <ClInclude Include="RouteMoveEnemy.h" />
+    <ClInclude Include="SceneChange.h" />
     <ClInclude Include="Scene\AbstractSceneFactory.h" />
     <ClInclude Include="Scene\ClearScene.h" />
-    <ClInclude Include="Scene\GameOverScene.h" />
     <ClInclude Include="Scene\GameScene.h" />
     <ClInclude Include="Scene\SceneFactory.h" />
     <ClInclude Include="Scene\SceneManager.h" />

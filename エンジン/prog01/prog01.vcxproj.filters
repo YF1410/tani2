@@ -98,6 +98,12 @@
     <Filter Include="エンジンシステム\Audio">
       <UniqueIdentifier>{dbc7d3ba-dd12-4b18-94db-22332798cde0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ゲームシステム\Enemy\HP">
+      <UniqueIdentifier>{0e175544-4973-4eb4-a16a-f496536de3b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ゲームシステム\Besa\Scene\SceneChange">
+      <UniqueIdentifier>{364dbb39-7547-4c9e-853c-03099e8d98f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -248,9 +254,6 @@
     <ClCompile Include="GameObject\MapChip.cpp">
       <Filter>エンジンシステム\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\GameOverScene.cpp">
-      <Filter>ゲームシステム\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\ClearScene.cpp">
       <Filter>ゲームシステム\Scene</Filter>
     </ClCompile>
@@ -329,6 +332,12 @@
     </ClCompile>
     <ClCompile Include="ParticleManager.cpp">
       <Filter>エンジンシステム\3d\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyHp.cpp">
+      <Filter>ゲームシステム\Enemy\HP</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneChange.cpp">
+      <Filter>ゲームシステム\Besa\Scene\SceneChange</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -455,9 +464,6 @@
     <ClInclude Include="Scene\AbstractSceneFactory.h">
       <Filter>ゲームシステム\Besa\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\GameOverScene.h">
-      <Filter>ゲームシステム\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\ClearScene.h">
       <Filter>ゲームシステム\Scene</Filter>
     </ClInclude>
@@ -544,6 +550,12 @@
     </ClInclude>
     <ClInclude Include="ParticleManager.h">
       <Filter>エンジンシステム\3d\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyHp.h">
+      <Filter>ゲームシステム\Enemy\HP</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneChange.h">
+      <Filter>ゲームシステム\Besa\Scene\SceneChange</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

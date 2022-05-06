@@ -15,7 +15,6 @@
 #include "EnemyHelperManager.h"
 #include "Ease.h"
 
-
 using namespace DirectX;
 
 int GameScene::counter;
@@ -36,6 +35,13 @@ GameScene::GameScene(int parameter) {
 	ui = std::make_unique<UserInterface>(&enemyManager->nowWave,playerObject.get(),enemyManager.get());
 	//背景セット
 
+	//カメラ生成
+	camera = std::make_unique<Camera>(WinApp::window_width, WinApp::window_height);
+
+	// カメラ注視点をセット
+	camera->SetTarget(Vector3(playerObject.get()->GetPos() + targetDistanceDef));
+	camera->SetEye(Vector3(playerObject.get()->GetPos() + eyeDistanceDef));
+	camera->SetUp({ 0,1,0 });
 }
 
 GameScene::~GameScene() {
@@ -49,8 +55,6 @@ void GameScene::Initialize() {
 
 	collisionManager = CollisionManager::GetInstance();
 
-	// カメラ生成
-	camera = std::make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera.get());
@@ -75,10 +79,6 @@ void GameScene::Initialize() {
 
 	light->SetDirLightDir(0, Vector3(0, -1, -0.4).Normal());
 
-	// カメラ注視点をセット
-	camera->SetTarget({ 0, 0, 0 });
-	camera->SetEye({ 0,0,-5 });
-	camera->SetUp({ 0,1,0 });
 
 	//プレイヤーの初期化
 	playerObject->Initialize();
@@ -107,7 +107,6 @@ void GameScene::Update() {
 	//カメラ更新
 		//プレイヤーの少し上を焦点にする
 		//カメラ更新
-	Vector3 camEye = camera.get()->GetEye();
 	float debrisLengthMax = 0.0f;
 	for (int i = 0; i < Debris::debris.size(); i++) {
 		if (Debris::debris[i]->isFirstAttack &&
@@ -270,6 +269,8 @@ void GameScene::Update() {
 	counter++;
 
 	camera->CameraShake();
+
+	sceneChange.Update();
 }
 
 void GameScene::LastUpdate() {
@@ -321,6 +322,8 @@ void GameScene::Draw() {
 	DebugText::GetInstance()->DrawAll(cmdList);
 	
 
+	//シーン遷移用
+	sceneChange.Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画
@@ -337,7 +340,7 @@ void GameScene::Draw() {
 	if (playerObject.get()->GetEnergy() <= 0) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
 			Input::GetInstance()->TriggerPadButton(BUTTON_A)) {
-			SceneManager::GetInstance()->ChangeScene("TitleScene");
+			sceneChange.SceneChangeStart("TitleScene");
 		}
 	}
 }

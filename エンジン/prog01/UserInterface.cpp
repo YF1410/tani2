@@ -56,6 +56,7 @@ void UserInterface::Initialize()
 			enemyResidue[j][i].get()->SetSize({ 80 * 0.7f,80 * 0.7f });
 		}
 	}
+	//Н≈СеЧ 
 	for (int j = 0; j < 3; j++) {
 		for (int i = 0; i < 10; i++) {
 			enemyWaveMax[j][i] = Sprite::Create(100 + i, { (float)(160 + j * 30),160 }, { 1,1,1,1 }, { 0.5f,0.5f });

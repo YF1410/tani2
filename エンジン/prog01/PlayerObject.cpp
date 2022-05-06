@@ -166,11 +166,28 @@ void PlayerObject::Update()
 	}
 
 	//コントローラーでの移動
-	velocity.x += input->PadStickGradient().x * moveSpead;
-	velocity.z += -input->PadStickGradient().y * moveSpead;
+	if (input->PushKey(DIK_A)) {
+		velocity.x -= moveSpead;
+	}
+	else if (input->PushKey(DIK_D)) {
+		velocity.x += moveSpead;
+	}
+	else {
+		velocity.x += input->PadStickGradient().x * moveSpead;
+	}
+	if (input->PushKey(DIK_W)) {
+		velocity.z += moveSpead;
+	}
+	else if (input->PushKey(DIK_S)) {
+		velocity.z -= moveSpead;
+	}
+	else {
+		velocity.z += -input->PadStickGradient().y * moveSpead;
+	}
+
 
 	//自爆
-	if ((input->TriggerPadButton(BUTTON_A)) &&
+	if (((input->TriggerPadButton(BUTTON_A)) ||input->TriggerKey(DIK_SPACE))&&
 		attack.can &&
 		attackCount > 0)
 	{

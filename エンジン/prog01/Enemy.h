@@ -8,7 +8,7 @@
 #include "Box2DCollider.h"
 #include "State.h"
 #include "Debris.h"
-
+#include "EnemyHp.h"
 
 class Enemy :
 	public GameObjCommon
@@ -23,6 +23,8 @@ public:
 	virtual void Update() override;
 	//最終更新
 	virtual void LustUpdate() override;
+	//描画
+	virtual void Draw() const override;
 	//衝突時コールバック
 	virtual void OnCollision(const CollisionInfo &info) override;
 
@@ -37,7 +39,9 @@ public:		//当たり判定関係
 	//State
 	bool isInvincible;		//無敵状態か
 
+
 	bool isAlive;
+
 
 	//コライダー
 	SphereCollider *broadSphereCollider;	//予測用コライダー
@@ -45,6 +49,8 @@ public:		//当たり判定関係
 	Box2DCollider *toMapChipCollider;		//マップチップ用コライダー
 
 protected: // メンバ変数
+	EnemyHp *hpBer;
+
 	//移動処理
 	virtual void Move();
 	virtual void Attack();
