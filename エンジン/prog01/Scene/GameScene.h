@@ -42,6 +42,14 @@ private: // エイリアス
 private: // 静的メンバ変数
 	static const int debugTextTexNumber = 0;
 
+public: // サブクラス
+	struct ScreenData
+	{
+		std::unique_ptr<Sprite> stateSprite;
+		std::unique_ptr<Sprite> selectSprite;
+		std::unique_ptr<Sprite> endSprite;
+	};
+
 public: // メンバ関数
 	//コンストラクタ
 	GameScene(int parameter = 0);
@@ -57,6 +65,8 @@ public: // メンバ関数
 	void LastUpdate() override;
 	// 描画
 	void Draw() override;
+
+	void Select();
 
 
 	static int counter;
@@ -119,8 +129,16 @@ private: // メンバ変数
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;
 
-	bool checkPoint;
-
 	//ステージ番号
 	int nowStageNum;
+
+	//クリアフラグ
+	bool clearFlag = false;
+	//ゲームオーバーフラグ
+	bool gameOverFlag = false;
+	//
+	bool selectFlag = false;
+	ScreenData gameOverScreen;
+	ScreenData clearScreen;
+	std::unique_ptr<Sprite> backSprite;
 };

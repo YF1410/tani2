@@ -23,6 +23,8 @@ public:
 	void LustUpdate() override;
 	//衝突時コールバック
 	void OnCollision(const CollisionInfo &info) override;
+
+	void SetEndFlag(bool cFlag, bool gFlag);
 	
 
 	//ゲッター
@@ -122,5 +124,7 @@ private: // メンバ変数
 	int shakeCount = 201;
 	int attenuation = 0;
 	XMFLOAT2 shake;
+	//動かなくするフラグ
+	bool endFlag = false;
 };
 

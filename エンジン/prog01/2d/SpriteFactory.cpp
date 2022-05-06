@@ -16,26 +16,10 @@ void SpriteFactory::Initialize()
 		assert(0);
 	}
 
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(2, L"Resources/Sprite/weve1.png")) {
-		assert(0);
-	}
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(3, L"Resources/Sprite/weve2.png")) {
-		assert(0);
-	}
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(4, L"Resources/Sprite/weve3.png")) {
-		assert(0);
-	}
-
-
+	//UI周り
 	if (!Sprite::LoadTexture(5, L"Resources/Sprite/UI/wave.png")) {
 		assert(0);
 	}
-
-
-	//UI周り
 	//HP
 	if (!Sprite::LoadTexture(6, L"Resources/Sprite/UI/playerHp.png")) {
 		assert(0);
@@ -71,15 +55,6 @@ void SpriteFactory::Initialize()
 
 
 	//sceneの画像
-	if (!Sprite::LoadTexture(30, L"Resources/Sprite/title.png")) {
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(31, L"Resources/Sprite/clear.png")) {
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(32, L"Resources/Sprite/gameover.png")) {
-		assert(0);
-	}
 	if (!Sprite::LoadTexture(33, L"Resources/Sprite/stageSelect.png")) {
 		assert(0);
 	}
@@ -88,6 +63,32 @@ void SpriteFactory::Initialize()
 		assert(0);
 	}
 	if (!Sprite::LoadTexture(36, L"Resources/Sprite/background.png")) {
+		assert(0);
+	}
+
+	//クリア、ゲームオーバー時の画像
+	if (!Sprite::LoadTexture(40, L"Resources/Sprite/back.png"))
+	{
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(41, L"Resources/Sprite/gameclear.png"))
+	{
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(42, L"Resources/Sprite/gameover.png"))
+	{
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(43, L"Resources/Sprite/nextstage.png"))
+	{
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(44, L"Resources/Sprite/retry.png"))
+	{
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(45, L"Resources/Sprite/escape.png"))
+	{
 		assert(0);
 	}
 

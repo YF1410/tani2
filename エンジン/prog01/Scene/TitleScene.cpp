@@ -73,7 +73,7 @@ void TitleScene::Update()
 		}
 	}
 
-	if (input->TriggerUp() && !shakeTimerFlag || input->PushPadStickUp() && !shakeTimerFlag)
+	if (input->TriggerUp() && !shakeTimerFlag)
 	{
 		if (!flag)
 		{
@@ -87,7 +87,7 @@ void TitleScene::Update()
 		}
 		shakeTimerFlag = true;
 	}
-	else if (input->TriggerDown() && !shakeTimerFlag || input->PushPadStickDown() && !shakeTimerFlag)
+	else if (input->TriggerDown() && !shakeTimerFlag)
 	{
 		if (!flag)
 		{
@@ -103,7 +103,6 @@ void TitleScene::Update()
 	}
 
 	Select();
-	Swimming();
 
 	titleObject3d->Update();
 	startObject3d->Update();
@@ -222,41 +221,6 @@ void TitleScene::Shake()
 			shakeTimerFlag = 0;
 			input->SetVibration(false);
 			startObject3d->SetPosition(savePos);
-		}
-	}
-}
-
-void TitleScene::Swimming()
-{
-	float timeRate = 0.0f;
-	int countNum = 60;
-
-	if (swimmingFlag)
-	{
-		XMFLOAT3 pos = titleObject3d->GetPosition();
-
-		pos.y += 0.1f;
-
-		titleObject3d->SetPosition(pos);
-
-
-		if (pos.y >= 8)
-		{
-			swimmingFlag = false;
-		}
-	}
-	if (!swimmingFlag)
-	{
-		XMFLOAT3 pos = titleObject3d->GetPosition();
-
-		pos.y -= 0.1f;
-
-		titleObject3d->SetPosition(pos);
-
-
-		if (pos.y <= 2)
-		{
-			swimmingFlag = true;
 		}
 	}
 }

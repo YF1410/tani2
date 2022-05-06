@@ -62,7 +62,7 @@ PlayerObject::~PlayerObject()
 void PlayerObject::Initialize()
 {
 	//サイズ初期化
-	energy = 1508.0f;
+	energy = 1502.0f;
 	//サイズ初期化
 	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
 	//ポジション初期化
@@ -162,11 +162,6 @@ void PlayerObject::Update()
 		isBounce = false;
 	}
 
-	//リセット
-	if (input->PushKey(DIK_R)) {
-		Initialize();
-	}
-
 	//無敵処理
 	if (isInvincible) {
 		invincibleCounter--;
@@ -175,45 +170,63 @@ void PlayerObject::Update()
 		}
 	}
 
-	//コントローラーでの移動
-	velocity.x += input->PadStickGradient().x * moveSpead;
-	velocity.z += -input->PadStickGradient().y * moveSpead;
-
-	//自爆
-	if ((input->TriggerPadButton(BUTTON_A)) &&
-		attack.can &&
-		attackCount > 0)
+	if (!endFlag)
 	{
-		//攻撃開始
-		attack.Start();
+		//コントローラーでの移動
+		velocity.x += input->PadStickGradient().x * moveSpead;
+		velocity.z += -input->PadStickGradient().y * moveSpead;
 
-		////破片生成
-		//for (int i = 0; i < DESTRUCT_POW; i++) {
-		//	Vector3 startVec;		//速度*向きベクトル
-		//	float shotRad;			//角度決定用
-		//	//発射スピード
-		//	float shotSpeed = rand() % 20 + energy / 500 * 30;
-		//	//残骸のサイズ
-		//	float shotSize = SHOT_ENERGY / DESTRUCT_POW;
+		//自爆
+		if ((input->TriggerPadButton(BUTTON_A)) &&
+			attack.can &&
+			attackCount > 0)
+		{
+			//攻撃開始
+			attack.Start();
 
-		//	//-15~15度で計算
-		//	shotRad = XMConvertToRadians(rand() % 90 - 45);
+			////破片生成
+			//for (int i = 0; i < DESTRUCT_POW; i++) {
+			//	Vector3 startVec;		//速度*向きベクトル
+			//	float shotRad;			//角度決定用
+			//	//発射スピード
+			//	float shotSpeed = rand() % 20 + energy / 500 * 30;
+			//	//残骸のサイズ
+			//	float shotSize = SHOT_ENERGY / DESTRUCT_POW;
 
-		//	startVec = -velocity.Normal();
+			//	//-15~15度で計算
+			//	shotRad = XMConvertToRadians(rand() % 90 - 45);
 
-		//	startVec.AddRotationY(shotRad);
-		//	//startVec = startVec + offset;
+			//	startVec = -velocity.Normal();
 
-		//	velocity += velocity.Normal() * 60;
-		//	//Debrisのコンテナに追加
-		//	Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
-		//}
-		//energy -= SHOT_ENERGY;
+			//	startVec.AddRotationY(shotRad);
+			//	//startVec = startVec + offset;
 
-		velocity += velocity.Normal() * 600;
-		//爆発終了
-		attackCount--;
-		attackGage.Start();
+			//	velocity += velocity.Normal() * 60;
+			//	//Debrisのコンテナに追加
+			//	Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
+			//}
+			//energy -= SHOT_ENERGY;
+
+			velocity += velocity.Normal() * 600;
+			//爆発終了
+			attackCount--;
+			attackGage.Start();
+		}
+
+		//回収
+		if (input->TriggerPadButton(BUTTON_B)) {
+			if (recovery.Start()) {
+				for (int i = 0; i < Debris::debris.size(); i++) {
+					Debris::debris[i]->ReturnStart();
+				}
+			}
+			else {
+				if (!dontRecovery) {
+					savePos = pos;
+				}
+				dontRecovery = true;
+			}
+		}
 	}
 
 	if (attackCount < 3) {
@@ -234,20 +247,7 @@ void PlayerObject::Update()
 		}
 	}*/
 
-	//回収
-	if (input->TriggerPadButton(BUTTON_B)) {
-		if (recovery.Start()) {
-			for (int i = 0; i < Debris::debris.size(); i++) {
-				Debris::debris[i]->ReturnStart();
-			}
-		}
-		else {
-			if (!dontRecovery) {
-				savePos = pos;
-			}
-			dontRecovery = true;
-		}
-	}
+	
 
 	/*if (dontRecovery) {
 		timer++;
@@ -512,6 +512,18 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 	GameObjCommon::Update();
 }
 
+void PlayerObject::SetEndFlag(bool cFlag, bool gFlag)
+{
+	if (cFlag && !endFlag)
+	{
+		endFlag = cFlag;
+	}
+	else if (gFlag && !endFlag)
+	{
+		endFlag = gFlag;
+	}
+}
+
 void PlayerObject::HitWall(
 	const XMVECTOR& hitPos,		//衝突位置
 	const Vector3& normal)
@@ -543,5 +555,3 @@ void PlayerObject::Damage(float damage)
 
 	boomParticle->AddBoom(2, 10, pos);
 }
-
-
