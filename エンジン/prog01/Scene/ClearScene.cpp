@@ -179,7 +179,7 @@ void ClearScene::Select()
 		}
 	}
 
-	if (input->TriggerUp() && !shakeTimerFlag || input->TriggerPadStickUp() && !shakeTimerFlag)
+	if (input->TriggerUp() && !shakeTimerFlag || input->PushPadStickUp() && !shakeTimerFlag)
 	{
 		if (!flag)
 		{
@@ -193,7 +193,7 @@ void ClearScene::Select()
 		}
 		shakeTimerFlag = true;
 	}
-	else if (input->TriggerDown() && !shakeTimerFlag || input->TriggerPadStickDown() && !shakeTimerFlag)
+	else if (input->TriggerDown() && !shakeTimerFlag || input->PushPadStickDown() && !shakeTimerFlag)
 	{
 		if (!flag)
 		{

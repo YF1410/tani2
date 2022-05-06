@@ -14,6 +14,7 @@
 #include "Easing.h"
 #include "EnemyHelperManager.h"
 #include "Ease.h"
+#include "ObjFactory.h"
 
 
 using namespace DirectX;
@@ -33,7 +34,7 @@ GameScene::GameScene(int parameter) {
 	playerObject = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos());
 	enemyManager = std::make_unique<EnemyManager>(playerObject.get());
 	//UI生成
-	ui = std::make_unique<UserInterface>(&enemyManager->nowWave,playerObject.get(),enemyManager.get());
+	ui = std::make_unique<UserInterface>(&enemyManager->nowWave, playerObject.get(), enemyManager.get());
 	//背景セット
 
 
@@ -106,6 +107,22 @@ void GameScene::Initialize() {
 	backSprite->SetSize({ 1280.0f,720.0f });
 	backSprite->SetColor({ 1.0f, 1.0f, 1.0f, 0.7f });
 
+	stageclearObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("stageclear"));
+	stageclearObject3d->SetRotation({ -50,0,-20 });
+	stageclearObject3d->SetScale({ 5000, 5000, 2000 });
+	stageclearObject3d->SetPosition({ 0,0,0 });
+
+	nextStageObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("nextStage"));
+	nextStageObject3d->SetRotation({ -40,0,15 });
+	nextStageObject3d->SetScale({ 0, 0, 0 });
+	//nextStageObject3d->SetPosition({ 3000,0,-300 });
+	nextStageObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+
+	clearEscapeObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("clearEscape"));
+	clearEscapeObject3d->SetRotation({ -40,0,15 });
+	clearEscapeObject3d->SetScale({ 0, 0, 0 });
+	//clearEscapeObject3d->SetPosition({ 3000,0,-1700 });
+
 	//デブリリセット
 	Debris::StaticInitialize(playerObject.get());
 
@@ -172,7 +189,11 @@ void GameScene::Update() {
 
 	playerObject->SetEndFlag(clearFlag, gameOverFlag);
 
-	Select();
+	if (clearFlag) {
+		Clear();
+	}
+
+	//Select();
 
 	//ライト更新
 	light->Update();
@@ -189,6 +210,10 @@ void GameScene::Update() {
 	Debris::StaticUpdate();
 	//エネミー更新
 	enemyManager.get()->Update();
+
+	stageclearObject3d->Update();
+	nextStageObject3d->Update();
+	clearEscapeObject3d->Update();
 
 	camera->CameraShake();
 }
@@ -243,7 +268,7 @@ void GameScene::Draw() {
 	Debris::StaticDraw();
 	enemyManager.get()->Draw();
 	playerObject->Draw();
-	
+
 #pragma endregion 3Dオブジェクト(FBX)描画
 	ParticleManager::GetInstance()->Draw(cmdList);
 
@@ -259,7 +284,7 @@ void GameScene::Draw() {
 	{
 		ui.get()->Draw();
 	}
-	
+
 	Sprite::PreDraw(cmdList);
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
@@ -268,18 +293,22 @@ void GameScene::Draw() {
 	{
 		backSprite->Draw();
 	}
-	
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
+
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
 #pragma endregion 前景スプライト描画
 
 
 	Object3d::PreDraw(cmdList);
+
 	//ここから下に書く
 	if (clearFlag)
 	{
-
+		stageclearObject3d->Draw();
+		nextStageObject3d->Draw();
+		clearEscapeObject3d->Draw();
 	}
 	else if (gameOverFlag)
 	{
@@ -308,28 +337,22 @@ void GameScene::Select()
 {
 	//入力更新
 	Input* input = Input::GetInstance();
-	if (input->TriggerUp())
+	input->SetVibration(true);
+	if ((input->TriggerUp() && !shakeTimerFlag) || (input->TriggerDown() && !shakeTimerFlag))
 	{
 		if (!selectFlag)
 		{
 			selectFlag = true;
+			saveNextStagePos = nextStagePos;
 		}
 		else if (selectFlag)
 		{
 			selectFlag = false;
+			saveClearEscapePos = clearEscapePos;
 		}
+		shakeTimerFlag = true;
 	}
-	else if (input->TriggerDown())
-	{
-		if (!selectFlag)
-		{
-			selectFlag = true;
-		}
-		else if (selectFlag)
-		{
-			selectFlag = false;
-		}
-	}
+
 	if (input->TriggerPadButton(BUTTON_A))
 	{
 		if (selectFlag)
@@ -342,21 +365,17 @@ void GameScene::Select()
 	{
 		if (!selectFlag)
 		{
-			clearScreen.selectSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
-			clearScreen.selectSprite->SetPosition({ 0,250 });
-			clearScreen.selectSprite->SetSize({ 750, 180 });
-			clearScreen.endSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-			clearScreen.endSprite->SetPosition({ 0,400 });
-			clearScreen.endSprite->SetSize({ 450, 100 });
+			nextStageObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+			nextStageObject3d->SetScale(maxNextStageScale);
+			clearEscapeObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+			clearEscapeObject3d->SetScale(selectScale);
 		}
 		else if (selectFlag)
 		{
-			clearScreen.selectSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-			clearScreen.selectSprite->SetPosition({ 50,280 });
-			clearScreen.selectSprite->SetSize({ 450, 100 });
-			clearScreen.endSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
-			clearScreen.endSprite->SetPosition({ -80,350 });
-			clearScreen.endSprite->SetSize({ 750, 180 });
+			nextStageObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+			nextStageObject3d->SetScale(selectScale);
+			clearEscapeObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+			clearEscapeObject3d->SetScale(maxClearEscapeScale);
 		}
 	}
 	if (gameOverFlag)
@@ -378,6 +397,129 @@ void GameScene::Select()
 			gameOverScreen.endSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 			gameOverScreen.endSprite->SetPosition({ 0,350 });
 			gameOverScreen.endSprite->SetSize({ 750, 180 });
+		}
+	}
+
+	Shake(input);
+}
+
+void GameScene::Clear() {
+	if (maxBounceTimer >= bounceTimer) {
+		bounceTimer++;
+	}
+
+	if (maxBounceTimer <= bounceTimer) {
+		OutBack();
+	}
+
+	XMFLOAT3 pos = stageclearObject3d->GetPosition();
+
+	float eTime = (float)(bounceTimer / static_cast<double>(maxBounceTimer));
+
+	Vector3 startPos = playerObject->GetPos();
+	startPos += {-700,100,5000};
+
+	Vector3 endPos = playerObject->GetPos();
+	endPos += {-700,100,1200};
+
+	pos = Ease(Out, ease::Bounce, eTime, startPos, endPos);
+
+	stageclearObject3d->SetPosition(pos);
+}
+
+void GameScene::OutBack() {
+	if (maxNextStageScaleTimer >= nextStageScaleTimer) {
+		nextStageScaleTimer++;
+	}
+
+	if (nextStageScaleTimer >= maxNextStageScaleTimer / 2) {
+		if (maxClearEscapeTimer >= clearEscapeTimer) {
+			clearEscapeTimer++;
+		}
+	}
+
+	XMFLOAT3 nextStageScale = nextStageObject3d->GetScale();
+	XMFLOAT3 clearEscapeScale = clearEscapeObject3d->GetScale();
+
+	float nextStageETime = (float)(nextStageScaleTimer / static_cast<double>(maxNextStageScaleTimer));
+	float clearEscapeETime = (float)(clearEscapeTimer / static_cast<double>(maxClearEscapeTimer));
+
+	nextStageScale = Ease(Out, ease::Back, nextStageETime, { 0,0,0 }, maxNextStageScale);
+	clearEscapeScale = Ease(Out, ease::Back, clearEscapeETime, { 0,0,0 }, maxClearEscapeScale);
+	
+	nextStagePos = playerObject->GetPos();
+	clearEscapePos = playerObject->GetPos();
+	nextStagePos += {1400, 100, -300};
+	clearEscapePos += {1200, 100, -1000};
+
+
+	nextStageObject3d->SetPosition(nextStagePos);
+	clearEscapeObject3d->SetPosition(clearEscapePos);
+	nextStageObject3d->SetScale(nextStageScale);
+	clearEscapeObject3d->SetScale(clearEscapeScale);
+
+	if (maxClearEscapeTimer <= clearEscapeTimer) {
+		Select();
+	}
+}
+
+void GameScene::Shake(Input *input)
+{
+	//input->SetVibrationPower(5000);
+
+	if (!selectFlag && shakeTimerFlag)
+	{
+		XMFLOAT3 shake = {};
+		shakeTimer++;
+
+		input->SetVibration(true);
+
+		if (shakeTimer > 0)
+		{
+			shake.x = (rand() % (100 - attenuation) - 50) + saveClearEscapePos.x;
+			shake.y = saveClearEscapePos.y;
+			shake.z = (rand() % (100 - attenuation) - 50) + saveClearEscapePos.z;
+		}
+
+		if (shakeTimer >= attenuation * 2)
+		{
+			attenuation += 1;
+			clearEscapeObject3d->SetPosition(shake);
+		}
+		else if (attenuation >= 6)
+		{
+			shakeTimer = 0;
+			attenuation = 0;
+			shakeTimerFlag = 0;
+			input->SetVibration(false);
+			clearEscapeObject3d->SetPosition(saveClearEscapePos);
+		}
+	}
+	else if (selectFlag && shakeTimerFlag)
+	{
+		XMFLOAT3 shake = {};
+		shakeTimer++;
+		input->SetVibration(true);
+
+		if (shakeTimer > 0)
+		{
+			shake.x = (rand() % (100 - attenuation) - 50) + saveNextStagePos.x;
+			shake.y = saveNextStagePos.y;
+			shake.z = (rand() % (100 - attenuation) - 50) + saveNextStagePos.z;
+		}
+
+		if (shakeTimer >= attenuation * 2)
+		{
+			attenuation += 1;
+			nextStageObject3d->SetPosition(shake);
+		}
+		else if (attenuation >= 6)
+		{
+			shakeTimer = 0;
+			attenuation = 0;
+			shakeTimerFlag = 0;
+			input->SetVibration(false);
+			nextStageObject3d->SetPosition(saveNextStagePos);
 		}
 	}
 }

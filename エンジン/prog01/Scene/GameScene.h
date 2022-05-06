@@ -68,6 +68,11 @@ public: // メンバ関数
 
 	void Select();
 
+	//ボタン関係
+	void Shake(Input *input);
+
+	void Clear();
+	void OutBack();
 
 	static int counter;
 private:	//当たり判定系関数
@@ -100,6 +105,10 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelPlane;
 	std::vector<std::unique_ptr<Object3d>> objects;
 
+	std::unique_ptr<Object3d> stageclearObject3d;
+	std::unique_ptr<Object3d> nextStageObject3d;
+	std::unique_ptr<Object3d> clearEscapeObject3d;
+
 	int frame = 0;
 	bool frameF = false;
 	int healFrame = 3;
@@ -112,6 +121,26 @@ private: // メンバ変数
 	bool showingFlag = false;
 	bool flag = false;
 
+	bool shakeTimerFlag = false;
+	int shakeTimer = 0;
+	int attenuation = 0;
+
+	bool bounceTimerFlag = false;
+	int bounceTimer = 0;
+	int maxBounceTimer = 70;
+
+	XMFLOAT3 maxNextStageScale = { 1800, 100, 700 };
+	XMFLOAT3 maxClearEscapeScale = { 1800, 100, 700 };
+	XMFLOAT3 selectScale = { 2200,100,1000 };
+	int nextStageScaleTimer = 0;
+	int maxNextStageScaleTimer = 20;
+	int clearEscapeTimer = 0;
+	int maxClearEscapeTimer = 20;
+	Vector3 nextStagePos = {0,0,0};
+	Vector3 clearEscapePos = { 0,0,0 };
+
+	Vector3 saveNextStagePos = { 0,0,0 };
+	XMFLOAT3 saveClearEscapePos = { 0,0,0 };
 
 	//ライト
 	std::unique_ptr<LightGroup> light;
@@ -137,7 +166,7 @@ private: // メンバ変数
 	//ゲームオーバーフラグ
 	bool gameOverFlag = false;
 	//
-	bool selectFlag = false;
+	bool selectFlag = true;
 	ScreenData gameOverScreen;
 	ScreenData clearScreen;
 	std::unique_ptr<Sprite> backSprite;
