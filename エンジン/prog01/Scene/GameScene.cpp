@@ -110,7 +110,7 @@ void GameScene::Initialize() {
 	stageclearObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("stageclear"));
 	stageclearObject3d->SetRotation({ -50,0,-20 });
 	stageclearObject3d->SetScale({ 5000, 5000, 2000 });
-	stageclearObject3d->SetPosition({ 0,0,0 });
+	stageclearObject3d->SetPosition({ 0,0,500 });
 
 	nextStageObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("nextStage"));
 	nextStageObject3d->SetRotation({ -40,0,15 });
