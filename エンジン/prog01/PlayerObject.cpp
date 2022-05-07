@@ -353,14 +353,37 @@ void PlayerObject::LustUpdate()
 	//}
 	//else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
 
-	//	if (hitPos.x != 0) {
-	//		pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
-	//	}
-	//	if (hitPos.z != 0) {
-	//		pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
-	//	}
-	//	normal.Normalize();
-	//	HitWall(hitPos, normal.Normal());
+
+	//移動中残骸生成
+	if (attack.is && debrisCooldown.can) {
+		debrisCooldown.Start();
+
+		//残骸のサイズ
+		float shotSize = energy / SHOT_ENERGY;
+		Vector3 shotVec = -velocity.Normal();
+		//startVec = startVec + offset;
+
+		//Debrisのコンテナに追加
+		Debris::debris.push_back(new Debris(pos/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
+		energy -= shotSize;
+
+	}
+	debrisCooldown.Intervel();
+
+	Input* input = Input::GetInstance();
+	Vector3 beforePos = pos + velocity;
+	if (attack.is && !endFlag) {
+		atkParticle->AddAttack(3, 20, pos, velocity, (atan2(pos.z - beforePos.z, pos.x - beforePos.x) + 3.14 / 2));
+		input->GetInstance()->SetVibration(true);
+		input->GetInstance()->SetVibrationPower(10000);
+	}
+	else if (!attack.is && !endFlag) {
+		input->GetInstance()->SetVibration(false);
+	}
+
+	//回収できる時のエフェクト
+	//if (recovery.can) {
+	//	recoveryParticle->AddRecovery(1, 8, pos);
 	//}
 
 	////角
