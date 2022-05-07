@@ -62,6 +62,8 @@ bool SceneChange::SceneChangeStart(const std::string &sceneName, int parameter)
 			for (int y = 0; y < 18; y++) {
 				blackBox[x][y].sprite.get()->SetRotation(0);
 				blackBox[x][y].sprite.get()->SetScale(0);
+				blackBox[x][y].offsetTimer = (31 - x + y);
+
 			}
 		}
 	}

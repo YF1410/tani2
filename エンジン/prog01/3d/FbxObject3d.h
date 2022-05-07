@@ -61,7 +61,7 @@ public: // 静的メンバ関数
 	// グラフィックパイプラインの生成
 	static void CreateGraphicsPipeline2();
 	// 3Dオブジェクト生成
-	static std::unique_ptr<FbxObject3d> Create(FbxModel* model = nullptr, bool isAnimation = false);
+	static std::unique_ptr<FbxObject3d> Create(FbxModel* model = nullptr, bool isAnimation = false,bool isBillbord = false);
 	// setter
 	static void SetDevice(ID3D12Device* device) { FbxObject3d::device = device; }
 	static void SetCamera(Camera* camera) { FbxObject3d::camera = camera; }
@@ -116,6 +116,8 @@ public: // メンバ関数
 	// スケールの設定
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
 	void SetScale(float scale) { this->scale = { scale,scale,scale }; }
+	//ビルボード設定
+	void SetBillboard(bool isBillboard) { this->isBillboard = isBillboard; }
 
 	XMMATRIX GetMatWorld() { return matWorld; }
 
@@ -124,7 +126,6 @@ public: // メンバ関数
 	// スケールの設定
 	void SetColor(XMFLOAT3 color) { this->color = color; }
 
-	
 protected: // メンバ変数
 	// 定数バッファ
 	ComPtr<ID3D12Resource> constBuffTransform;
@@ -148,6 +149,10 @@ protected: // メンバ変数
 	FbxTime endTime;
 	//現在時間(アニメーション)
 	FbxTime currentTime;
+
+	//ビルボード
+	bool isBillboard = false;
+
 	//アニメーション再生中
 	bool isPlay = false;
 	//ループフラグ

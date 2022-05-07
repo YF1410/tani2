@@ -31,7 +31,8 @@ public:
 		Vector3 pos = { 0,0,0 },			//初期位置
 		Vector3 scale = { 1,1,1 },			//初期サイズ
 		Vector3 rotate = { 0,0,0 },			//初期回転
-		bool loadAnimation =false			//アニメーション読み込み
+		bool loadAnimation = false,			//アニメーション読み込み
+		bool isBillbord = false
 	) :
 		Tag(tag),
 		isGravity(isGravity),
@@ -50,6 +51,7 @@ public:
 		objectData->SetPosition(pos);
 		objectData->SetRotation(rotate);
 		objectData->SetScale(scale);
+		objectData->SetBillboard(isBillbord);
 		Initialize();
 	}
 

@@ -199,6 +199,7 @@ void ParticleEmitter::AddDefeat(int count, int life, XMFLOAT3 position,DEFEAT_TY
 	}
 }
 
+
 void ParticleEmitter::Update()
 {
 	particleMan->Update();

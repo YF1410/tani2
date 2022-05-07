@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObjCommon.h"
-class EnemyHp :
+
+class EnemyHp:
 	public GameObjCommon
 {
 public :
@@ -12,5 +13,8 @@ private:
 	float *nowHp;
 	float *maxHp;
 	Vector3 *pos_p;
+	std::unique_ptr<GameObjCommon> gage;
+
+
 };
 
