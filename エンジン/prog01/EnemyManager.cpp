@@ -9,7 +9,7 @@ EnemyManager::EnemyManager(PlayerObject *player)
 {
 	this->player = player;
 	CsvLoad(MapChip::MAP_NAME::TEST_MAP, "testSpawn");
-	CsvLoad(MapChip::MAP_NAME::Stage1, "01");
+	CsvLoad(MapChip::MAP_NAME::Stage1, "testSpawn");
 	CsvLoad(MapChip::MAP_NAME::Stage2, "testSpawn");
 	CsvLoad(MapChip::MAP_NAME::Stage3, "testSpawn");
 	CsvLoad(MapChip::MAP_NAME::Stage4, "testSpawn");

@@ -68,7 +68,8 @@ void TitleScene::Update()
 	{
 		if (flag)
 		{
-			SceneManager::GetInstance()->ChangeScene("GameScene");
+			//SceneManager::GetInstance()->ChangeScene("GameScene");
+			sceneChangeFlag = true;
 		}
 		else if (!flag)
 		{
@@ -108,6 +109,10 @@ void TitleScene::Update()
 	}
 
 	Select();
+
+	if (sceneChangeFlag) {
+		sceneChange.SceneChangeStart("SelectScene");
+	}
 
 	titleObject3d->Update();
 	startObject3d->Update();
@@ -227,11 +232,6 @@ void TitleScene::Shake()
 			shakeTimerFlag = 0;
 			input->SetVibration(false);
 			startObject3d->SetPosition(savePos);
-		}
-
-		if (sceneChangeFlag) {
-			sceneChange.SceneChangeStart("SelectScene");
-			//‚â‚Ô‚È‚©
 		}
 	}
 }

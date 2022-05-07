@@ -253,7 +253,7 @@ void GameScene::LastUpdate()
 	MapChip::GetInstance()->Adaptation();
 	//パーティクル全てのアップデート
 	ParticleManager::GetInstance()->Update();
-
+	sceneChange.Update();
 	//カウンターを加算
 	counter++;
 }
