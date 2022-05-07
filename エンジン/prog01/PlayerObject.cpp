@@ -334,24 +334,57 @@ void PlayerObject::Draw() const
 
 void PlayerObject::LustUpdate()
 {
-	////マップチップとの当たり判定
-	//toMapChipCollider->Update();
-	//Vector3 hitPos = { 0,0,0 };
-	//Vector3 moveVec = velocity + penalty;
-	//Vector3 normal = { 0,0,0 };
-	////上下
-	//if (MapChip::GetInstance()->CheckMapChipAreaToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
-	//	if (hitPos.x != 0) {
-	//		pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
-	//	}
-	//	if (hitPos.z != 0) {
-	//		pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
-	//	}
-	//	normal.Normalize();
-	//	HitWall(hitPos, normal.Normal());
+	//マップチップとの当たり判定
+	toMapChipCollider->Update();
+	Vector3 hitPos = { 0,0,0 };
+	Vector3 moveVec = velocity + penalty;
+	Vector3 normal = { 0,0,0 };
+	//上下
+	if (MapChip::GetInstance()->CheckMapChipAreaToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
+		if (hitPos.x != 0) {
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
+		}
+		if (hitPos.z != 0) {
+			pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
+		}
+		normal.Normalize();
+		HitWall(hitPos, normal.Normal());
 
+	}
+	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
+
+		if (hitPos.x != 0) {
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
+		}
+		if (hitPos.z != 0) {
+			pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
+		}
+		normal.Normalize();
+		HitWall(hitPos, normal.Normal());
+	}
+
+	//角
+	//else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
+		//Vector3 normal = { 0,0,0 };
+		//if (hitPos.x != 0) {
+		//	int vec = 1;	//向き
+		//	if (0 < velocity.x) {
+		//		vec = -1;
+		//	}
+		//	pos.x = hitPos.x;
+		//	normal.x = vec;
+		//}
+		//if (hitPos.z != 0) {
+		//	int vec = 1;	//向き
+		//	if (velocity.z < 0) {
+		//		vec = -1;
+		//	}
+		//	pos.z = hitPos.z;
+		//	normal.z = vec;
+		//}
+		//normal.Normalize();
+		//velocity = CalcWallScratchVector(velocity, normal);
 	//}
-	//else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
 
 
 	//移動中残骸生成
@@ -386,85 +419,29 @@ void PlayerObject::LustUpdate()
 	//	recoveryParticle->AddRecovery(1, 8, pos);
 	//}
 
-	////角
-	////else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
-	//	//Vector3 normal = { 0,0,0 };
-	//	//if (hitPos.x != 0) {
-	//	//	int vec = 1;	//向き
-	//	//	if (0 < velocity.x) {
-	//	//		vec = -1;
-	//	//	}
-	//	//	pos.x = hitPos.x;
-	//	//	normal.x = vec;
-	//	//}
-	//	//if (hitPos.z != 0) {
-	//	//	int vec = 1;	//向き
-	//	//	if (velocity.z < 0) {
-	//	//		vec = -1;
-	//	//	}
-	//	//	pos.z = hitPos.z;
-	//	//	normal.z = vec;
-	//	//}
-	//	//normal.Normalize();
-	//	//velocity = CalcWallScratchVector(velocity, normal);
-	////}
+	//if (dontRecovery)
+	//{
+	//	Vector3 shake = { 0.0f, 0.0f, 0.0f };
+	//	Vector3 shakePos = { 0.0f, 0.0f, 0.0f };
 
+	//	pos = savePos;
 
-	////移動中残骸生成
-	//if (attack.is && debrisCooldown.can) {
-	//	debrisCooldown.Start();
+	//	timer++;
+	//	if (timer <= maxTimer)
+	//	{
+	//		shake.x = (((float)(rand() % (maxTimer - timer) - (maxTimer - timer) / 2))*5);//(rand() % (int)(Ease(In,Quad,(float)(shakeTimer /20),100,1)));
+	//		//shake.y = (rand() % (shakeCount - attenuation) - (shakeCount / 2));
+	//		shake.z = (((float)(rand() % (maxTimer - timer) - (maxTimer - timer) / 2)) * 5);//(rand() % (int)Ease(In, Quad, (float)(shakeTimer / 20), 100, 1));
+	//		shakePos = shake + pos;
+	//	}
 
-	//	//残骸のサイズ
-	//	float shotSize = energy / SHOT_ENERGY;
-	//	Vector3 shotVec = -velocity.Normal();
-	//	//startVec = startVec + offset;
-
-	//	//Debrisのコンテナに追加
-	//	Debris::debris.push_back(new Debris(pos/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
-	//	energy -= shotSize;
-
+	//	pos = shakePos;
 	//}
-	//debrisCooldown.Intervel();
-
-	//Input* input = Input::GetInstance();
-	//Vector3 beforePos = pos + velocity;
-	//if (attack.is) {
-	//	atkParticle->AddAttack(3, 20, pos, velocity, (atan2(pos.z - beforePos.z, pos.x - beforePos.x) + 3.14 / 2));
-	//	input->GetInstance()->SetVibration(true);
-	//	input->GetInstance()->SetVibrationPower(10000);
+	//if (!dontRecovery)
+	//{
+	//	timer = 0;
+	//	attenuation = 0;
 	//}
-	//else if (!attack.is) {
-	//	input->GetInstance()->SetVibration(false);
-	//}
-
-	////回収できる時のエフェクト
-	////if (recovery.can) {
-	////	recoveryParticle->AddRecovery(1, 8, pos);
-	////}
-
-	////if (dontRecovery)
-	////{
-	////	Vector3 shake = { 0.0f, 0.0f, 0.0f };
-	////	Vector3 shakePos = { 0.0f, 0.0f, 0.0f };
-
-	////	pos = savePos;
-
-	////	timer++;
-	////	if (timer <= maxTimer)
-	////	{
-	////		shake.x = (((float)(rand() % (maxTimer - timer) - (maxTimer - timer) / 2))*5);//(rand() % (int)(Ease(In,Quad,(float)(shakeTimer /20),100,1)));
-	////		//shake.y = (rand() % (shakeCount - attenuation) - (shakeCount / 2));
-	////		shake.z = (((float)(rand() % (maxTimer - timer) - (maxTimer - timer) / 2)) * 5);//(rand() % (int)Ease(In, Quad, (float)(shakeTimer / 20), 100, 1));
-	////		shakePos = shake + pos;
-	////	}
-
-	////	pos = shakePos;
-	////}
-	////if (!dontRecovery)
-	////{
-	////	timer = 0;
-	////	attenuation = 0;
-	////}
 }
 
 
@@ -552,7 +529,7 @@ void PlayerObject::HitWall(
 	const Vector3& normal)
 {
 	Input* input = Input::GetInstance();
-	//velocity = CalcReflectVector(velocity, normal);
+	velocity = CalcReflectVector(velocity, normal);
 	if (attack.is) {
 		refParticle->AddRef(20, 40, pos, velocity);
 		input->GetInstance()->SetVibrationPower(65535);
