@@ -611,8 +611,7 @@ void GameScene::Clear() {
 
 		stageclearObject3d->SetPosition(stageclearPos);
 	}
-
-	if (maxClearTimer <= clearTimer) {
+	else if (maxClearTimer <= clearTimer) {
 		OutBack();
 	}
 }
@@ -621,8 +620,7 @@ void GameScene::Gameover() {
 	if (maxGameoverTimer >= gameoverTimer) {
 		gameoverTimer++;
 	}
-
-	if (maxGameoverTimer <= gameoverTimer) {
+	else if (maxGameoverTimer <= gameoverTimer) {
 		OutBack();
 	}
 
