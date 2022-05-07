@@ -406,8 +406,7 @@ void GameScene::Clear() {
 	if (maxBounceTimer >= bounceTimer) {
 		bounceTimer++;
 	}
-
-	if (maxBounceTimer <= bounceTimer) {
+	else if (maxBounceTimer <= bounceTimer) {
 		OutBack();
 	}
 
