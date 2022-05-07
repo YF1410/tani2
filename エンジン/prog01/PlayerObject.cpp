@@ -10,6 +10,7 @@
 #include "MapChip.h"
 #include "Enemy.h"
 #include "ParticleManager.h"
+#include "Audio.h"
 
 
 using namespace DirectX;
@@ -206,6 +207,7 @@ void PlayerObject::Update()
 			attack.can &&
 			attackCount > 0)
 		{
+			Audio::GetInstance()->PlayWave(10);
 			//UŒ‚ŠJn
 			attack.Start();
 
@@ -241,6 +243,7 @@ void PlayerObject::Update()
 		//‰ñû
 		if (input->TriggerPadButton(BUTTON_B)) {
 			if (recovery.Start()) {
+				Audio::GetInstance()->PlayWave(14);
 				for (int i = 0; i < Debris::debris.size(); i++) {
 					Debris::debris[i]->ReturnStart();
 				}
@@ -374,7 +377,7 @@ void PlayerObject::LustUpdate()
 		}
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
-
+		Audio::GetInstance()->PlayWave(16);
 	}
 	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
 
@@ -386,6 +389,7 @@ void PlayerObject::LustUpdate()
 		}
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
+		Audio::GetInstance()->PlayWave(16);
 	}
 
 	//Šp
@@ -486,6 +490,7 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 				(!debri->isFirstAttack || debri->state == Debris::RETURN)) {
 				//‹zû
 				energy += debri->GetSize();
+				Audio::GetInstance()->PlayWave(13);
 			}
 
 			isHealFrameIncrease = true;
@@ -572,6 +577,7 @@ void PlayerObject::Damage(float damage)
 	//isInvincible = true;
 	energy -= damage;
 	invincibleCounter = 60;
+	Audio::GetInstance()->PlayWave(11);
 
 	//size‚ª0‚É‚È‚Á‚½‚ç€–Sˆ—
 	if (energy <= 0) {
