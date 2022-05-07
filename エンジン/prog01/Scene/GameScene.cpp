@@ -153,8 +153,8 @@ void GameScene::Finalize() {
 
 void GameScene::Update() {
 	//カメラ更新
-		//プレイヤーの少し上を焦点にする
-		//カメラ更新
+	//プレイヤーの少し上を焦点にする
+	//カメラ更新
 	float debrisLengthMax = 0.0f;
 	for (int i = 0; i < Debris::debris.size(); i++) {
 		if (Debris::debris[i]->isFirstAttack &&

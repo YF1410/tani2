@@ -229,8 +229,9 @@ void TitleScene::Shake()
 			startObject3d->SetPosition(savePos);
 		}
 
-	if (sceneChangeFlag) {
-		sceneChange.SceneChangeStart("SelectScene");
-		//‚â‚Ô‚È‚©
+		if (sceneChangeFlag) {
+			sceneChange.SceneChangeStart("SelectScene");
+			//‚â‚Ô‚È‚©
+		}
 	}
 }
