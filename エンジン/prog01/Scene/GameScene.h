@@ -69,10 +69,12 @@ public: // メンバ関数
 	void Select();
 
 	//ボタン関係
-	void Shake(Input *input);
+	void Shake(Input* input);
 
 	void Clear();
 	void OutBack();
+
+	void Gameover();
 
 	static int counter;
 private:	//当たり判定系関数
@@ -109,6 +111,10 @@ private: // メンバ変数
 	std::unique_ptr<Object3d> nextStageObject3d;
 	std::unique_ptr<Object3d> clearEscapeObject3d;
 
+	std::unique_ptr<Object3d> gameoverObject3d;
+	std::unique_ptr<Object3d> retryObject3d;
+	std::unique_ptr<Object3d> gameoverEscapeObject3d;
+
 	int frame = 0;
 	bool frameF = false;
 	int healFrame = 3;
@@ -121,26 +127,64 @@ private: // メンバ変数
 	bool showingFlag = false;
 	bool flag = false;
 
+	bool saveCount = 0;
+
 	bool shakeTimerFlag = false;
 	int shakeTimer = 0;
 	int attenuation = 0;
 
-	bool bounceTimerFlag = false;
+	int clearTimer = 0;
+	int maxClearTimer = 70;
+
+	int gameoverTimer = 0;
+	int maxGameoverTimer = 70;
+
+	Vector3 sceneBouncePos = { 0,0,0 };
+	Vector3 sceneBouncePosDown = { 0,0,0 };
+	Vector3 sceneBouncePosUp = { 0,0,0 };
+
+	Vector3 selectBouncePos = { 0,0,0 };
+	Vector3 selectBouncePosDown = { 0,0,0 };
+	Vector3 selectBouncePosUp = { 0,0,0 };
+
+	Vector3 sceneRotate = { 0,0,0 };
+	Vector3 sceneRotateRight = { 0,0,0 };
+	Vector3 sceneRotateLeft = { 0,0,0 };
 	int bounceTimer = 0;
-	int maxBounceTimer = 70;
+	int maxBounceTimer = 20;
+	int rotateTimer = 0;
+	int maxRotateTimer = 70;
+	bool isUp = true;
+	bool isRight = true;
+	Vector3 bounceAmount = { 0,0,100 };
+	Vector3 rotateAmount = { 0,-20,10 };
 
 	XMFLOAT3 maxNextStageScale = { 1800, 100, 700 };
 	XMFLOAT3 maxClearEscapeScale = { 1800, 100, 700 };
+	XMFLOAT3 maxRetryScale = { 1800, 100, 700 };
+	XMFLOAT3 maxGameoverEscapeScale = { 1800, 100, 700 };
 	XMFLOAT3 selectScale = { 2200,100,1000 };
 	int nextStageScaleTimer = 0;
 	int maxNextStageScaleTimer = 20;
 	int clearEscapeTimer = 0;
 	int maxClearEscapeTimer = 20;
-	Vector3 nextStagePos = {0,0,0};
+	int retryScaleTimer = 0;
+	int maxRetryScaleTimer = 20;
+	int gameoverEscapeTimer = 0;
+	int maxGameoverEscapeTimer = 20;
+	Vector3 stageclearPos = { 0,0,0 };
+	Vector3 gameoverPos = { 0,0,0 };
+	Vector3 nextStagePos = { 0,0,0 };
 	Vector3 clearEscapePos = { 0,0,0 };
+	Vector3 retryPos = { 0,0,0 };
+	Vector3 gameoverEscapePos = { 0,0,0 };
 
-	Vector3 saveNextStagePos = { 0,0,0 };
+	XMFLOAT3 saveStageclearPos = { 0,0,0 };
+	XMFLOAT3 saveGameoverRot = { 0,0,0 };
+	XMFLOAT3 saveNextStagePos = { 0,0,0 };
 	XMFLOAT3 saveClearEscapePos = { 0,0,0 };
+	XMFLOAT3 saveRetryPos = { 0,0,0 };
+	XMFLOAT3 saveGameoverEscapePos = { 0,0,0 };
 
 	//ライト
 	std::unique_ptr<LightGroup> light;

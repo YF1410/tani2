@@ -123,6 +123,23 @@ void GameScene::Initialize() {
 	clearEscapeObject3d->SetScale({ 0, 0, 0 });
 	//clearEscapeObject3d->SetPosition({ 3000,0,-1700 });
 
+	gameoverObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("gameover"));
+	gameoverObject3d->SetRotation({ -50,0,-20 });
+	gameoverObject3d->SetScale({ 5500, 5000, 2000 });
+	gameoverObject3d->SetPosition({ 0,0,0 });
+
+	retryObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("retry"));
+	retryObject3d->SetRotation({ -40,0,15 });
+	retryObject3d->SetScale({ 0, 0, 0 });
+	//nextStageObject3d->SetPosition({ 3000,0,-300 });
+	retryObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+
+	gameoverEscapeObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("gameoverEscape"));
+	gameoverEscapeObject3d->SetRotation({ -40,0,15 });
+	gameoverEscapeObject3d->SetScale({ 0, 0, 0 });
+	//clearEscapeObject3d->SetPosition({ 3000,0,-1700 });
+
+
 	//デブリリセット
 	Debris::StaticInitialize(playerObject.get());
 
@@ -188,9 +205,11 @@ void GameScene::Update() {
 	}
 
 	playerObject->SetEndFlag(clearFlag, gameOverFlag);
-
 	if (clearFlag) {
 		Clear();
+	}
+	else if (gameOverFlag) {
+		Gameover();
 	}
 
 	//Select();
@@ -214,6 +233,9 @@ void GameScene::Update() {
 	stageclearObject3d->Update();
 	nextStageObject3d->Update();
 	clearEscapeObject3d->Update();
+	gameoverObject3d->Update();
+	retryObject3d->Update();
+	gameoverEscapeObject3d->Update();
 
 	camera->CameraShake();
 }
@@ -303,6 +325,9 @@ void GameScene::Draw() {
 
 	Object3d::PreDraw(cmdList);
 
+	//stageclearObject3d->Draw();
+	//gameoverObject3d->Draw();
+
 	//ここから下に書く
 	if (clearFlag)
 	{
@@ -312,7 +337,9 @@ void GameScene::Draw() {
 	}
 	else if (gameOverFlag)
 	{
-
+		gameoverObject3d->Draw();
+		retryObject3d->Draw();
+		gameoverEscapeObject3d->Draw();
 	}
 	Object3d::PostDraw();
 
@@ -337,25 +364,39 @@ void GameScene::Select()
 {
 	//入力更新
 	Input* input = Input::GetInstance();
-	input->SetVibration(true);
+	if (saveCount == 0) {
+		saveStageclearPos = stageclearPos;
+		saveGameoverRot = gameoverObject3d->GetRotation();
+		saveNextStagePos = nextStagePos;
+		saveRetryPos = retryPos;
+		saveClearEscapePos = clearEscapePos;
+		saveGameoverEscapePos = gameoverEscapePos;
+		saveCount++;
+	}
 	if ((input->TriggerUp() && !shakeTimerFlag) || (input->TriggerDown() && !shakeTimerFlag))
 	{
 		if (!selectFlag)
 		{
 			selectFlag = true;
 			saveNextStagePos = nextStagePos;
+			saveRetryPos = retryPos;
 		}
 		else if (selectFlag)
 		{
 			selectFlag = false;
 			saveClearEscapePos = clearEscapePos;
+			saveGameoverEscapePos = gameoverEscapePos;
 		}
 		shakeTimerFlag = true;
 	}
 
 	if (input->TriggerPadButton(BUTTON_A))
 	{
-		if (selectFlag)
+		if (selectFlag) {
+
+		}
+
+		if (!selectFlag)
 		{
 			exit(1);
 		}
@@ -363,12 +404,41 @@ void GameScene::Select()
 
 	if (clearFlag)
 	{
+		sceneBouncePosDown = saveStageclearPos;
+		sceneBouncePosUp = saveStageclearPos;
+		sceneBouncePosUp += bounceAmount;
 		if (!selectFlag)
 		{
 			nextStageObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 			nextStageObject3d->SetScale(maxNextStageScale);
 			clearEscapeObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 			clearEscapeObject3d->SetScale(selectScale);
+
+			selectBouncePosDown = saveClearEscapePos;
+			selectBouncePosUp = saveClearEscapePos;
+			selectBouncePosUp += bounceAmount;
+			if (maxBounceTimer >= bounceTimer) {
+				bounceTimer++;
+				if (maxBounceTimer <= bounceTimer) {
+					bounceTimer = 0;
+					if (!isUp) {
+						isUp = true;
+					}
+					else if (isUp) {
+						isUp = false;
+					}
+				}
+			}
+			float eTime = (float)(bounceTimer / static_cast<double>(maxBounceTimer));
+			if (isUp) {
+				sceneBouncePos = Ease(Out, ease::Quint, eTime, sceneBouncePosDown, sceneBouncePosUp);
+				selectBouncePos = Ease(Out, ease::Quint, eTime, selectBouncePosDown, selectBouncePosUp);
+			}
+			else if (!isUp) {
+				sceneBouncePos = Ease(In, ease::Quint, eTime, sceneBouncePosUp, sceneBouncePosDown);
+				selectBouncePos = Ease(In, ease::Quint, eTime, selectBouncePosUp, selectBouncePosDown);
+			}
+			clearEscapeObject3d->SetPosition(selectBouncePos);
 		}
 		else if (selectFlag)
 		{
@@ -376,150 +446,389 @@ void GameScene::Select()
 			nextStageObject3d->SetScale(selectScale);
 			clearEscapeObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 			clearEscapeObject3d->SetScale(maxClearEscapeScale);
+
+			selectBouncePosDown = saveNextStagePos;
+			selectBouncePosUp = saveNextStagePos;
+			selectBouncePosUp += bounceAmount;
+			if (maxBounceTimer >= bounceTimer) {
+				bounceTimer++;
+				if (maxBounceTimer <= bounceTimer) {
+					bounceTimer = 0;
+					if (!isUp) {
+						isUp = true;
+					}
+					else if (isUp) {
+						isUp = false;
+					}
+				}
+			}
+			float eTime = (float)(bounceTimer / static_cast<double>(maxBounceTimer));
+			if (isUp) {
+				sceneBouncePos = Ease(Out, ease::Quint, eTime, sceneBouncePosDown, sceneBouncePosUp);
+				selectBouncePos = Ease(Out, ease::Quint, eTime, selectBouncePosDown, selectBouncePosUp);
+			}
+			else if (!isUp) {
+				sceneBouncePos = Ease(In, ease::Quint, eTime, sceneBouncePosUp, sceneBouncePosDown);
+				selectBouncePos = Ease(In, ease::Quint, eTime, selectBouncePosUp, selectBouncePosDown);
+			}
+			nextStageObject3d->SetPosition(selectBouncePos);
 		}
+		stageclearObject3d->SetPosition(sceneBouncePos);
 	}
 	if (gameOverFlag)
 	{
+		sceneRotateLeft = saveGameoverRot;
+		sceneRotateRight = saveGameoverRot;
+		sceneRotateRight += rotateAmount;
 		if (!selectFlag)
 		{
-			gameOverScreen.selectSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
-			gameOverScreen.selectSprite->SetPosition({ 0,250 });
-			gameOverScreen.selectSprite->SetSize({ 750, 180 });
-			gameOverScreen.endSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-			gameOverScreen.endSprite->SetPosition({ 90,400 });
-			gameOverScreen.endSprite->SetSize({ 450, 100 });
+			retryObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+			retryObject3d->SetScale(maxRetryScale);
+			gameoverEscapeObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+			gameoverEscapeObject3d->SetScale(selectScale);
+
+			selectBouncePosDown = saveGameoverEscapePos;
+			selectBouncePosUp = saveGameoverEscapePos;
+			selectBouncePosUp += bounceAmount;
+			if (maxBounceTimer >= bounceTimer) {
+				bounceTimer++;
+				if (maxBounceTimer <= bounceTimer) {
+					bounceTimer = 0;
+					if (!isUp) {
+						isUp = true;
+					}
+					else if (isUp) {
+						isUp = false;
+					}
+				}
+			}
+
+			if (maxRotateTimer >= rotateTimer) {
+				rotateTimer++;
+				if (maxRotateTimer <= rotateTimer) {
+					rotateTimer = 0;
+					if (!isRight) {
+						isRight = true;
+					}
+					else if (isRight) {
+						isRight = false;
+					}
+				}
+			}
+
+			float  bounceETime = (float)(bounceTimer / static_cast<double>(maxBounceTimer));
+			float rotateETime = (float)(rotateTimer / static_cast<double>(maxRotateTimer));
+			if (isUp) {
+				selectBouncePos = Ease(Out, ease::Quint, bounceETime, selectBouncePosDown, selectBouncePosUp);
+			}
+			else if (!isUp) {
+				selectBouncePos = Ease(In, ease::Quint, bounceETime, selectBouncePosUp, selectBouncePosDown);
+			}
+
+			if (isRight) {
+				sceneRotate = Ease(In, ease::Quint, rotateETime, sceneRotateLeft, sceneRotateRight);
+			}
+			else if (!isRight) {
+				sceneRotate = Ease(In, ease::Quint, rotateETime, sceneRotateRight, sceneRotateLeft);
+			}
+
+			gameoverEscapeObject3d->SetPosition(selectBouncePos);
 		}
 		else if (selectFlag)
 		{
-			gameOverScreen.selectSprite->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-			gameOverScreen.selectSprite->SetPosition({ 80,280 });
-			gameOverScreen.selectSprite->SetSize({ 450, 100 });
-			gameOverScreen.endSprite->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
-			gameOverScreen.endSprite->SetPosition({ 0,350 });
-			gameOverScreen.endSprite->SetSize({ 750, 180 });
+			retryObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
+			retryObject3d->SetScale(selectScale);
+			gameoverEscapeObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+			gameoverEscapeObject3d->SetScale(maxGameoverEscapeScale);
+
+			selectBouncePosDown = saveRetryPos;
+			selectBouncePosUp = saveRetryPos;
+			selectBouncePosUp += bounceAmount;
+			if (maxBounceTimer >= bounceTimer) {
+				bounceTimer++;
+				if (maxBounceTimer <= bounceTimer) {
+					bounceTimer = 0;
+					if (!isUp) {
+						isUp = true;
+					}
+					else if (isUp) {
+						isUp = false;
+					}
+				}
+			}
+
+			if (maxRotateTimer >= rotateTimer) {
+				rotateTimer++;
+				if (maxRotateTimer <= rotateTimer) {
+					rotateTimer = 0;
+					if (!isRight) {
+						isRight = true;
+					}
+					else if (isRight) {
+						isRight = false;
+					}
+				}
+			}
+
+			float bounceETime = (float)(bounceTimer / static_cast<double>(maxBounceTimer));
+			float rotateETime = (float)(rotateTimer / static_cast<double>(maxRotateTimer));
+			if (isUp) {
+				selectBouncePos = Ease(Out, ease::Quint, bounceETime, selectBouncePosDown, selectBouncePosUp);
+			}
+			else if (!isUp) {
+				selectBouncePos = Ease(In, ease::Quint, bounceETime, selectBouncePosUp, selectBouncePosDown);
+			}
+
+			if (isRight) {
+				sceneRotate = Ease(In, ease::Quint, rotateETime, sceneRotateLeft, sceneRotateRight);
+			}
+			else if (!isRight) {
+				sceneRotate = Ease(In, ease::Quint, rotateETime, sceneRotateRight, sceneRotateLeft);
+			}
+			retryObject3d->SetPosition(selectBouncePos);
 		}
+		gameoverObject3d->SetRotation(sceneRotate);
 	}
 
 	Shake(input);
 }
 
 void GameScene::Clear() {
-	if (maxBounceTimer >= bounceTimer) {
-		bounceTimer++;
+	if (maxClearTimer >= clearTimer) {
+		clearTimer++;
+
+		stageclearPos = stageclearObject3d->GetPosition();
+
+		float eTime = (float)(clearTimer / static_cast<double>(maxClearTimer));
+
+		Vector3 startPos = playerObject->GetPos();
+		startPos += {-700, 100, 5000};
+
+		Vector3 endPos = playerObject->GetPos();
+		endPos += {-700, 100, 1200};
+
+		stageclearPos = Ease(Out, ease::Bounce, eTime, startPos, endPos);
+
+		stageclearObject3d->SetPosition(stageclearPos);
 	}
 
-	if (maxBounceTimer <= bounceTimer) {
+	if (maxClearTimer <= clearTimer) {
+		OutBack();
+	}
+}
+
+void GameScene::Gameover() {
+	if (maxGameoverTimer >= gameoverTimer) {
+		gameoverTimer++;
+	}
+
+	if (maxGameoverTimer <= gameoverTimer) {
 		OutBack();
 	}
 
-	XMFLOAT3 pos = stageclearObject3d->GetPosition();
+	gameoverPos = gameoverObject3d->GetPosition();
 
-	float eTime = (float)(bounceTimer / static_cast<double>(maxBounceTimer));
+	float eTime = (float)(gameoverTimer / static_cast<double>(maxGameoverTimer));
 
 	Vector3 startPos = playerObject->GetPos();
-	startPos += {-700,100,5000};
+	startPos += {-700, 100, 5000};
 
 	Vector3 endPos = playerObject->GetPos();
-	endPos += {-700,100,1200};
+	endPos += {-700, 100, 1200};
 
-	pos = Ease(Out, ease::Bounce, eTime, startPos, endPos);
+	gameoverPos = Ease(Out, ease::Quint, eTime, startPos, endPos);
 
-	stageclearObject3d->SetPosition(pos);
+	gameoverObject3d->SetPosition(gameoverPos);
 }
 
 void GameScene::OutBack() {
-	if (maxNextStageScaleTimer >= nextStageScaleTimer) {
-		nextStageScaleTimer++;
-	}
+	if (clearFlag) {
+		if (maxNextStageScaleTimer >= nextStageScaleTimer) {
+			nextStageScaleTimer++;
+		}
 
-	if (nextStageScaleTimer >= maxNextStageScaleTimer / 2) {
-		if (maxClearEscapeTimer >= clearEscapeTimer) {
-			clearEscapeTimer++;
+		if (nextStageScaleTimer >= maxNextStageScaleTimer / 2) {
+			if (maxClearEscapeTimer >= clearEscapeTimer) {
+				clearEscapeTimer++;
+			}
+		}
+
+		XMFLOAT3 nextStageScale = nextStageObject3d->GetScale();
+		XMFLOAT3 clearEscapeScale = clearEscapeObject3d->GetScale();
+
+		float nextStageETime = (float)(nextStageScaleTimer / static_cast<double>(maxNextStageScaleTimer));
+		float clearEscapeETime = (float)(clearEscapeTimer / static_cast<double>(maxClearEscapeTimer));
+
+		nextStageScale = Ease(Out, ease::Back, nextStageETime, { 0,0,0 }, maxNextStageScale);
+		clearEscapeScale = Ease(Out, ease::Back, clearEscapeETime, { 0,0,0 }, maxClearEscapeScale);
+
+		nextStagePos = playerObject->GetPos();
+		clearEscapePos = playerObject->GetPos();
+		nextStagePos += {1400, 100, -300};
+		clearEscapePos += {1200, 100, -1000};
+
+
+		nextStageObject3d->SetPosition(nextStagePos);
+		clearEscapeObject3d->SetPosition(clearEscapePos);
+		nextStageObject3d->SetScale(nextStageScale);
+		clearEscapeObject3d->SetScale(clearEscapeScale);
+
+		if (maxClearEscapeTimer <= clearEscapeTimer) {
+			Select();
+		}
+	}
+	else if (gameOverFlag) {
+		if (maxRetryScaleTimer >= retryScaleTimer) {
+			retryScaleTimer++;
+		}
+
+		if (retryScaleTimer >= maxRetryScaleTimer / 2) {
+			if (maxGameoverEscapeTimer >= gameoverEscapeTimer) {
+				gameoverEscapeTimer++;
+			}
+		}
+
+		XMFLOAT3 retryScale = retryObject3d->GetScale();
+		XMFLOAT3 gameoverEscapeScale = gameoverEscapeObject3d->GetScale();
+
+		float retryETime = (float)(retryScaleTimer / static_cast<double>(maxRetryScaleTimer));
+		float gameoverEscapeETime = (float)(gameoverEscapeTimer / static_cast<double>(maxGameoverEscapeTimer));
+
+		retryScale = Ease(Out, ease::Back, retryETime, { 0,0,0 }, maxRetryScale);
+		gameoverEscapeScale = Ease(Out, ease::Back, gameoverEscapeETime, { 0,0,0 }, maxGameoverEscapeScale);
+
+		retryPos = playerObject->GetPos();
+		gameoverEscapePos = playerObject->GetPos();
+		retryPos += {1400, 100, -300};
+		gameoverEscapePos += {1200, 100, -1000};
+
+
+		retryObject3d->SetPosition(retryPos);
+		gameoverEscapeObject3d->SetPosition(gameoverEscapePos);
+		retryObject3d->SetScale(retryScale);
+		gameoverEscapeObject3d->SetScale(gameoverEscapeScale);
+
+		if (maxGameoverEscapeTimer <= gameoverEscapeTimer) {
+			Select();
 		}
 	}
 
-	XMFLOAT3 nextStageScale = nextStageObject3d->GetScale();
-	XMFLOAT3 clearEscapeScale = clearEscapeObject3d->GetScale();
-
-	float nextStageETime = (float)(nextStageScaleTimer / static_cast<double>(maxNextStageScaleTimer));
-	float clearEscapeETime = (float)(clearEscapeTimer / static_cast<double>(maxClearEscapeTimer));
-
-	nextStageScale = Ease(Out, ease::Back, nextStageETime, { 0,0,0 }, maxNextStageScale);
-	clearEscapeScale = Ease(Out, ease::Back, clearEscapeETime, { 0,0,0 }, maxClearEscapeScale);
-	
-	nextStagePos = playerObject->GetPos();
-	clearEscapePos = playerObject->GetPos();
-	nextStagePos += {1400, 100, -300};
-	clearEscapePos += {1200, 100, -1000};
-
-
-	nextStageObject3d->SetPosition(nextStagePos);
-	clearEscapeObject3d->SetPosition(clearEscapePos);
-	nextStageObject3d->SetScale(nextStageScale);
-	clearEscapeObject3d->SetScale(clearEscapeScale);
-
-	if (maxClearEscapeTimer <= clearEscapeTimer) {
-		Select();
-	}
 }
 
-void GameScene::Shake(Input *input)
+void GameScene::Shake(Input* input)
 {
 	//input->SetVibrationPower(5000);
 
 	if (!selectFlag && shakeTimerFlag)
 	{
-		XMFLOAT3 shake = {};
-		shakeTimer++;
+		if (clearFlag) {
+			XMFLOAT3 shake = {};
+			shakeTimer++;
 
-		input->SetVibration(true);
+			input->SetVibration(true);
 
-		if (shakeTimer > 0)
-		{
-			shake.x = (rand() % (100 - attenuation) - 50) + saveClearEscapePos.x;
-			shake.y = saveClearEscapePos.y;
-			shake.z = (rand() % (100 - attenuation) - 50) + saveClearEscapePos.z;
+			if (shakeTimer > 0)
+			{
+				shake.x = (rand() % (100 - attenuation) - 50) + saveClearEscapePos.x;
+				shake.y = saveClearEscapePos.y;
+				shake.z = (rand() % (100 - attenuation) - 50) + saveClearEscapePos.z;
+			}
+
+			if (shakeTimer >= attenuation * 2)
+			{
+				attenuation += 1;
+				clearEscapeObject3d->SetPosition(shake);
+			}
+			else if (attenuation >= 6)
+			{
+				shakeTimer = 0;
+				attenuation = 0;
+				shakeTimerFlag = 0;
+				input->SetVibration(false);
+				clearEscapeObject3d->SetPosition(saveClearEscapePos);
+			}
 		}
+		else if (gameOverFlag) {
+			XMFLOAT3 shake = {};
+			shakeTimer++;
 
-		if (shakeTimer >= attenuation * 2)
-		{
-			attenuation += 1;
-			clearEscapeObject3d->SetPosition(shake);
-		}
-		else if (attenuation >= 6)
-		{
-			shakeTimer = 0;
-			attenuation = 0;
-			shakeTimerFlag = 0;
-			input->SetVibration(false);
-			clearEscapeObject3d->SetPosition(saveClearEscapePos);
+			input->SetVibration(true);
+
+			if (shakeTimer > 0)
+			{
+				shake.x = (rand() % (100 - attenuation) - 50) + saveGameoverEscapePos.x;
+				shake.y = saveGameoverEscapePos.y;
+				shake.z = (rand() % (100 - attenuation) - 50) + saveGameoverEscapePos.z;
+			}
+
+			if (shakeTimer >= attenuation * 2)
+			{
+				attenuation += 1;
+				gameoverEscapeObject3d->SetPosition(shake);
+			}
+			else if (attenuation >= 6)
+			{
+				shakeTimer = 0;
+				attenuation = 0;
+				shakeTimerFlag = 0;
+				input->SetVibration(false);
+				gameoverEscapeObject3d->SetPosition(saveGameoverEscapePos);
+			}
 		}
 	}
 	else if (selectFlag && shakeTimerFlag)
 	{
-		XMFLOAT3 shake = {};
-		shakeTimer++;
-		input->SetVibration(true);
+		if (clearFlag) {
+			XMFLOAT3 shake = {};
+			shakeTimer++;
+			input->SetVibration(true);
 
-		if (shakeTimer > 0)
-		{
-			shake.x = (rand() % (100 - attenuation) - 50) + saveNextStagePos.x;
-			shake.y = saveNextStagePos.y;
-			shake.z = (rand() % (100 - attenuation) - 50) + saveNextStagePos.z;
-		}
+			if (shakeTimer > 0)
+			{
+				shake.x = (rand() % (100 - attenuation) - 50) + saveNextStagePos.x;
+				shake.y = saveNextStagePos.y;
+				shake.z = (rand() % (100 - attenuation) - 50) + saveNextStagePos.z;
+			}
 
-		if (shakeTimer >= attenuation * 2)
-		{
-			attenuation += 1;
-			nextStageObject3d->SetPosition(shake);
+			if (shakeTimer >= attenuation * 2)
+			{
+				attenuation += 1;
+				nextStageObject3d->SetPosition(shake);
+			}
+			else if (attenuation >= 6)
+			{
+				shakeTimer = 0;
+				attenuation = 0;
+				shakeTimerFlag = 0;
+				input->SetVibration(false);
+				nextStageObject3d->SetPosition(saveNextStagePos);
+			}
 		}
-		else if (attenuation >= 6)
-		{
-			shakeTimer = 0;
-			attenuation = 0;
-			shakeTimerFlag = 0;
-			input->SetVibration(false);
-			nextStageObject3d->SetPosition(saveNextStagePos);
+		if (gameOverFlag) {
+			XMFLOAT3 shake = {};
+			shakeTimer++;
+			input->SetVibration(true);
+
+			if (shakeTimer > 0)
+			{
+				shake.x = (rand() % (100 - attenuation) - 50) + saveRetryPos.x;
+				shake.y = saveRetryPos.y;
+				shake.z = (rand() % (100 - attenuation) - 50) + saveRetryPos.z;
+			}
+
+			if (shakeTimer >= attenuation * 2)
+			{
+				attenuation += 1;
+				retryObject3d->SetPosition(shake);
+			}
+			else if (attenuation >= 6)
+			{
+				shakeTimer = 0;
+				attenuation = 0;
+				shakeTimerFlag = 0;
+				input->SetVibration(false);
+				retryObject3d->SetPosition(saveRetryPos);
+			}
 		}
 	}
 }
