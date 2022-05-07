@@ -220,8 +220,10 @@ void Enemy::Attack()
 
 void Enemy::Damage(float damage)
 {
+	hpBer->HpDraw.Start();
 	//無敵時間中は処理を中断
 	if (isInvincible) { return; }
+	hpBer->HpDraw.timer = hpBer->HpDraw.interval;
 	//ダメージを受ける
 	HP -= damage;
 	//無敵時間をセットする
