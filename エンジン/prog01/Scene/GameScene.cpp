@@ -16,7 +16,6 @@
 #include "Ease.h"
 #include "ObjFactory.h"
 
-
 using namespace DirectX;
 
 int GameScene::counter;
@@ -36,7 +35,6 @@ GameScene::GameScene(int parameter) {
 	//UI生成
 	ui = std::make_unique<UserInterface>(&enemyManager->nowWave, playerObject.get(), enemyManager.get());
 	//背景セット
-
 
 	//カメラ生成
 	camera = std::make_unique<Camera>(WinApp::window_width, WinApp::window_height);
@@ -157,7 +155,6 @@ void GameScene::Update() {
 	//カメラ更新
 		//プレイヤーの少し上を焦点にする
 		//カメラ更新
-	Vector3 camEye = camera.get()->GetEye();
 	float debrisLengthMax = 0.0f;
 	for (int i = 0; i < Debris::debris.size(); i++) {
 		if (Debris::debris[i]->isFirstAttack &&
@@ -316,6 +313,8 @@ void GameScene::Draw() {
 		backSprite->Draw();
 	}
 
+	//シーン遷移用
+	sceneChange.Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
 

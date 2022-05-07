@@ -24,6 +24,8 @@
 #include "BaseScene.h"
 #include "UserInterface.h"
 
+#include "SceneChange.h"
+
 
 class CollisionManager;
 class ContactableObject;
@@ -202,6 +204,9 @@ private: // メンバ変数
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;
 
+	SceneChange sceneChange;
+	bool checkPoint;
+	//やぶなか
 	//ステージ番号
 	int nowStageNum;
 

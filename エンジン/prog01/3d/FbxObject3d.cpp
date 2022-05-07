@@ -387,7 +387,7 @@ void FbxObject3d::CreateGraphicsPipeline2()
 	if (FAILED(result)) { assert(0); }
 }
 
-std::unique_ptr<FbxObject3d> FbxObject3d::Create(FbxModel* model, bool isAnimation)
+std::unique_ptr<FbxObject3d> FbxObject3d::Create(FbxModel* model, bool isAnimation,bool isBillboard)
 {
 	// 3Dオブジェクトのインスタンスを生成
 	FbxObject3d* fbxObject3d = new FbxObject3d();
@@ -412,6 +412,8 @@ std::unique_ptr<FbxObject3d> FbxObject3d::Create(FbxModel* model, bool isAnimati
 	{
 		fbxObject3d->LoadAnimation();
 	}
+	
+	fbxObject3d->isBillboard = isBillboard;
 
 	return std::unique_ptr<FbxObject3d>(fbxObject3d);
 }
@@ -577,11 +579,26 @@ void FbxObject3d::UpdateWorldMatrix()
 	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
 	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
 
+
 	// ワールド行列の合成
-	matWorld = XMMatrixIdentity(); // 変形をリセット
-	matWorld *= matScale; // ワールド行列にスケーリングを反映
-	matWorld *= matRot; // ワールド行列に回転を反映
-	matWorld *= matTrans; // ワールド行列に平行移動を反映
+	if (isBillboard && camera)
+	{
+		const XMMATRIX &matBillboard = camera->GetBillboardMatrix();
+
+		matWorld = XMMatrixIdentity();
+		matWorld *= matScale; // ワールド行列にスケーリングを反映
+		matWorld *= matRot; // ワールド行列に回転を反映
+		matWorld *= matBillboard;
+		matWorld *= matTrans; // ワールド行列に平行移動を反映
+	}
+	else
+	{
+		matWorld = XMMatrixIdentity(); // 変形をリセット
+		matWorld *= matScale; // ワールド行列にスケーリングを反映
+		matWorld *= matRot; // ワールド行列に回転を反映
+		matWorld *= matTrans; // ワールド行列に平行移動を反映
+	}
+
 }
 
 void FbxObject3d::LoadAnimation()

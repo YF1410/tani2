@@ -9,7 +9,7 @@ EnemyManager::EnemyManager(PlayerObject *player)
 {
 	this->player = player;
 	CsvLoad(MapChip::MAP_NAME::TEST_MAP, "testSpawn");
-	CsvLoad(MapChip::MAP_NAME::Stage1, "testSpawn");
+	CsvLoad(MapChip::MAP_NAME::Stage1, "01");
 	CsvLoad(MapChip::MAP_NAME::Stage2, "testSpawn");
 	CsvLoad(MapChip::MAP_NAME::Stage3, "testSpawn");
 	CsvLoad(MapChip::MAP_NAME::Stage4, "testSpawn");
@@ -28,8 +28,8 @@ void EnemyManager::Initialize()
 	waveStartTime = 0;
 	//ここでエネミーを追加
 
-	int spawnDataSize = spawnData[MapChip::GetInstance()->nowMap]->size() / spawnData[MapChip::GetInstance()->nowMap][0].size();
-	for (int size = 0; size < spawnDataSize; size++) {
+	//int spawnDataSize = spawnData[MapChip::GetInstance()->nowMap]->size() / spawnData[MapChip::GetInstance()->nowMap][0].size();
+	for (int size = 0; size <= spawnData[MapChip::GetInstance()->nowMap]->size(); size++) {
 		for (int i = 0; i < spawnData[MapChip::GetInstance()->nowMap][size].size(); i++) {
 			waveEnemyNum[size] += spawnData[MapChip::GetInstance()->nowMap][size][i]->num;
 		}

@@ -86,6 +86,9 @@ void ModelManager::Initialize()
 	model[ENEMY_ROBO_8].get()->SetRoughness(0.1f);
 	model[ENEMY_ROBO_8].get()->TransferMaterial();
 
+	LoadModel(ENEMY_HP_FRAME, "EnemyHp"/*_break"*/);
+	LoadModel(ENEMY_HP_GAGE, "EnemyHpGage"/*_break"*/);
+
 }
 
 void ModelManager::Finalize()

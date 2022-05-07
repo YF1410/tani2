@@ -12,6 +12,8 @@
 
 #include <memory>
 
+#include "SceneChange.h"
+
 class SelectScene : public BaseScene
 {
 private: // エイリアス
@@ -41,5 +43,7 @@ public: // メンバ関数
 private: // メンバ変数
 	//スプライト
 	std::unique_ptr<Sprite> sprite;
+	SceneChange sceneChange;
+
 };
 

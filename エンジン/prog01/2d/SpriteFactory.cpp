@@ -125,7 +125,10 @@ void SpriteFactory::Initialize()
 	}
 
 	
-
+	//SceneChange
+	if (!Sprite::LoadTexture(110, L"Resources/Sprite/SceneChange/SceneChangeBox.png")) {
+		assert(0);
+	}
 
 
 }

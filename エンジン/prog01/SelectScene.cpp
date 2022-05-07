@@ -21,34 +21,36 @@ void SelectScene::Update()
 {
 	Input* input = Input::GetInstance();
 
-	if (input->TriggerPadButton(BUTTON_A))
+	if (input->TriggerPadButton(BUTTON_A) ||
+		input->TriggerKey(DIK_SPACE))
 	{
-		SceneManager::GetInstance()->ChangeScene("GameScene",1);
+		sceneChange.SceneChangeStart("GameScene",1);
 	}
 
 	if (input->TriggerKey(DIK_1)) {
-		SceneManager::GetInstance()->ChangeScene("GameScene", 1);
+		sceneChange.SceneChangeStart("GameScene", 1);
 	}
 
 	if (input->TriggerKey(DIK_2)) {
-		SceneManager::GetInstance()->ChangeScene("GameScene", 2);
+		sceneChange.SceneChangeStart("GameScene", 2);
 	}
 
 	if (input->TriggerKey(DIK_3)) {
-		SceneManager::GetInstance()->ChangeScene("GameScene", 3);
+		sceneChange.SceneChangeStart("GameScene", 3);
 	}
 
 	if (input->TriggerKey(DIK_4)) {
-		SceneManager::GetInstance()->ChangeScene("GameScene", 4);
+		sceneChange.SceneChangeStart("GameScene", 4);
 	}
 
 	if (input->TriggerKey(DIK_5)) {
-		SceneManager::GetInstance()->ChangeScene("GameScene", 5);
+		sceneChange.SceneChangeStart("GameScene", 5);
 	}
 }
 
 void SelectScene::LastUpdate()
 {
+	sceneChange.Update();
 }
 
 void SelectScene::Draw()
@@ -74,7 +76,7 @@ void SelectScene::Draw()
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
-
+	sceneChange.Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画

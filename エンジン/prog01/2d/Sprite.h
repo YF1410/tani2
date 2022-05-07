@@ -74,12 +74,19 @@ public: // メンバ関数
 	~Sprite();
 	// 初期化
 	bool Initialize();
+	//ゲッター
+	float GetRotation() { return rotation; }
+	float GetScale() { return scale; }
+
+
 	// 角度の設定
 	void SetRotation(float rotation);
 	// 座標の設定
 	void SetPosition(XMFLOAT2 position);
 	// サイズの設定
 	void SetSize(XMFLOAT2 size);
+	//スケール
+	void SetScale(float scale);
 	// カラー設定
 	void SetColor(XMFLOAT4 _color) { color = _color; }
 	// アンカーポイントの設定
@@ -108,6 +115,9 @@ private: // メンバ変数
 	XMFLOAT2 position{};
 	// スプライト幅、高さ
 	XMFLOAT2 size = { 100.0f, 100.0f };
+	XMFLOAT2 defSize = { 100.0f, 100.0f };
+	//スケール
+	float scale = 1.0f;
 	// アンカーポイント
 	XMFLOAT2 anchorpoint = { 0, 0 };
 	// ワールド行列

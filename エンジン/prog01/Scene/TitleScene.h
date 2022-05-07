@@ -11,6 +11,8 @@
 
 #include <memory>
 
+#include "SceneChange.h"
+
 class TitleScene : public BaseScene
 {
 private: // エイリアス
@@ -59,4 +61,8 @@ private: // メンバ変数
 	int attenuation = 0;
 
 	XMFLOAT3 savePos = {};
+	bool sceneChangeFlag = false;
+	SceneChange sceneChange;
+	//やぶなか
+
 };
