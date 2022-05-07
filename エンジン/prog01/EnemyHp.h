@@ -1,20 +1,19 @@
 #pragma once
 #include "GameObjCommon.h"
+#include "State.h"
 
-class EnemyHp:
+class EnemyHp :
 	public GameObjCommon
 {
-public :
-	EnemyHp(float &nowHp, float &maxHp, Vector3 &pos);
+public:
+	EnemyHp(float& nowHp, float& maxHp, Vector3& pos);
 	void Update();
 	void Draw();
-
+	STATE HpDraw;
 private:
-	float *nowHp;
-	float *maxHp;
-	Vector3 *pos_p;
+	float* nowHp;
+	float* maxHp;
+	Vector3* pos_p;
 	std::unique_ptr<GameObjCommon> gage;
-
-
 };
 

@@ -334,8 +334,8 @@
 			<Filter>エンジンシステム\3d\Particle</Filter>
 		</ClCompile>
 		<ClCompile Include="3d\ObjFactory.cpp">
+			<Filter>エンジンシステム\3d\OBJ</Filter>
 		</ClCompile>
-		<Filter>エンジンシステム\3d\OBJ</Filter>
 		<ClCompile Include="EnemyHp.cpp">
 			<Filter>ゲームシステム\Enemy\HP</Filter>
 		</ClCompile>
