@@ -11,6 +11,7 @@ void SelectScene::Initialize()
 	// ”wŒiƒXƒvƒ‰ƒCƒg¶¬
 	sprite = Sprite::Create(33, { 0.0f,0.0f });
 	sprite->SetSize({ 1280.0f,720.0f });
+	Audio::GetInstance()->LoopPlayWave(1, 0.5f);
 }
 
 void SelectScene::Finalize()

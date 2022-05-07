@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "ObjFactory.h"
 #include "Ease.h"
+#include "Audio.h"
 
 TitleScene::~TitleScene()
 {
@@ -47,6 +48,8 @@ void TitleScene::Initialize()
 	endObject3d->SetScale({ 10, 1, 5 });
 	endObject3d->SetPosition({ 30,-17,0 });
 
+	Audio::GetInstance()->LoopPlayWave(0, 0.5f);
+
 	// カメラ注視点をセット
 	camera->SetTarget({ 0, 0, 0 });
 	camera->SetEye({ 0,-10,-5 });
@@ -68,7 +71,6 @@ void TitleScene::Update()
 	{
 		if (flag)
 		{
-			//SceneManager::GetInstance()->ChangeScene("GameScene");
 			sceneChangeFlag = true;
 		}
 		else if (!flag)
@@ -90,8 +92,7 @@ void TitleScene::Update()
 			savePos = { 30,-17,0 };
 		}
 		shakeTimerFlag = true;
-		sceneChangeFlag = true;
-		//やぶなか
+		Audio::GetInstance()->PlayWave(15);
 	}
 	else if (input->TriggerDown() && !shakeTimerFlag)
 	{
@@ -106,6 +107,7 @@ void TitleScene::Update()
 			savePos = { 30,-17,0 };
 		}
 		shakeTimerFlag = true;
+		Audio::GetInstance()->PlayWave(15);
 	}
 
 	Select();

@@ -4,10 +4,10 @@
 #include "DirectXCommon.h"
 #include <DirectXMath.h>
 #include "Input.h"
+#include "Audio.h"
 #include "Sprite.h"
 #include "Object3d.h"
 #include "DebugText.h"
-#include "Audio.h"
 #include "ParticleManager.h"
 #include "Camera.h"
 #include "LightGroup.h"
@@ -219,4 +219,7 @@ private: // ƒƒ“ƒo•Ï”
 	ScreenData gameOverScreen;
 	ScreenData clearScreen;
 	std::unique_ptr<Sprite> backSprite;
+
+	//BGM‚ÌØ‚è‘Ö‚¦
+	bool isChangeBGM = false;
 };

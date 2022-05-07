@@ -107,7 +107,7 @@ void Audio::LoadWave(int soundNumber, const char* filename)
 	soundDatas.insert(std::make_pair(soundNumber, soundData));
 }
 
-void Audio::PlayWave(int soundNumber)
+void Audio::PlayWave(int soundNumber, float volume)
 {
 	SoundData& soundData = soundDatas[soundNumber];
 
@@ -116,6 +116,7 @@ void Audio::PlayWave(int soundNumber)
 	// 波形フォーマットを元にSourceVoiceの生成
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
 	result = xAudio2->CreateSourceVoice(&pSourceVoice, &soundData.wfex, 0, 2.0f, nullptr);
+	pSourceVoice->SetVolume(volume);
 	assert(SUCCEEDED(result));
 
 	// 再生する波形データの設定
@@ -124,6 +125,7 @@ void Audio::PlayWave(int soundNumber)
 	buf.pContext = soundData.pBuffer;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
 	buf.AudioBytes = soundData.dataSize;
+	
 
 	// 波形データの再生
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
@@ -133,14 +135,17 @@ void Audio::PlayWave(int soundNumber)
 	assert(SUCCEEDED(result));
 }
 
-void Audio::LoopPlayWave(int soundNumber)
+void Audio::LoopPlayWave(int soundNumber, float volume)
 {
 	SoundData& soundData = soundDatas[soundNumber];
 
 	HRESULT result;
 
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
+	
 	result = xAudio2->CreateSourceVoice(&pSourceVoice, &soundData.wfex, 0, 2.0f, nullptr);
+
+	pSourceVoice->SetVolume(volume);
 	assert(SUCCEEDED(result));
 
 	pSourceVoices.push_back(pSourceVoice);
@@ -164,9 +169,11 @@ void Audio::LoopPlayWave(int soundNumber)
 void Audio::LoopStopWave()
 {
 	HRESULT result;
-
-	result = pSourceVoices[0]->Stop();
-	result = pSourceVoices[0]->FlushSourceBuffers();
-	result = pSourceVoices[0]->SubmitSourceBuffer(&buf);
-	pSourceVoices.clear();
+	if (pSourceVoices.size() != 0)
+	{
+		result = pSourceVoices[0]->Stop();
+		result = pSourceVoices[0]->FlushSourceBuffers();
+		result = pSourceVoices[0]->SubmitSourceBuffer(&buf);
+		pSourceVoices.clear();
+	}
 }

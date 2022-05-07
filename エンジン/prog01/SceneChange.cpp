@@ -1,4 +1,5 @@
 #include "SceneChange.h"
+#include "Audio.h"
 
 
 SceneChange::SceneChange():
@@ -36,6 +37,7 @@ void SceneChange::Update()
 	}
 	if (blackBox[0][17].outEnd) {
 		outEndFlag = true;
+		Audio::GetInstance()->LoopStopWave();
 		SceneManager::GetInstance()->ChangeScene(sceneName, parameter);
 	}
 

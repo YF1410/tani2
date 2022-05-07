@@ -39,10 +39,14 @@ GameScene::GameScene(int parameter) {
 	//カメラ生成
 	camera = std::make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 
+	Audio::GetInstance()->LoopPlayWave(parameter + 1, 0.5f);
+
 	// カメラ注視点をセット
 	camera->SetTarget(Vector3(playerObject.get()->GetPos() + targetDistanceDef));
 	camera->SetEye(Vector3(playerObject.get()->GetPos() + eyeDistanceDef));
 	camera->SetUp({ 0,1,0 });
+	//フラグリセット
+	isChangeBGM = false;
 }
 
 GameScene::~GameScene() {
@@ -195,10 +199,22 @@ void GameScene::Update() {
 	if (enemyManager.get()->isEndFlag())
 	{
 		clearFlag = true;
+		if (!isChangeBGM)
+		{
+			Audio::GetInstance()->LoopStopWave();
+			Audio::GetInstance()->LoopPlayWave(9, 0.5f);
+			isChangeBGM = true;
+		}
 	}
 	else if (playerObject.get()->GetEnergy() <= 0)
 	{
 		gameOverFlag = true;
+		if (!isChangeBGM)
+		{
+			Audio::GetInstance()->LoopStopWave();
+			Audio::GetInstance()->LoopPlayWave(8, 0.5f);
+			isChangeBGM = true;
+		}
 	}
 
 	playerObject->SetEndFlag(clearFlag, gameOverFlag);
@@ -387,6 +403,7 @@ void GameScene::Select()
 			saveGameoverEscapePos = gameoverEscapePos;
 		}
 		shakeTimerFlag = true;
+		Audio::GetInstance()->PlayWave(15);
 	}
 
 	if (input->TriggerPadButton(BUTTON_A))

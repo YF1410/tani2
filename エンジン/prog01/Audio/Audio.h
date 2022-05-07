@@ -74,8 +74,8 @@ public: // メンバ関数
 	// サウンドファイルの読み込み
 	void LoadWave(int soundNumber, const char* filename);
 	// サウンドファイルの再生
-	void PlayWave(int soundNumber);
-	void LoopPlayWave(int soundNumber);
+	void PlayWave(int soundNumber, float volume = 1.0f);
+	void LoopPlayWave(int soundNumber, float volume = 1.0f);
 	void LoopStopWave();
 
 private:
