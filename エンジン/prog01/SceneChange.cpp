@@ -2,12 +2,14 @@
 
 
 SceneChange::SceneChange():
-	startFlag(false),
-	endFlag(false)
+	inEndFlag(false),
+	outEndFlag(false)
 {
+	type = FADE_IN;
 	for (int x = 0; x < 32; x++) {
 		for (int y = 0; y < 18; y++) {
 			blackBox[x][y].sprite = Sprite::Create(110, { (float)(20 + x*40),(float)(20 + y * 40 )}, { 1,1,1,1 }, { 0.5f,0.5f });
+			blackBox[x][y].offsetTimer = (31 - x + y);
 		}
 	}
 }
@@ -15,21 +17,35 @@ SceneChange::SceneChange():
 
 void SceneChange::Update()
 {
-	//if (startFlag) {
-		for (int x = 0; x < 32; x++) {
-			for (int y = 0; y < 18; y++) {
-				blackBox[x][y].spin();
+	if (type == NOT) return;
+	for (int x = 0; x < 32; x++) {
+		for (int y = 0; y < 18; y++) {
+			if (blackBox[x][y].offsetTimer <= 0) {
+				blackBox[x][y].spin(type);
 			}
-		}
-	//}
-		if (blackBox[31][17].sprite.get()->GetScale() <= 0) {
+			else {
+				blackBox[x][y].offsetTimer--;
+			}
 
 		}
+	}
+
+	//末端がtrueならそれを全体に適応
+	if (blackBox[0][17].inEnd) {
+		inEndFlag = true;
+	}
+	if (blackBox[0][17].outEnd) {
+		outEndFlag = true;
+		SceneManager::GetInstance()->ChangeScene(sceneName, parameter);
+	}
+
+
 }
 
 void SceneChange::Draw()
 {
-	//fadeが開始したら
+	if (type == NOT) return;
+
 	for (int x = 0; x < 32; x++) {
 		for (int y = 0; y < 18; y++) {
 			blackBox[x][y].sprite.get()->Draw();
@@ -39,16 +55,31 @@ void SceneChange::Draw()
 
 bool SceneChange::SceneChangeStart(const std::string &sceneName, int parameter)
 {
-	type = FADE_OUT;
-	//アニメーションが終わったら遷移
-	if (endFlag) {
-		SceneManager::GetInstance()->ChangeScene(sceneName, parameter);
+	if (type != FADE_OUT) {
+		outEndFlag = false;
+
+		for (int x = 0; x < 32; x++) {
+			for (int y = 0; y < 18; y++) {
+				blackBox[x][y].sprite.get()->SetRotation(0);
+				blackBox[x][y].sprite.get()->SetScale(0);
+			}
+		}
 	}
+	type = FADE_OUT;
+
+	this->sceneName = sceneName;
+	this->parameter = parameter;
+	isChange = true;
+	
 	return false;
 }
 
-void SceneChange::BLACK_BOX::spin()
+void SceneChange::BLACK_BOX::spin(TYPE type)
 {
+	//終了していれば処理を省略
+	if (type == FADE_IN && inEnd) return;
+	if (type == FADE_OUT && outEnd) return;
+
 	//回転
 	float rotate = sprite.get()->GetRotation();
 	rotate += 3;
@@ -56,10 +87,19 @@ void SceneChange::BLACK_BOX::spin()
 
 	//縮小
 	float scale = sprite.get()->GetScale();
-	scale -= 0.05f;
+	scale -= 0.05f * type;
 	//見えなくなったら終了
-	if (scale <= 0.0f) {
+	if (type == FADE_IN && scale <= 0.0f) {
 		scale = 0.0f;
+		inEnd = true;
+
 	}
+	else if (type == FADE_OUT && scale >= 1.0f &&
+		(int)rotate % 90 == 0) {
+		scale = 1.0f;
+		outEnd = true;
+
+	}
+
 	this->sprite.get()->SetScale(scale);
 }

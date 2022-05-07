@@ -270,10 +270,27 @@ void GameScene::Update() {
 
 	camera->CameraShake();
 
-	sceneChange.Update();
 }
 
 void GameScene::LastUpdate() {
+
+	if (enemyManager.get()->isEndFlag())
+	{
+		sceneChange.SceneChangeStart("ClearScene");
+	}
+
+	if (playerObject.get()->GetEnergy() == 0) {
+		SceneManager::GetInstance()->ChangeScene("GameOverScene");
+	}
+	if (playerObject.get()->GetEnergy() <= 0) {
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+			Input::GetInstance()->TriggerPadButton(BUTTON_A)) {
+			sceneChange.SceneChangeStart("TitleScene");
+		}
+	}
+
+	sceneChange.Update();
+
 }
 
 void GameScene::Draw() {
@@ -329,18 +346,4 @@ void GameScene::Draw() {
 #pragma endregion 前景スプライト描画
 
 
-	if (enemyManager.get()->isEndFlag())
-	{
-		SceneManager::GetInstance()->ChangeScene("ClearScene");
-	}
-
-	if (playerObject.get()->GetEnergy() == 0) {
-		SceneManager::GetInstance()->ChangeScene("GameOverScene");
-	}
-	if (playerObject.get()->GetEnergy() <= 0) {
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
-			Input::GetInstance()->TriggerPadButton(BUTTON_A)) {
-			sceneChange.SceneChangeStart("TitleScene");
-		}
-	}
 }

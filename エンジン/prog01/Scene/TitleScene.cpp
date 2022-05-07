@@ -11,6 +11,7 @@ void TitleScene::Initialize()
 	// 背景スプライト生成
 	sprite = Sprite::Create(30, { 0.0f,0.0f });
 	sprite->SetSize({ 1280.0f,720.0f });
+	sceneChange.type = SceneChange::NOT;
 }
 
 void TitleScene::Finalize()
@@ -24,12 +25,13 @@ void TitleScene::Update()
 	if (input->TriggerPadButton(BUTTON_A) ||
 		input->TriggerKey(DIK_SPACE))
 	{
-		SceneManager::GetInstance()->ChangeScene("SelectScene");
+		sceneChangeFlag = true;
 	}
 }
 
 void TitleScene::LastUpdate()
 {
+	sceneChange.Update();
 }
 
 void TitleScene::Draw()
@@ -55,8 +57,12 @@ void TitleScene::Draw()
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
-
+	sceneChange.Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画
+
+	if (sceneChangeFlag) {
+		sceneChange.SceneChangeStart("SelectScene");
+	}
 }
