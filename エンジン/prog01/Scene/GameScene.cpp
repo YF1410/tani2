@@ -354,7 +354,7 @@ void GameScene::Select()
 
 	if (input->TriggerPadButton(BUTTON_A))
 	{
-		if (selectFlag)
+		if (!selectFlag)
 		{
 			exit(1);
 		}

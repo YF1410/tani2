@@ -65,7 +65,7 @@ void TitleScene::Update()
 	{
 		if (flag)
 		{
-			SceneManager::GetInstance()->ChangeScene("GameScene");
+			SceneManager::GetInstance()->ChangeScene("SelectScene");
 		}
 		else if (!flag)
 		{
