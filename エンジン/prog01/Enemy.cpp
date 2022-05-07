@@ -18,7 +18,12 @@ Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 	) {
 	isAlive = true;
 	this->player = player;
-	maxHP = 100.0f;
+	maxHP = 1000.0f;
+	HP = maxHP;
+
+	//HPbar生成
+	hpBer = new EnemyHp(HP, maxHP,pos);
+
 
 	scale = 2.5f;
 	//当たり判定初期化
@@ -47,7 +52,6 @@ void Enemy::Initialize() {
 		40,
 		0
 	};
-	HP = maxHP;
 }
 
 void Enemy::Update() {
@@ -139,6 +143,15 @@ void Enemy::LustUpdate() {
 		HitWall(hitPos, normal.Normal());
 
 	}
+
+
+	hpBer->Update();
+}
+
+void Enemy::Draw() const
+{
+	GameObjCommon::Draw();
+	hpBer->Draw();
 }
 
 void Enemy::OnCollision(const CollisionInfo &info)
@@ -207,8 +220,10 @@ void Enemy::Attack()
 
 void Enemy::Damage(float damage)
 {
+	hpBer->HpDraw.Start();
 	//無敵時間中は処理を中断
 	if (isInvincible) { return; }
+	hpBer->HpDraw.timer = hpBer->HpDraw.interval;
 	//ダメージを受ける
 	HP -= damage;
 	//無敵時間をセットする

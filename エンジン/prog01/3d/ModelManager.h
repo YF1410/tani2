@@ -32,6 +32,8 @@ public:
 		ENEMY_ROBO_7,
 		ENEMY_ROBO_8,
 
+		ENEMY_HP_FRAME,
+		ENEMY_HP_GAGE,
 
 		//�ő吔
 		MAX

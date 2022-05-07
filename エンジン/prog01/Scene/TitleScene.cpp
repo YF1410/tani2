@@ -51,6 +51,8 @@ void TitleScene::Initialize()
 	camera->SetTarget({ 0, 0, 0 });
 	camera->SetEye({ 0,-10,-5 });
 	camera->SetUp({ 0,1,0 });
+	sceneChange.type = SceneChange::NOT;
+	//やぶなか
 }
 
 void TitleScene::Finalize()
@@ -61,11 +63,13 @@ void TitleScene::Update()
 {
 	Input* input = Input::GetInstance();
 
-	if (input->TriggerPadButton(BUTTON_A))
+	if (input->TriggerPadButton(BUTTON_A) ||
+		input->TriggerKey(DIK_SPACE))
 	{
 		if (flag)
 		{
-			SceneManager::GetInstance()->ChangeScene("SelectScene");
+			//SceneManager::GetInstance()->ChangeScene("GameScene");
+			sceneChangeFlag = true;
 		}
 		else if (!flag)
 		{
@@ -86,6 +90,8 @@ void TitleScene::Update()
 			savePos = { 30,-17,0 };
 		}
 		shakeTimerFlag = true;
+		sceneChangeFlag = true;
+		//やぶなか
 	}
 	else if (input->TriggerDown() && !shakeTimerFlag)
 	{
@@ -104,6 +110,10 @@ void TitleScene::Update()
 
 	Select();
 
+	if (sceneChangeFlag) {
+		sceneChange.SceneChangeStart("SelectScene");
+	}
+
 	titleObject3d->Update();
 	startObject3d->Update();
 	endObject3d->Update();
@@ -111,6 +121,7 @@ void TitleScene::Update()
 
 void TitleScene::LastUpdate()
 {
+	sceneChange.Update();
 }
 
 void TitleScene::Draw()
@@ -138,7 +149,7 @@ void TitleScene::Draw()
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
-
+	sceneChange.Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画

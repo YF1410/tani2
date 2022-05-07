@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+#include "WinApp.h"
 #include "Vector3.h"
 
 //サイズからスケールへと変換
@@ -38,6 +39,38 @@ static void Clamp(int *value, int min, int max)
 	{
 		*value = max;
 	}
+}
+
+
+//ワールド座標からスクリーン座標
+static XMFLOAT2 ConvertWorldToScreen() { return { 0,0 }; }
+//スクリーン座標からワールド座標
+static XMFLOAT3 ConvertScreenToWorld(
+	XMFLOAT2 *screenPos,	//スクリーン上の位置
+	float fZ,				//射影空間上のZ座標
+	XMFLOAT2 windowSize,	//ウィンドウサイズ
+	Camera *camera
+
+	) {
+	XMMATRIX InvView, InvPrj, Vp, InvViewport;
+	Vp = XMMatrixIdentity();
+	XMFLOAT4X4 mat;
+	XMStoreFloat4x4(&mat, Vp);
+	InvView = XMMatrixInverse(nullptr, camera->GetViewMatrix());
+	InvPrj = XMMatrixInverse(nullptr, camera->GetProjectionMatrix());
+	mat._11 = WinApp::window_width / 2.0f;
+	mat._22 = -WinApp::window_height / 2.0f;
+	mat._41 = WinApp::window_width / 2.0f;
+	mat._42 = WinApp::window_height / 2.0f;
+	Vp = XMLoadFloat4x4(&mat);
+	InvViewport = XMMatrixInverse(nullptr, Vp);
+
+	//逆変換
+	XMMATRIX tmp = InvViewport * InvPrj * InvView;
+	Vector3 worldPos = XMVector3TransformCoord(Vector3(screenPos->x, screenPos->y, fZ), tmp);
+
+
+	return worldPos;
 }
 
 

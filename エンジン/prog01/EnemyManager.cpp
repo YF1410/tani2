@@ -28,8 +28,8 @@ void EnemyManager::Initialize()
 	waveStartTime = 0;
 	//ここでエネミーを追加
 
-	int spawnDataSize = spawnData[MapChip::GetInstance()->nowMap]->size() / spawnData[MapChip::GetInstance()->nowMap][0].size();
-	for (int size = 0; size < spawnDataSize; size++) {
+	//int spawnDataSize = spawnData[MapChip::GetInstance()->nowMap]->size() / spawnData[MapChip::GetInstance()->nowMap][0].size();
+	for (int size = 0; size <= spawnData[MapChip::GetInstance()->nowMap]->size(); size++) {
 		for (int i = 0; i < spawnData[MapChip::GetInstance()->nowMap][size].size(); i++) {
 			waveEnemyNum[size] += spawnData[MapChip::GetInstance()->nowMap][size][i]->num;
 		}

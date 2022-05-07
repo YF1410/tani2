@@ -56,6 +56,7 @@ void UserInterface::Initialize()
 			enemyResidue[j][i].get()->SetSize({ 80 * 0.7f,80 * 0.7f });
 		}
 	}
+	//Å‘å—Ê
 	for (int j = 0; j < 3; j++) {
 		for (int i = 0; i < 10; i++) {
 			enemyWaveMax[j][i] = Sprite::Create(100 + i, { (float)(160 + j * 30),160 }, { 1,1,1,1 }, { 0.5f,0.5f });
@@ -75,11 +76,14 @@ void UserInterface::Initialize()
 
 	//Enemy
 	enemy = Sprite::Create(7, { 0, -30 }, { 1,1,1,1 }, { 0,0 });
-	enemy.get()->SetSize({ 300,300 });
+	//enemy.get()->SetSize({ 300,300 });
 
 	for (int i = 0; i < 4; i++) {
-		expGauge[i] = Sprite::Create(i + 20, { WinApp::window_width - 32,220 }, { 1,1,1,1 }, { 1.0f,0.0f });
-		expGauge[i]->SetSize({250,120});
+		//before
+		/*expGauge[i] = Sprite::Create(i + 20, { WinApp::window_width - 32,220 }, { 1,1,1,1 }, { 1.0f,0.0f });
+		expGauge[i]->SetSize({250,120});*/
+		expGauge[i] = Sprite::Create(i + 20, { WinApp::window_width - 20,220 }, { 1,1,1,1 }, { 1.0f,0.0f });
+		expGauge[i].get()->SetScale(0.25f);
 	}
 
 	//‰ñû
@@ -104,6 +108,11 @@ void UserInterface::Update()
 
 	oldWave = *nowWave;
 	if (isChangeWave) {
+		//Å‰‚Ì•\¦‚É‘Ò‹@ŠÔ‚ğ•t‚¯‚é
+		if (true) {
+
+		}
+
 		//’†‰›‚Ü‚Å
 		if (moveWaveTimer <= 1.0f) {
 			movePosX = Ease(Out, Quad, moveWaveTimer, WinApp::window_width + 256*2, WinApp::window_width / 2);

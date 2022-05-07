@@ -11,6 +11,9 @@ void ObjFactory::Initialize()
 	LoadModel("stageclear");
 	LoadModel("nextStage");
 	LoadModel("clearEscape");
+	LoadModel("gameover");
+	LoadModel("retry");
+	LoadModel("gameoverEscape");
 }
 
 void ObjFactory::Finalize()
