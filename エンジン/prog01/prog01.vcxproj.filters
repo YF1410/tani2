@@ -104,6 +104,9 @@
     <Filter Include="ゲームシステム\Besa\Scene\SceneChange">
       <UniqueIdentifier>{364dbb39-7547-4c9e-853c-03099e8d98f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ゲームシステム\Enemy\Boss">
+      <UniqueIdentifier>{944d6421-40ad-44c5-888c-6595dda3ab25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -315,7 +318,6 @@
       <Filter>ゲームシステム\Enemy\Helper</Filter>
     </ClCompile>
     <ClCompile Include="EnemyHelperManager.cpp" />
-    <ClCompile Include="BoundEnemy.cpp" />
     <ClCompile Include="DefenseEnemy.cpp" />
     <ClCompile Include="KiteEnemy.cpp" />
     <ClCompile Include="SuctionEnemy.cpp" />
@@ -338,6 +340,12 @@
     </ClCompile>
     <ClCompile Include="SceneChange.cpp">
       <Filter>ゲームシステム\Besa\Scene\SceneChange</Filter>
+    </ClCompile>
+    <ClCompile Include="ShotBoss.cpp">
+      <Filter>ゲームシステム\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundEnemy.cpp">
+      <Filter>ゲームシステム\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -533,7 +541,6 @@
       <Filter>ゲームシステム\Enemy\Helper</Filter>
     </ClInclude>
     <ClInclude Include="EnemyHelperManager.h" />
-    <ClInclude Include="BoundEnemy.h" />
     <ClInclude Include="DefenseEnemy.h" />
     <ClInclude Include="KiteEnemy.h" />
     <ClInclude Include="SuctionEnemy.h" />
@@ -556,6 +563,12 @@
     </ClInclude>
     <ClInclude Include="SceneChange.h">
       <Filter>ゲームシステム\Besa\Scene\SceneChange</Filter>
+    </ClInclude>
+    <ClInclude Include="ShotBoss.h">
+      <Filter>ゲームシステム\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundEnemy.h">
+      <Filter>ゲームシステム\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

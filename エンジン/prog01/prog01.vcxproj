@@ -339,6 +339,7 @@
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="SelectScene.cpp" />
+    <ClCompile Include="ShotBoss.cpp" />
     <ClCompile Include="StayEnemy.cpp" />
     <ClCompile Include="SuctionEnemy.cpp" />
     <ClCompile Include="UserInterface.cpp" />
@@ -417,6 +418,7 @@
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="SelectScene.h" />
+    <ClInclude Include="ShotBoss.h" />
     <ClInclude Include="SlimeMath.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StayEnemy.h" />

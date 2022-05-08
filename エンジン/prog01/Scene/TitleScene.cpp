@@ -26,6 +26,7 @@ void TitleScene::Update()
 		input->TriggerKey(DIK_SPACE))
 	{
 		sceneChangeFlag = true;
+
 	}
 }
 
@@ -57,11 +58,11 @@ void TitleScene::Draw()
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
+	//シーン遷移
 	sceneChange.Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion 前景スプライト描画
-
 	if (sceneChangeFlag) {
 		sceneChange.SceneChangeStart("SelectScene");
 	}

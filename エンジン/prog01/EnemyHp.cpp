@@ -34,10 +34,10 @@ void EnemyHp::Update()
 			HpDraw.is = false;
 		}
 
-		if (HpDraw.timer <= 60) {
+		/*if (HpDraw.timer <= 60) {
 			objectData.get()->SetAlpha((float)(HpDraw.timer / 60.0f));
 			gage.get()->GetObjectDate()->SetAlpha((float)(HpDraw.timer / 60.0f));
-		}
+		}*/
 
 		GameObjCommon::Update();
 		GameObjCommon::Adaptation();

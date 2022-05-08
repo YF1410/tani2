@@ -66,14 +66,3 @@ void BoundEnemy::OnCollision(const CollisionInfo &info)
 	pos += penalty;
 	GameObjCommon::Update();
 }
-
-void BoundEnemy::Damage(float damage)
-{
-	//無敵時間中は処理を中断
-	if (isInvincible) { return; }
-	//ダメージを受ける
-	HP -= damage;
-	//無敵時間をセットする
-	isInvincible = true;
-	InvincibleTimer = 0;
-}

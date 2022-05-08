@@ -458,7 +458,7 @@ void PlayerObject::OnCollision(const CollisionInfo &info)
 		break;
 	case ENEMY:
 		enemy = dynamic_cast<Enemy*>(info.object);
-		//エネミーが攻撃可能状態ならダメージ処理をする
+		//エネミーが攻撃可能状態で、自分が攻撃していなければダメージを負う
 		if (enemy->attack.can && !attack.is) {
 			Damage(enemy->CauseDamage());
 		}
