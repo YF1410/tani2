@@ -207,7 +207,8 @@ void PlayerObject::Update()
 			attack.can &&
 			attackCount > 0)
 		{
-			Audio::GetInstance()->PlayWave(10);
+			Audio::GetInstance()->LoopPlayWave(10);
+			boostFlag = true;
 			//UŒ‚ŠJŽn
 			attack.Start();
 
@@ -263,6 +264,12 @@ void PlayerObject::Update()
 			attackGage.Start();
 		}
 		attackGage.Intervel();
+	}
+
+	if (!attack.is && boostFlag)
+	{
+		Audio::GetInstance()->LoopStopWave(1);
+		boostFlag = false;
 	}
 
 	/*if (attackCount <= 3) {

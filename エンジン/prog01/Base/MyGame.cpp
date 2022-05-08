@@ -30,7 +30,7 @@ void MyGame::Initialize()
 	Audio::GetInstance()->LoadWave(8, "Resources/Audio/BGM/gameover_01.wav"); //ゲームオー`バー
 	Audio::GetInstance()->LoadWave(9, "Resources/Audio/BGM/clear_01.wav");    //クリア
 	//SE(10～16)
-	Audio::GetInstance()->LoadWave(10, "Resources/Audio/SE/select_01.wav");     //ブースト状態
+	Audio::GetInstance()->LoadWave(10, "Resources/Audio/SE/boost.wav");     //ブースト状態
 	Audio::GetInstance()->LoadWave(11, "Resources/Audio/SE/damage_01.wav");   //ダメージ1
 	Audio::GetInstance()->LoadWave(12, "Resources/Audio/SE/damage_02.wav");   //ダメージ2
 	Audio::GetInstance()->LoadWave(13, "Resources/Audio/SE/heal_01.wav");     //回復

@@ -18,6 +18,7 @@ Audio::~Audio()
 	{
 		delete pair.second.pBuffer;
 	}
+	pSourceVoices.clear();
 }
 
 Audio* Audio::GetInstance()
@@ -166,14 +167,14 @@ void Audio::LoopPlayWave(int soundNumber, float volume)
 	assert(SUCCEEDED(result));
 }
 
-void Audio::LoopStopWave()
+void Audio::LoopStopWave(int soundNumber)
 {
 	HRESULT result;
 	if (pSourceVoices.size() != 0)
 	{
-		result = pSourceVoices[0]->Stop();
-		result = pSourceVoices[0]->FlushSourceBuffers();
-		result = pSourceVoices[0]->SubmitSourceBuffer(&buf);
-		pSourceVoices.clear();
+		result = pSourceVoices[soundNumber]->Stop();
+		result = pSourceVoices[soundNumber]->FlushSourceBuffers();
+		result = pSourceVoices[soundNumber]->SubmitSourceBuffer(&buf);
+		pSourceVoices.erase(pSourceVoices.begin() + soundNumber);
 	}
 }
