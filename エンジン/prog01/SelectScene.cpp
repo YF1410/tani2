@@ -25,6 +25,7 @@ void SelectScene::Update()
 	if (input->TriggerPadButton(BUTTON_A) ||
 		input->TriggerKey(DIK_SPACE))
 	{
+		Audio::GetInstance()->PlayWave(16);
 		sceneChange.SceneChangeStart("GameScene",1);
 	}
 

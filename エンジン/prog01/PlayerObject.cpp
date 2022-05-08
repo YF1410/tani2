@@ -377,7 +377,7 @@ void PlayerObject::LustUpdate()
 		}
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
-		Audio::GetInstance()->PlayWave(16);
+		Audio::GetInstance()->PlayWave(17);
 	}
 	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
 
@@ -389,7 +389,7 @@ void PlayerObject::LustUpdate()
 		}
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
-		Audio::GetInstance()->PlayWave(16);
+		Audio::GetInstance()->PlayWave(17);
 	}
 
 	//Šp

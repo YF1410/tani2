@@ -409,11 +409,12 @@ void GameScene::Select()
 	if (input->TriggerPadButton(BUTTON_A))
 	{
 		if (selectFlag) {
-
+			Audio::GetInstance()->PlayWave(16);
 		}
 
 		if (!selectFlag)
 		{
+			Audio::GetInstance()->PlayWave(16);
 			exit(1);
 		}
 	}
