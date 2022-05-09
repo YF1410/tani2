@@ -253,7 +253,7 @@ void GameScene::Update() {
 }
 
 void GameScene::LastUpdate() {
-
+	//‚±‚±‚©‚ç
 
 	//‘S‚Ä‚ÌˆÚ“®ÅI“K‰žˆ—
 	playerObject.get()->Adaptation();
@@ -274,7 +274,7 @@ void GameScene::LastUpdate() {
 	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
-
+	//‚±‚±‚Ü‚Å
 
 	if (playerObject.get()->GetEnergy() <= 0) {
 		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
@@ -291,6 +291,7 @@ void GameScene::LastUpdate() {
 
 	if (playerObject.get()->GetEnergy() == 0) {
 		SceneManager::GetInstance()->ChangeScene("GameOverScene");
+
 	}
 	if (playerObject.get()->GetEnergy() <= 0) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||

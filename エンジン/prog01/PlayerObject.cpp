@@ -16,7 +16,7 @@ using namespace DirectX;
 
 PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	GameObjCommon(
-		ModelManager::SLIME,	//スライムのモデルをセット
+		ModelManager::PLAYER,	//クラゲモデルをセット
 		GameObjCommon::PLAYER,	//プレイヤーとして扱う
 		false,					//重力の影響を受ける
 		startPos,
@@ -49,13 +49,11 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, 100, 100);
 	SetNarrowCollider(toMapChipCollider);
 
-	coreUp = new GameObjCommon(ModelManager::SLIME_CORE, Notag, false, { 0,0,0 }, { 1.5f,1.5f,1.5f });
 
 }
 
 PlayerObject::~PlayerObject()
 {
-	delete coreUp;
 }
 
 
@@ -316,10 +314,6 @@ void PlayerObject::Draw() const
 {
 	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
 	Object3d::PreDraw(cmdList);
-
-	coreUp->pos = pos;
-	coreUp->Adaptation();
-	coreUp->Draw();
 
 	Object3d::PostDraw();
 
