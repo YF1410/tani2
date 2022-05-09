@@ -75,113 +75,11 @@ bool Input::Initialize(HINSTANCE hInstance, HWND hwnd)
 	}
 #pragma endregion
 #pragma region ゲームパッド
-	//初期化（一度だけ行う処理）
-	result = DirectInput8Create
-	(
-		hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinputPad, nullptr
-	);
-	if (FAILED(result))
-	{
-		assert(0);
-		return result;
-	}
 
-	// デバイスの列挙
-	if (FAILED(dinputPad->EnumDevices(DI8DEVTYPE_GAMEPAD, DeviceFindCallBack, &parameter, DIEDFL_ATTACHEDONLY)))
-	{
-		assert(0);
-		return result;
-	}
-
-	result = dinputPad->CreateDevice(GUID_Joystick, &devGamePad, NULL);
-	if (FAILED(result))
-	{
-		padFlag = false;
-	}
-
-	if (padFlag == true)
-	{
-		// デバイスのフォーマットの設定
-		result = devGamePad->SetDataFormat(&c_dfDIJoystick);
-		if (FAILED(result))
-		{
-			assert(0);
-			return result;
-		}
-
-		// 軸モードを絶対値モードとして設定
-		//ZeroMemory(&diprop, sizeof(diprop));
-		diprop.diph.dwSize = sizeof(diprop);
-		diprop.diph.dwHeaderSize = sizeof(diprop.diph);
-		diprop.diph.dwHow = DIPH_DEVICE;
-		diprop.diph.dwObj = 0;
-		diprop.dwData = DIPROPAXISMODE_ABS;	// 絶対値モードの指定(DIPROPAXISMODE_RELにしたら相対値)
-		// 軸モードを変更
-		result = devGamePad->SetProperty(DIPROP_AXISMODE, &diprop.diph);
-		if (FAILED(result))
-		{
-			assert(0);
-			return result;
-		}
-
-		// X軸の値の範囲設定
-		ZeroMemory(&diprg, sizeof(diprg));
-		diprg.diph.dwSize = sizeof(diprg);
-		diprg.diph.dwHeaderSize = sizeof(diprg.diph);
-		diprg.diph.dwHow = DIPH_BYOFFSET;
-		diprg.diph.dwObj = DIJOFS_X;
-		diprg.lMin = -1000;
-		diprg.lMax = 1000;
-		result = devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
-		if (FAILED(result))
-		{
-			assert(0);
-			return result;
-		}
-
-		// Y軸の値の範囲設定
-		diprg.diph.dwObj = DIJOFS_Y;
-		result = devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
-		if (FAILED(result))
-		{
-			assert(0);
-			return result;
-		}
-
-		// Z軸の値の範囲設定
-		diprg.diph.dwObj = DIJOFS_Z;
-		result = devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
-		if (FAILED(result))
-		{
-			assert(0);
-			return result;
-		}
-
-		// RX軸の値の範囲設定
-		diprg.diph.dwObj = DIJOFS_RX;
-		result = devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
-		if (FAILED(result))
-		{
-			assert(0);
-			return result;
-		}
-
-		// RY軸の値の範囲設定
-		diprg.diph.dwObj = DIJOFS_RY;
-		result = devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
-		if (FAILED(result))
-		{
-			assert(0);
-			return result;
-		}
-
-		result = devGamePad->SetCooperativeLevel(hwnd, DISCL_EXCLUSIVE | DISCL_FOREGROUND);
-		if (FAILED(result))
-		{
-			assert(0);
-			return result;
-		}
-	}
+	this->hInstance = hInstance;
+	this->hwnd = hwnd;
+	PadInitialize();
+	
 #pragma endregion
 
 	return true;
@@ -208,7 +106,11 @@ void Input::Update()
 	result = devMouse->GetDeviceState(sizeof(mouseState), &mouseState);
 #pragma endregion
 #pragma region ゲームパッド
-	if (padFlag == true)
+	if (!padFlag)
+	{
+		PadInitialize();
+	}
+	else if (padFlag)
 	{
 		// 制御開始
 		result = devGamePad->Acquire();
@@ -257,6 +159,120 @@ bool Input::TriggerKey(BYTE keyNumber)
 BOOL CALLBACK Input::DeviceFindCallBack(LPCDIDEVICEINSTANCE ipddi, LPVOID pvRef)
 {
 	return DIENUM_CONTINUE;
+}
+
+void Input::PadInitialize()
+{
+	HRESULT result = S_FALSE;
+
+	//初期化（一度だけ行う処理）
+	result = DirectInput8Create
+	(
+		hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinputPad, nullptr
+	);
+	if (FAILED(result))
+	{
+		assert(0);
+		return;
+	}
+
+	// デバイスの列挙
+	if (FAILED(dinputPad->EnumDevices(DI8DEVTYPE_GAMEPAD, DeviceFindCallBack, &parameter, DIEDFL_ATTACHEDONLY)))
+	{
+		assert(0);
+		return;
+	}
+
+	result = dinputPad->CreateDevice(GUID_Joystick, &devGamePad, NULL);
+	if (FAILED(result))
+	{
+		padFlag = false;
+		return;
+	}
+
+	if (padFlag == true)
+	{
+		// デバイスのフォーマットの設定
+		result = devGamePad->SetDataFormat(&c_dfDIJoystick);
+		if (FAILED(result))
+		{
+			assert(0);
+			return;
+		}
+
+		// 軸モードを絶対値モードとして設定
+		//ZeroMemory(&diprop, sizeof(diprop));
+		diprop.diph.dwSize = sizeof(diprop);
+		diprop.diph.dwHeaderSize = sizeof(diprop.diph);
+		diprop.diph.dwHow = DIPH_DEVICE;
+		diprop.diph.dwObj = 0;
+		diprop.dwData = DIPROPAXISMODE_ABS;	// 絶対値モードの指定(DIPROPAXISMODE_RELにしたら相対値)
+		// 軸モードを変更
+		result = devGamePad->SetProperty(DIPROP_AXISMODE, &diprop.diph);
+		if (FAILED(result))
+		{
+			assert(0);
+			return;
+		}
+
+		// X軸の値の範囲設定
+		ZeroMemory(&diprg, sizeof(diprg));
+		diprg.diph.dwSize = sizeof(diprg);
+		diprg.diph.dwHeaderSize = sizeof(diprg.diph);
+		diprg.diph.dwHow = DIPH_BYOFFSET;
+		diprg.diph.dwObj = DIJOFS_X;
+		diprg.lMin = -1000;
+		diprg.lMax = 1000;
+		result = devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
+		if (FAILED(result))
+		{
+			assert(0);
+			return;
+		}
+
+		// Y軸の値の範囲設定
+		diprg.diph.dwObj = DIJOFS_Y;
+		result = devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
+		if (FAILED(result))
+		{
+			assert(0);
+			return;
+		}
+
+		// Z軸の値の範囲設定
+		diprg.diph.dwObj = DIJOFS_Z;
+		result = devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
+		if (FAILED(result))
+		{
+			assert(0);
+			return;
+		}
+
+		// RX軸の値の範囲設定
+		diprg.diph.dwObj = DIJOFS_RX;
+		result = devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
+		if (FAILED(result))
+		{
+			assert(0);
+			return;
+		}
+
+		// RY軸の値の範囲設定
+		diprg.diph.dwObj = DIJOFS_RY;
+		result = devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
+		if (FAILED(result))
+		{
+			assert(0);
+			return;
+		}
+
+		result = devGamePad->SetCooperativeLevel(hwnd, DISCL_EXCLUSIVE | DISCL_FOREGROUND);
+		if (FAILED(result))
+		{
+			assert(0);
+			return;
+		}
+	}
 }
 
 bool Input::PushPadStickUp()
@@ -312,6 +328,26 @@ bool Input::TriggerUp()
 bool Input::TriggerDown()
 {
 	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_DOWN && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_DOWN)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::TriggerRight()
+{
+	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_RIGHT && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_RIGHT)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::TriggerLeft()
+{
+	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_LEFT && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_LEFT)
 	{
 		return true;
 	}
