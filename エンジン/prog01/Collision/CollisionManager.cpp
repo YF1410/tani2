@@ -29,6 +29,9 @@ void CollisionManager::CheckBroadCollisions()
 		{
 			BaseCollider *colA = *itA;
 			BaseCollider *colB = *itB;
+			
+			colA->Update();
+			colB->Update();
 
 			//自分同士の衝突や、コライダー未設定の者は無視する
 			if (itB == itA ||

@@ -252,11 +252,22 @@ void GameScene::Update() {
 	retryObject3d->Update();
 	gameoverEscapeObject3d->Update();
 
+	//パーティクル全てのアップデート
+	ParticleManager::GetInstance()->Update();
+
+	//カウンターを加算
+	counter++;
+
 	camera->CameraShake();
 }
 
-void GameScene::LastUpdate()
-{
+	
+void GameScene::LastUpdate() {
+	//全ての移動最終適応処理
+	playerObject.get()->Adaptation();
+	Debris::StaticAdaptation();
+	enemyManager.get()->Adaptation();
+	MapChip::GetInstance()->Adaptation();
 	// 全ての衝突をチェック
 	collisionManager->CheckBroadCollisions();
 	//最終更新
@@ -269,11 +280,10 @@ void GameScene::LastUpdate()
 	Debris::StaticAdaptation();
 	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
+
 	//パーティクル全てのアップデート
 	ParticleManager::GetInstance()->Update();
 	sceneChange.Update();
-	//カウンターを加算
-	counter++;
 }
 
 void GameScene::Draw() {
