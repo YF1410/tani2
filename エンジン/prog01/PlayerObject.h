@@ -126,5 +126,7 @@ private: // メンバ変数
 	XMFLOAT2 shake;
 	//動かなくするフラグ
 	bool endFlag = false;
+	//ブースト時の音がなってるか
+	bool boostFlag = false;
 };
 

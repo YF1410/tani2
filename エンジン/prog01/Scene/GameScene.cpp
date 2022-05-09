@@ -329,8 +329,6 @@ void GameScene::Draw() {
 		backSprite->Draw();
 	}
 
-	//シーン遷移用
-	sceneChange.Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
@@ -339,9 +337,6 @@ void GameScene::Draw() {
 
 
 	Object3d::PreDraw(cmdList);
-
-	//stageclearObject3d->Draw();
-	//gameoverObject3d->Draw();
 
 	//ここから下に書く
 	if (clearFlag)
@@ -358,6 +353,12 @@ void GameScene::Draw() {
 	}
 	Object3d::PostDraw();
 
+	Sprite::PreDraw(cmdList);
+	//シーン遷移用
+	sceneChange.Draw();
+	// スプライト描画後処理
+	Sprite::PostDraw();
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
 
 	/*if (enemyManager.get()->isEndFlag())
 	{
@@ -409,11 +410,18 @@ void GameScene::Select()
 	if (input->TriggerPadButton(BUTTON_A))
 	{
 		if (selectFlag) {
+			Audio::GetInstance()->PlayWave(16);
+			if (clearFlag) {
+				sceneChange.SceneChangeStart("SelectScene",nowStageNum + 1);
+			}
+			else if (gameOverFlag) {
 
+			}
 		}
 
 		if (!selectFlag)
 		{
+			Audio::GetInstance()->PlayWave(16);
 			exit(1);
 		}
 	}
@@ -626,8 +634,6 @@ void GameScene::Clear() {
 		stageclearPos = Ease(Out, ease::Bounce, eTime, startPos, endPos);
 
 		stageclearObject3d->SetPosition(stageclearPos);
-
-		selectScene.StageUnlock(nowStageNum);
 	}
 	else if (maxClearTimer <= clearTimer) {
 		OutBack();

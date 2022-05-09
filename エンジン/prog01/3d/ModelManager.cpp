@@ -17,12 +17,7 @@ ModelManager *ModelManager::GetIns()
 void ModelManager::Initialize()
 {
 
-	LoadModel(SLIME, "slime");
-	model[SLIME].get()->SetMetalness(0.2f);		
-	model[SLIME].get()->SetSpecular(0.4f);
-	model[SLIME].get()->SetRoughness(0.4f);
-	model[SLIME].get()->SetAlpha(0.8f);
-	model[SLIME].get()->TransferMaterial();
+	LoadModel(SLIME, "player");
 
 	LoadModel(TESTS_TAGE, "stage");
 	LoadModel(DEFAULT_BLOCK, "testBlock");

@@ -5,6 +5,7 @@
 #include <wrl.h>
 #include <map>
 #include <vector>
+#include <string>
 
 class Audio final
 {// オーディオ
@@ -76,7 +77,7 @@ public: // メンバ関数
 	// サウンドファイルの再生
 	void PlayWave(int soundNumber, float volume = 1.0f);
 	void LoopPlayWave(int soundNumber, float volume = 1.0f);
-	void LoopStopWave();
+	void LoopStopWave(int soundNumber = 0);
 
 private:
 	Audio();

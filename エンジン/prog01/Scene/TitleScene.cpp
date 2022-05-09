@@ -71,10 +71,12 @@ void TitleScene::Update()
 	{
 		if (flag)
 		{
+			Audio::GetInstance()->PlayWave(16);
 			sceneChangeFlag = true;
 		}
 		else if (!flag)
 		{
+			Audio::GetInstance()->PlayWave(16);
 			exit(1);
 		}
 	}

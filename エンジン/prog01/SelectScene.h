@@ -27,6 +27,7 @@ private: // エイリアス
 	using XMVECTOR = DirectX::XMVECTOR;
 
 public: // メンバ関数
+	SelectScene(int parameter);
 	// デストラクタ
 	~SelectScene();
 	// 初期化
@@ -42,7 +43,7 @@ public: // メンバ関数
 
 	void SavePosition();
 	void SelectEasing();
-	void StageUnlock(int clearStageNum);
+	void StageUnlock1(int clearStageNum);
 
 private: // メンバ変数
 	//スプライト

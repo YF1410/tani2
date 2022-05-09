@@ -25,7 +25,6 @@
 #include "UserInterface.h"
 
 #include "SceneChange.h"
-#include "SelectScene.h"
 
 
 class CollisionManager;
@@ -85,8 +84,6 @@ private:	//当たり判定系関数
 	//void PlayerToDebris();	//プレイヤーと破片
 
 private: // メンバ変数
-	SelectScene selectScene;
-
 	//カメラ
 	std::unique_ptr<Camera> camera;
 

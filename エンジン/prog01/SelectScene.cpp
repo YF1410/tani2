@@ -2,6 +2,10 @@
 #include "SceneManager.h"
 #include "Easing.h"
 
+SelectScene::SelectScene(int parameter) {
+	maxUnlockStage = parameter;
+}
+
 SelectScene::~SelectScene()
 {
 	Finalize();
@@ -38,7 +42,6 @@ void SelectScene::Initialize()
 	stage4BG->SetSize({ 1280.0f,720.0f });
 	stage5BG = Sprite::Create(115, stage5BGPos);
 	stage5BG->SetSize({ 1280.0f,720.0f });
-
 	//Audio::GetInstance()->LoopPlayWave(1, 0.5f);
 }
 
@@ -53,6 +56,7 @@ void SelectScene::Update()
 	if (input->TriggerPadButton(BUTTON_A) ||
 		input->TriggerKey(DIK_SPACE))
 	{
+		Audio::GetInstance()->PlayWave(16);
 		if (selectCount == 0) {
 			sceneChange.SceneChangeStart("GameScene", 0);
 		}
@@ -76,23 +80,23 @@ void SelectScene::Update()
 	//ステージアンロックデバッグ用
 	if (input->TriggerKey(DIK_1))
 	{
-		StageUnlock(1);
+		StageUnlock1(1);
 	}
 	if (input->TriggerKey(DIK_2))
 	{
-		StageUnlock(2);
+		StageUnlock1(2);
 	}
 	if (input->TriggerKey(DIK_3))
 	{
-		StageUnlock(3);
+		StageUnlock1(3);
 	}
 	if (input->TriggerKey(DIK_4))
 	{
-		StageUnlock(4);
+		StageUnlock1(4);
 	}
 	if (input->TriggerKey(DIK_5))
 	{
-		StageUnlock(5);
+		StageUnlock1(5);
 	}
 
 	if (input->TriggerUp() && !isSelectEase && selectCount < maxUnlockStage) {
@@ -271,9 +275,9 @@ void SelectScene::SelectEasing() {
 	}
 }
 
-void SelectScene::StageUnlock(int clearStageNum)
+void SelectScene::StageUnlock1(int clearStageNum)
 {
-	if (clearStageNum > maxUnlockStage) {
-		maxUnlockStage++;
+	if (clearStageNum >= maxUnlockStage) {
+		maxUnlockStage = clearStageNum + 1;
 	}
 }
