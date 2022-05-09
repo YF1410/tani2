@@ -130,5 +130,7 @@ private: // メンバ変数
 	//angleを保存
 	float saveAngle = 0.0f;
 	bool saveAngleFlag = false;
+	//リセットフラグ
+	bool resetFlag = false;
 };
 

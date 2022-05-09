@@ -170,7 +170,7 @@ void Audio::LoopPlayWave(int soundNumber, float volume)
 void Audio::LoopStopWave(int soundNumber)
 {
 	HRESULT result;
-	if (pSourceVoices.size() != 0)
+	if (pSourceVoices.size() != 0 && pSourceVoices.size() >= soundNumber + 1)
 	{
 		result = pSourceVoices[soundNumber]->Stop();
 		result = pSourceVoices[soundNumber]->FlushSourceBuffers();

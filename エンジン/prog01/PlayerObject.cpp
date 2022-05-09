@@ -212,7 +212,7 @@ void PlayerObject::Update()
 		else if (saveAngleFlag)
 		{
 			saveAngle = input->PadStickAngle() + 90;
-			rotate.y = input->PadStickAngle() + 90;	
+			rotate.y = input->PadStickAngle() + 90;
 		}
 		//rotate.x = 90;
 
@@ -220,12 +220,12 @@ void PlayerObject::Update()
 		/*if ((input->TriggerPadButton(BUTTON_A)) &&
 			attack.can &&
 			attackCount > 0)*/
-		//自爆(デバッグ用やぶなか
+			//自爆(デバッグ用やぶなか
 		if (((input->TriggerPadButton(BUTTON_A)) || input->TriggerKey(DIK_SPACE)) &&
 			attack.can &&
 			attackCount > 0 && !boostFlag)
 		{
-			Audio::GetInstance()->LoopPlayWave(10,5);
+			Audio::GetInstance()->LoopPlayWave(10, 5);
 			boostFlag = true;
 			//攻撃開始
 			attack.Start();
@@ -273,6 +273,15 @@ void PlayerObject::Update()
 				}
 				dontRecovery = true;
 			}
+		}
+	}
+	else if (endFlag)
+	{
+		if (!resetFlag)
+		{
+			Audio::GetInstance()->LoopStopWave(0);
+			input->GetInstance()->SetVibration(false);
+			resetFlag = true;
 		}
 	}
 
@@ -546,7 +555,7 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 		if (!attack.is) {
 			penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.02f;
 		}
-		else if(enemy->isBounce){
+		else if (enemy->isBounce) {
 			Vector3 nextPos = info.inter + Vector3(pos - info.object->pos).Normal() * (broadSphereCollider->GetRadius() /*+ enemy->pushBackCollider->GetRadius()*/);
 			nextPos.y = 0;
 			velocity = CalcReflectVector(velocity, Vector3(pos - enemy->pos).Normal());
