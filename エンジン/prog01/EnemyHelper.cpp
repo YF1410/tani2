@@ -3,7 +3,7 @@
 EnemyHelper::EnemyHelper(Vector3 startPos, Vector3 startVec, Vector3 *targetPos, ModelManager::ModelName modelName):
 	GameObjCommon(
 		modelName,
-		GameObjCommon::ENEMY,
+		GameObjCommon::BULLET,
 		false,
 		startPos,
 		{ 1,1,1 },

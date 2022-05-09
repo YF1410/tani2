@@ -39,13 +39,14 @@ public:		//当たり判定関係
 	//State
 	bool isInvincible;		//無敵状態か
 
+	//プレイヤーが跳ね返るか否か
+	bool isBounce;
 
 	bool isAlive;
 
 
 	//コライダー
 	SphereCollider *broadSphereCollider;	//予測用コライダー
-	SphereCollider *pushBackCollider;		//厳密なコライダー（現状未使用）
 	Box2DCollider *toMapChipCollider;		//マップチップ用コライダー
 
 protected: // メンバ変数
@@ -61,6 +62,8 @@ protected: // メンバ変数
 	//移動系
 	float moveSpeed = 5.0f;			//移動量
 	float maxMoveSpeed = 15.0f;		//最大移動量
+	//通常時の大きさ
+	float defScale;
 
 	//体力
 	float maxHP;		//最大HP
@@ -82,4 +85,6 @@ protected: // メンバ変数
 		const XMVECTOR &hitPos,		//衝突位置
 		const Vector3 &normal);
 
+	virtual void HitPlayer(const CollisionInfo &info);
+	virtual void HitDebri(const CollisionInfo &info);
 };

@@ -31,6 +31,6 @@ void EscapeEnemy::Attack()
 {
 	if (attack.can) {
 		attack.Start();
-		EnemyHelperManager::enemyHelpers.push_back(new EnemyBullet(pos, Vector3(player->GetPos() - pos).Normal() * 15,&pos, ModelManager::ModelName::SLIME));
+		EnemyHelperManager::enemyHelpers.push_back(new EnemyBullet(pos, Vector3(player->GetPos() - pos).Normal() * 15, ModelManager::ModelName::SLIME));
 	}
 }

@@ -317,7 +317,6 @@
     <ClCompile Include="EnemyBullet.cpp">
       <Filter>ゲームシステム\Enemy\Helper</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyHelperManager.cpp" />
     <ClCompile Include="DefenseEnemy.cpp" />
     <ClCompile Include="KiteEnemy.cpp" />
     <ClCompile Include="SuctionEnemy.cpp" />
@@ -346,6 +345,9 @@
     </ClCompile>
     <ClCompile Include="BoundEnemy.cpp">
       <Filter>ゲームシステム\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyHelperManager.cpp">
+      <Filter>ゲームシステム\Enemy\Helper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -540,7 +542,6 @@
     <ClInclude Include="EnemyBullet.h">
       <Filter>ゲームシステム\Enemy\Helper</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyHelperManager.h" />
     <ClInclude Include="DefenseEnemy.h" />
     <ClInclude Include="KiteEnemy.h" />
     <ClInclude Include="SuctionEnemy.h" />
@@ -569,6 +570,9 @@
     </ClInclude>
     <ClInclude Include="BoundEnemy.h">
       <Filter>ゲームシステム\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyHelperManager.h">
+      <Filter>ゲームシステム\Enemy\Helper</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

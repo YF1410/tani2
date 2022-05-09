@@ -6,7 +6,7 @@ EnemyHp::EnemyHp(float &nowHp, float &maxHp, Vector3 &pos):
 	pos_p = &pos;
 	this->nowHp = &nowHp;
 	this->maxHp = &maxHp;
-	gage = std::make_unique<GameObjCommon>(ModelManager::ENEMY_HP_GAGE, Notag, false, Vector3{0,0,0}, Vector3{ 1,1,1 }, Vector3{ 0,0,0 }, false, true);
+	gage = std::make_unique<GameObjCommon>(ModelManager::ENEMY_HP_GAGE, Notag, false, Vector3{0,0,0}, Vector3{ 1,1,1 }, Vector3{ 0,0,0 }, false,true);
 	HpDraw = {
 		true,
 		false,

@@ -90,7 +90,6 @@ private: // ƒƒ“ƒo•Ï”
 
 
 	std::unique_ptr<Model> modelPlane;
-	std::vector<std::unique_ptr<Object3d>> objects;
 
 	int frame = 0;
 	bool frameF = false;

@@ -16,6 +16,8 @@
 #include "SuctionEnemy.h"
 #include "GetawayEnemy.h"
 #include "RouteMoveEnemy.h"
+#include "ShotBoss.h"
+
 #include "MapChip.h"
 
 class EnemyManager
@@ -49,6 +51,7 @@ public:
 		SUCTION,
 		GETAWAY,
 		ROUTEMOVE,
+		Boss,
 		MAX
 	};
 
@@ -67,11 +70,11 @@ public:
 		}
 	};
 
-	static const int MAX_WAVE = 3;
-	int waveEnemyNum[MAX_WAVE + 1];
+	int MAX_WAVE[MapChip::MAP_NAME::MAX];
+	int waveEnemyNum[10];
 private:
 	//スポーンデータ
-	std::vector<SPAWN_DATA*> spawnData[MapChip::MAP_NAME::MAX][MAX_WAVE + 1];
+	std::vector<SPAWN_DATA*> spawnData[MapChip::MAP_NAME::MAX][10];
 	//プレイヤーポインタ
 	PlayerObject *player;
 

@@ -21,7 +21,8 @@ void ClearScene::Update()
 {
 	Input* input = Input::GetInstance();
 
-	if (input->TriggerPadButton(BUTTON_B))
+	if (input->TriggerPadButton(BUTTON_B)&&
+		input->TriggerKey(DIK_SPACE))
 	{
 		SceneManager::GetInstance()->ChangeScene("TitleScene");
 	}
@@ -52,6 +53,7 @@ void ClearScene::Draw()
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
 #pragma region 前景スプライト描画
+
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
 

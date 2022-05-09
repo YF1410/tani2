@@ -25,6 +25,15 @@ void EnemyHelperManager::Update()
 	}
 }
 
+void EnemyHelperManager::LustUpdate()
+{
+
+	//XV
+	for (int i = 0; i < enemyHelpers.size(); i++) {
+		enemyHelpers[i]->LustUpdate();
+	}
+}
+
 void EnemyHelperManager::Draw() const
 {
 	for (int i = 0; i < enemyHelpers.size(); i++) {

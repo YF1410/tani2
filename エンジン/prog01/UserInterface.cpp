@@ -231,11 +231,11 @@ void UserInterface::Draw() const
 	Sprite::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 	waveText.get()->Draw();
 	waveNum[*nowWave + 1].get()->Draw();
-	waveMaxNum[enemys->MAX_WAVE].get()->Draw();
+	waveMaxNum[enemys->MAX_WAVE[MapChip::GetInstance()->nowMap]].get()->Draw();
 
 	moveWave.get()->Draw();
 	moveWaveNum[*nowWave + 1].get()->Draw();
-	moveWaveMaxNum[enemys->MAX_WAVE].get()->Draw();
+	moveWaveMaxNum[enemys->MAX_WAVE[MapChip::GetInstance()->nowMap]].get()->Draw();
 	playerHp.get()->Draw();
 	enemy.get()->Draw();
 	//“G‚Ìc”
