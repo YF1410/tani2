@@ -122,13 +122,6 @@ private: // ƒƒ“ƒo•Ï”
 	int healFrame = 3;
 	int boomFrame = 2;
 
-	int weveStartTimer = 0;
-	float upTimer = 0.0f;
-	bool changeFlag = false;
-	bool endFlag = false;
-	bool showingFlag = false;
-	bool flag = false;
-
 	bool saveCount = 0;
 
 	bool shakeTimerFlag = false;
