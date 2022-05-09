@@ -16,6 +16,7 @@ ModelManager *ModelManager::GetIns()
 
 void ModelManager::Initialize()
 {
+	LoadModel(PLAYER, "player");
 
 	LoadModel(SLIME, "player");
 

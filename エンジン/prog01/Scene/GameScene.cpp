@@ -263,6 +263,8 @@ void GameScene::Update() {
 
 	
 void GameScene::LastUpdate() {
+	//ここから
+
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
 	Debris::StaticAdaptation();
@@ -280,7 +282,7 @@ void GameScene::LastUpdate() {
 	Debris::StaticAdaptation();
 	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
-
+	//ここまで
 	//パーティクル全てのアップデート
 	ParticleManager::GetInstance()->Update();
 	sceneChange.Update();

@@ -17,6 +17,7 @@ public:
 		DEFAULT_BLOCK,
 		CHECK_BLOCK,
 		
+		PLAYER,
 
 		SLIME,
 		SLIME_BREAK,
