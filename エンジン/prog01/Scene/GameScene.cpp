@@ -39,7 +39,7 @@ GameScene::GameScene(int parameter) {
 	//カメラ生成
 	camera = std::make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 
-	Audio::GetInstance()->LoopPlayWave(parameter + 1, 0.5f);
+	Audio::GetInstance()->LoopPlayWave(parameter + 2, 0.5f);
 
 	// カメラ注視点をセット
 	camera->SetTarget(Vector3(playerObject.get()->GetPos() + targetDistanceDef));
