@@ -207,7 +207,7 @@ void PlayerObject::Update()
 			attack.can &&
 			attackCount > 0)
 		{
-			Audio::GetInstance()->LoopPlayWave(10);
+			Audio::GetInstance()->LoopPlayWave(10,5);
 			boostFlag = true;
 			//UŒ‚ŠJn
 			attack.Start();
