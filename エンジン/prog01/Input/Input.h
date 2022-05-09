@@ -82,6 +82,8 @@ public: //メンバ関数
 
 	//ゲームパッドのキーの押下をチェック
 	bool PushPadButton(PadKey keyNumber);
+	//ゲームパッドのキーの押下をチェック
+	bool LongPushPadButton(PadKey keyNumber);
 	// キーのトリガーをチェック
 	bool TriggerPadButton(PadKey keyNumber);
 	//振動のフラグ設定

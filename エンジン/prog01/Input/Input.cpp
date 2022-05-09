@@ -409,6 +409,17 @@ bool Input::PushPadButton(PadKey keyNumber)
 	return false;
 }
 
+bool Input::LongPushPadButton(PadKey keyNumber)
+{
+	// ‘O‰ñ‚ª1‚ÅA¡‰ñ‚ª1‚¾‚Á‚½‚ç’·‰Ÿ‚µ
+	if (padDataPre.rgbButtons[keyNumber] && padData.rgbButtons[keyNumber])
+	{
+		return true;
+	}
+
+	return false;
+}
+
 bool Input::TriggerPadButton(PadKey keyNumber)
 {
 
