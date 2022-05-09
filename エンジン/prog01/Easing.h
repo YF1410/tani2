@@ -28,3 +28,4 @@ namespace EasingFunction
 
 double Ease(type Type, ease Ease, double t, double start,double end);
 Vector3 Ease(type Type, ease Ease, double t, Vector3 start, Vector3 end);
+XMFLOAT2 Ease(type Type, ease Ease, double t, XMFLOAT2 start, XMFLOAT2 end);

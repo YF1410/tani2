@@ -130,6 +130,23 @@ void SpriteFactory::Initialize()
 		assert(0);
 	}
 
+	//SelectScene‚Ì”wŒi
+	if (!Sprite::LoadTexture(111, L"Resources/Sprite/SelectSceneBG/stage1.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(112, L"Resources/Sprite/SelectSceneBG/stage2.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(113, L"Resources/Sprite/SelectSceneBG/stage3.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(114, L"Resources/Sprite/SelectSceneBG/stage4.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(115, L"Resources/Sprite/SelectSceneBG/stage5.png")) {
+		assert(0);
+	}
+
 
 }
 

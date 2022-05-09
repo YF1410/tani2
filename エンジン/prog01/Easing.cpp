@@ -106,3 +106,12 @@ Vector3 Ease(type InOutType, ease EaseType, double t, Vector3 start, Vector3 end
 
     return result;
 }
+
+XMFLOAT2 Ease(type InOutType, ease EaseType, double t, XMFLOAT2 start, XMFLOAT2 end) {
+    XMFLOAT2 result;
+
+    result.x = Ease(InOutType, EaseType, t, start.x, end.x);
+    result.y = Ease(InOutType, EaseType, t, start.y, end.y);
+
+    return result;
+}

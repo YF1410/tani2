@@ -626,6 +626,8 @@ void GameScene::Clear() {
 		stageclearPos = Ease(Out, ease::Bounce, eTime, startPos, endPos);
 
 		stageclearObject3d->SetPosition(stageclearPos);
+
+		selectScene.StageUnlock(nowStageNum);
 	}
 	else if (maxClearTimer <= clearTimer) {
 		OutBack();
