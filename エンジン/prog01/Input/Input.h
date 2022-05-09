@@ -59,6 +59,8 @@ public: //メンバ関数
 
 	static BOOL CALLBACK DeviceFindCallBack(LPCDIDEVICEINSTANCE ipddi, LPVOID pvRef);
 
+	void PadInitialize();
+
 	//ゲームパッドのスティック
 	bool PushPadStickUp();
 	bool PushPadStickDown();
@@ -67,6 +69,8 @@ public: //メンバ関数
 
 	bool TriggerUp();
 	bool TriggerDown();
+	bool TriggerRight();
+	bool TriggerLeft();
 
 	XMFLOAT2& PadStickGradient(const float &deadzone = 0.2f);
 	double PadStickAngle();
@@ -143,4 +147,8 @@ private: //メンバ変数
 	ComPtr<IDirectInputDevice8> devMouse;
 	DIMOUSESTATE2 mouseState = {};
 	DIMOUSESTATE2 mouseStatePre = {};
+
+	//接続
+	HINSTANCE hInstance;
+	HWND hwnd;
 };
