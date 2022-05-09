@@ -98,7 +98,7 @@ void PlayerObject::Initialize()
 	};
 
 	//アニメーション開始
-	//objectData->PlayAnimation();
+	objectData->PlayAnimation();
 
 	// パーティクルマネージャ生成
 	healParticle1 = healParticle1->Create(L"heal1");
@@ -184,7 +184,6 @@ void PlayerObject::Update()
 		}
 		else {
 			velocity.x += input->PadStickGradient().x * moveSpead;
-			rotate.y = input->PadStickAngle();
 		}
 		if (input->PushKey(DIK_W)) {
 			velocity.z += moveSpead;
@@ -194,9 +193,28 @@ void PlayerObject::Update()
 		}
 		else {
 			velocity.z += -input->PadStickGradient().y * moveSpead;
-			rotate.y = input->PadStickAngle();
 		}
 
+		if (!input->PushPadStickDown() && !input->PushPadStickLeft() &&
+			!input->PushPadStickRight() && !input->PushPadStickUp())
+		{
+			saveAngleFlag = false;
+		}
+		else
+		{
+			saveAngleFlag = true;
+		}
+
+		if (!saveAngleFlag)
+		{
+			rotate.y = saveAngle;
+		}
+		else if (saveAngleFlag)
+		{
+			saveAngle = input->PadStickAngle() + 90;
+			rotate.y = input->PadStickAngle() + 90;	
+		}
+		//rotate.x = 90;
 
 		//自爆(before
 		/*if ((input->TriggerPadButton(BUTTON_A)) &&

@@ -127,5 +127,8 @@ private: // メンバ変数
 	bool endFlag = false;
 	//ブースト時の音がなってるか
 	bool boostFlag = false;
+	//angleを保存
+	float saveAngle = 0.0f;
+	bool saveAngleFlag = false;
 };
 
