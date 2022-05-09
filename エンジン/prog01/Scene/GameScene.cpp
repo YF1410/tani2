@@ -239,9 +239,30 @@ void GameScene::Update() {
 
 	float contact_pos = 0.0f;
 
+	
+	
+	//パーティクル全てのアップデート
+	ParticleManager::GetInstance()->Update();
+
+	//カウンターを加算
+	counter++;
+
+	camera->CameraShake();
+
+
+}
+
+void GameScene::LastUpdate() {
+
+
+	//全ての移動最終適応処理
+	playerObject.get()->Adaptation();
+	Debris::StaticAdaptation();
+	enemyManager.get()->Adaptation();
+	MapChip::GetInstance()->Adaptation();
+
 	// 全ての衝突をチェック
 	collisionManager->CheckBroadCollisions();
-
 	//最終更新
 	ui.get()->Update();
 	enemyManager.get()->FinalUpdate();
@@ -253,24 +274,15 @@ void GameScene::Update() {
 	enemyManager.get()->Adaptation();
 	MapChip::GetInstance()->Adaptation();
 
+
+
 	if (playerObject.get()->GetEnergy() <= 0) {
 		DebugText::GetInstance()->Print("Game Over", 0, 240, 5);
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE)||
-			Input::GetInstance()->TriggerPadButton(BUTTON_A)){
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+			Input::GetInstance()->TriggerPadButton(BUTTON_A)) {
 
 		}
 	}
-	//パーティクル全てのアップデート
-	ParticleManager::GetInstance()->Update();
-
-	//カウンターを加算
-	counter++;
-
-	camera->CameraShake();
-
-}
-
-void GameScene::LastUpdate() {
 
 	if (enemyManager.get()->isEndFlag())
 	{
