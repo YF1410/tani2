@@ -349,6 +349,8 @@
     <ClCompile Include="EnemyHelperManager.cpp">
       <Filter>ゲームシステム\Enemy\Helper</Filter>
     </ClCompile>
+    <ClCompile Include="3d\ObjFactory.cpp" />
+    <ClCompile Include="ClearConfirmation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -574,5 +576,7 @@
     <ClInclude Include="EnemyHelperManager.h">
       <Filter>ゲームシステム\Enemy\Helper</Filter>
     </ClInclude>
+    <ClInclude Include="3d\ObjFactory.h" />
+    <ClInclude Include="ClearConfirmation.h" />
   </ItemGroup>
 </Project>

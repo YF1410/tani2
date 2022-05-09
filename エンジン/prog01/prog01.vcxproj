@@ -300,6 +300,7 @@
     <ClCompile Include="Box2DCollider.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="CheckBlock.cpp" />
+    <ClCompile Include="ClearConfirmation.cpp" />
     <ClCompile Include="Collision\Collision.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
     </ClCompile>
@@ -378,6 +379,7 @@
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="CheckBlock.h" />
     <ClInclude Include="CircleShadow.h" />
+    <ClInclude Include="ClearConfirmation.h" />
     <ClInclude Include="Collision\BaseCollider.h" />
     <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Collision\CollisionAttribute.h" />
