@@ -70,12 +70,11 @@ void SelectScene::Update()
 {
 	Input* input = Input::GetInstance();
 
-	if (isUnlockStage) {
+	if (isUnlockStage && sceneChange.inEndFlag) {
 		UnlockStage(maxUnlockStage);
 	}
 
-	if (input->TriggerPadButton(BUTTON_A) ||
-		input->TriggerKey(DIK_SPACE))
+	if (input->TriggerPadButton(BUTTON_A)&& !isUnlockStage && !nowSceneChange)
 	{
 		Audio::GetInstance()->PlayWave(16);
 		if (selectCount == 0) {
@@ -97,6 +96,7 @@ void SelectScene::Update()
 			sceneChange.SceneChangeStart("GameScene", 5);
 		}
 
+		nowSceneChange = true;
 		/*if (selectCount <= maxUnlockStage) {
 			if (selectCount == 0) {
 				sceneChange.SceneChangeStart("GameScene", 0);
@@ -284,6 +284,12 @@ void SelectScene::SelectEasing() {
 	stage3->SetPosition(stage3Pos);
 	stage4->SetPosition(stage4Pos);
 	stage5->SetPosition(stage5Pos);
+
+	stage1Lock->SetPosition(stage1Pos);
+	stage2Lock->SetPosition(stage2Pos);
+	stage3Lock->SetPosition(stage3Pos);
+	stage4Lock->SetPosition(stage4Pos);
+	stage5Lock->SetPosition(stage5Pos);
 
 	tutorialBG->SetPosition(tutorialBGPos);
 	stage1BG->SetPosition(stage1BGPos);

@@ -103,8 +103,8 @@ void PlayerObject::Initialize()
 	//objectData->PlayAnimation();
 
 	// パーティクルマネージャ生成
-	healParticle1 = healParticle1->Create(L"heal3");
-	healParticle2 = healParticle2->Create(L"heal4");
+	healParticle1 = healParticle1->Create(L"heal1");
+	healParticle2 = healParticle2->Create(L"heal2");
 	healParticle1->SetStartScale(300.0f);
 	healParticle2->SetStartScale(300.0f);
 	healParticle1->SetCenter(500.0f);

@@ -130,5 +130,7 @@ private: // ƒƒ“ƒo•Ï”
 	int unlockEaseTimer = 0;
 	int maxUnlockEaseTimer = 60;
 	bool isUnlockStage = false;
+
+	bool nowSceneChange = false;
 };
 
