@@ -64,11 +64,6 @@ void ClearScene::Update()
 	stageclearObject3d->Update();
 	nextStageObject3d->Update();
 	clearEscapeObject3d->Update();
-	if (input->TriggerPadButton(BUTTON_B)&&
-		input->TriggerKey(DIK_SPACE))
-	{
-		SceneManager::GetInstance()->ChangeScene("TitleScene");
-	}
 }
 
 void ClearScene::LastUpdate()
@@ -116,7 +111,7 @@ void ClearScene::Bounce() {
 	if (maxBounceTimer <= bounceTimer) {
 		OutBack();
 	}
-	
+
 	XMFLOAT3 pos = stageclearObject3d->GetPosition();
 
 	float eTime = (float)(bounceTimer / static_cast<double>(maxBounceTimer));

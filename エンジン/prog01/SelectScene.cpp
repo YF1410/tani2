@@ -132,12 +132,12 @@ void SelectScene::Update()
 		SavePosition();
 	}
 
-	/*if (input->TriggerKey(DIK_1)) {
-		maxUnlockStage = 1;
-	}
-	if (input->TriggerKey(DIK_2)) {
-		isUnlockStage = true;
-	}*/
+	//if (input->TriggerKey(DIK_1)) {
+	//	maxUnlockStage = 1;
+	//}
+	//if (input->TriggerKey(DIK_2)) {
+	//	isUnlockStage = true;
+	//}
 
 	if (isSelectEase) {
 		SelectEasing();
@@ -184,11 +184,21 @@ void SelectScene::Draw()
 	stage3->Draw();
 	stage4->Draw();
 	stage5->Draw();
-	stage1Lock->Draw();
-	stage2Lock->Draw();
-	stage3Lock->Draw();
-	stage4Lock->Draw();
-	stage5Lock->Draw();
+	if (maxUnlockStage < 2) {
+		stage1Lock->Draw();
+	}
+	if (maxUnlockStage < 3) {
+		stage2Lock->Draw();
+	}
+	if (maxUnlockStage < 4) {
+		stage3Lock->Draw();
+	}
+	if (maxUnlockStage < 5) {
+		stage4Lock->Draw();
+	}
+	if (maxUnlockStage < 6) {
+		stage5Lock->Draw();
+	}
 	sceneChange.Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
