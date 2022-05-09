@@ -205,7 +205,7 @@ void PlayerObject::Update()
 		//自爆(デバッグ用やぶなか
 		if (((input->TriggerPadButton(BUTTON_A)) || input->TriggerKey(DIK_SPACE)) &&
 			attack.can &&
-			attackCount > 0)
+			attackCount > 0 && !boostFlag)
 		{
 			Audio::GetInstance()->LoopPlayWave(10,5);
 			boostFlag = true;
