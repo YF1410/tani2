@@ -48,7 +48,7 @@ void SelectScene::Initialize()
 	stage5BG = Sprite::Create(115, stage5BGPos);
 	stage5BG->SetSize({ 1280.0f,720.0f });
 
-	stage1Lock = Sprite::Create(110, tutorialPos, color, anchorPoint);
+	stage1Lock = Sprite::Create(110, stage1Pos, color, anchorPoint);
 	stage1Lock->SetSize(stage1LockSize);
 	stage2Lock = Sprite::Create(110, stage2Pos, color, anchorPoint);
 	stage2Lock->SetSize(stage2LockSize);
