@@ -189,6 +189,7 @@ void Input::PadInitialize()
 		padFlag = false;
 		return;
 	}
+	padFlag = true;
 
 	if (padFlag == true)
 	{
