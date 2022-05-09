@@ -146,8 +146,25 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(115, L"Resources/Sprite/SelectSceneBG/stage5.png")) {
 		assert(0);
 	}
-
-
+	//SelectSceneÇÃêîéö
+	if (!Sprite::LoadTexture(116, L"Resources/Sprite/SelectSceneNum/00.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(117, L"Resources/Sprite/SelectSceneNum/01.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(118, L"Resources/Sprite/SelectSceneNum/02.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(119, L"Resources/Sprite/SelectSceneNum/03.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(120, L"Resources/Sprite/SelectSceneNum/04.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(121, L"Resources/Sprite/SelectSceneNum/05.png")) {
+		assert(0);
+	}
 }
 
 SpriteFactory* SpriteFactory::GetInstance()

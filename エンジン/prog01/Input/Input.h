@@ -67,6 +67,8 @@ public: //ƒƒ“ƒoŠÖ”
 
 	bool TriggerUp();
 	bool TriggerDown();
+	bool TriggerRight();
+	bool TriggerLeft();
 
 	XMFLOAT2& PadStickGradient(const float &deadzone = 0.2f);
 	double PadStickAngle();

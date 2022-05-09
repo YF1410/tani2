@@ -413,6 +413,7 @@ void GameScene::Select()
 			Audio::GetInstance()->PlayWave(16);
 			if (clearFlag) {
 				sceneChange.SceneChangeStart("SelectScene",nowStageNum + 1);
+				//sceneChange.SceneChangeStart("GameScene", nowStageNum + 1);
 			}
 			else if (gameOverFlag) {
 

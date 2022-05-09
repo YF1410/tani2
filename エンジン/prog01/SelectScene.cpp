@@ -3,7 +3,11 @@
 #include "Easing.h"
 
 SelectScene::SelectScene(int parameter) {
-	maxUnlockStage = parameter;
+	if (maxUnlockStage < parameter) {
+		maxUnlockStage = parameter;
+		isUnlockStage = true;
+	}
+	selectCount = parameter;
 }
 
 SelectScene::~SelectScene()
@@ -13,22 +17,23 @@ SelectScene::~SelectScene()
 
 void SelectScene::Initialize()
 {
+	InitializePosSize(selectCount);
 	// 背景スプライト生成
 	sprite = Sprite::Create(33, { 0.0f,0.0f });
 	sprite->SetSize({ 1280.0f,720.0f });
 
-	tutorial = Sprite::Create(100, tutorialPos, color, anchorPoint);
-	tutorial->SetSize(selectSize);
-	stage1 = Sprite::Create(101, stage1Pos, color, anchorPoint);
-	stage1->SetSize(defaultSize);
-	stage2 = Sprite::Create(102, stage2Pos, color, anchorPoint);
-	stage2->SetSize(defaultSize);
-	stage3 = Sprite::Create(103, stage3Pos, color, anchorPoint);
-	stage3->SetSize(defaultSize);
-	stage4 = Sprite::Create(104, stage4Pos, color, anchorPoint);
-	stage4->SetSize(defaultSize);
-	stage5 = Sprite::Create(105, stage5Pos, color, anchorPoint);
-	stage5->SetSize(defaultSize);
+	tutorial = Sprite::Create(116, tutorialPos, color, anchorPoint);
+	tutorial->SetSize(tutorialSize);
+	stage1 = Sprite::Create(117, stage1Pos, color, anchorPoint);
+	stage1->SetSize(stage1Size);
+	stage2 = Sprite::Create(118, stage2Pos, color, anchorPoint);
+	stage2->SetSize(stage2Size);
+	stage3 = Sprite::Create(119, stage3Pos, color, anchorPoint);
+	stage3->SetSize(stage3Size);
+	stage4 = Sprite::Create(120, stage4Pos, color, anchorPoint);
+	stage4->SetSize(stage4Size);
+	stage5 = Sprite::Create(121, stage5Pos, color, anchorPoint);
+	stage5->SetSize(stage5Size);
 
 	tutorialBG = Sprite::Create(111, tutorialBGPos);
 	tutorialBG->SetSize({ 1280.0f,720.0f });
@@ -42,7 +47,19 @@ void SelectScene::Initialize()
 	stage4BG->SetSize({ 1280.0f,720.0f });
 	stage5BG = Sprite::Create(115, stage5BGPos);
 	stage5BG->SetSize({ 1280.0f,720.0f });
-	//Audio::GetInstance()->LoopPlayWave(1, 0.5f);
+
+	stage1Lock = Sprite::Create(110, tutorialPos, color, anchorPoint);
+	stage1Lock->SetSize(stage1LockSize);
+	stage2Lock = Sprite::Create(110, stage2Pos, color, anchorPoint);
+	stage2Lock->SetSize(stage2LockSize);
+	stage3Lock = Sprite::Create(110, stage3Pos, color, anchorPoint);
+	stage3Lock->SetSize(stage3LockSize);
+	stage4Lock = Sprite::Create(110, stage4Pos, color, anchorPoint);
+	stage4Lock->SetSize(stage4LockSize);
+	stage5Lock = Sprite::Create(110, stage5Pos, color, anchorPoint);
+	stage5Lock->SetSize(stage5LockSize);
+
+	Audio::GetInstance()->LoopPlayWave(1, 0.5f);
 }
 
 void SelectScene::Finalize()
@@ -52,6 +69,10 @@ void SelectScene::Finalize()
 void SelectScene::Update()
 {
 	Input* input = Input::GetInstance();
+
+	if (isUnlockStage) {
+		UnlockStage(maxUnlockStage);
+	}
 
 	if (input->TriggerPadButton(BUTTON_A) ||
 		input->TriggerKey(DIK_SPACE))
@@ -75,42 +96,48 @@ void SelectScene::Update()
 		else if (selectCount == 5) {
 			sceneChange.SceneChangeStart("GameScene", 5);
 		}
+
+		/*if (selectCount <= maxUnlockStage) {
+			if (selectCount == 0) {
+				sceneChange.SceneChangeStart("GameScene", 0);
+			}
+			else if (selectCount == 1) {
+				sceneChange.SceneChangeStart("GameScene", 1);
+			}
+			else if (selectCount == 2) {
+				sceneChange.SceneChangeStart("GameScene", 2);
+			}
+			else if (selectCount == 3) {
+				sceneChange.SceneChangeStart("GameScene", 3);
+			}
+			else if (selectCount == 4) {
+				sceneChange.SceneChangeStart("GameScene", 4);
+			}
+			else if (selectCount == 5) {
+				sceneChange.SceneChangeStart("GameScene", 5);
+			}
+		}*/
 	}
 
-	//ステージアンロックデバッグ用
-	if (input->TriggerKey(DIK_1))
-	{
-		StageUnlock1(1);
-	}
-	if (input->TriggerKey(DIK_2))
-	{
-		StageUnlock1(2);
-	}
-	if (input->TriggerKey(DIK_3))
-	{
-		StageUnlock1(3);
-	}
-	if (input->TriggerKey(DIK_4))
-	{
-		StageUnlock1(4);
-	}
-	if (input->TriggerKey(DIK_5))
-	{
-		StageUnlock1(5);
-	}
-
-	if (input->TriggerUp() && !isSelectEase && selectCount < maxUnlockStage) {
+	if (input->TriggerRight() && !isSelectEase && selectCount < maxUnlockStage && !isUnlockStage) {
 		selectCount++;
 		isNext = true;
 		isSelectEase = true;
 		SavePosition();
 	}
-	else if (input->TriggerDown() && !isSelectEase && selectCount > 0) {
+	else if (input->TriggerLeft() && !isSelectEase && selectCount > 0 && !isUnlockStage) {
 		selectCount--;
 		isBack = true;
 		isSelectEase = true;
 		SavePosition();
 	}
+
+	/*if (input->TriggerKey(DIK_1)) {
+		maxUnlockStage = 1;
+	}
+	if (input->TriggerKey(DIK_2)) {
+		isUnlockStage = true;
+	}*/
 
 	if (isSelectEase) {
 		SelectEasing();
@@ -157,6 +184,11 @@ void SelectScene::Draw()
 	stage3->Draw();
 	stage4->Draw();
 	stage5->Draw();
+	stage1Lock->Draw();
+	stage2Lock->Draw();
+	stage3Lock->Draw();
+	stage4Lock->Draw();
+	stage5Lock->Draw();
 	sceneChange.Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -197,52 +229,52 @@ void SelectScene::SelectEasing() {
 	stage5BGPos.x = Ease(In, Quint, eTime, saveStage5BGPos.x, bgSpriteWidth * (-selectCount + 5));
 
 	if (selectCount == 0) {
-		tutorialSize = Ease(In, Quint, eTime, defaultSize, selectSize);
-		stage1Size = Ease(In, Quint, eTime, selectSize, defaultSize);
+		tutorialSize = Ease(In, Quint, eTime, defaultNumSize, selectNumSize);
+		stage1Size = Ease(In, Quint, eTime, selectNumSize, defaultNumSize);
 	}
 	else if (selectCount == 1) {
 		if (isNext) {
-			tutorialSize = Ease(In, Quint, eTime, selectSize, defaultSize);
-			stage1Size = Ease(In, Quint, eTime, defaultSize, selectSize);
+			tutorialSize = Ease(In, Quint, eTime, selectNumSize, defaultNumSize);
+			stage1Size = Ease(In, Quint, eTime, defaultNumSize, selectNumSize);
 		}
 		else if (isBack) {
-			stage1Size = Ease(In, Quint, eTime, defaultSize, selectSize);
-			stage2Size = Ease(In, Quint, eTime, selectSize, defaultSize);
+			stage1Size = Ease(In, Quint, eTime, defaultNumSize, selectNumSize);
+			stage2Size = Ease(In, Quint, eTime, selectNumSize, defaultNumSize);
 		}
 	}
 	else if (selectCount == 2) {
 		if (isNext) {
-			stage1Size = Ease(In, Quint, eTime, selectSize, defaultSize);
-			stage2Size = Ease(In, Quint, eTime, defaultSize, selectSize);
+			stage1Size = Ease(In, Quint, eTime, selectNumSize, defaultNumSize);
+			stage2Size = Ease(In, Quint, eTime, defaultNumSize, selectNumSize);
 		}
 		else if (isBack) {
-			stage2Size = Ease(In, Quint, eTime, defaultSize, selectSize);
-			stage3Size = Ease(In, Quint, eTime, selectSize, defaultSize);
+			stage2Size = Ease(In, Quint, eTime, defaultNumSize, selectNumSize);
+			stage3Size = Ease(In, Quint, eTime, selectNumSize, defaultNumSize);
 		}
 	}
 	else if (selectCount == 3) {
 		if (isNext) {
-			stage2Size = Ease(In, Quint, eTime, selectSize, defaultSize);
-			stage3Size = Ease(In, Quint, eTime, defaultSize, selectSize);
+			stage2Size = Ease(In, Quint, eTime, selectNumSize, defaultNumSize);
+			stage3Size = Ease(In, Quint, eTime, defaultNumSize, selectNumSize);
 		}
 		else if (isBack) {
-			stage3Size = Ease(In, Quint, eTime, defaultSize, selectSize);
-			stage4Size = Ease(In, Quint, eTime, selectSize, defaultSize);
+			stage3Size = Ease(In, Quint, eTime, defaultNumSize, selectNumSize);
+			stage4Size = Ease(In, Quint, eTime, selectNumSize, defaultNumSize);
 		}
 	}
 	else if (selectCount == 4) {
 		if (isNext) {
-			stage3Size = Ease(In, Quint, eTime, selectSize, defaultSize);
-			stage4Size = Ease(In, Quint, eTime, defaultSize, selectSize);
+			stage3Size = Ease(In, Quint, eTime, selectNumSize, defaultNumSize);
+			stage4Size = Ease(In, Quint, eTime, defaultNumSize, selectNumSize);
 		}
 		else if (isBack) {
-			stage4Size = Ease(In, Quint, eTime, defaultSize, selectSize);
-			stage5Size = Ease(In, Quint, eTime, selectSize, defaultSize);
+			stage4Size = Ease(In, Quint, eTime, defaultNumSize, selectNumSize);
+			stage5Size = Ease(In, Quint, eTime, selectNumSize, defaultNumSize);
 		}
 	}
 	else if (selectCount == 5) {
-		stage4Size = Ease(In, Quint, eTime, selectSize, defaultSize);
-		stage5Size = Ease(In, Quint, eTime, defaultSize, selectSize);
+		stage4Size = Ease(In, Quint, eTime, selectNumSize, defaultNumSize);
+		stage5Size = Ease(In, Quint, eTime, defaultNumSize, selectNumSize);
 	}
 
 
@@ -275,9 +307,128 @@ void SelectScene::SelectEasing() {
 	}
 }
 
-void SelectScene::StageUnlock1(int clearStageNum)
+void SelectScene::InitializePosSize(int selectCount) {
+	tutorialPos = { (WinApp::window_width / 2) + (offAmount * -selectCount),WinApp::window_height / 2 };
+	stage1Pos = { (WinApp::window_width / 2) + (offAmount * (-selectCount + 1)),WinApp::window_height / 2 };
+	stage2Pos = { (WinApp::window_width / 2) + (offAmount * (-selectCount + 2)),WinApp::window_height / 2 };
+	stage3Pos = { (WinApp::window_width / 2) + (offAmount * (-selectCount + 3)),WinApp::window_height / 2 };
+	stage4Pos = { (WinApp::window_width / 2) + (offAmount * (-selectCount + 4)),WinApp::window_height / 2 };
+	stage5Pos = { (WinApp::window_width / 2) + (offAmount * (-selectCount + 5)),WinApp::window_height / 2 };
+
+	tutorialBGPos = { bgSpriteWidth * -selectCount,0 };
+	stage1BGPos = { bgSpriteWidth * (-selectCount + 1),0 };
+	stage2BGPos = { bgSpriteWidth * (-selectCount + 2),0 };
+	stage3BGPos = { bgSpriteWidth * (-selectCount + 3),0 };
+	stage4BGPos = { bgSpriteWidth * (-selectCount + 4),0 };
+	stage5BGPos = { bgSpriteWidth * (-selectCount + 5),0 };
+
+	if (selectCount == 0) {
+		tutorialSize = selectNumSize;
+		stage1Size = defaultNumSize;
+		stage2Size = defaultNumSize;
+		stage3Size = defaultNumSize;
+		stage4Size = defaultNumSize;
+		stage5Size = defaultNumSize;
+		stage1LockSize = defaultLockSize;
+		stage2LockSize = defaultLockSize;
+		stage3LockSize = defaultLockSize;
+		stage4LockSize = defaultLockSize;
+		stage5LockSize = defaultLockSize;
+	}
+	else if (selectCount == 1) {
+		tutorialSize = defaultNumSize;
+		stage1Size = selectNumSize;
+		stage2Size = defaultNumSize;
+		stage3Size = defaultNumSize;
+		stage4Size = defaultNumSize;
+		stage5Size = defaultNumSize;
+		stage1LockSize = selectLockSize;
+		stage2LockSize = defaultLockSize;
+		stage3LockSize = defaultLockSize;
+		stage4LockSize = defaultLockSize;
+		stage5LockSize = defaultLockSize;
+	}
+	else if (selectCount == 2) {
+		tutorialSize = defaultNumSize;
+		stage1Size = defaultNumSize;
+		stage2Size = selectNumSize;
+		stage3Size = defaultNumSize;
+		stage4Size = defaultNumSize;
+		stage5Size = defaultNumSize;
+		stage1LockSize = defaultLockSize;
+		stage2LockSize = selectLockSize;
+		stage3LockSize = defaultLockSize;
+		stage4LockSize = defaultLockSize;
+		stage5LockSize = defaultLockSize;
+	}
+	else if (selectCount == 3) {
+		tutorialSize = defaultNumSize;
+		stage1Size = defaultNumSize;
+		stage2Size = defaultNumSize;
+		stage3Size = selectNumSize;
+		stage4Size = defaultNumSize;
+		stage5Size = defaultNumSize;
+		stage1LockSize = defaultLockSize;
+		stage2LockSize = defaultLockSize;
+		stage3LockSize = selectLockSize;
+		stage4LockSize = defaultLockSize;
+		stage5LockSize = defaultLockSize;
+	}
+	else if (selectCount == 4) {
+		tutorialSize = defaultNumSize;
+		stage1Size = defaultNumSize;
+		stage2Size = defaultNumSize;
+		stage3Size = defaultNumSize;
+		stage4Size = selectNumSize;
+		stage5Size = defaultNumSize;
+		stage1LockSize = defaultLockSize;
+		stage2LockSize = defaultLockSize;
+		stage3LockSize = defaultLockSize;
+		stage4LockSize = selectLockSize;
+		stage5LockSize = defaultLockSize;
+	}
+	else if (selectCount == 5) {
+		tutorialSize = defaultNumSize;
+		stage1Size = defaultNumSize;
+		stage2Size = defaultNumSize;
+		stage3Size = defaultNumSize;
+		stage4Size = defaultNumSize;
+		stage5Size = selectNumSize;
+		stage1LockSize = defaultLockSize;
+		stage2LockSize = defaultLockSize;
+		stage3LockSize = defaultLockSize;
+		stage4LockSize = defaultLockSize;
+		stage5LockSize = selectLockSize;
+	}
+}
+
+void SelectScene::UnlockStage(int unlockStageNum)
 {
-	if (clearStageNum >= maxUnlockStage) {
-		maxUnlockStage = clearStageNum + 1;
+	unlockEaseTimer++;
+	float eTime = (float)(unlockEaseTimer / static_cast<double>(maxUnlockEaseTimer));
+	if (unlockStageNum == 1) {
+		stage1LockSize = Ease(In, Back, eTime, selectLockSize, {0,0});
+		stage1Lock->SetSize(stage1LockSize);
+	}
+	else if (unlockStageNum == 2) {
+		stage2LockSize = Ease(In, Back, eTime, selectLockSize, { 0,0 });
+		stage2Lock->SetSize(stage2LockSize);
+	}
+	else if (unlockStageNum == 3) {
+		stage3LockSize = Ease(In, Back, eTime, selectLockSize, { 0,0 });
+		stage3Lock->SetSize(stage3LockSize);
+	}
+	else if (unlockStageNum == 4) {
+		stage4LockSize = Ease(In, Back, eTime, selectLockSize, { 0,0 });
+		stage4Lock->SetSize(stage4LockSize);
+	}
+	else if (unlockStageNum == 5) {
+		stage5LockSize = Ease(In, Back, eTime, selectLockSize, { 0,0 });
+		stage5Lock->SetSize(stage5LockSize);
+	}
+
+	if (unlockEaseTimer >= maxUnlockEaseTimer) {
+		isUnlockStage = false;
+		unlockEaseTimer = 0;
 	}
 }

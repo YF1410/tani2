@@ -319,6 +319,26 @@ bool Input::TriggerDown()
 	return false;
 }
 
+bool Input::TriggerRight()
+{
+	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_RIGHT && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_RIGHT)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::TriggerLeft()
+{
+	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_LEFT && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_LEFT)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 XMFLOAT2& Input::PadStickGradient(const float &deadzone)
 {
 

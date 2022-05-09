@@ -43,7 +43,8 @@ public: // メンバ関数
 
 	void SavePosition();
 	void SelectEasing();
-	void StageUnlock1(int clearStageNum);
+	void InitializePosSize(int selectCount);
+	void UnlockStage(int unlockStageNum);
 
 private: // メンバ変数
 	//スプライト
@@ -60,10 +61,22 @@ private: // メンバ変数
 	std::unique_ptr<Sprite> stage3BG;
 	std::unique_ptr<Sprite> stage4BG;
 	std::unique_ptr<Sprite> stage5BG;
+
+	std::unique_ptr<Sprite> stage1Lock;
+	std::unique_ptr<Sprite> stage2Lock;
+	std::unique_ptr<Sprite> stage3Lock;
+	std::unique_ptr<Sprite> stage4Lock;
+	std::unique_ptr<Sprite> stage5Lock;
+
 	SceneChange sceneChange;
 
-	XMFLOAT2 defaultSize = { 150.0f,150.0f };
-	XMFLOAT2 selectSize = { 500.0f,500.0f };
+	int maxUnlockStage = 0;
+
+	XMFLOAT2 defaultNumSize = { 150.0f,150.0f };
+	XMFLOAT2 selectNumSize = { 400.0f,400.0f };
+	XMFLOAT2 defaultLockSize = {75.0f,75.0f};
+	XMFLOAT2 selectLockSize = { 300.0f,300.0f };
+
 	float offAmount = 400.0f;
 	int selectCount = 0;
 	XMFLOAT2 tutorialPos = { (WinApp::window_width / 2) + (offAmount * selectCount),WinApp::window_height / 2 };
@@ -78,12 +91,17 @@ private: // メンバ変数
 	XMFLOAT2 saveStage3Pos = { 0,0 };
 	XMFLOAT2 saveStage4Pos = { 0,0 };
 	XMFLOAT2 saveStage5Pos = { 0,0 };
-	XMFLOAT2 tutorialSize = selectSize;
-	XMFLOAT2 stage1Size = defaultSize;
-	XMFLOAT2 stage2Size = defaultSize;
-	XMFLOAT2 stage3Size = defaultSize;
-	XMFLOAT2 stage4Size = defaultSize;
-	XMFLOAT2 stage5Size = defaultSize;
+	XMFLOAT2 tutorialSize = selectNumSize;
+	XMFLOAT2 stage1Size = defaultNumSize;
+	XMFLOAT2 stage2Size = defaultNumSize;
+	XMFLOAT2 stage3Size = defaultNumSize;
+	XMFLOAT2 stage4Size = defaultNumSize;
+	XMFLOAT2 stage5Size = defaultNumSize;
+	XMFLOAT2 stage1LockSize = defaultLockSize;
+	XMFLOAT2 stage2LockSize = defaultLockSize;
+	XMFLOAT2 stage3LockSize = defaultLockSize;
+	XMFLOAT2 stage4LockSize = defaultLockSize;
+	XMFLOAT2 stage5LockSize = defaultLockSize;
 
 	float bgSpriteWidth = 1280.0f;
 	XMFLOAT2 tutorialBGPos = { bgSpriteWidth * selectCount,0 };
@@ -103,12 +121,14 @@ private: // メンバ変数
 	XMFLOAT2 anchorPoint = { 0.5f,0.5f };
 
 	int selectEaseTimer = 0;
-	int maxSelectEaseTimer = 30;
+	int maxSelectEaseTimer = 25;
 	bool isSelectEase = false;
 
 	bool isNext = false;
 	bool isBack = false;
 
-	int maxUnlockStage = 0;
+	int unlockEaseTimer = 0;
+	int maxUnlockEaseTimer = 60;
+	bool isUnlockStage = false;
 };
 
