@@ -11,6 +11,7 @@ private:
 public:
 	static EnemyHelperManager *GetIns();		//Žæ“¾—p
 	void Update();
+	void LustUpdate();
 	void Draw() const;
 	static std::vector<EnemyHelper *> enemyHelpers;
 };

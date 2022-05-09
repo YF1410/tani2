@@ -153,6 +153,7 @@ void TitleScene::Draw()
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
+	//シーン遷移
 	sceneChange.Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();

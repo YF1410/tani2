@@ -63,7 +63,7 @@ PlayerObject::~PlayerObject()
 void PlayerObject::Initialize()
 {
 	//サイズ初期化
-	energy = 1502.0f;
+	energy = 1500.0f;
 	//サイズ初期化
 	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
 	//ポジション初期化
@@ -522,7 +522,7 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 		break;
 	case ENEMY:
 		enemy = dynamic_cast<Enemy*>(info.object);
-		//エネミーが攻撃可能状態ならダメージ処理をする
+		//エネミーが攻撃可能状態で、自分が攻撃していなければダメージを負う
 		if (enemy->attack.can && !attack.is) {
 			Damage(enemy->CauseDamage());
 		}
@@ -532,13 +532,18 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 		if (!attack.is) {
 			penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.02f;
 		}
-		else {
+		else if(enemy->isBounce){
 			Vector3 nextPos = info.inter + Vector3(pos - info.object->pos).Normal() * (broadSphereCollider->GetRadius() /*+ enemy->pushBackCollider->GetRadius()*/);
 			nextPos.y = 0;
 			velocity = CalcReflectVector(velocity, Vector3(pos - enemy->pos).Normal());
 			pos = nextPos;
 		}
 
+		break;
+	case BULLET:
+		if (!attack.is) {
+			Damage(10.0f);
+		}
 		break;
 	default:
 		break;

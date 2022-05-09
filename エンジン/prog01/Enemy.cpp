@@ -18,23 +18,21 @@ Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 	) {
 	isAlive = true;
 	this->player = player;
-	maxHP = 1000.0f;
+	maxHP = 100.0f;
 	HP = maxHP;
-
+	isBounce = true;
 	//HPbar生成
 	hpBer = new EnemyHp(HP, maxHP,pos);
 
 
-	scale = 2.5f;
+	defScale = 2.5f;
+	scale = defScale;
 	//当たり判定初期化
 	float radius = 100;
 	broadSphereCollider = new SphereCollider("BroadSphere", XMVECTOR{ 0,radius,0 }, radius);
 	SetBroadCollider(broadSphereCollider);
 
-	pushBackCollider = new SphereCollider("pushBackCollider", XMVECTOR{ 0,radius,0 }, radius);
-	SetNarrowCollider(pushBackCollider);
-
-	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, 100, 100);
+	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, radius, radius);
 	SetNarrowCollider(toMapChipCollider);
 
 	Initialize();
@@ -76,14 +74,14 @@ void Enemy::Update() {
 		InvincibleTimer++;
 		//ここは後でアニメーションに変更する
 		if (InvincibleTimer <= 10) {
-			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), 1.0f, 3.0f)*2.5f;
+			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), 1.0f, 3.0f)*defScale;
 		}
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 30.0f), 3.0f  , 1.0f  ) * 2.5f;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f  , 1.0f  ) * defScale;
 		}
 
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 30.0f), 3.0f, 0.0f) * 2.5f;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f, 0.0f) * defScale;
 		}
 		//タイマーが30になったら無敵を解除
 		if (InvincibleTimer >= 30) {
@@ -97,7 +95,7 @@ void Enemy::Update() {
 				}
 			}
 			else {
-				scale = 2.5f;
+				scale = defScale;
 			}
 		}
 	}
@@ -157,33 +155,16 @@ void Enemy::Draw() const
 void Enemy::OnCollision(const CollisionInfo &info)
 {
 	//ダイナミックキャスト用
-	Debris *debri;
-	PlayerObject *player;
 	Enemy *enemy;
 
 	//衝突したコライダーで分岐
 	switch (info.object->Tag)
 	{
 	case PLAYER:
-		player = dynamic_cast<PlayerObject *>(info.object);
-		
-		//プレイヤーが攻撃状態なら
-		if (player->attack.is) {
-			//ダメージを受ける
-			Damage(player->attackPow);
-		}
-		else {
-			//位置修正
-			penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.4f;
-			penalty.y = 0;
-		}
+		HitPlayer(info);
 		break;
 	case DEBRIS:
-		//デブリが攻撃状態ならダメージを受ける
- 		debri = dynamic_cast<Debris *>(info.object);
-		if (debri->isAttack) {
-			Damage(debri->velocity.Length());
-		}
+		HitDebri(info);
 		break;
 
 	case ENEMY:
@@ -242,4 +223,32 @@ void Enemy::HitWall(const XMVECTOR &hitPos, const Vector3 &normal)
 	//反射
 	velocity = CalcWallScratchVector(velocity, normal);
 
+}
+
+void Enemy::HitPlayer(const CollisionInfo &info)
+{
+	PlayerObject *player;
+
+	player = dynamic_cast<PlayerObject *>(info.object);
+
+	//プレイヤーが攻撃状態なら
+	if (player->attack.is) {
+		//ダメージを受ける
+		Damage(player->attackPow);
+	}
+	else {
+		//位置修正
+		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.4f;
+		penalty.y = 0;
+	}
+}
+
+void Enemy::HitDebri(const CollisionInfo &info)
+{
+	Debris *debri;
+	//デブリが攻撃状態ならダメージを受ける
+	debri = dynamic_cast<Debris *>(info.object);
+	if (debri->isAttack) {
+		Damage(debri->velocity.Length());
+	}
 }

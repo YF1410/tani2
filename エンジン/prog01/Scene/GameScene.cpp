@@ -231,11 +231,13 @@ void GameScene::Update() {
 	light->Update();
 
 	EnemyHelperManager::GetIns()->Update();
+	EnemyHelperManager::GetIns()->LustUpdate();
+	//ステージ更新
+	//testStage->Update();
 
-	for (auto& object : objects) {
-		object->Update();
-	}
+	//デバックテキスト
 
+	
 	//プレイヤー更新
 	playerObject->Update();
 	//破片更新
@@ -301,9 +303,9 @@ void GameScene::Draw() {
 	EnemyHelperManager::GetIns()->Draw();
 	MapChip::GetInstance()->Draw();
 	Debris::StaticDraw();
-	enemyManager.get()->Draw();
 	playerObject->Draw();
-
+	enemyManager.get()->Draw();
+	
 #pragma endregion 3Dオブジェクト(FBX)描画
 	ParticleManager::GetInstance()->Draw(cmdList);
 

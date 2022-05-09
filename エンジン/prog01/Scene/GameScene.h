@@ -107,7 +107,6 @@ private: // ƒƒ“ƒo•Ï”
 
 
 	std::unique_ptr<Model> modelPlane;
-	std::vector<std::unique_ptr<Object3d>> objects;
 
 	std::unique_ptr<Object3d> stageclearObject3d;
 	std::unique_ptr<Object3d> nextStageObject3d;

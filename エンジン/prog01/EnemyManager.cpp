@@ -9,11 +9,11 @@ EnemyManager::EnemyManager(PlayerObject *player)
 {
 	this->player = player;
 	CsvLoad(MapChip::MAP_NAME::TEST_MAP, "testSpawn");
-	CsvLoad(MapChip::MAP_NAME::Stage1, "testSpawn");
-	CsvLoad(MapChip::MAP_NAME::Stage2, "testSpawn");
-	CsvLoad(MapChip::MAP_NAME::Stage3, "testSpawn");
-	CsvLoad(MapChip::MAP_NAME::Stage4, "testSpawn");
-	CsvLoad(MapChip::MAP_NAME::Stage5, "testSpawn");
+	CsvLoad(MapChip::MAP_NAME::Stage1, "01");
+	CsvLoad(MapChip::MAP_NAME::Stage2, "02");
+	CsvLoad(MapChip::MAP_NAME::Stage3, "03");
+	CsvLoad(MapChip::MAP_NAME::Stage4, "04");
+	CsvLoad(MapChip::MAP_NAME::Stage5, "05");
 
 }
 
@@ -54,7 +54,7 @@ void EnemyManager::Update()
 {
 	//ウェーブ進行
 	if (enemys[MapChip::GetInstance()->nowMap].size() == 0 && spawnData[MapChip::GetInstance()->nowMap][nowWave].size() == 0) {
-		if (nowWave < MAX_WAVE - 1) {
+		if (nowWave < MAX_WAVE[MapChip::GetInstance()->nowMap]) {
 			nowWave++;
 			waveStartTime = GameScene::counter;
 		}
@@ -105,6 +105,9 @@ void EnemyManager::Update()
 					break;
 				case ROUTEMOVE:
 					enemys[MapChip::GetInstance()->nowMap].push_back(new RouteMoveEnemy(spawnPos, player));
+					break;
+				case Boss:
+					enemys[MapChip::GetInstance()->nowMap].push_back(new ShotBoss(spawnPos, player));
 					break;
 				default:
 					enemys[MapChip::GetInstance()->nowMap].push_back(new Enemy(spawnPos, player));
@@ -181,6 +184,7 @@ void EnemyManager::CsvLoad(MapChip::MAP_NAME mapName, std::string fName)
 	std::ifstream ifs("Resources/EnemySpawnData/" + fName + ".csv");
 	//MAP_DATA loadData;
 	std::string line;
+	int waveNum = -1;
 	while (getline(ifs, line))
 	{
 		std::istringstream stream(line);
@@ -190,8 +194,15 @@ void EnemyManager::CsvLoad(MapChip::MAP_NAME mapName, std::string fName)
 		{
 			result.push_back(stoi(field));
 		}
-		spawnData[mapName][result[0]].push_back(new SPAWN_DATA((ENEMY_TYPE)result[1], result[2], Vector3(result[3],0, result[4]), result[5]));
+		spawnData[mapName][result[0]].push_back(new SPAWN_DATA((ENEMY_TYPE)result[1], result[2], 
+			//座標
+			Vector3((result[3] - 1) * 200, 0, (result[4] - 1) * -200 ),
+			result[5]));
 
+		if (waveNum != result[0]) {
+			waveNum = result[0];
+			MAX_WAVE[mapName]++;
+		}
 		/*for (auto i : result)
 		{
 			loadData.mapChip.push_back(i);

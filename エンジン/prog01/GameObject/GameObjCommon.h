@@ -16,6 +16,7 @@ public://サブクラス
 		PLAYER,
 		DEBRIS,
 		ENEMY,
+		BULLET,
 
 		//Block系
 		DEFAULT_BLOACK,
