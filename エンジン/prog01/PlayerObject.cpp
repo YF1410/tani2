@@ -174,6 +174,8 @@ void PlayerObject::Update()
 	}
 	else {
 		velocity.x += input->PadStickGradient().x * moveSpead;
+		rotate.y = input->PadStickAngle();
+
 	}
 	if (input->PushKey(DIK_W)) {
 		velocity.z += moveSpead;
@@ -183,8 +185,9 @@ void PlayerObject::Update()
 	}
 	else {
 		velocity.z += -input->PadStickGradient().y * moveSpead;
-	}
+		rotate.y = input->PadStickAngle();
 
+	}
 
 	//Ž©”š
 	if (((input->TriggerPadButton(BUTTON_A)) ||input->TriggerKey(DIK_SPACE))&&
