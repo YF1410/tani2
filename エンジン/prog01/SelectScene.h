@@ -74,8 +74,9 @@ private: // ÉÅÉìÉoïœêî
 
 	XMFLOAT2 defaultNumSize = { 150.0f,150.0f };
 	XMFLOAT2 selectNumSize = { 400.0f,400.0f };
-	XMFLOAT2 defaultLockSize = {75.0f,75.0f};
-	XMFLOAT2 selectLockSize = { 300.0f,300.0f };
+	XMFLOAT2 defaultLockSize = {135.0f,135.0f};
+	//XMFLOAT2 defaultLockSize = {75.0f,75.0f};
+	XMFLOAT2 selectLockSize = { 370.0f,370.0f };
 
 	float offAmount = 400.0f;
 	int selectCount = 0;
