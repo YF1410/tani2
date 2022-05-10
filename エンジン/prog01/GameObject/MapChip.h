@@ -53,7 +53,7 @@ public:
 	//マップナンバー指定
 	int GetChipNum(int x, int y);
 	//オブジェクト生成
-	void CreateStage();
+	void CreateStage(MAP_NAME mapName);
 	
 	//更新
 	void Update();

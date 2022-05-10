@@ -22,13 +22,13 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 		false,					//重力の影響を受ける
 		startPos,
 		{ 1,1,1 },
-		{ 0,0,0 },
+		{ 1,1,1 },
 		true
 	)
 {
 	srand(time(NULL));			//爆破用乱数のシード値をセット
 
-	scale = ConvertSizeToScale(energy / 2.0f);
+	//scale = ConvertSizeToScale(energy / 2.0f);
 
 	//初期位置に設定
 	this->startPos = startPos;
@@ -61,7 +61,7 @@ PlayerObject::~PlayerObject()
 void PlayerObject::Initialize()
 {
 	//サイズ初期化
-	energy = 1500.0f;
+	energy = 500.0f;
 	//サイズ初期化
 	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
 	//ポジション初期化
@@ -80,14 +80,14 @@ void PlayerObject::Initialize()
 	recovery = {
 		true,
 		false,
-		300,
+		150,
 		0
 	};
 	//
 	attackGage = {
 		true,
 		false,
-		60 * 2,
+		90,
 		0
 	};
 	debrisCooldown = {
@@ -144,7 +144,7 @@ void PlayerObject::Update()
 {
 	Input* input = Input::GetInstance();
 	//スケールから移動量決定
-	moveSpead = scale.x * 5;
+	moveSpead = 7.5f;
 	//ペナルティリセット
 	penalty = { 0,0,0 };
 
@@ -336,7 +336,7 @@ void PlayerObject::Update()
 	attackPow = velocity.Length();
 
 	//サイズからスケールへ変換
-	scale = ConvertSizeToScale(energy / 2.0f);
+	//scale = ConvertSizeToScale(energy / 2.0f);
 	//移動量を適応
 	PosAddVelocity();
 	//移動量からブロードコライダーを更新
@@ -565,7 +565,7 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 		break;
 	case BULLET:
 		if (!attack.is) {
-			Damage(10.0f);
+			Damage(5.0f);
 		}
 		break;
 	default:

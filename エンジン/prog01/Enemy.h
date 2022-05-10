@@ -34,7 +34,7 @@ public:		//当たり判定関係
 	//攻撃フラグ
 	STATE attack;
 	//与えられるダメージ
-	int attackPow = 1;
+	int attackPow = 10;
 
 	//State
 	bool isInvincible;		//無敵状態か

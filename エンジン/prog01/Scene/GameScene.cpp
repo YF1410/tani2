@@ -27,14 +27,14 @@ GameScene::GameScene(int parameter) {
 	nowStageNum = parameter;
 	//マップ生成
 	MapChip::GetInstance()->SetMapName((MapChip::MAP_NAME)nowStageNum);
-	MapChip::GetInstance()->CreateStage();
+	MapChip::GetInstance()->CreateStage((MapChip::MAP_NAME)nowStageNum);
 
 
 	//プレイヤー生成
 	playerObject = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos());
 	enemyManager = std::make_unique<EnemyManager>(playerObject.get());
 	//UI生成
-	ui = std::make_unique<UserInterface>(&enemyManager->nowWave, playerObject.get(), enemyManager.get());
+	ui = std::make_unique<UserInterface>(&enemyManager->nowWave, playerObject.get(), enemyManager.get(),&counter);
 	//背景セット
 
 	//カメラ生成
@@ -152,7 +152,6 @@ void GameScene::Initialize() {
 
 void GameScene::Finalize() {
 	Debris::Finalize();
-	MapChip::GetInstance()->Filnalize();
 	ParticleManager::GetInstance()->Finalize();
 }
 
@@ -265,6 +264,8 @@ void GameScene::Update() {
 	
 void GameScene::LastUpdate() {
 	//ここから
+
+	MapChip::GetInstance()->Update();
 
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
@@ -432,7 +433,8 @@ void GameScene::Select()
 				//sceneChange.SceneChangeStart("GameScene", nowStageNum + 1);
 			}
 			else if (gameOverFlag) {
-				sceneChange.SceneChangeStart("SelectScene", nowStageNum + 1);
+				sceneChange.SceneChangeStart("GameScene", nowStageNum);
+
 			}
 		}
 

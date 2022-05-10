@@ -18,18 +18,19 @@ void ModelManager::Initialize()
 {
 	LoadModel(PLAYER, "player");
 
-	LoadModel(SLIME, "player");
 
 	LoadModel(TESTS_TAGE, "stage");
 	LoadModel(DEFAULT_BLOCK, "testBlock");
 	LoadModel(CHECK_BLOCK, "checkBlock");
 
+	LoadModel(SLIME, "slime");
+	model[SLIME].get()->SetMetalness(0.2f);
+	model[SLIME].get()->SetSpecular(0.4f);
+	model[SLIME].get()->SetRoughness(0.4f);
+	model[SLIME].get()->SetAlpha(0.8f);
+	model[SLIME].get()->TransferMaterial();
 	LoadModel(SLIME_BREAK, "slime"/*_break"*/ );
-	model[SLIME_BREAK].get()->SetMetalness(0.2f);
-	model[SLIME_BREAK].get()->SetSpecular(0.4f);
-	model[SLIME_BREAK].get()->SetRoughness(0.4f);
-	model[SLIME_BREAK].get()->SetAlpha(0.8f);
-	model[SLIME_BREAK].get()->TransferMaterial();
+	model[SLIME_BREAK].get()->SetBaseColor({ 1.0f,1.0f,0.0f});
 	LoadModel(SLIME_CORE,"core");
 
 

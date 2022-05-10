@@ -8,7 +8,7 @@
 class UserInterface
 {
 public:
-	UserInterface(int *nowWave, PlayerObject *player, EnemyManager *enemys);
+	UserInterface(int *nowWave, PlayerObject *player, EnemyManager *enemys, int *counter);
 	~UserInterface();
 	void Initialize();
 	void Update();
@@ -47,6 +47,18 @@ private:
 	int recoverColorTimer;
 	XMFLOAT2 shake;
 
+	//チュートリアル
+	int tutorialNum;
+	std::unique_ptr<Sprite> boost[4];
+	std::unique_ptr<Sprite> end[2];
+	std::unique_ptr<Sprite> hp[2];
+	std::unique_ptr<Sprite> kaisyu[2];
+	std::unique_ptr<Sprite> enemy_t;
+	std::unique_ptr<Sprite> start;
+
+	std::vector<std::unique_ptr<Sprite>> tutorialImag;
+
+
 
 	//現在のウェーブ数
 	static int *nowWave;
@@ -58,5 +70,8 @@ private:
 	//プレイヤーのデータ
 	PlayerObject *player;
 	EnemyManager *enemys;
+
+	//カウンター
+	int *counter;
 };
 

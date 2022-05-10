@@ -15,6 +15,7 @@ void MapChip::Initialize()
 	CsvLoad(Stage3, "03");
 	CsvLoad(Stage4, "04");
 	CsvLoad(Stage5, "05");
+
 }
 
 void MapChip::Filnalize()
@@ -58,6 +59,7 @@ void MapChip::CsvLoad(MAP_NAME nowMap, std::string fName)
 
 	//マップネームに対応した位置に格納
 	mapData[nowMap] = loadData;
+
 }
 
 int MapChip::GetChipNum(int x, int y)
@@ -72,24 +74,24 @@ int MapChip::GetChipNum(int x, int y)
 	return map[y * mapData[nowMap].wide + x];
 }
 
-void MapChip::CreateStage()
+void MapChip::CreateStage(MAP_NAME mapName)
 {
-	for (int z = 0; z < mapData[nowMap].high; z++) {
-		for (int x = 0; x < mapData[nowMap].wide; x++) {
+	for (int z = 0; z < mapData[mapName].high; z++) {
+		for (int x = 0; x < mapData[mapName].wide; x++) {
 			switch (MapChip::GetInstance()->GetChipNum(x, z))
 			{
 			case 0:		//0には何も配置しない
 				break;
 			case 1:		//1はベースブロック
-				mapChipObj[nowMap].push_back(std::make_unique<BaseBlock>(Vector3(chipSize * x, 0, -chipSize * z)));
+				mapChipObj[mapName].push_back(std::make_unique<BaseBlock>(Vector3(chipSize * x, 0, -chipSize * z)));
 				break;
 
 			case 9:
-				startPos[nowMap] = { 200.0f * x, 0.0f, -200.0f * z };
+				startPos[mapName] = { 200.0f * x, 0.0f, -200.0f * z };
 				break;
 
 			case 10:		//1はベースブロック
-				mapChipObj[nowMap].push_back(std::make_unique<BaseBlock>(Vector3(chipSize * x, 0, -chipSize * z)));
+				mapChipObj[mapName].push_back(std::make_unique<BaseBlock>(Vector3(chipSize * x, 0, -chipSize * z)));
 				break;
 			default:
 				break;
