@@ -95,10 +95,13 @@ public: // メンバ関数
 	void SetIsFlipX(bool isFlipX);
 	// 上下反転の設定
 	void SetIsFlipY(bool isFlipY);
+	// 非表示設定
+	void SetIsInvisible(bool isInvisible) { this->isInvisible = isInvisible; }
 	// テクスチャ範囲設定
 	void SetTextureRect(XMFLOAT2 texBase, XMFLOAT2 texSize);
 	// 描画
 	void Draw();
+
 
 private: // メンバ変数
 	// 頂点バッファ
@@ -132,6 +135,8 @@ private: // メンバ変数
 	XMFLOAT2 texBase = { 0, 0 };
 	// テクスチャ幅、高さ
 	XMFLOAT2 texSize = { 100.0f, 100.0f };
+	//　非表示フラグ
+	bool isInvisible = false;
 
 private: // メンバ関数
 	// 頂点データ転送

@@ -33,7 +33,7 @@ GameScene::GameScene(int parameter) {
 	playerObject = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos());
 	enemyManager = std::make_unique<EnemyManager>(playerObject.get());
 	//UI生成
-	ui = std::make_unique<UserInterface>(&enemyManager->nowWave, playerObject.get(), enemyManager.get());
+	ui = std::make_unique<UserInterface>(&enemyManager->nowWave, playerObject.get(), enemyManager.get(),&counter);
 	//背景セット
 
 	//カメラ生成

@@ -144,7 +144,7 @@ void PlayerObject::Update()
 {
 	Input* input = Input::GetInstance();
 	//スケールから移動量決定
-	moveSpead = scale.x * 5;
+	moveSpead = 7.5f;
 	//ペナルティリセット
 	penalty = { 0,0,0 };
 

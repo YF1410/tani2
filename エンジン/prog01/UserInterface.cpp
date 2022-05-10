@@ -9,11 +9,12 @@ bool UserInterface::isChangeWave;
 float UserInterface::moveWaveTimer;
 float UserInterface::movePosX;
 
-UserInterface::UserInterface(int *nowWave, PlayerObject *player, EnemyManager *enemys)
+UserInterface::UserInterface(int *nowWave, PlayerObject *player, EnemyManager *enemys, int *counter)
 {
 	this->nowWave = nowWave;
 	this->player = player;
 	this->enemys = enemys;
+	this->counter = counter;
 }
 
 UserInterface::~UserInterface()
@@ -71,6 +72,44 @@ void UserInterface::Initialize()
 		for (int i = 0; i < 10; i++) {
 			energyNum[j][i] = Sprite::Create(100 + i, {(float)(WinApp::window_width - 250 + j * 40),170 }, { 1,1,1,1 }, { 0,1.0f });
 			energyNum[j][i].get()->SetSize({ 80,80 });
+		}
+	}
+
+	//チュートリアル
+	if (MapChip::GetInstance()->nowMap == 0) {
+		//説明
+		start = Sprite::Create(161, { (float)(300),(float)(50) }, { 1,1,1,1 });
+		start.get()->SetScale(0.4f);
+		tutorialImag.push_back(std::move(start));
+
+		//Hp
+		for (int i = 0; i < 2; i++) {
+			hp[i] = Sprite::Create(157 + i, { (float)(WinApp::window_width / 2 + 100),(float)(WinApp::window_height / 2 - 300) }, { 1,1,1,1 });
+			hp[i].get()->SetScale(0.4f);
+			tutorialImag.push_back(std::move(hp[i]));
+		}
+		//ブースト
+		tutorialNum = 0;
+		for (int i = 0; i < 4; i++) {
+			boost[i] = Sprite::Create(150 + i, { (float)(WinApp::window_width / 2 + 100),(float)(WinApp::window_height / 2 - 150) }, { 1,1,1,1 });
+			boost[i].get()->SetScale(0.4f);
+			tutorialImag.push_back(std::move(boost[i]));
+		}
+		//回収
+		for (int i = 0; i < 2; i++) {
+			kaisyu[i] = Sprite::Create(159 + i, { (float)(WinApp::window_width / 2 + 100),(float)(WinApp::window_height / 2) - 50 }, { 1,1,1,1 });
+			kaisyu[i].get()->SetScale(0.4f);
+			tutorialImag.push_back(std::move(kaisyu[i]));
+		}
+		enemy_t = Sprite::Create(156, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 });
+		enemy_t.get()->SetScale(0.4f);
+		tutorialImag.push_back(std::move(enemy_t));
+		
+		//終了
+		for (int i = 0; i < 2; i++) {
+			end[i] = Sprite::Create(154 + i, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 });
+			end[i].get()->SetScale(0.4f);
+			tutorialImag.push_back(std::move(end[i]));
 		}
 	}
 
@@ -217,6 +256,15 @@ void UserInterface::Update()
 	}
 
 
+	//チュートリアル
+	if (MapChip::GetInstance()->nowMap == 0 && tutorialNum < tutorialImag.size()-1) {
+		if (*counter % 300 == 0) {
+			if (tutorialNum < tutorialImag.size()) {
+				tutorialNum++;
+			}
+		}
+	}
+
 	//テキスト系
 	//HP
 	//DebugText::GetInstance()->VariablePrint(WinApp::window_width - 300, 120, "", player->GetEnergy(), 2.5f);
@@ -254,5 +302,12 @@ void UserInterface::Draw() const
 	expGauge[player->attackCount].get()->Draw();
 	recoverGauge.get()->Draw();
 	recoverFrame.get()->Draw();
+
+	//チュートリアル
+	if (MapChip::GetInstance()->nowMap == 0) {
+		tutorialImag[tutorialNum].get()->Draw();
+	}
+
+
 	Sprite::PostDraw();
 }

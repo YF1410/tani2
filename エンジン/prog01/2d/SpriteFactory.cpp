@@ -165,6 +165,44 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(121, L"Resources/Sprite/SelectSceneNum/05.png")) {
 		assert(0);
 	}
+
+	//チュートリアル用
+	if (!Sprite::LoadTexture(150, L"Resources/Sprite/tutorial_text/boost_01.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(151, L"Resources/Sprite/tutorial_text/boost_02.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(152, L"Resources/Sprite/tutorial_text/boost_03.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(153, L"Resources/Sprite/tutorial_text/boost_04.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(154, L"Resources/Sprite/tutorial_text/end_01.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(155, L"Resources/Sprite/tutorial_text/end_02.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(156, L"Resources/Sprite/tutorial_text/enemy_01.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(157, L"Resources/Sprite/tutorial_text/hp_01.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(158, L"Resources/Sprite/tutorial_text/hp_02.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(159, L"Resources/Sprite/tutorial_text/kaisyu_01.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(160, L"Resources/Sprite/tutorial_text/kaisyu_02.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(161, L"Resources/Sprite/tutorial_text/start.png")) {
+		assert(0);
+	}
 }
 
 SpriteFactory* SpriteFactory::GetInstance()
