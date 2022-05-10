@@ -78,7 +78,7 @@ void UserInterface::Initialize()
 	//チュートリアル
 	if (MapChip::GetInstance()->nowMap == 0) {
 		//説明
-		start = Sprite::Create(161, { (float)(300),(float)(50) }, { 1,1,1,1 });
+		start = Sprite::Create(161, { (float)(250),(float)(50) }, { 1,1,1,1 });
 		start.get()->SetScale(0.4f);
 		tutorialImag.push_back(std::move(start));
 
@@ -101,16 +101,14 @@ void UserInterface::Initialize()
 			kaisyu[i].get()->SetScale(0.4f);
 			tutorialImag.push_back(std::move(kaisyu[i]));
 		}
-		enemy_t = Sprite::Create(156, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 });
+		enemy_t = Sprite::Create(156, { (float)(250),(float)(50) }, { 1,1,1,1 });
 		enemy_t.get()->SetScale(0.4f);
 		tutorialImag.push_back(std::move(enemy_t));
 		
 		//終了
-		for (int i = 0; i < 2; i++) {
-			end[i] = Sprite::Create(154 + i, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 });
-			end[i].get()->SetScale(0.4f);
-			tutorialImag.push_back(std::move(end[i]));
-		}
+		end[0] = Sprite::Create(154 + 0, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2 + 200) }, { 1,1,1,1 }, { 0.5f,0.5f });
+		end[0].get()->SetScale(0.4f);
+		tutorialImag.push_back(std::move(end[0]));
 	}
 
 	//Enemy
@@ -257,11 +255,15 @@ void UserInterface::Update()
 
 
 	//チュートリアル
-	if (MapChip::GetInstance()->nowMap == 0 && tutorialNum < tutorialImag.size()-1) {
-		if (*counter % 300 == 0) {
+	if (MapChip::GetInstance()->nowMap == 0 && tutorialNum <= tutorialImag.size()-1) {
+		if (*counter % 300 == 0 && tutorialNum < tutorialImag.size() - 1) {
 			if (tutorialNum < tutorialImag.size()) {
 				tutorialNum++;
 			}
+		}
+		else if (*counter % 300 == 0) {
+			tutorialImag[tutorialNum].get()->SetIsInvisible(true);
+
 		}
 	}
 

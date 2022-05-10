@@ -26,7 +26,7 @@ GameScene::GameScene(int parameter) {
 	nowStageNum = parameter;
 	//マップ生成
 	MapChip::GetInstance()->SetMapName((MapChip::MAP_NAME)nowStageNum);
-	MapChip::GetInstance()->CreateStage();
+	MapChip::GetInstance()->CreateStage((MapChip::MAP_NAME)nowStageNum);
 
 
 	//プレイヤー生成
@@ -151,7 +151,6 @@ void GameScene::Initialize() {
 
 void GameScene::Finalize() {
 	Debris::Finalize();
-	MapChip::GetInstance()->Filnalize();
 	ParticleManager::GetInstance()->Finalize();
 }
 
@@ -264,6 +263,8 @@ void GameScene::Update() {
 	
 void GameScene::LastUpdate() {
 	//ここから
+
+	MapChip::GetInstance()->Update();
 
 	//全ての移動最終適応処理
 	playerObject.get()->Adaptation();
@@ -430,6 +431,7 @@ void GameScene::Select()
 				//sceneChange.SceneChangeStart("GameScene", nowStageNum + 1);
 			}
 			else if (gameOverFlag) {
+				sceneChange.SceneChangeStart("GameScene", nowStageNum);
 
 			}
 		}

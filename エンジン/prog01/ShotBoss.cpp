@@ -9,7 +9,7 @@ ShotBoss::ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos) :
 	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::SLIME));
 	HP = 5000;
 	maxHP = HP;
-
+	hpBer->offset = { 0,100,-1000 };
 	defScale = 5.0f;
 	scale = defScale;
 	isBounce = false;

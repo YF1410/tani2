@@ -73,6 +73,10 @@ void SelectScene::Update()
 	if (isUnlockStage && sceneChange.inEndFlag) {
 		UnlockStage(maxUnlockStage);
 	}
+	if (input->TriggerKey(DIK_1)) {
+		sceneChange.SceneChangeStart("GameScene", 5);
+
+	}
 
 	if (input->TriggerPadButton(BUTTON_A)&& !isUnlockStage && !nowSceneChange)
 	{
