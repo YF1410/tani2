@@ -260,7 +260,8 @@ void PlayerObject::Update()
 		}
 
 		//‰ñŽû
-		if (input->TriggerPadButton(BUTTON_B)) {
+		if (input->TriggerPadButton(BUTTON_B)||
+			input->TriggerKey(DIK_Q)) {
 			if (recovery.Start()) {
 				Audio::GetInstance()->PlayWave(14);
 				for (int i = 0; i < Debris::debris.size(); i++) {
