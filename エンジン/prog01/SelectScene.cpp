@@ -100,7 +100,7 @@ void SelectScene::Update()
 
 	}
 
-	if (input->TriggerPadButton(BUTTON_A)&& !isUnlockStage && !nowSceneChange)
+	if (input->TriggerPadButton(BUTTON_A) && !isUnlockStage && !nowSceneChange || input->TriggerKey(DIK_SPACE) && !isUnlockStage && !nowSceneChange)
 	{
 		Audio::GetInstance()->PlayWave(16);
 		if (selectCount == 0) {
@@ -145,13 +145,13 @@ void SelectScene::Update()
 		}*/
 	}
 
-	if (input->TriggerRight() && !isSelectEase && selectCount < maxUnlockStage && !isUnlockStage) {
+	if (input->TriggerRight() && !isSelectEase && selectCount < maxUnlockStage && !isUnlockStage || input->TriggerKey(DIK_RIGHT) && !isSelectEase && selectCount < maxUnlockStage && !isUnlockStage) {
 		selectCount++;
 		isNext = true;
 		isSelectEase = true;
 		SavePosition();
 	}
-	else if (input->TriggerLeft() && !isSelectEase && selectCount > 0 && !isUnlockStage) {
+	else if (input->TriggerLeft() && !isSelectEase && selectCount > 0 && !isUnlockStage || input->TriggerKey(DIK_LEFT) && !isSelectEase && selectCount > 0 && !isUnlockStage) {
 		selectCount--;
 		isBack = true;
 		isSelectEase = true;
