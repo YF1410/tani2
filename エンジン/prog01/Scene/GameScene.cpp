@@ -15,6 +15,7 @@
 #include "EnemyHelperManager.h"
 #include "Ease.h"
 #include "ObjFactory.h"
+#include "ClearConfirmation.h"
 
 using namespace DirectX;
 
@@ -426,18 +427,20 @@ void GameScene::Select()
 		if (selectFlag) {
 			Audio::GetInstance()->PlayWave(16);
 			if (clearFlag) {
+				ClearConfirmation::GetInstance()->SetMaxUnlockStageNum(nowStageNum + 1);
 				sceneChange.SceneChangeStart("SelectScene",nowStageNum + 1);
 				//sceneChange.SceneChangeStart("GameScene", nowStageNum + 1);
 			}
 			else if (gameOverFlag) {
-
+				sceneChange.SceneChangeStart("SelectScene", nowStageNum + 1);
 			}
 		}
 
 		if (!selectFlag)
 		{
 			Audio::GetInstance()->PlayWave(16);
-			exit(1);
+			sceneChange.SceneChangeStart("TitleScene");
+			//exit(1);
 		}
 	}
 

@@ -1,13 +1,35 @@
 #include "SelectScene.h"
 #include "SceneManager.h"
 #include "Easing.h"
+#include "ClearConfirmation.h"
 
 SelectScene::SelectScene(int parameter) {
-	if (maxUnlockStage < parameter) {
-		maxUnlockStage = parameter;
+	//ClearConfirmation::GetInstance()->SetMaxUnlockStageNum(parameter);
+	int i = ClearConfirmation::GetInstance()->GetMaxUnlockStageNum();
+	if (i >= parameter) {
+		maxUnlockStage = i;
+		selectCount = i;
 		isUnlockStage = true;
 	}
-	selectCount = parameter;
+	else {
+		selectCount = parameter;
+	}
+
+	if (parameter == 1 && ClearConfirmation::GetInstance()->GetStage1Flag()) {
+		isUnlockStage = false;
+	}
+	if (parameter == 2 && ClearConfirmation::GetInstance()->GetStage2Flag()) {
+		isUnlockStage = false;
+	}
+	if (parameter == 3 && ClearConfirmation::GetInstance()->GetStage3Flag()) {
+		isUnlockStage = false;
+	}
+	if (parameter == 4 && ClearConfirmation::GetInstance()->GetStage4Flag()) {
+		isUnlockStage = false;
+	}
+	if (parameter == 5 && ClearConfirmation::GetInstance()->GetStage5Flag()) {
+		isUnlockStage = false;
+	}
 }
 
 SelectScene::~SelectScene()
@@ -184,19 +206,19 @@ void SelectScene::Draw()
 	stage3->Draw();
 	stage4->Draw();
 	stage5->Draw();
-	if (maxUnlockStage < 2) {
+	if (maxUnlockStage < 2 && !ClearConfirmation::GetInstance()->GetStage1Flag()) {
 		stage1Lock->Draw();
 	}
-	if (maxUnlockStage < 3) {
+	if (maxUnlockStage < 3 && !ClearConfirmation::GetInstance()->GetStage2Flag()) {
 		stage2Lock->Draw();
 	}
-	if (maxUnlockStage < 4) {
+	if (maxUnlockStage < 4 && !ClearConfirmation::GetInstance()->GetStage3Flag()) {
 		stage3Lock->Draw();
 	}
-	if (maxUnlockStage < 5) {
+	if (maxUnlockStage < 5 && !ClearConfirmation::GetInstance()->GetStage4Flag()) {
 		stage4Lock->Draw();
 	}
-	if (maxUnlockStage < 6) {
+	if (maxUnlockStage < 6 && !ClearConfirmation::GetInstance()->GetStage5Flag()) {
 		stage5Lock->Draw();
 	}
 	sceneChange.Draw();
@@ -446,5 +468,21 @@ void SelectScene::UnlockStage(int unlockStageNum)
 	if (unlockEaseTimer >= maxUnlockEaseTimer) {
 		isUnlockStage = false;
 		unlockEaseTimer = 0;
+		if (unlockStageNum == 1) {
+			ClearConfirmation::GetInstance()->SetStage1Flag(true);
+		}
+		else if (unlockStageNum == 2) {
+			ClearConfirmation::GetInstance()->SetStage2Flag(true);
+		}
+		else if (unlockStageNum == 3) {
+			ClearConfirmation::GetInstance()->SetStage3Flag(true);
+		}
+		else if (unlockStageNum == 4) {
+			ClearConfirmation::GetInstance()->SetStage4Flag(true);
+		}
+		else if (unlockStageNum == 5) {
+			ClearConfirmation::GetInstance()->SetStage5Flag(true);
+		}
+
 	}
 }
