@@ -81,7 +81,7 @@ void TitleScene::Update()
 		}
 	}
 
-	if (input->TriggerUp() && !shakeTimerFlag)
+	if ((input->TriggerUp() || input->TriggerKey(DIK_W)) && !shakeTimerFlag)
 	{
 		if (!flag)
 		{
@@ -96,7 +96,7 @@ void TitleScene::Update()
 		shakeTimerFlag = true;
 		Audio::GetInstance()->PlayWave(15);
 	}
-	else if (input->TriggerDown() && !shakeTimerFlag)
+	else if ((input->TriggerDown() || input->TriggerKey(DIK_S)) && !shakeTimerFlag)
 	{
 		if (!flag)
 		{

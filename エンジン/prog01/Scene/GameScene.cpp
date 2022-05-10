@@ -405,7 +405,7 @@ void GameScene::Select()
 		saveGameoverEscapePos = gameoverEscapePos;
 		saveCount++;
 	}
-	if ((input->TriggerUp() && !shakeTimerFlag) || (input->TriggerDown() && !shakeTimerFlag))
+	if (((input->TriggerUp() || input->TriggerKey(DIK_W))&& !shakeTimerFlag) || ((input->TriggerDown() || input->TriggerKey(DIK_W))&& !shakeTimerFlag))
 	{
 		if (!selectFlag)
 		{
@@ -423,7 +423,7 @@ void GameScene::Select()
 		Audio::GetInstance()->PlayWave(15);
 	}
 
-	if (input->TriggerPadButton(BUTTON_A))
+	if (input->TriggerPadButton(BUTTON_A) || input->TriggerKey(DIK_SPACE))
 	{
 		if (selectFlag) {
 			Audio::GetInstance()->PlayWave(16);

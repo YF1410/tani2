@@ -95,12 +95,9 @@ void SelectScene::Update()
 	if (isUnlockStage && sceneChange.inEndFlag) {
 		UnlockStage(maxUnlockStage);
 	}
-	if (input->TriggerKey(DIK_1)) {
-		sceneChange.SceneChangeStart("GameScene", 5);
 
-	}
 
-	if (input->TriggerPadButton(BUTTON_A)&& !isUnlockStage && !nowSceneChange)
+	if ((input->TriggerPadButton(BUTTON_A) || input->TriggerKey(DIK_SPACE))&& !isUnlockStage && !nowSceneChange)
 	{
 		Audio::GetInstance()->PlayWave(16);
 		if (selectCount == 0) {
@@ -145,13 +142,13 @@ void SelectScene::Update()
 		}*/
 	}
 
-	if (input->TriggerRight() && !isSelectEase && selectCount < maxUnlockStage && !isUnlockStage) {
+	if ((input->TriggerRight() || input->TriggerKey(DIK_A))&& !isSelectEase && selectCount < maxUnlockStage && !isUnlockStage) {
 		selectCount++;
 		isNext = true;
 		isSelectEase = true;
 		SavePosition();
 	}
-	else if (input->TriggerLeft() && !isSelectEase && selectCount > 0 && !isUnlockStage) {
+	else if ((input->TriggerLeft() || input->TriggerKey(DIK_D)) && !isSelectEase && selectCount > 0 && !isUnlockStage) {
 		selectCount--;
 		isBack = true;
 		isSelectEase = true;
