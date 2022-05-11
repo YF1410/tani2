@@ -190,7 +190,7 @@ void ParticleEmitter::AddRef(int count, int life, XMFLOAT3 position, Vector3 vel
 		//’Ç‰Á
 		particleMan->Add(life, this->position, this->velocity, accel, s_scale, e_scale, s_color, e_color);
 	}
-	camera->SetShakeFlag(true, 401);
+	camera->SetShakeFlag(true, 101);
 }
 
 void ParticleEmitter::AddDefeat(int count, int life, XMFLOAT3 position, DEFEAT_TYPE defeatType) {

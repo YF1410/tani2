@@ -142,13 +142,17 @@ void SelectScene::Update()
 		}*/
 	}
 
-	if (input->TriggerRight() && !isSelectEase && selectCount < maxUnlockStage && !isUnlockStage || input->TriggerKey(DIK_RIGHT) && !isSelectEase && selectCount < maxUnlockStage && !isUnlockStage) {
+	if ((input->TriggerRight() || input->TriggerPadStickRight() || input->TriggerKey(DIK_RIGHT) || input->TriggerKey(DIK_D)) 
+		&& !isSelectEase && selectCount < maxUnlockStage && !isUnlockStage)
+	{
 		selectCount++;
 		isNext = true;
 		isSelectEase = true;
 		SavePosition();
 	}
-	else if (input->TriggerLeft() && !isSelectEase && selectCount > 0 && !isUnlockStage || input->TriggerKey(DIK_LEFT) && !isSelectEase && selectCount > 0 && !isUnlockStage) {
+	else if ((input->TriggerLeft() || input->TriggerPadStickLeft() || input->TriggerKey(DIK_LEFT) || input->TriggerKey(DIK_A)) 
+		&& !isSelectEase && selectCount > 0 && !isUnlockStage)
+	{
 		selectCount--;
 		isBack = true;
 		isSelectEase = true;
@@ -446,7 +450,7 @@ void SelectScene::UnlockStage(int unlockStageNum)
 	unlockEaseTimer++;
 	float eTime = (float)(unlockEaseTimer / static_cast<double>(maxUnlockEaseTimer));
 	if (unlockStageNum == 1) {
-		stage1LockSize = Ease(In, Back, eTime, selectLockSize, {0,0});
+		stage1LockSize = Ease(In, Back, eTime, selectLockSize, { 0,0 });
 		stage1Lock->SetSize(stage1LockSize);
 	}
 	else if (unlockStageNum == 2) {

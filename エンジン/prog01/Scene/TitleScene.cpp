@@ -81,24 +81,8 @@ void TitleScene::Update()
 		}
 	}
 
-	if (input->TriggerUp() && !shakeTimerFlag || input->PushPadStickUp() && !shakeTimerFlag ||
-		input->TriggerKey(DIK_DOWN) && !shakeTimerFlag || input->TriggerKey(DIK_W)) && !shakeTimerFlag)
-	{
-		if (!flag)
-		{
-			flag = true;
-			savePos = { 30,-7,0 };
-		}
-		else if (flag)
-		{
-			flag = false;
-			savePos = { 30,-17,0 };
-		}
-		shakeTimerFlag = true;
-		Audio::GetInstance()->PlayWave(15);
-	}
-	else if (input->TriggerDown() && !shakeTimerFlag || input->PushPadStickDown() && !shakeTimerFlag || 
-		input->TriggerKey(DIK_DOWN) && !shakeTimerFlag || input->TriggerKey(DIK_S)) && !shakeTimerFlag)
+	if ((input->TriggerUp() || input->TriggerDown() ||input->TriggerPadStickUp() || input->TriggerPadStickDown() 
+		|| input->TriggerKey(DIK_UP) || input->TriggerKey(DIK_DOWN) || input->TriggerKey(DIK_W) || input->TriggerKey(DIK_S)) && !shakeTimerFlag)
 	{
 		if (!flag)
 		{
