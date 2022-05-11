@@ -12,6 +12,7 @@ EnemyBullet::EnemyBullet(Vector3 startPos, Vector3 startVec, ModelManager::Model
 
 void EnemyBullet::Update()
 {
+	oldPos = pos;
 	velocity.y = 0;
 	pos += velocity;
 	GameObjCommon::Update();
@@ -30,7 +31,7 @@ void EnemyBullet::LustUpdate()
 	if (MapChip::GetInstance()->CheckMapChipAreaToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
 		isAlive = false;
 	}
-	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
+	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal,&oldPos)) {
 		isAlive = false;
 
 	}

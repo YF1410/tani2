@@ -53,6 +53,9 @@ void Enemy::Initialize() {
 }
 
 void Enemy::Update() {
+
+	//‹Œƒ|ƒWƒVƒ‡ƒ“
+	oldPos = pos;
 	//ˆÚ“®—Ê‰Šú‰»
 	VelocityReset(0.95f);
 	if (!isInvincible && velocity.Length() > maxMoveSpeed) {
@@ -129,7 +132,7 @@ void Enemy::LustUpdate() {
 		moveVec = velocity + penalty;
 		normal = { 0,0,0 };
 	}
-	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
+	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal,&oldPos)) {
 
 		if (hitPos.x != 0) {
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;

@@ -68,7 +68,7 @@ public:
 	
 
 	//マップチップと矩形の当たり判定
-	bool CheckMapChipToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos, Vector3 *normal);
+	bool CheckMapChipToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos, Vector3 *normal,Vector3 *oldPos);
 	bool CheckMapChipAreaToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos, Vector3 *normal);
 	//マップチップと球の当たり判定
 	bool CheckMapChipToSphere2d(SphereCollider *sphereCollider,Vector3 *vel,Vector3 *hitPos);
