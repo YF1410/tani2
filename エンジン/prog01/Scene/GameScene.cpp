@@ -201,7 +201,7 @@ void GameScene::Update() {
 		clearFlag = true;
 		if (!isChangeBGM)
 		{
-			Audio::GetInstance()->LoopStopWave();
+			Audio::GetInstance()->LoopStopWave(1);
 			Audio::GetInstance()->LoopPlayWave(9, 0.5f);
 			isChangeBGM = true;
 		}
@@ -211,7 +211,7 @@ void GameScene::Update() {
 		gameOverFlag = true;
 		if (!isChangeBGM)
 		{
-			Audio::GetInstance()->LoopStopWave();
+			Audio::GetInstance()->LoopStopWave(1);
 			Audio::GetInstance()->LoopPlayWave(8, 0.5f);
 			isChangeBGM = true;
 		}

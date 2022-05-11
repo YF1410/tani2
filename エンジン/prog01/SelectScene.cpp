@@ -5,10 +5,9 @@
 
 SelectScene::SelectScene(int parameter) {
 	//ClearConfirmation::GetInstance()->SetMaxUnlockStageNum(parameter);
-	int i = ClearConfirmation::GetInstance()->GetMaxUnlockStageNum();
-	if (i >= parameter) {
-		maxUnlockStage = i;
-		selectCount = i;
+	if (ClearConfirmation::GetInstance()->GetMaxUnlockStageNum() >= parameter) {
+		maxUnlockStage = ClearConfirmation::GetInstance()->GetMaxUnlockStageNum();
+		selectCount = ClearConfirmation::GetInstance()->GetMaxUnlockStageNum();
 		isUnlockStage = true;
 	}
 	else {
