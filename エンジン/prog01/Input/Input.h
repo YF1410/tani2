@@ -67,6 +67,11 @@ public: //ÉÅÉìÉoä÷êî
 	bool PushPadStickRight();
 	bool PushPadStickLeft();
 
+	bool TriggerPadStickUp();
+	bool TriggerPadStickDown();
+	bool TriggerPadStickRight();
+	bool TriggerPadStickLeft();
+
 	bool TriggerUp();
 	bool TriggerDown();
 	bool TriggerRight();

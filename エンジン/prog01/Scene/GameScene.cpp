@@ -405,7 +405,9 @@ void GameScene::Select()
 		saveGameoverEscapePos = gameoverEscapePos;
 		saveCount++;
 	}
-	if (((input->TriggerUp() || input->TriggerKey(DIK_W))&& !shakeTimerFlag) || ((input->TriggerDown() || input->TriggerKey(DIK_W))&& !shakeTimerFlag))
+	if ((input->TriggerUp() || input->TriggerPadStickUp() || input->TriggerKey(DIK_W) || input->TriggerKey(DIK_UP)
+		|| input->TriggerDown() || input->TriggerPadStickDown() || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_DOWN)) 
+		&& !shakeTimerFlag)
 	{
 		if (!selectFlag)
 		{

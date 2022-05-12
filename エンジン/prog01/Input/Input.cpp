@@ -316,6 +316,38 @@ bool Input::PushPadStickLeft()
 	return false;
 }
 
+bool Input::TriggerPadStickUp() {
+	if (padData.lY < -angle && !(padDataPre.lY < -angle)) 	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::TriggerPadStickDown() {
+	if (padData.lY > angle && !(padDataPre.lY > angle)) 	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::TriggerPadStickRight() {
+	if (padData.lX > angle && !(padDataPre.lX > angle)) 	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::TriggerPadStickLeft() {
+	if (padData.lX < -angle && !(padDataPre.lX < -angle)) 	{
+		return true;
+	}
+
+	return false;
+}
+
 bool Input::TriggerUp()
 {
 	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_UP && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_UP)
