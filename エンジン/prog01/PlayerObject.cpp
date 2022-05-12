@@ -143,6 +143,9 @@ void PlayerObject::Initialize()
 void PlayerObject::Update()
 {
 	Input* input = Input::GetInstance();
+	
+	//旧ポジション
+	oldPos = pos;
 	//スケールから移動量決定
 	moveSpead = 7.5f;
 	//ペナルティリセット
@@ -410,7 +413,7 @@ void PlayerObject::LustUpdate()
 		HitWall(hitPos, normal.Normal());
 		Audio::GetInstance()->PlayWave(17);
 	}
-	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
+	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal,&oldPos)) {
 
 		if (hitPos.x != 0) {
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;

@@ -208,7 +208,7 @@ void ParticleFactory::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOA
 	//追加した要素を参照
 	Particle& p = particles.front();
 	//値のセット
-	p.position = position;
+	p.position = position + Vector3{2500,0,0};
 	p.velocity = velocity;
 	p.accel = accel;
 	p.num_frame = life;
