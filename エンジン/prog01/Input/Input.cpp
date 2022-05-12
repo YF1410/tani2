@@ -75,9 +75,17 @@ bool Input::Initialize(HINSTANCE hInstance, HWND hwnd)
 	}
 #pragma endregion
 #pragma region ゲームパッド
-
-	this->hInstance = hInstance;
 	this->hwnd = hwnd;
+
+	//初期化（一度だけ行う処理）
+	result = DirectInput8Create
+	(
+		hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinputPad, nullptr
+	);
+	if (FAILED(result))
+	{
+		assert(0);
+	}
 	PadInitialize();
 	
 #pragma endregion
@@ -158,6 +166,8 @@ bool Input::TriggerKey(BYTE keyNumber)
 
 BOOL CALLBACK Input::DeviceFindCallBack(LPCDIDEVICEINSTANCE ipddi, LPVOID pvRef)
 {
+
+
 	return DIENUM_CONTINUE;
 }
 
@@ -165,23 +175,12 @@ void Input::PadInitialize()
 {
 	HRESULT result = S_FALSE;
 
-	//初期化（一度だけ行う処理）
-	result = DirectInput8Create
-	(
-		hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinputPad, nullptr
-	);
-	if (FAILED(result))
-	{
-		assert(0);
-		return;
-	}
-
-	// デバイスの列挙
-	if (FAILED(dinputPad->EnumDevices(DI8DEVTYPE_GAMEPAD, DeviceFindCallBack, &parameter, DIEDFL_ATTACHEDONLY)))
-	{
-		assert(0);
-		return;
-	}
+	//// デバイスの列挙 （複数の場合）
+	//if (FAILED(dinputPad->EnumDevices(DI8DEVTYPE_GAMEPAD, DeviceFindCallBack, &parameter, DIEDFL_ATTACHEDONLY)))
+	//{
+	//	assert(0);
+	//	return;
+	//}
 
 	result = dinputPad->CreateDevice(GUID_Joystick, &devGamePad, NULL);
 	if (FAILED(result))

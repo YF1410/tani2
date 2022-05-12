@@ -8,6 +8,9 @@
 #include <cstdlib>
 
 #include "WinApp.h"
+#include <mmsystem.h>
+#pragma comment(lib,"winmm.lib")
+
 
 class DirectXCommon final
 {
@@ -58,6 +61,12 @@ private: // メンバ変数
 	ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	ComPtr<ID3D12Fence> fence;
 	UINT64 fenceVal = 0;
+
+	const float MIN_FREAM_TIME = 1.0f / 60;
+	float frameTime = 0;
+	LARGE_INTEGER timeStart;
+	LARGE_INTEGER timeEnd;
+	LARGE_INTEGER timeFreq;
 
 private: // メンバ関数
 	// DXGIデバイス初期化
