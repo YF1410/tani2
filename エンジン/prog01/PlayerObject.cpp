@@ -66,6 +66,7 @@ void PlayerObject::Initialize()
 	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
 	//ƒ|ƒWƒVƒ‡ƒ“‰Šú‰»
 	pos = startPos;
+	oldPos = pos;
 	savePos = startPos;
 
 	//UŒ‚ŠÖŒW
@@ -413,7 +414,7 @@ void PlayerObject::LustUpdate()
 		HitWall(hitPos, normal.Normal());
 		Audio::GetInstance()->PlayWave(17);
 	}
-	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal,&oldPos)) {
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal,&oldPos)) {
 
 		if (hitPos.x != 0) {
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
