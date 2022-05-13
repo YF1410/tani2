@@ -206,7 +206,11 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(162, L"Resources/Sprite/SelectSceneNum/chain.png")) {
 		assert(0);
 	}
+	if (!Sprite::LoadTexture(163, L"Resources/Sprite/SelectSceneNum/lock.png")) {
+		assert(0);
+	}
 }
+
 
 SpriteFactory* SpriteFactory::GetInstance()
 {

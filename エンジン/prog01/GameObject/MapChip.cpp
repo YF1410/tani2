@@ -20,7 +20,7 @@ void MapChip::Initialize()
 
 void MapChip::Filnalize()
 {
-	for (auto& a : mapChipObj)
+	for (auto &a : mapChipObj)
 	{
 		a.clear();
 	}
@@ -121,70 +121,89 @@ void MapChip::Draw()
 	}
 }
 
-bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos, Vector3 *normal)
+bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos, Vector3 *normal, Vector3 *oldPos)
 {
 	Vector3 hitPositon = { 0,0,0 };
 	Box2DCollider box = *boxCollider;
-	int nowChipX = (box.center.x + (chipSize / 2) - fmodf(box.center.x + (chipSize / 2),chipSize)) / chipSize;
-	int nowChipY = (-box.center.z - (chipSize / 2) - fmodf(-box.center.z - (chipSize / 2), chipSize)) / chipSize + 1;
 
-	int rig = ((box.center.x + box.Right) - (chipSize / 2) - fmodf((box.center.x + box.Right) - (chipSize / 2), chipSize)) / chipSize + 1;
-	int lef = ((box.center.x + box.Left) + (chipSize / 2) - fmodf((box.center.x + box.Left) + (chipSize / 2), chipSize)) / chipSize;
-	int up = (-box.center.z + box.Top + (chipSize / 2) - fmodf(-box.center.z + box.Top + (chipSize / 2), chipSize)) / chipSize;
-	int down = (-box.center.z + box.Bottom - (chipSize / 2) - fmodf(-box.center.z + box.Bottom - (chipSize / 2), chipSize)) / chipSize + 1;
+	Vector3 boxCenter[2] = {
+		{*oldPos + (box.center - *oldPos) / 2},//半分
+		{box.center}
+	};
 
-	bool hit = false;
+	int counter = 1;
+	if (vel->Length() >= chipSize) {
+		counter = 0;
+	}
+	for (; counter < 2; counter++) {
+
+		int nowChipX = (boxCenter[counter].x + (chipSize / 2) - fmodf(boxCenter[counter].x + (chipSize / 2), chipSize)) / chipSize;
+		int nowChipY = (-boxCenter[counter].z - (chipSize / 2) - fmodf(-boxCenter[counter].z - (chipSize / 2), chipSize)) / chipSize + 1;
+
+		int rig = ((boxCenter[counter].x + box.Right) - (chipSize / 2) - fmodf((boxCenter[counter].x + box.Right) - (chipSize / 2), chipSize)) / chipSize + 1;
+		int lef = ((boxCenter[counter].x + box.Left) + (chipSize / 2) - fmodf((boxCenter[counter].x + box.Left) + (chipSize / 2), chipSize)) / chipSize;
+		int up = (-boxCenter[counter].z + box.Top + (chipSize / 2) - fmodf(-boxCenter[counter].z + box.Top + (chipSize / 2), chipSize)) / chipSize;
+		int down = (-boxCenter[counter].z + box.Bottom - (chipSize / 2) - fmodf(-boxCenter[counter].z + box.Bottom - (chipSize / 2), chipSize)) / chipSize + 1;
+
+		bool hit = false;
 
 
-	//上方向への移動があるとき
-	if (0 < vel->z) {
-	
-		if (GetChipNum(nowChipX, up) == 1) {
-			hitPositon.z = -up * chipSize - chipSize / 2;
-			normal->z = -1.0f;
-			hit = true;
+		//上方向への移動があるとき
+		if (0 < vel->z) {
+
+			if (GetChipNum(nowChipX, up) == 1) {
+				hitPositon.z = -up * chipSize - chipSize / 2;
+				normal->z = -1.0f;
+				hit = true;
+			}
+		}
+		//下側
+		if (0 > vel->z) {
+
+			if (GetChipNum(nowChipX, down) == 1) {
+				hitPositon.z = -down * chipSize + chipSize / 2;
+				normal->z = 1.0f;
+				hit = true;
+			}
+		}
+		//右側
+		if (0 < vel->x) {
+			if (GetChipNum(rig, nowChipY) == 1) {
+				hitPositon.x = rig * chipSize - chipSize / 2;
+				normal->x = -1.0f;
+				hit = true;
+			}
+		}
+		//左側
+		if (vel->x < 0) {
+
+			if (GetChipNum(lef, nowChipY) == 1) {
+				hitPositon.x = lef * chipSize + chipSize / 2;
+				normal->x = 1.0f;
+				hit = true;
+			}
+		}
+
+		if (hitpos != nullptr) {
+			*hitpos = hitPositon;
+		}
+
+		//あったっていたらその時点で終了
+		if (hit) {
+			return hit;
 		}
 	}
-	//下側
-	if (0 > vel->z) {
-		
-		if (GetChipNum(nowChipX, down) == 1) {
-			hitPositon.z = -down * chipSize + chipSize / 2;
-			normal->z = 1.0f;
-			hit = true;
-		}
-	}
-	//右側
-	if (0 < vel->x) {
-		if (GetChipNum(rig, nowChipY) == 1) {
-			hitPositon.x = rig * chipSize - chipSize / 2;
-			normal->x = -1.0f;
-			hit = true;
-		}
-	}
-	//左側
-	if (vel->x < 0) {
-		
-		if (GetChipNum(lef, nowChipY) == 1) {
-			hitPositon.x = lef * chipSize + chipSize / 2;
-			normal->x = 1.0f;
-			hit = true;
-		}
-	}
+	return false;
 
 
-	if (hitpos != nullptr) {
-		*hitpos = hitPositon;
-	}
-
-
-	return hit;
 }
 
 bool MapChip::CheckMapChipAreaToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vector3 *hitpos, Vector3 *normal)
 {
+
 	Vector3 hitPositon = { 0,0,0 };
 	Box2DCollider box = *boxCollider;
+
 	int nowChipX = (box.center.x + (chipSize / 2) - fmodf(box.center.x + (chipSize / 2), chipSize)) / chipSize;
 	int nowChipY = (-box.center.z - (chipSize / 2) - fmodf(-box.center.z - (chipSize / 2), chipSize)) / chipSize + 1;
 
@@ -236,7 +255,7 @@ bool MapChip::CheckMapChipToSphere2d(SphereCollider *sphereCollider, Vector3 *ve
 	int lef = ((center.x - sphere.GetRadius()) + (chipSize / 2) - fmodf((center.x - sphere.GetRadius()) + (chipSize / 2), chipSize)) / chipSize;
 	int up = (-center.z - sphere.GetRadius() + (chipSize / 2) - fmodf(-center.z - sphere.GetRadius() + (chipSize / 2), chipSize)) / chipSize;
 	int down = (-center.z + sphere.GetRadius() - (chipSize / 2) - fmodf(-center.z + sphere.GetRadius() - (chipSize / 2), chipSize)) / chipSize + 1;
-	
+
 	Vector3 hitPosition = { 0,0,0 };
 	bool hit = false;
 
@@ -247,9 +266,9 @@ bool MapChip::CheckMapChipToSphere2d(SphereCollider *sphereCollider, Vector3 *ve
 		for (int x = lef; x <= rig; x++) {
 			if (GetChipNum(x, up) == 1) {
 				//細かい当たり判定
-				for (int offset = -1; offset <= 1; offset +=2) {
+				for (int offset = -1; offset <= 1; offset += 2) {
 					Vector3 cornerPos = {
-						(float)(x * chipSize + (chipSize / 2)*offset),
+						(float)(x * chipSize + (chipSize / 2) * offset),
 						0,
 						(float)(-up * chipSize - (chipSize / 2))
 					};
@@ -258,7 +277,7 @@ bool MapChip::CheckMapChipToSphere2d(SphereCollider *sphereCollider, Vector3 *ve
 						sphere.GetRadius()
 					};
 					if (Collision::CheckSphere2Point(mapChipSphere, sphere.center)) {
-						hitPosition.z = Vector3(cornerPos + Vector3(sphere.center- cornerPos).Normal() * mapChipSphere.radius).z;
+						hitPosition.z = Vector3(cornerPos + Vector3(sphere.center - cornerPos).Normal() * mapChipSphere.radius).z;
 						hit = true;
 					}
 				}
@@ -293,7 +312,7 @@ bool MapChip::CheckMapChipToSphere2d(SphereCollider *sphereCollider, Vector3 *ve
 	//右側
 	if (0 < vel->x) {
 		for (int y = up; y <= down; y++) {
-			if (GetChipNum(rig,y) == 1) {
+			if (GetChipNum(rig, y) == 1) {
 				//細かい当たり判定
 				for (int offset = -1; offset <= 1; offset += 2) {
 					Vector3 cornerPos = {
@@ -347,7 +366,7 @@ MapChip::~MapChip()
 	Filnalize();
 }
 
-MapChip* MapChip::GetInstance()
+MapChip *MapChip::GetInstance()
 {
 	static MapChip instance;
 	return &instance;

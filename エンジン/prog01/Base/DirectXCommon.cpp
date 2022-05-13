@@ -84,6 +84,9 @@ void DirectXCommon::Initialize(WinApp* winApp)
 	{
 		assert(0);
 	}
+	QueryPerformanceFrequency(&timeFreq);
+	// 1度取得しておく(初回計算用)
+	QueryPerformanceCounter(&timeStart);
 }
 
 void DirectXCommon::PreDraw()
@@ -137,6 +140,22 @@ void DirectXCommon::PostDraw()
 		WaitForSingleObject(event, INFINITE);
 		CloseHandle(event);
 	}
+
+	// 今の時間を取得
+	QueryPerformanceCounter(&timeEnd);
+	// (今の時間 - 前フレームの時間) / 周波数 = 経過時間(秒単位)
+	frameTime = static_cast<float>(timeEnd.QuadPart - timeStart.QuadPart) / static_cast<float>(timeFreq.QuadPart);
+
+	if (frameTime < MIN_FREAM_TIME)
+	{ // 時間に余裕がある
+		// ミリ秒に変換
+		DWORD sleepTime = static_cast<DWORD>((MIN_FREAM_TIME - frameTime) * 1000);
+
+		timeBeginPeriod(1); // 分解能を上げる(こうしないとSleepの精度はガタガタ)
+		Sleep(sleepTime);   // 寝る
+		timeEndPeriod(1);   // 戻す
+	}
+	timeStart = timeEnd; // 入れ替え
 
 	commandAllocator->Reset(); // キューをクリア
 	commandList->Reset(commandAllocator.Get(), nullptr); // 再びコマンドリストを貯める準備

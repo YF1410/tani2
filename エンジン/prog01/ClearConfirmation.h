@@ -19,7 +19,7 @@ public:
 	bool GetStage3Flag() { return stage3Flag; }
 	bool GetStage4Flag() { return stage4Flag; }
 	bool GetStage5Flag() { return stage5Flag; }
-	int GetMaxUnlockStageNum() { return maxUnlockStageNum; }
+	int& GetMaxUnlockStageNum() { return maxUnlockStageNum; }
 
 	//setter
 	void SetStage1Flag(bool _stage1Flag) { stage1Flag = _stage1Flag; }

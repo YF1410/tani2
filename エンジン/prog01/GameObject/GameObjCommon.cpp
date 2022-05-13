@@ -117,6 +117,10 @@ void GameObjCommon::Adaptation()
 void GameObjCommon::Draw() const
 {
 	if (isInvisible) return;	//透明なときと削除タイミングでは描画しない
+	Vector3 offsetPos = pos + Vector3{2500,0,0};
+	objectData->SetPosition(offsetPos);
+	objectData->Update();
+
 	objectData->Draw(DirectXCommon::GetInstance()->GetCommandList());
 }
 

@@ -45,6 +45,7 @@ void Object3d::StaticFinalize()
 
 void Object3d::PreDraw(ID3D12GraphicsCommandList* cmdList)
 {
+
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
 	assert(Object3d::cmdList == nullptr);
 
@@ -318,12 +319,22 @@ void Object3d::Draw()
 	assert(device);
 	assert(Object3d::cmdList);
 
+	//2500ずらす
+	Vector3 offsetPos = Vector3(position) + Vector3(2500, 0, 0);
+	SetPosition(offsetPos);
+	Update();
+
 	// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
 	//ライトの描画
 	light->Draw(cmdList, 3);
 	//モデル描画
 	model->Draw(cmdList);
+
+	//2500もどす
+	offsetPos -= Vector3(2500, 0, 0);
+	SetPosition(offsetPos);
+
 }
 
 void Object3d::UpdateWorldMatrix()

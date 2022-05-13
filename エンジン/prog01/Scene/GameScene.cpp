@@ -201,7 +201,7 @@ void GameScene::Update() {
 		clearFlag = true;
 		if (!isChangeBGM)
 		{
-			Audio::GetInstance()->LoopStopWave();
+			Audio::GetInstance()->LoopStopWave(1);
 			Audio::GetInstance()->LoopPlayWave(9, 0.5f);
 			isChangeBGM = true;
 		}
@@ -211,7 +211,7 @@ void GameScene::Update() {
 		gameOverFlag = true;
 		if (!isChangeBGM)
 		{
-			Audio::GetInstance()->LoopStopWave();
+			Audio::GetInstance()->LoopStopWave(1);
 			Audio::GetInstance()->LoopPlayWave(8, 0.5f);
 			isChangeBGM = true;
 		}
@@ -405,8 +405,9 @@ void GameScene::Select()
 		saveGameoverEscapePos = gameoverEscapePos;
 		saveCount++;
 	}
-	if ((input->TriggerUp() || input->TriggerDown() ||input->TriggerPadStickUp() || input->TriggerPadStickDown() 
-		|| input->TriggerKey(DIK_W) || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_UP) || input->TriggerKey(DIK_DOWN))&& !shakeTimerFlag)
+	if ((input->TriggerUp() || input->TriggerPadStickUp() || input->TriggerKey(DIK_W) || input->TriggerKey(DIK_UP)
+		|| input->TriggerDown() || input->TriggerPadStickDown() || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_DOWN)) 
+		&& !shakeTimerFlag)
 	{
 		if (!selectFlag)
 		{

@@ -54,6 +54,7 @@ Debris::~Debris()
 
 void Debris::Update()
 {
+	oldPos = pos;
 	VelocityReset();
 	//強制回収フラグがたったらステートを変更
 	//攻撃終了
@@ -122,7 +123,7 @@ void Debris::LustUpdate()
 	Vector3 moveVec = velocity + penalty;
 	Vector3 normal = { 0,0,0 };
 	//上下左右
-	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos,&normal)) {
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos,&normal,&oldPos)) {
 		if (hitPos.x != 0) {
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
 		}

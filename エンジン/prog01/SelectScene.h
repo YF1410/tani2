@@ -67,6 +67,11 @@ private: // メンバ変数
 	std::unique_ptr<Sprite> stage3Lock;
 	std::unique_ptr<Sprite> stage4Lock;
 	std::unique_ptr<Sprite> stage5Lock;
+	std::unique_ptr<Sprite> stage1Chain;
+	std::unique_ptr<Sprite> stage2Chain;
+	std::unique_ptr<Sprite> stage3Chain;
+	std::unique_ptr<Sprite> stage4Chain;
+	std::unique_ptr<Sprite> stage5Chain;
 
 	SceneChange sceneChange;
 
@@ -74,9 +79,12 @@ private: // メンバ変数
 
 	XMFLOAT2 defaultNumSize = { 150.0f,150.0f };
 	XMFLOAT2 selectNumSize = { 400.0f,400.0f };
+	XMFLOAT2 defaultChainSize = {135.0f,135.0f};
 	XMFLOAT2 defaultLockSize = {135.0f,135.0f};
-	//XMFLOAT2 defaultLockSize = {75.0f,75.0f};
+	XMFLOAT2 selectChainSize = { 370.0f,370.0f };
 	XMFLOAT2 selectLockSize = { 370.0f,370.0f };
+
+	float defaultRotation = 0;
 
 	float offAmount = 400.0f;
 	int selectCount = 0;
@@ -98,11 +106,21 @@ private: // メンバ変数
 	XMFLOAT2 stage3Size = defaultNumSize;
 	XMFLOAT2 stage4Size = defaultNumSize;
 	XMFLOAT2 stage5Size = defaultNumSize;
+	XMFLOAT2 stage1LockPosition = stage1Pos;
+	XMFLOAT2 stage2LockPosition = stage2Pos;
+	XMFLOAT2 stage3LockPosition = stage3Pos;
+	XMFLOAT2 stage4LockPosition = stage4Pos;
+	XMFLOAT2 stage5LockPosition = stage5Pos;
 	XMFLOAT2 stage1LockSize = defaultLockSize;
 	XMFLOAT2 stage2LockSize = defaultLockSize;
 	XMFLOAT2 stage3LockSize = defaultLockSize;
 	XMFLOAT2 stage4LockSize = defaultLockSize;
 	XMFLOAT2 stage5LockSize = defaultLockSize;
+	XMFLOAT2 stage1ChainSize = defaultChainSize;
+	XMFLOAT2 stage2ChainSize = defaultChainSize;
+	XMFLOAT2 stage3ChainSize = defaultChainSize;
+	XMFLOAT2 stage4ChainSize = defaultChainSize;
+	XMFLOAT2 stage5ChainSize = defaultChainSize;
 
 	float bgSpriteWidth = 1280.0f;
 	XMFLOAT2 tutorialBGPos = { bgSpriteWidth * selectCount,0 };
@@ -128,10 +146,17 @@ private: // メンバ変数
 	bool isNext = false;
 	bool isBack = false;
 
+	int droplockEaseTimer = 0;
+	int maxDroplockEaseTimer = 120;
 	int unlockEaseTimer = 0;
 	int maxUnlockEaseTimer = 60;
 	bool isUnlockStage = false;
 
 	bool nowSceneChange = false;
+
+	float selectLockRotation = 0;
+	float selectLockRightRotation = 15.0f;
+	float selectLockLeftRotation = -15.0f;
+	float rotationVelocity = -15.0f;
 };
 

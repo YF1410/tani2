@@ -49,10 +49,11 @@ void Camera::UpdateViewMatrix()
 	// ビュー行列の更新
 	//matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
 
+	//2500ずらす
 	// 視点座標
-	XMVECTOR eyePosition = XMLoadFloat3(&eye);
+	XMVECTOR eyePosition = XMLoadFloat3(&eye) + Vector3(2500, 0, 0);
 	// 注視点座標
-	XMVECTOR targetPosition = XMLoadFloat3(&target);
+	XMVECTOR targetPosition = XMLoadFloat3(&target) + Vector3(2500, 0, 0);
 	// (仮の)上方向
 	XMVECTOR upVector = XMLoadFloat3(&up);
 
