@@ -34,7 +34,7 @@ GameScene::GameScene(int parameter) {
 	playerObject = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos());
 	enemyManager = std::make_unique<EnemyManager>(playerObject.get());
 	//UI生成
-	ui = std::make_unique<UserInterface>(&enemyManager->nowWave, playerObject.get(), enemyManager.get(),&counter);
+	ui = std::make_unique<UserInterface>(&enemyManager->nowWave, playerObject.get(), enemyManager.get(), &counter);
 	//背景セット
 
 	//カメラ生成
@@ -142,6 +142,9 @@ void GameScene::Initialize() {
 	gameoverEscapeObject3d->SetScale({ 0, 0, 0 });
 	//clearEscapeObject3d->SetPosition({ 3000,0,-1700 });
 
+	recoveryEffectObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("recoveryEffect"));
+
+	recoveryEffect2Object3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("recoveryEffect2"));
 
 	//デブリリセット
 	Debris::StaticInitialize(playerObject.get());
@@ -217,6 +220,20 @@ void GameScene::Update() {
 		}
 	}
 
+	if (playerObject.get()->recovery.can) {
+		recoveryEffectObject3d->SetScale({ 3000.0f,1.0f,3000.0f });
+		recoveryEffect2Object3d->SetScale({ 3000.0f,1.0f,3000.0f });
+	}
+	else if (playerObject.get()->recovery.is && (playerObject.get()->recovery.interval / 2) <= playerObject.get()->recovery.timer) {
+		float eTime = (float)((playerObject.get()->recovery.interval - playerObject.get()->recovery.timer) / static_cast<double>(playerObject.get()->recovery.interval / 2));
+		recoveryEffectObject3d->SetScale(Ease(Out, Quint, eTime, { 3000.0f,1.0f,3000.0f }, { 1.0f,1.0f,1.0f }));
+		recoveryEffect2Object3d->SetScale(Ease(Out, Quint, eTime, { 3000.0f,1.0f,3000.0f }, { 1.0f,1.0f,1.0f }));
+		recoveryEffectObject3d->SetPosition({ playerObject.get()->GetPos().x,playerObject.get()->GetPos().y + 50.0f,playerObject.get()->GetPos().z });
+		recoveryEffect2Object3d->SetPosition({ playerObject.get()->GetPos().x,playerObject.get()->GetPos().y + 60.0f,playerObject.get()->GetPos().z });
+		recoveryEffectObject3d->SetRotation({ 0, static_cast<float>(12 * playerObject.get()->recovery.timer),0 });
+		recoveryEffect2Object3d->SetRotation({ 0, static_cast<float>(4 * playerObject.get()->recovery.timer),0 });
+	}
+
 	playerObject->SetEndFlag(clearFlag, gameOverFlag);
 	if (clearFlag) {
 		Clear();
@@ -237,7 +254,7 @@ void GameScene::Update() {
 
 	//デバックテキスト
 
-	
+
 	//プレイヤー更新
 	playerObject->Update();
 	//破片更新
@@ -251,6 +268,8 @@ void GameScene::Update() {
 	gameoverObject3d->Update();
 	retryObject3d->Update();
 	gameoverEscapeObject3d->Update();
+	recoveryEffectObject3d->Update();
+	recoveryEffect2Object3d->Update();
 
 	//パーティクル全てのアップデート
 	ParticleManager::GetInstance()->Update();
@@ -261,7 +280,7 @@ void GameScene::Update() {
 	camera->CameraShake();
 }
 
-	
+
 void GameScene::LastUpdate() {
 	//ここから
 
@@ -319,7 +338,14 @@ void GameScene::Draw() {
 	Debris::StaticDraw();
 	playerObject->Draw();
 	enemyManager.get()->Draw();
-	
+
+	Object3d::PreDraw(cmdList);
+	if (playerObject.get()->recovery.is) {
+		recoveryEffectObject3d->Draw();
+		recoveryEffect2Object3d->Draw();
+	}
+	Object3d::PostDraw();
+
 #pragma endregion 3Dオブジェクト(FBX)描画
 	ParticleManager::GetInstance()->Draw(cmdList);
 
@@ -330,7 +356,6 @@ void GameScene::Draw() {
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
-
 	if (!clearFlag && !gameOverFlag)
 	{
 		ui.get()->Draw();
@@ -353,7 +378,6 @@ void GameScene::Draw() {
 
 
 	Object3d::PreDraw(cmdList);
-
 	//ここから下に書く
 	if (clearFlag)
 	{
@@ -406,7 +430,7 @@ void GameScene::Select()
 		saveCount++;
 	}
 	if ((input->TriggerUp() || input->TriggerPadStickUp() || input->TriggerKey(DIK_W) || input->TriggerKey(DIK_UP)
-		|| input->TriggerDown() || input->TriggerPadStickDown() || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_DOWN)) 
+		|| input->TriggerDown() || input->TriggerPadStickDown() || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_DOWN))
 		&& !shakeTimerFlag)
 	{
 		if (!selectFlag)
@@ -431,7 +455,7 @@ void GameScene::Select()
 			Audio::GetInstance()->PlayWave(16);
 			if (clearFlag) {
 				ClearConfirmation::GetInstance()->SetMaxUnlockStageNum(nowStageNum + 1);
-				sceneChange.SceneChangeStart("SelectScene",nowStageNum + 1);
+				sceneChange.SceneChangeStart("SelectScene", nowStageNum + 1);
 				//sceneChange.SceneChangeStart("GameScene", nowStageNum + 1);
 			}
 			else if (gameOverFlag) {
@@ -756,7 +780,6 @@ void GameScene::OutBack() {
 			Select();
 		}
 	}
-
 }
 
 void GameScene::Shake(Input* input)

@@ -21,6 +21,7 @@ struct STATE
 		if (!can) {
 			if (timer <= 0) {
 				can = true;
+				is = false;
 			}
 			else {
 				timer--;

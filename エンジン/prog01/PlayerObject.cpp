@@ -123,22 +123,11 @@ void PlayerObject::Initialize()
 
 	//atkParticle->SetStartColor({ 0.8f, 0.8f, 2.0f, 1.0f });
 
-	atkStockParticle = atkStockParticle->Create(L"atkStock");
-	atkStockParticle->SetStartScale(0.0f);
-	atkStockParticle->SetEndScale(300.0f);
-	atkStockParticle->SetStartColor({ 1, 1, 1, 0.3f });
-
-	recoveryParticle = atkStockParticle->Create(L"recovery");
-	recoveryParticle->SetStartScale(150.0f);
-	recoveryParticle->SetCenter(400.0f);
-
 	ParticleManager::GetInstance()->SetParticleEmitter(healParticle1);
 	ParticleManager::GetInstance()->SetParticleEmitter(healParticle2);
 	ParticleManager::GetInstance()->SetParticleEmitter(boomParticle);
 	ParticleManager::GetInstance()->SetParticleEmitter(refParticle);
 	ParticleManager::GetInstance()->SetParticleEmitter(atkParticle);
-	ParticleManager::GetInstance()->SetParticleEmitter(atkStockParticle);
-	ParticleManager::GetInstance()->SetParticleEmitter(recoveryParticle);
 }
 
 void PlayerObject::Update()
@@ -156,9 +145,11 @@ void PlayerObject::Update()
 	VelocityReset(0.95f);
 	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
+		rotate = { 0,0,0 };
 	}
 	if (attack.is && velocity.Length() >= 180) {
 		velocity = velocity.Normal() * 180;
+		rotate = {90.0f,0,0};
 	}
 	if (attack.is && velocity.Length() < 100) {
 		attack.is = false;
@@ -303,17 +294,6 @@ void PlayerObject::Update()
 		Audio::GetInstance()->LoopStopWave(1);
 		boostFlag = false;
 	}
-
-	/*if (attackCount <= 3) {
-		atkStockParticleTimer++;
-		if (atkStockParticleTimer >= atkStockParticleMaxTimer) {
-			for (int i = 0; i < attackCount; i++) {
-				atkStockParticle->AddAtkStock(attackCount, 20, { pos.x, pos.y, pos.z + (80 * (attackCount - (i + 2))) - 100 });
-			}
-			atkStockParticleTimer = 0;
-		}
-	}*/
-
 
 
 	/*if (dontRecovery) {

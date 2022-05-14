@@ -105,10 +105,6 @@ private: // ƒƒ“ƒo•Ï”
 	ParticleEmitter* boomParticle;
 	ParticleEmitter* refParticle;
 	ParticleEmitter* atkParticle;
-	ParticleEmitter* atkStockParticle;
-	int atkStockParticleTimer = 0;
-	int atkStockParticleMaxTimer = 40;
-	ParticleEmitter* recoveryParticle;
 
 	int nowHealFrame = 0;
 	int nowBoomFrame = 0;

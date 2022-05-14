@@ -14,6 +14,8 @@ void ObjFactory::Initialize()
 	LoadModel("gameover");
 	LoadModel("retry");
 	LoadModel("gameoverEscape");
+	LoadModel("recoveryEffect");
+	LoadModel("recoveryEffect2");
 }
 
 void ObjFactory::Finalize()

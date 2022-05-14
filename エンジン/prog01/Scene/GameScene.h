@@ -116,6 +116,9 @@ private: // ƒƒ“ƒo•Ï”
 	std::unique_ptr<Object3d> retryObject3d;
 	std::unique_ptr<Object3d> gameoverEscapeObject3d;
 
+	std::unique_ptr<Object3d> recoveryEffectObject3d;
+	std::unique_ptr<Object3d> recoveryEffect2Object3d;
+
 	int frame = 0;
 	bool frameF = false;
 	int healFrame = 3;
