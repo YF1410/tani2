@@ -106,48 +106,13 @@ void SelectScene::Update() {
 	}
 
 
-	if (input->TriggerPadButton(BUTTON_A) && !isUnlockStage && !nowSceneChange || input->TriggerKey(DIK_SPACE) && !isUnlockStage && !nowSceneChange) 	{
+	if ((input->TriggerPadButton(BUTTON_A)|| input->TriggerKey(DIK_SPACE)) && !isUnlockStage && !nowSceneChange){
 		Audio::GetInstance()->PlayWave(16);
-		if (selectCount == 0) {
-			sceneChange.SceneChangeStart("GameScene", 0);
-		}
-		else if (selectCount == 1) {
-			sceneChange.SceneChangeStart("GameScene", 1);
-		}
-		else if (selectCount == 2) {
-			sceneChange.SceneChangeStart("GameScene", 2);
-		}
-		else if (selectCount == 3) {
-			sceneChange.SceneChangeStart("GameScene", 3);
-		}
-		else if (selectCount == 4) {
-			sceneChange.SceneChangeStart("GameScene", 4);
-		}
-		else if (selectCount == 5) {
-			sceneChange.SceneChangeStart("GameScene", 5);
-		}
-
 		nowSceneChange = true;
-		/*if (selectCount <= maxUnlockStage) {
-			if (selectCount == 0) {
-				sceneChange.SceneChangeStart("GameScene", 0);
-			}
-			else if (selectCount == 1) {
-				sceneChange.SceneChangeStart("GameScene", 1);
-			}
-			else if (selectCount == 2) {
-				sceneChange.SceneChangeStart("GameScene", 2);
-			}
-			else if (selectCount == 3) {
-				sceneChange.SceneChangeStart("GameScene", 3);
-			}
-			else if (selectCount == 4) {
-				sceneChange.SceneChangeStart("GameScene", 4);
-			}
-			else if (selectCount == 5) {
-				sceneChange.SceneChangeStart("GameScene", 5);
-			}
-		}*/
+	}
+
+	if (nowSceneChange) {
+		selectSceneChange();
 	}
 
 	if ((input->TriggerRight() || input->TriggerPadStickRight() || input->TriggerKey(DIK_RIGHT) || input->TriggerKey(DIK_D)) 
@@ -579,5 +544,35 @@ void SelectScene::UnlockStage(int unlockStageNum) {
 			ClearConfirmation::GetInstance()->SetStage5Flag(true);
 		}
 
+	}
+}
+
+void SelectScene::selectSceneChange() {
+	if (pushSelectTimer < maxPushSelectTimer) {
+		pushSelectTimer++;
+	}
+	float eTime = (float)(pushSelectTimer / static_cast<double>(maxPushSelectTimer));
+
+	if (selectCount == 0) {
+		tutorialSize = Ease(In, Back, eTime, selectNumSize, { 0,0 });
+		tutorial->SetSize(tutorialSize);
+		if (pushSelectTimer >= maxPushSelectTimer) {
+			sceneChange.SceneChangeStart("GameScene", 0);
+		}
+	}
+	else if (selectCount == 1) {
+		sceneChange.SceneChangeStart("GameScene", 1);
+	}
+	else if (selectCount == 2) {
+		sceneChange.SceneChangeStart("GameScene", 2);
+	}
+	else if (selectCount == 3) {
+		sceneChange.SceneChangeStart("GameScene", 3);
+	}
+	else if (selectCount == 4) {
+		sceneChange.SceneChangeStart("GameScene", 4);
+	}
+	else if (selectCount == 5) {
+		sceneChange.SceneChangeStart("GameScene", 5);
 	}
 }

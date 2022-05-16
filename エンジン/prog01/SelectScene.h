@@ -45,6 +45,7 @@ public: // メンバ関数
 	void SelectEasing();
 	void InitializePosSize(int selectCount);
 	void UnlockStage(int unlockStageNum);
+	void selectSceneChange();
 
 private: // メンバ変数
 	//スプライト
@@ -158,5 +159,8 @@ private: // メンバ変数
 	float selectLockRightRotation = 15.0f;
 	float selectLockLeftRotation = -15.0f;
 	float rotationVelocity = -15.0f;
+
+	int pushSelectTimer = 0;
+	int maxPushSelectTimer = 20;
 };
 
