@@ -16,6 +16,10 @@ void ObjFactory::Initialize()
 	LoadModel("gameoverEscape");
 	LoadModel("recoveryEffect");
 	LoadModel("recoveryEffect2");
+	LoadModel("stage1");
+	LoadModel("stage2");
+	LoadModel("stage3");
+	LoadModel("stage4");
 }
 
 void ObjFactory::Finalize()

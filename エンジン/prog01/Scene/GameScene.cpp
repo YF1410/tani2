@@ -143,9 +143,30 @@ void GameScene::Initialize() {
 	//clearEscapeObject3d->SetPosition({ 3000,0,-1700 });
 
 	recoveryEffectObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("recoveryEffect"));
-
 	recoveryEffect2Object3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("recoveryEffect2"));
 
+	if (nowStageNum <= 1) {
+		stageBGObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("stage1"));
+	}
+	else if (nowStageNum == 2) {
+		stageBGObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("stage2"));
+	}
+	if (nowStageNum == 3) {
+		stageBGObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("stage3"));
+	}
+	if (nowStageNum == 4) {
+		stageBGObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("stage4"));
+	}
+	if (nowStageNum == 5) {
+		stageBGObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("stage5"));
+	}
+
+	stageBGObject3d->SetScale({ 100, 1, 100 });
+	stageBGObject3d->SetPosition({
+		(MapChip::GetInstance()->GetMapData().wide * 200.0f) / 2 - 100.0f,
+		-100.0f,
+		-(MapChip::GetInstance()->GetMapData().high * 200.0f) / 2 + 100.0f
+		});
 	//デブリリセット
 	Debris::StaticInitialize(playerObject.get());
 
@@ -184,7 +205,7 @@ void GameScene::Update() {
 		camera.get()->GetEye(),
 		Vector3(playerObject.get()->GetPos() +
 			eyeDistanceDef +
-			Vector3(0, debrisLengthMax * 0.7f, 0) +
+			Vector3(0,debrisLengthMax * 0.7f, 0) +
 			playerObject.get()->velocity * velocityOffset
 		));
 	camera->CameraMoveEyeVector(Vector3(eyeDistance - Vector3(camera.get()->GetEye())));
@@ -270,6 +291,8 @@ void GameScene::Update() {
 	gameoverEscapeObject3d->Update();
 	recoveryEffectObject3d->Update();
 	recoveryEffect2Object3d->Update();
+	stageBGObject3d->Update();
+	//stageBG2Object3d->Update();
 
 	//パーティクル全てのアップデート
 	ParticleManager::GetInstance()->Update();
@@ -327,6 +350,8 @@ void GameScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	// 3Dオブクジェクトの描画
 	Object3d::PreDraw(cmdList);
+	stageBGObject3d->Draw();
+	//stageBG2Object3d->Draw();
 	Object3d::PostDraw();
 #pragma endregion 3Dオブジェクト描画
 
@@ -456,7 +481,6 @@ void GameScene::Select()
 			if (clearFlag) {
 				ClearConfirmation::GetInstance()->SetMaxUnlockStageNum(nowStageNum + 1);
 				sceneChange.SceneChangeStart("SelectScene", nowStageNum + 1);
-				//sceneChange.SceneChangeStart("GameScene", nowStageNum + 1);
 			}
 			else if (gameOverFlag) {
 				sceneChange.SceneChangeStart("GameScene", nowStageNum);

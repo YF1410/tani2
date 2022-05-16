@@ -79,9 +79,9 @@ private: // ÉÅÉìÉoïœêî
 
 	XMFLOAT2 defaultNumSize = { 150.0f,150.0f };
 	XMFLOAT2 selectNumSize = { 400.0f,400.0f };
-	XMFLOAT2 defaultChainSize = {135.0f,135.0f};
+	XMFLOAT2 defaultChainSize = {145.0f,145.0f};
 	XMFLOAT2 defaultLockSize = {135.0f,135.0f};
-	XMFLOAT2 selectChainSize = { 370.0f,370.0f };
+	XMFLOAT2 selectChainSize = { 400.0f,400.0f };
 	XMFLOAT2 selectLockSize = { 370.0f,370.0f };
 
 	float defaultRotation = 0;

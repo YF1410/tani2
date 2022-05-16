@@ -29,6 +29,9 @@ SelectScene::SelectScene(int parameter) {
 	if (parameter == 5 && ClearConfirmation::GetInstance()->GetStage5Flag()) {
 		isUnlockStage = false;
 	}
+	//maxUnlockStage = 4;
+	//selectCount = 4;
+	//isUnlockStage = true;
 }
 
 SelectScene::~SelectScene() {
