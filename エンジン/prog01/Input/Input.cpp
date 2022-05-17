@@ -114,11 +114,7 @@ void Input::Update()
 	result = devMouse->GetDeviceState(sizeof(mouseState), &mouseState);
 #pragma endregion
 #pragma region ゲームパッド
-	if (!padFlag)
-	{
-		PadInitialize();
-	}
-	else if (padFlag)
+	if (padFlag)
 	{
 		// 制御開始
 		result = devGamePad->Acquire();

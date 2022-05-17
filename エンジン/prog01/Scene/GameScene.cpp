@@ -48,6 +48,15 @@ GameScene::GameScene(int parameter) {
 	camera->SetUp({ 0,1,0 });
 	//フラグリセット
 	isChangeBGM = false;
+
+	if (parameter == 0)
+	{
+		tutorialFlag = true;
+	}
+	else
+	{
+		tutorialFlag = false;
+	}
 }
 
 GameScene::~GameScene() {
@@ -274,16 +283,16 @@ void GameScene::Update() {
 	//testStage->Update();
 
 	//チュートリアルストップ
-	if (MapChip::GetInstance()->nowMap == MapChip::TUTORIAL) {
+	if (MapChip::GetInstance()->nowMap == MapChip::TUTORIAL && tutorialFlag) {
 		//ストップ解除処理
 		if (ui.get()->tutorialNum == 5
 			&& EnemyManager::enemys->size() == 0
-			&& enemyManager.get()->spawnData[MapChip::GetInstance()->nowMap][0].size() == 0) 
+			&& enemyManager.get()->spawnData[MapChip::GetInstance()->nowMap][0].size() == 0)
 		{
 			ui.get()->stopFrag = true;
 			ui.get()->tutorialNum++;
 		}
-		if (ui.get()->tutorialNum == 12){
+		if (ui.get()->tutorialNum == 12) {
 			static bool push = false;
 			if (Input::GetInstance()->PushKey(DIK_Q)
 				|| Input::GetInstance()->TriggerPadButton(BUTTON_B)) {
@@ -306,25 +315,48 @@ void GameScene::Update() {
 			//エネミー更新
 			enemyManager.get()->Update();
 
-	stageclearObject3d->Update();
-	nextStageObject3d->Update();
-	clearEscapeObject3d->Update();
-	gameoverObject3d->Update();
-	retryObject3d->Update();
-	gameoverEscapeObject3d->Update();
-	recoveryEffectObject3d->Update();
-	recoveryEffect2Object3d->Update();
-	stageBGObject3d->Update();
-	//stageBG2Object3d->Update();
+			stageclearObject3d->Update();
+			nextStageObject3d->Update();
+			clearEscapeObject3d->Update();
+			gameoverObject3d->Update();
+			retryObject3d->Update();
+			gameoverEscapeObject3d->Update();
+			recoveryEffectObject3d->Update();
+			recoveryEffect2Object3d->Update();
+			stageBGObject3d->Update();
+			//stageBG2Object3d->Update();
 
-			//パーティクル全てのアップデート
+					//パーティクル全てのアップデート
 			ParticleManager::GetInstance()->Update();
 		}
 		else {
 			playerObject->StopState();
 		}
 	}
-	
+	else if(!tutorialFlag)
+	{
+		//プレイヤー更新
+		playerObject->Update();
+		//破片更新
+		Debris::StaticUpdate();
+		//エネミー更新
+		enemyManager.get()->Update();
+
+		stageclearObject3d->Update();
+		nextStageObject3d->Update();
+		clearEscapeObject3d->Update();
+		gameoverObject3d->Update();
+		retryObject3d->Update();
+		gameoverEscapeObject3d->Update();
+		recoveryEffectObject3d->Update();
+		recoveryEffect2Object3d->Update();
+		stageBGObject3d->Update();
+		//stageBG2Object3d->Update();
+
+				//パーティクル全てのアップデート
+		ParticleManager::GetInstance()->Update();
+	}
+
 	//カウンターを加算
 	counter++;
 
@@ -345,7 +377,26 @@ void GameScene::LastUpdate() {
 		MapChip::GetInstance()->Adaptation();
 		// 全ての衝突をチェック
 		collisionManager->CheckBroadCollisions();
-		
+
+		enemyManager.get()->FinalUpdate();
+		playerObject.get()->LustUpdate();
+		Debris::StaticLustUpdate();
+		//全ての移動最終適応処理
+		playerObject.get()->Adaptation();
+		Debris::StaticAdaptation();
+		enemyManager.get()->Adaptation();
+		MapChip::GetInstance()->Adaptation();
+	}
+	else if(!tutorialFlag)
+	{
+		//全ての移動最終適応処理
+		playerObject.get()->Adaptation();
+		Debris::StaticAdaptation();
+		enemyManager.get()->Adaptation();
+		MapChip::GetInstance()->Adaptation();
+		// 全ての衝突をチェック
+		collisionManager->CheckBroadCollisions();
+
 		enemyManager.get()->FinalUpdate();
 		playerObject.get()->LustUpdate();
 		Debris::StaticLustUpdate();
