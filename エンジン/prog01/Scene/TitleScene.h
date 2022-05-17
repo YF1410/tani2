@@ -12,6 +12,7 @@
 #include <memory>
 
 #include "SceneChange.h"
+#include "Easing.h"
 
 class TitleScene : public BaseScene
 {
@@ -43,6 +44,8 @@ public: // メンバ関数
 	void Select();
 	void Shake();
 
+	void SpecifiedMove();
+
 private: // メンバ変数
 	//スプライト
 	std::unique_ptr<Sprite> sprite;
@@ -56,7 +59,7 @@ private: // メンバ変数
 	std::unique_ptr<Object3d> endObject3d;
 
 	bool flag = true;
-	bool shakeTimerFlag = false;
+	bool isShake = false;
 	int shakeTimer = 0;
 	int attenuation = 0;
 	
@@ -64,6 +67,19 @@ private: // メンバ変数
 	XMFLOAT3 savePos = {};
 	bool sceneChangeFlag = false;
 	SceneChange sceneChange;
-	//やぶなか
+	
+	XMFLOAT3 titleObjectPosition = { 5,5,0 };
+	XMFLOAT3 startObjectPosition = { 30,-7,0 };
+	XMFLOAT3 endObjectPosition = { 30,-17,0 };
 
+	bool isUp = false;
+	int specifiedMoveTimer = 0;
+	int maxSpecifiedMoveTimer = 20;
+	float bounceAmount = 1.0f;
+	float specifiedBouncePosUp = titleObjectPosition.y + bounceAmount;
+	float specifiedBouncePosDown = titleObjectPosition.y - bounceAmount;
+	float specifiedBounceStartPosUp = startObjectPosition.y + bounceAmount;
+	float specifiedBounceStartPosDown = startObjectPosition.y - bounceAmount;
+	float specifiedBounceEndPosUp = endObjectPosition.y + bounceAmount;
+	float specifiedBounceEndPosDown = endObjectPosition.y - bounceAmount;
 };

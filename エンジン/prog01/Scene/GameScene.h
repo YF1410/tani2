@@ -128,7 +128,7 @@ private: // ƒƒ“ƒo•Ï”
 
 	bool saveCount = 0;
 
-	bool shakeTimerFlag = false;
+	bool isShake = false;
 	int shakeTimer = 0;
 	int attenuation = 0;
 

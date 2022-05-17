@@ -456,7 +456,7 @@ void GameScene::Select()
 	}
 	if ((input->TriggerUp() || input->TriggerPadStickUp() || input->TriggerKey(DIK_W) || input->TriggerKey(DIK_UP)
 		|| input->TriggerDown() || input->TriggerPadStickDown() || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_DOWN))
-		&& !shakeTimerFlag)
+		&& !isShake)
 	{
 		if (!selectFlag)
 		{
@@ -470,7 +470,7 @@ void GameScene::Select()
 			saveClearEscapePos = clearEscapePos;
 			saveGameoverEscapePos = gameoverEscapePos;
 		}
-		shakeTimerFlag = true;
+		isShake = true;
 		Audio::GetInstance()->PlayWave(15);
 	}
 
@@ -810,7 +810,7 @@ void GameScene::Shake(Input* input)
 {
 	//input->SetVibrationPower(5000);
 
-	if (!selectFlag && shakeTimerFlag)
+	if (!selectFlag && isShake)
 	{
 		if (clearFlag) {
 			XMFLOAT3 shake = {};
@@ -834,7 +834,7 @@ void GameScene::Shake(Input* input)
 			{
 				shakeTimer = 0;
 				attenuation = 0;
-				shakeTimerFlag = 0;
+				isShake = false;
 				input->SetVibration(false);
 				clearEscapeObject3d->SetPosition(saveClearEscapePos);
 			}
@@ -861,13 +861,13 @@ void GameScene::Shake(Input* input)
 			{
 				shakeTimer = 0;
 				attenuation = 0;
-				shakeTimerFlag = 0;
+				isShake = false;
 				input->SetVibration(false);
 				gameoverEscapeObject3d->SetPosition(saveGameoverEscapePos);
 			}
 		}
 	}
-	else if (selectFlag && shakeTimerFlag)
+	else if (selectFlag && isShake)
 	{
 		if (clearFlag) {
 			XMFLOAT3 shake = {};
@@ -890,7 +890,7 @@ void GameScene::Shake(Input* input)
 			{
 				shakeTimer = 0;
 				attenuation = 0;
-				shakeTimerFlag = 0;
+				isShake = false;
 				input->SetVibration(false);
 				nextStageObject3d->SetPosition(saveNextStagePos);
 			}
@@ -916,7 +916,7 @@ void GameScene::Shake(Input* input)
 			{
 				shakeTimer = 0;
 				attenuation = 0;
-				shakeTimerFlag = 0;
+				isShake = false;
 				input->SetVibration(false);
 				retryObject3d->SetPosition(saveRetryPos);
 			}

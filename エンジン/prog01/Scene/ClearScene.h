@@ -57,7 +57,7 @@ private: // ƒƒ“ƒo•Ï”
 	std::unique_ptr<Object3d> clearEscapeObject3d;
 
 	bool flag = true;
-	bool shakeTimerFlag = false;
+	bool isShake = false;
 	int shakeTimer = 0;
 	int attenuation = 0;
 

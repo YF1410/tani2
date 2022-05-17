@@ -180,7 +180,7 @@ void ClearScene::Select()
 		}
 	}
 
-	if (input->TriggerUp() && !shakeTimerFlag || input->PushPadStickUp() && !shakeTimerFlag)
+	if (input->TriggerUp() && !isShake || input->PushPadStickUp() && !isShake)
 	{
 		if (!flag)
 		{
@@ -192,9 +192,9 @@ void ClearScene::Select()
 			flag = false;
 			savePos = { 30,-17,0 };
 		}
-		shakeTimerFlag = true;
+		isShake = true;
 	}
-	else if (input->TriggerDown() && !shakeTimerFlag || input->PushPadStickDown() && !shakeTimerFlag)
+	else if (input->TriggerDown() && !isShake || input->PushPadStickDown() && !isShake)
 	{
 		if (!flag)
 		{
@@ -206,7 +206,7 @@ void ClearScene::Select()
 			flag = false;
 			savePos = { 30,-17,0 };
 		}
-		shakeTimerFlag = true;
+		isShake = true;
 	}
 
 	Shake();
@@ -217,7 +217,7 @@ void ClearScene::Shake()
 	Input* input = Input::GetInstance();
 	input->SetVibrationPower(5000);
 
-	if (!flag && shakeTimerFlag)
+	if (!flag && isShake)
 	{
 		XMFLOAT3 shake = {};
 		shakeTimer++;
@@ -240,12 +240,12 @@ void ClearScene::Shake()
 		{
 			shakeTimer = 0;
 			attenuation = 0;
-			shakeTimerFlag = 0;
+			isShake = false;
 			input->SetVibration(false);
 			clearEscapeObject3d->SetPosition(savePos);
 		}
 	}
-	else if (flag && shakeTimerFlag)
+	else if (flag && isShake)
 	{
 		XMFLOAT3 shake = {};
 		shakeTimer++;
@@ -267,7 +267,7 @@ void ClearScene::Shake()
 		{
 			shakeTimer = 0;
 			attenuation = 0;
-			shakeTimerFlag = 0;
+			isShake = false;
 			input->SetVibration(false);
 			nextStageObject3d->SetPosition(savePos);
 		}

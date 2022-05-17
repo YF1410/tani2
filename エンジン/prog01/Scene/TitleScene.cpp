@@ -4,13 +4,11 @@
 #include "Ease.h"
 #include "Audio.h"
 
-TitleScene::~TitleScene()
-{
+TitleScene::~TitleScene() {
 	Finalize();
 }
 
-void TitleScene::Initialize()
-{
+void TitleScene::Initialize() {
 	// カメラ生成
 	camera = std::make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 	// 3Dオブジェクトにカメラをセット
@@ -35,18 +33,18 @@ void TitleScene::Initialize()
 	titleObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("title"));
 	titleObject3d->SetRotation({ -105,-35,0 });
 	titleObject3d->SetScale({ 75, 1, 15 });
-	titleObject3d->SetPosition({ 5,5,0 });
+	titleObject3d->SetPosition(titleObjectPosition);
 
 	startObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("start"));
 	startObject3d->SetRotation({ -90,25,0 });
 	startObject3d->SetScale({ 30, 1, 10 });
-	startObject3d->SetPosition({ 30,-7,0 });
+	startObject3d->SetPosition(startObjectPosition);
 	startObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 
 	endObject3d = Object3d::Create(ObjFactory::GetInstance()->GetModel("end"));
 	endObject3d->SetRotation({ -90,25,0 });
 	endObject3d->SetScale({ 10, 1, 5 });
-	endObject3d->SetPosition({ 30,-17,0 });
+	endObject3d->SetPosition(endObjectPosition);
 
 	Audio::GetInstance()->LoopPlayWave(0, 0.5f);
 
@@ -58,44 +56,36 @@ void TitleScene::Initialize()
 	//やぶなか
 }
 
-void TitleScene::Finalize()
-{
+void TitleScene::Finalize() {
 }
 
-void TitleScene::Update()
-{
+void TitleScene::Update() {
 	Input* input = Input::GetInstance();
 
 	if ((input->TriggerPadButton(BUTTON_A) ||
 		input->TriggerKey(DIK_SPACE))
-		&& !sceneChangeFlag)
-	{
-		if (flag)
-		{
+		&& !sceneChangeFlag) {
+		if (flag) {
 			Audio::GetInstance()->PlayWave(16);
 			sceneChangeFlag = true;
 		}
-		else if (!flag)
-		{
+		else if (!flag) {
 			Audio::GetInstance()->PlayWave(16);
 			exit(1);
 		}
 	}
 
-	if ((input->TriggerUp() || input->TriggerDown() ||input->TriggerPadStickUp() || input->TriggerPadStickDown() 
-		|| input->TriggerKey(DIK_UP) || input->TriggerKey(DIK_DOWN) || input->TriggerKey(DIK_W) || input->TriggerKey(DIK_S)) && !shakeTimerFlag)
-	{
-		if (!flag)
-		{
+	if ((input->TriggerUp() || input->TriggerDown() || input->TriggerPadStickUp() || input->TriggerPadStickDown()
+		|| input->TriggerKey(DIK_UP) || input->TriggerKey(DIK_DOWN) || input->TriggerKey(DIK_W) || input->TriggerKey(DIK_S)) && !isShake) {
+		if (!flag) {
 			flag = true;
 			savePos = { 30,-7,0 };
 		}
-		else if (flag)
-		{
+		else if (flag) {
 			flag = false;
 			savePos = { 30,-17,0 };
 		}
-		shakeTimerFlag = true;
+		isShake = true;
 		Audio::GetInstance()->PlayWave(15);
 	}
 
@@ -105,18 +95,18 @@ void TitleScene::Update()
 		sceneChange.SceneChangeStart("SelectScene");
 	}
 
+	SpecifiedMove();
+
 	titleObject3d->Update();
 	startObject3d->Update();
 	endObject3d->Update();
 }
 
-void TitleScene::LastUpdate()
-{
+void TitleScene::LastUpdate() {
 	sceneChange.Update();
 }
 
-void TitleScene::Draw()
-{
+void TitleScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
 #pragma region 背景スプライト描画
@@ -147,17 +137,14 @@ void TitleScene::Draw()
 #pragma endregion 前景スプライト描画
 }
 
-void TitleScene::Select()
-{
-	if (!flag)
-	{
+void TitleScene::Select() {
+	if (!flag) {
 		startObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		startObject3d->SetScale({ 10, 1, 5 });
 		endObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 		endObject3d->SetScale({ 30, 1, 10 });
 	}
-	else if (flag)
-	{
+	else if (flag) {
 		startObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 		startObject3d->SetScale({ 30, 1, 10 });
 		endObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
@@ -167,63 +154,97 @@ void TitleScene::Select()
 	Shake();
 }
 
-void TitleScene::Shake()
-{
+void TitleScene::Shake() {
 	Input* input = Input::GetInstance();
 
-	if (!flag && shakeTimerFlag)
-	{
+	if (!flag && isShake) {
 		XMFLOAT3 shake = {};
 		shakeTimer++;
 
 		input->SetVibration(true);
 
-		if (shakeTimer > 0)
-		{
+		if (shakeTimer > 0) {
 			shake.x = (rand() % (7 - attenuation) - 3) + savePos.x;
 			shake.y = (rand() % (7 - attenuation) - 3) + savePos.y;
 			shake.z = savePos.z;
 		}
 
-		if (shakeTimer >= attenuation * 2)
-		{
+		if (shakeTimer >= attenuation * 2) {
 			attenuation += 1;
 			endObject3d->SetPosition(shake);
 		}
-		else if (attenuation >= 6)
-		{
+		else if (attenuation >= 6) {
 			shakeTimer = 0;
 			attenuation = 0;
-			shakeTimerFlag = 0;
+			isShake = 0;
 			input->SetVibration(false);
 			endObject3d->SetPosition(savePos);
 		}
 	}
-	else if (flag && shakeTimerFlag)
-	{
+	else if (flag && isShake) {
 		XMFLOAT3 shake = {};
 		shakeTimer++;
 		input->SetVibration(true);
 
-		if (shakeTimer > 0)
-		{
+		if (shakeTimer > 0) {
 			shake.x = (rand() % (7 - attenuation) - 3) + savePos.x;
 			shake.y = (rand() % (7 - attenuation) - 3) + savePos.y;
 			shake.z = savePos.z;
 		}
 
-		if (shakeTimer >= attenuation * 2)
-		{
+		if (shakeTimer >= attenuation * 2) {
 			attenuation += 1;
 			startObject3d->SetPosition(shake);
 		}
-		else if (attenuation >= 6)
-		{
+		else if (attenuation >= 6) {
 			shakeTimer = 0;
 			attenuation = 0;
-			shakeTimerFlag = 0;
+			isShake = 0;
 			input->SetVibration(false);
 			startObject3d->SetPosition(savePos);
 		}
+	}
+}
+
+void TitleScene::SpecifiedMove() {
+	if (maxSpecifiedMoveTimer >= specifiedMoveTimer) {
+		specifiedMoveTimer++;
+		if (maxSpecifiedMoveTimer <= specifiedMoveTimer) {
+			specifiedMoveTimer = 0;
+			if (!isUp) {
+				isUp = true;
+			}
+			else if (isUp) {
+				isUp = false;
+			}
+		}
+	}
+
+	float eTime = (float)(specifiedMoveTimer / static_cast<double>(maxSpecifiedMoveTimer));
+
+
+	if (isUp) {
+		titleObjectPosition.y = Ease(Out, ease::Quint, eTime, specifiedBouncePosDown, specifiedBouncePosUp);
+		if (flag) {
+			startObjectPosition.y = Ease(Out, ease::Quint, eTime, specifiedBounceStartPosDown, specifiedBounceStartPosUp);
+		}
+		else if (!flag) {
+			endObjectPosition.y = Ease(Out, ease::Quint, eTime, specifiedBounceEndPosDown, specifiedBounceEndPosUp);
+		}
+	}
+	else if (!isUp) {
+		titleObjectPosition.y = Ease(In, ease::Quint, eTime, specifiedBouncePosUp, specifiedBouncePosDown);
+		if (flag) {
+			startObjectPosition.y = Ease(In, ease::Quint, eTime, specifiedBounceStartPosUp, specifiedBounceStartPosDown);
+		}
+		else if (!flag) {
+			endObjectPosition.y = Ease(In, ease::Quint, eTime, specifiedBounceEndPosUp, specifiedBounceEndPosDown);
+		}
+	}
+
+	titleObject3d->SetPosition(titleObjectPosition);
+	if (!isShake) {
+		startObject3d->SetPosition(startObjectPosition);
+		endObject3d->SetPosition(endObjectPosition);
 	}
 }
