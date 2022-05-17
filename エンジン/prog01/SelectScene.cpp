@@ -106,7 +106,8 @@ void SelectScene::Update() {
 	}
 
 
-	if ((input->TriggerPadButton(BUTTON_A)|| input->TriggerKey(DIK_SPACE)) && !isUnlockStage && !nowSceneChange){
+	if ((input->TriggerPadButton(BUTTON_A) || input->TriggerKey(DIK_SPACE))&& !isUnlockStage && !nowSceneChange)
+	{
 		Audio::GetInstance()->PlayWave(16);
 		nowSceneChange = true;
 	}

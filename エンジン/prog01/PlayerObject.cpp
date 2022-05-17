@@ -135,7 +135,7 @@ void PlayerObject::Initialize()
 void PlayerObject::Update()
 {
 	Input* input = Input::GetInstance();
-	
+	healChack = false;
 	//旧ポジション
 	oldPos = pos;
 	//スケールから移動量決定
@@ -348,31 +348,6 @@ void PlayerObject::Update()
 	broadSphereCollider->SetRadius(/*velocity.Length() + pushBackCollider->GetRadius()*/scale.x * 120.0f);
 	toMapChipCollider->SetRadius(scale.x * 120.0f, scale.x * 120.0f);
 
-	//DebugText::GetInstance()->VariablePrint(0, 80, "StayTimer", recovery.timer, 3);
-
-	//if (input->TriggerKey(DIK_H)) {
-	//	frameF = true;
-	//}
-
-	//if (frameF) {
-	//	frame++;
-	//}
-
-	//if (frame <= 2 && frameF) {
-	//	healParticle1->AddHeal(3, 40, pos);
-	//	healParticle2->AddHeal(4, 40, pos);
-	//	//boomParticle->AddBoom(2, 40, pos);
-	//	//refParticle->AddRef(2, 40, pos,velocity);
-	//}
-	//else {
-	//	frameF = false;
-	//	frame = 0;
-	//}
-	/*healParticle1->Update();
-	healParticle2->Update();
-	boomParticle->Update();
-	refParticle->Update();
-	atkParticle->Update();*/
 	
 	if (animationChangeFrag) {
 		if (animationType == DEATH) {
@@ -394,15 +369,6 @@ void PlayerObject::Draw() const
 
 	GameObjCommon::Draw();
 
-	// パーティクルの描画
-	/*healParticle1->Draw(cmdList);
-	healParticle2->Draw(cmdList);
-	boomParticle->Draw(cmdList);
-	refParticle->Draw(cmdList);
-	atkParticle->Draw(cmdList);*/
-	//Object3d::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
-	//flont.get()->Draw();
-	//Object3d::PostDraw();
 }
 
 void PlayerObject::LustUpdate()
@@ -488,34 +454,6 @@ void PlayerObject::LustUpdate()
 		input->GetInstance()->SetVibration(false);
 	}
 
-	//回収できる時のエフェクト
-	//if (recovery.can) {
-	//	recoveryParticle->AddRecovery(1, 8, pos);
-	//}
-
-	//if (dontRecovery)
-	//{
-	//	Vector3 shake = { 0.0f, 0.0f, 0.0f };
-	//	Vector3 shakePos = { 0.0f, 0.0f, 0.0f };
-
-	//	pos = savePos;
-
-	//	timer++;
-	//	if (timer <= maxTimer)
-	//	{
-	//		shake.x = (((float)(rand() % (maxTimer - timer) - (maxTimer - timer) / 2))*5);//(rand() % (int)(Ease(In,Quad,(float)(shakeTimer /20),100,1)));
-	//		//shake.y = (rand() % (shakeCount - attenuation) - (shakeCount / 2));
-	//		shake.z = (((float)(rand() % (maxTimer - timer) - (maxTimer - timer) / 2)) * 5);//(rand() % (int)Ease(In, Quad, (float)(shakeTimer / 20), 100, 1));
-	//		shakePos = shake + pos;
-	//	}
-
-	//	pos = shakePos;
-	//}
-	//if (!dontRecovery)
-	//{
-	//	timer = 0;
-	//	attenuation = 0;
-	//}
 }
 
 
@@ -537,23 +475,9 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 				hp += debri->GetSize();
 				Audio::GetInstance()->PlayWave(13);
 			}
-
-			isHealFrameIncrease = true;
-
-			if (isHealFrameIncrease) {
-				nowHealFrame++;
-			}
-
-			if (nowHealFrame <= maxHealFrame && isHealFrameIncrease) {
-				healParticle1->AddHeal(3, 40, pos, velocity);
-				healParticle2->AddHeal(4, 40, pos, velocity);
-				//boomParticle->AddBoom(2, 40, pos);
-				//refParticle->AddRef(2, 40, pos,velocity);
-			}
-			else {
-				isHealFrameIncrease = false;
-				nowHealFrame = 0;
-			}
+			healChack = true;
+			healParticle1->AddHeal(3, 40, pos, velocity);
+			healParticle2->AddHeal(4, 40, pos, velocity);
 		}
 
 
@@ -621,6 +545,13 @@ void PlayerObject::HitWall(
 			isBounce = true;
 		}
 	}
+}
+
+void PlayerObject::StopState()
+{
+	velocity = { 0,0,0 };
+	Audio::GetInstance()->LoopStopWave(1);
+	Input::GetInstance()->SetVibration(false);
 }
 
 void PlayerObject::Damage(float damage)

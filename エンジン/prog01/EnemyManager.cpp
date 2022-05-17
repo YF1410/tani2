@@ -8,7 +8,7 @@ std::vector<Enemy *> EnemyManager::enemys[MapChip::MAP_NAME::MAX];
 EnemyManager::EnemyManager(PlayerObject *player)
 {
 	this->player = player;
-	CsvLoad(MapChip::MAP_NAME::TEST_MAP, "testSpawn");
+	CsvLoad(MapChip::MAP_NAME::TUTORIAL, "testSpawn");
 	CsvLoad(MapChip::MAP_NAME::Stage1, "01");
 	CsvLoad(MapChip::MAP_NAME::Stage2, "02");
 	CsvLoad(MapChip::MAP_NAME::Stage3, "03");

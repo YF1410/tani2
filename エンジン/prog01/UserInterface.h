@@ -15,7 +15,9 @@ public:
 	void Update();
 	void Draw() const;
 
-
+	//チュートリアル
+	int tutorialNum;
+	bool stopFrag;
 private:
 	//フレーム
 	std::unique_ptr<Sprite> frame;
@@ -50,15 +52,12 @@ private:
 	int recoverColorTimer;
 	XMFLOAT2 shake;
 
-	//チュートリアル
-	int tutorialNum;
 	std::unique_ptr<Sprite> text[18];
 
 	std::vector<std::unique_ptr<Sprite>> tutorialImag;
 
 
 	//ストップ用フラグ
-	int stopFrag[5];
 
 	//現在のウェーブ数
 	static int *nowWave;

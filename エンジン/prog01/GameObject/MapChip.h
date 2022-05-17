@@ -20,7 +20,7 @@ private:
 
 public:
 	enum MAP_NAME {
-		TEST_MAP,
+		TUTORIAL,
 		Stage1,
 		Stage2,
 		Stage3,

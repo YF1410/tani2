@@ -71,10 +71,10 @@ public:
 	};
 
 	int MAX_WAVE[MapChip::MAP_NAME::MAX];
+	std::vector<SPAWN_DATA*> spawnData[MapChip::MAP_NAME::MAX][10];
 	int waveEnemyNum[10];
 private:
 	//スポーンデータ
-	std::vector<SPAWN_DATA*> spawnData[MapChip::MAP_NAME::MAX][10];
 	//プレイヤーポインタ
 	PlayerObject *player;
 
