@@ -42,6 +42,7 @@ void GameObjCommon::Update()
 			++iter;
 		}
 	}
+
 }
 
 void GameObjCommon::FixedUpdate()

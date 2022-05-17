@@ -13,6 +13,14 @@ class PlayerObject :
 	public GameObjCommon
 {
 public:
+	enum ANIMATION_TYPE {
+		BOOST,
+		DEATH,
+		MOVE,
+		RETRIEVE
+	}animationType;
+	bool animationChangeFrag;
+
 	PlayerObject(XMFLOAT3 startPos);
 	~PlayerObject();
 	//初期化
@@ -31,7 +39,7 @@ public:
 	Vector3 GetPos() { return pos; }
 	Vector3 *GetPosPointer() { return &pos; }
 	float GetSpeed() { return velocity.Length(); }
-	float GetEnergy() { return energy; }
+	float GetEnergy() { return hp; }
 
 	//壁との衝突
 	void HitWall(
@@ -42,7 +50,9 @@ public:
 
 	//回収フラグ
 	STATE recovery;
+	int recoveryEndTimer;
 	bool dontRecovery;
+
 
 	//攻撃回数
 	int attackCount;
@@ -62,6 +72,10 @@ public:
 	SphereCollider *pushBackCollider;	//押し返し用
 	SphereCollider *attackCollider;	//攻撃用
 
+
+	//hp
+	float hp;	//体力
+	float maxHp;	//最大
 
 private:
 
@@ -87,8 +101,6 @@ private: // メンバ変数
 	//反射フラグ
 	bool isBounce;
 	
-	//エネルギー
-	float energy;	//質量
 	//自爆で飛ばす数
 	const int DESTRUCT_POW = 5;
 	//爆発に使う合計エネルギー

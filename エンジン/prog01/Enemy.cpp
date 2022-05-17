@@ -210,6 +210,9 @@ void Enemy::Damage(float damage)
 	hpBer->HpDraw.timer = hpBer->HpDraw.interval;
 	//ダメージを受ける
 	HP -= damage;
+	if (HP < 0) {
+		HP = 0;
+	}
 	//無敵時間をセットする
 	isInvincible = true;
 	InvincibleTimer = 0;

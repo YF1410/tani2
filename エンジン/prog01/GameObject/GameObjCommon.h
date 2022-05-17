@@ -48,7 +48,6 @@ public:
 	{
 		objectData = nullptr;
 		objectData = FbxObject3d::Create(ModelManager::GetIns()->GetModel(modelName),loadAnimation);
-		objectData->SetModel(ModelManager::GetIns()->GetModel(modelName));
 		objectData->SetPosition(pos);
 		objectData->SetRotation(rotate);
 		objectData->SetScale(scale);
