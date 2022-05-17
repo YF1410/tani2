@@ -99,7 +99,6 @@ void SelectScene::Update()
 
 	if ((input->TriggerPadButton(BUTTON_A) || input->TriggerKey(DIK_SPACE))&& !isUnlockStage && !nowSceneChange)
 	{
-		selectCount = 3;
 		Audio::GetInstance()->PlayWave(16);
 		if (selectCount == 0) {
 			sceneChange.SceneChangeStart("GameScene", 0);

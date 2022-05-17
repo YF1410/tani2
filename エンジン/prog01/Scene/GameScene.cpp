@@ -159,6 +159,7 @@ void GameScene::Update() {
 	//カメラ更新
 	//プレイヤーの少し上を焦点にする
 	//カメラ更新
+
 	float debrisLengthMax = 0.0f;
 	for (int i = 0; i < Debris::debris.size(); i++) {
 		if (Debris::debris[i]->isFirstAttack &&
@@ -235,26 +236,54 @@ void GameScene::Update() {
 	//ステージ更新
 	//testStage->Update();
 
-	//デバックテキスト
+	//チュートリアルストップ
+	if (MapChip::GetInstance()->nowMap == MapChip::TUTORIAL) {
+		//ストップ解除処理
+		if (ui.get()->tutorialNum == 5
+			&& EnemyManager::enemys->size() == 0
+			&& enemyManager.get()->spawnData[MapChip::GetInstance()->nowMap][0].size() == 0) 
+		{
+			ui.get()->stopFrag = true;
+			ui.get()->tutorialNum++;
+		}
+		if (ui.get()->tutorialNum == 12){
+			static bool push = false;
+			if (Input::GetInstance()->PushKey(DIK_Q)
+				|| Input::GetInstance()->TriggerPadButton(BUTTON_B)) {
+				push = true;
+			}
+			if (playerObject.get()->healChack
+				&& push
+				)
+			{
+				ui.get()->stopFrag = true;
+				ui.get()->tutorialNum++;
+			}
+		}
 
+		if (!ui.get()->stopFrag) {
+			//プレイヤー更新
+			playerObject->Update();
+			//破片更新
+			Debris::StaticUpdate();
+			//エネミー更新
+			enemyManager.get()->Update();
+
+			stageclearObject3d->Update();
+			nextStageObject3d->Update();
+			clearEscapeObject3d->Update();
+			gameoverObject3d->Update();
+			retryObject3d->Update();
+			gameoverEscapeObject3d->Update();
+
+			//パーティクル全てのアップデート
+			ParticleManager::GetInstance()->Update();
+		}
+		else {
+			playerObject->StopState();
+		}
+	}
 	
-	//プレイヤー更新
-	playerObject->Update();
-	//破片更新
-	Debris::StaticUpdate();
-	//エネミー更新
-	enemyManager.get()->Update();
-
-	stageclearObject3d->Update();
-	nextStageObject3d->Update();
-	clearEscapeObject3d->Update();
-	gameoverObject3d->Update();
-	retryObject3d->Update();
-	gameoverEscapeObject3d->Update();
-
-	//パーティクル全てのアップデート
-	ParticleManager::GetInstance()->Update();
-
 	//カウンターを加算
 	counter++;
 
@@ -266,24 +295,27 @@ void GameScene::LastUpdate() {
 	//ここから
 
 	MapChip::GetInstance()->Update();
-
-	//全ての移動最終適応処理
-	playerObject.get()->Adaptation();
-	Debris::StaticAdaptation();
-	enemyManager.get()->Adaptation();
-	MapChip::GetInstance()->Adaptation();
-	// 全ての衝突をチェック
-	collisionManager->CheckBroadCollisions();
+	if (MapChip::GetInstance()->nowMap == MapChip::TUTORIAL
+		&& !ui.get()->stopFrag) {
+		//全ての移動最終適応処理
+		playerObject.get()->Adaptation();
+		Debris::StaticAdaptation();
+		enemyManager.get()->Adaptation();
+		MapChip::GetInstance()->Adaptation();
+		// 全ての衝突をチェック
+		collisionManager->CheckBroadCollisions();
+		
+		enemyManager.get()->FinalUpdate();
+		playerObject.get()->LustUpdate();
+		Debris::StaticLustUpdate();
+		//全ての移動最終適応処理
+		playerObject.get()->Adaptation();
+		Debris::StaticAdaptation();
+		enemyManager.get()->Adaptation();
+		MapChip::GetInstance()->Adaptation();
+	}
 	//最終更新
 	ui.get()->Update();
-	enemyManager.get()->FinalUpdate();
-	playerObject.get()->LustUpdate();
-	Debris::StaticLustUpdate();
-	//全ての移動最終適応処理
-	playerObject.get()->Adaptation();
-	Debris::StaticAdaptation();
-	enemyManager.get()->Adaptation();
-	MapChip::GetInstance()->Adaptation();
 	//ここまで
 	//パーティクル全てのアップデート
 	ParticleManager::GetInstance()->Update();

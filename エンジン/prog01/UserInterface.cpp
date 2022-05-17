@@ -25,8 +25,12 @@ UserInterface::~UserInterface()
 
 void UserInterface::Initialize()
 {
-
-	stopFrag = 0;
+	if (MapChip::GetInstance()->nowMap == MapChip::TUTORIAL) {
+		stopFrag = true;
+	}
+	else {
+		stopFrag = false;
+	}
 	//フレーム
 	frame = Sprite::Create(2, { 0,0 });
 	//ステージテキスト
@@ -247,12 +251,23 @@ void UserInterface::Update()
 		}
 	}
 	//チュートリアル
-	if (MapChip::GetInstance()->nowMap == 0 && tutorialNum <= tutorialImag.size()-1) {
-		if (*counter % 300 == 0 && tutorialNum < tutorialImag.size() - 1) {
-			tutorialNum++;
+	if (stopFrag && MapChip::GetInstance()->nowMap == 0 && tutorialNum <= tutorialImag.size() - 1) {
+		if (*counter % 200 == 0 && tutorialNum < tutorialImag.size() - 1) {
+			if (tutorialNum == 5
+				|| tutorialNum == 12
+				) {
+				//停止無効
+				stopFrag = false;
+			}
+			else {
+				tutorialNum++;
+
+			}
+
 		}
-		else if (*counter % 300 == 0) {
+		else if (*counter % 200 == 0) {
 			tutorialImag[tutorialNum].get()->SetIsInvisible(true);
+			stopFrag = false;
 
 		}
 	}
@@ -296,7 +311,7 @@ void UserInterface::Draw() const
 
 
 	//チュートリアル
-	if (MapChip::GetInstance()->nowMap == 0) {
+	if (MapChip::GetInstance()->nowMap == 0 && stopFrag) {
 		tutorialImag[tutorialNum].get()->Draw();
 	}
 

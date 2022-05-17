@@ -77,6 +77,9 @@ public:
 	float hp;	//‘Ì—Í
 	float maxHp;	//Å‘å
 
+	bool healChack = false;
+
+	void StopState();
 private:
 
 
@@ -86,6 +89,7 @@ private:
 	bool isInvincible;
 	//ŠÔ
 	int invincibleCounter;
+
 
 private: // ƒƒ“ƒo•Ï”
 	
@@ -122,11 +126,9 @@ private: // ƒƒ“ƒo•Ï”
 	int atkStockParticleMaxTimer = 40;
 	ParticleEmitter* recoveryParticle;
 
-	int nowHealFrame = 0;
 	int nowBoomFrame = 0;
 	bool isHealFrameIncrease = false;
 	bool isBoomFrameIncrease = false;
-	int maxHealFrame = 3;
 	int maxBoomFrame = 2;
 
 
