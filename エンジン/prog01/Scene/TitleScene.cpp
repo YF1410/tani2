@@ -66,8 +66,9 @@ void TitleScene::Update()
 {
 	Input* input = Input::GetInstance();
 
-	if (input->TriggerPadButton(BUTTON_A) ||
+	if ((input->TriggerPadButton(BUTTON_A) ||
 		input->TriggerKey(DIK_SPACE))
+		&& !sceneChangeFlag)
 	{
 		if (flag)
 		{
