@@ -12,6 +12,7 @@ public:
 	STATE HpDraw;
 	Vector3 offset;
 private:
+	float HpScale;
 	float* nowHp;
 	float* maxHp;
 	Vector3* pos_p;

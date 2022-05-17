@@ -17,42 +17,70 @@ void SpriteFactory::Initialize()
 	}
 
 	//UI周り
+	//frame
+	if (!Sprite::LoadTexture(2, L"Resources/Sprite/UI/frame.png")) {
+		assert(0);
+	}
+	//ステージテキスト
+	if (!Sprite::LoadTexture(4, L"Resources/Sprite/UI/stage.png")) {
+		assert(0);
+	}
+	//ウェーブテキスト
 	if (!Sprite::LoadTexture(5, L"Resources/Sprite/UI/wave.png")) {
 		assert(0);
 	}
-	//HP
-	if (!Sprite::LoadTexture(6, L"Resources/Sprite/UI/playerHp.png")) {
+
+	//HPフレーム
+	if (!Sprite::LoadTexture(6, L"Resources/Sprite/UI/Hp.png")) {
 		assert(0);
 	}
-	//Enemy
-	if (!Sprite::LoadTexture(7, L"Resources/Sprite/UI/enemyNum.png")) {
-		assert(0);
-	}
-	//回収
-	if (!Sprite::LoadTexture(8, L"Resources/Sprite/UI/recover/recovery.png")) {
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(9, L"Resources/Sprite/UI/recover/recoveryGauge.png")) {
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(10, L"Resources/Sprite/UI/recover/recovery1.png")) {
+	//HPゲージ
+	if (!Sprite::LoadTexture(7, L"Resources/Sprite/UI/gauge_02.png")) {
 		assert(0);
 	}
 
-	//体当たり
-	if (!Sprite::LoadTexture(20, L"Resources/Sprite/UI/exGauge/expGaugeEmpty.png")) {
+	//ブーストフレーム
+	if (!Sprite::LoadTexture(8, L"Resources/Sprite/UI/boost_01.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(21, L"Resources/Sprite/UI/exGauge/expGauge1.png")) {
+	//回収フレーム
+	if (!Sprite::LoadTexture(9, L"Resources/Sprite/UI/kaisyu_01.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(22, L"Resources/Sprite/UI/exGauge/expGauge2.png")) {
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(23, L"Resources/Sprite/UI/exGauge/expGauge3.png")) {
+	//縦ゲージ
+	if (!Sprite::LoadTexture(10, L"Resources/Sprite/UI/gauge_01.png")) {
 		assert(0);
 	}
 
+	//ミニマップ
+	//エネミーの位置
+	if (!Sprite::LoadTexture(15, L"Resources/Sprite/UI/enemy_pos.png")) {
+		assert(0);
+	}
+	//プレイヤーの位置
+	if (!Sprite::LoadTexture(16, L"Resources/Sprite/UI/playerpos_01.png")) {
+		assert(0);
+	}
+
+	//マップ0
+	if (!Sprite::LoadTexture(20, L"Resources/Sprite/UI/00.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(21, L"Resources/Sprite/UI/01.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(22, L"Resources/Sprite/UI/02.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(23, L"Resources/Sprite/UI/03.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(24, L"Resources/Sprite/UI/04.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(25, L"Resources/Sprite/UI/05.png")) {
+		assert(0);
+	}
 
 	//sceneの画像
 	if (!Sprite::LoadTexture(33, L"Resources/Sprite/stageSelect.png")) {
@@ -68,14 +96,6 @@ void SpriteFactory::Initialize()
 
 	//クリア、ゲームオーバー時の画像
 	if (!Sprite::LoadTexture(40, L"Resources/Sprite/back.png"))
-	{
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(41, L"Resources/Sprite/gameclear.png"))
-	{
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(42, L"Resources/Sprite/gameover.png"))
 	{
 		assert(0);
 	}
@@ -167,46 +187,73 @@ void SpriteFactory::Initialize()
 	}
 
 	//チュートリアル用
-	if (!Sprite::LoadTexture(150, L"Resources/Sprite/tutorial_text/boost_01.png")) {
+	if (!Sprite::LoadTexture(150, L"Resources/Sprite/tutorial/01.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(151, L"Resources/Sprite/tutorial_text/boost_02.png")) {
+	if (!Sprite::LoadTexture(151, L"Resources/Sprite/tutorial/02.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(152, L"Resources/Sprite/tutorial_text/boost_03.png")) {
+	if (!Sprite::LoadTexture(152, L"Resources/Sprite/tutorial/03.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(153, L"Resources/Sprite/tutorial_text/boost_04.png")) {
+	if (!Sprite::LoadTexture(153, L"Resources/Sprite/tutorial/04.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(154, L"Resources/Sprite/tutorial_text/end_01.png")) {
+	if (!Sprite::LoadTexture(154, L"Resources/Sprite/tutorial/05.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(155, L"Resources/Sprite/tutorial_text/end_02.png")) {
+	if (!Sprite::LoadTexture(155, L"Resources/Sprite/tutorial/06.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(156, L"Resources/Sprite/tutorial_text/enemy_01.png")) {
+	if (!Sprite::LoadTexture(156, L"Resources/Sprite/tutorial/07.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(157, L"Resources/Sprite/tutorial_text/hp_01.png")) {
+	if (!Sprite::LoadTexture(157, L"Resources/Sprite/tutorial/08.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(158, L"Resources/Sprite/tutorial_text/hp_02.png")) {
+	if (!Sprite::LoadTexture(158, L"Resources/Sprite/tutorial/09.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(159, L"Resources/Sprite/tutorial_text/kaisyu_01.png")) {
+	if (!Sprite::LoadTexture(159, L"Resources/Sprite/tutorial/10.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(160, L"Resources/Sprite/tutorial_text/kaisyu_02.png")) {
+	if (!Sprite::LoadTexture(160, L"Resources/Sprite/tutorial/11.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(161, L"Resources/Sprite/tutorial_text/start.png")) {
+	if (!Sprite::LoadTexture(161, L"Resources/Sprite/tutorial/12.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(162, L"Resources/Sprite/SelectSceneNum/chain.png")) {
+	if (!Sprite::LoadTexture(162, L"Resources/Sprite/tutorial/13.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(163, L"Resources/Sprite/SelectSceneNum/lock.png")) {
+	if (!Sprite::LoadTexture(163, L"Resources/Sprite/tutorial/14.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(164, L"Resources/Sprite/tutorial/15.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(165, L"Resources/Sprite/tutorial/16.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(166, L"Resources/Sprite/tutorial/17.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(167, L"Resources/Sprite/tutorial/18.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(168, L"Resources/Sprite/tutorial/skipText.png")) {
+		assert(0);
+	}
+
+
+
+
+
+
+	if (!Sprite::LoadTexture(170, L"Resources/Sprite/SelectSceneNum/chain.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(171, L"Resources/Sprite/SelectSceneNum/lock.png")) {
 		assert(0);
 	}
 }

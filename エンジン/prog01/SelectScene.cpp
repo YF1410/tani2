@@ -70,26 +70,26 @@ void SelectScene::Initialize() {
 	stage5BG = Sprite::Create(115, stage5BGPos);
 	stage5BG->SetSize({ 1280.0f,720.0f });
 
-	stage1Lock = Sprite::Create(163, stage1Pos, color, anchorPoint);
+	stage1Lock = Sprite::Create(171, stage1Pos, color, anchorPoint);
 	stage1Lock->SetSize(stage1LockSize);
-	stage2Lock = Sprite::Create(163, stage2Pos, color, anchorPoint);
+	stage2Lock = Sprite::Create(171, stage2Pos, color, anchorPoint);
 	stage2Lock->SetSize(stage2LockSize);
-	stage3Lock = Sprite::Create(163, stage3Pos, color, anchorPoint);
+	stage3Lock = Sprite::Create(171, stage3Pos, color, anchorPoint);
 	stage3Lock->SetSize(stage3LockSize);
-	stage4Lock = Sprite::Create(163, stage4Pos, color, anchorPoint);
+	stage4Lock = Sprite::Create(171, stage4Pos, color, anchorPoint);
 	stage4Lock->SetSize(stage4LockSize);
-	stage5Lock = Sprite::Create(163, stage5Pos, color, anchorPoint);
+	stage5Lock = Sprite::Create(171, stage5Pos, color, anchorPoint);
 	stage5Lock->SetSize(stage5LockSize);
 
-	stage1Chain = Sprite::Create(162, stage1Pos, color, anchorPoint);
+	stage1Chain = Sprite::Create(170, stage1Pos, color, anchorPoint);
 	stage1Chain->SetSize(stage1ChainSize);
-	stage2Chain = Sprite::Create(162, stage2Pos, color, anchorPoint);
+	stage2Chain = Sprite::Create(170, stage2Pos, color, anchorPoint);
 	stage2Chain->SetSize(stage2ChainSize);
-	stage3Chain = Sprite::Create(162, stage3Pos, color, anchorPoint);
+	stage3Chain = Sprite::Create(170, stage3Pos, color, anchorPoint);
 	stage3Chain->SetSize(stage3ChainSize);
-	stage4Chain = Sprite::Create(162, stage4Pos, color, anchorPoint);
+	stage4Chain = Sprite::Create(170, stage4Pos, color, anchorPoint);
 	stage4Chain->SetSize(stage4ChainSize);
-	stage5Chain = Sprite::Create(162, stage5Pos, color, anchorPoint);
+	stage5Chain = Sprite::Create(170, stage5Pos, color, anchorPoint);
 	stage5Chain->SetSize(stage5ChainSize);
 
 	Audio::GetInstance()->LoopPlayWave(1, 0.5f);

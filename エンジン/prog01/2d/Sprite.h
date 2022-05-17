@@ -77,6 +77,7 @@ public: // メンバ関数
 	//ゲッター
 	float GetRotation() { return rotation; }
 	float GetScale() { return scale; }
+	XMFLOAT2 GetSize() { return size; }
 
 
 	// 角度の設定

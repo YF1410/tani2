@@ -82,7 +82,7 @@ void GameScene::Initialize() {
 	light->SetPointLightActive(2, false);
 	light->SetCircleShadowActive(0, true);
 
-	light->SetDirLightDir(0, Vector3(0, -1, -0.4).Normal());
+	light->SetDirLightDir(0, Vector3(0, -1, +0.4).Normal());
 
 	//プレイヤーの初期化
 	playerObject->Initialize();
@@ -330,6 +330,13 @@ void GameScene::LastUpdate() {
 	//パーティクル全てのアップデート
 	ParticleManager::GetInstance()->Update();
 	sceneChange.Update();
+
+	//チュートリアルスキップ
+	if (Input::GetInstance()->PushPadButton(BUTTON_X) ||
+		Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+		clearFlag = true;
+	}
+
 }
 
 void GameScene::Draw() {

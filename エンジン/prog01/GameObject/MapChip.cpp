@@ -126,16 +126,17 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vect
 	Vector3 hitPositon = { 0,0,0 };
 	Box2DCollider box = *boxCollider;
 
-	Vector3 boxCenter[2] = {
-		{*oldPos + (box.center - *oldPos) / 2},//”¼•ª
-		{box.center}
-	};
 
-	int counter = 1;
-	if (vel->Length() >= chipSize) {
-		counter = 0;
+	//Å‘åŽŽs‰ñ”
+	const int MaxChecke = (int)(vel->Length())/chipSize + 1;
+	std::vector<Vector3> boxCenter;
+	for (int i = 0; i < MaxChecke - 1; i++) {
+		boxCenter.push_back(Vector3(*oldPos + Vector3(vel->Normal() * (chipSize * i + chipSize))));
 	}
-	for (; counter < 2; counter++) {
+	boxCenter.push_back(Vector3(box.center));
+
+	for (int counter = 0; counter < MaxChecke; counter++) {
+
 
 		int nowChipX = (boxCenter[counter].x + (chipSize / 2) - fmodf(boxCenter[counter].x + (chipSize / 2), chipSize)) / chipSize;
 		int nowChipY = (-boxCenter[counter].z - (chipSize / 2) - fmodf(-boxCenter[counter].z - (chipSize / 2), chipSize)) / chipSize + 1;

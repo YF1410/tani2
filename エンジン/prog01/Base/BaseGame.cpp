@@ -19,10 +19,8 @@ void BaseGame::Run()
 		{
 			break;
 		}
-
 		Draw();
 	}
-
 	Finalize();
 }
 

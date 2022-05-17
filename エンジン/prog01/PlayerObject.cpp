@@ -61,7 +61,8 @@ PlayerObject::~PlayerObject()
 void PlayerObject::Initialize()
 {
 	//サイズ初期化
-	energy = 500.0f;
+	maxHp = 500.0f;
+	hp = maxHp;
 	//サイズ初期化
 	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
 	//ポジション初期化
@@ -99,7 +100,8 @@ void PlayerObject::Initialize()
 	};
 
 	//アニメーション開始
-	objectData->PlayAnimation();
+	animationType = MOVE;
+	animationChangeFrag = true;
 
 	// パーティクルマネージャ生成
 	healParticle1 = healParticle1->Create(L"heal1");
@@ -145,15 +147,20 @@ void PlayerObject::Update()
 	VelocityReset(0.95f);
 	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
-		rotate = { 0,0,0 };
 	}
 	if (attack.is && velocity.Length() >= 180) {
 		velocity = velocity.Normal() * 180;
-		rotate = {90.0f,0,0};
 	}
 	if (attack.is && velocity.Length() < 100) {
 		attack.is = false;
 		isBounce = false;
+		animationType = MOVE;
+		animationChangeFrag = true;
+	}
+	if (recoveryEndTimer == 0) {
+
+		animationType = MOVE;
+		animationChangeFrag = true;
 	}
 
 	//無敵処理
@@ -180,6 +187,7 @@ void PlayerObject::Update()
 		else {
 			velocity.x += input->PadStickGradient().x * moveSpead;
 		}
+
 		if (input->PushKey(DIK_W)) {
 			velocity.z += moveSpead;
 		}
@@ -190,24 +198,23 @@ void PlayerObject::Update()
 			velocity.z += -input->PadStickGradient().y * moveSpead;
 		}
 
-		if (!input->PushPadStickDown() && !input->PushPadStickLeft() &&
-			!input->PushPadStickRight() && !input->PushPadStickUp())
+		if (velocity.Length() > 0.0f)
 		{
-			saveAngleFlag = false;
+			saveAngleFlag = true;
 		}
 		else
 		{
-			saveAngleFlag = true;
+			saveAngleFlag = false;
 		}
 
 		if (!saveAngleFlag)
 		{
 			rotate.y = saveAngle;
 		}
-		else if (saveAngleFlag)
+		else 
 		{
-			saveAngle = input->PadStickAngle() + 90;
-			rotate.y = input->PadStickAngle() + 90;
+			saveAngle = ConvertNormalToDeg(velocity.Normal(), Vector3{ 0,0,1 }).y + 180;
+			rotate.y = saveAngle;
 		}
 		//rotate.x = 90;
 
@@ -218,12 +225,16 @@ void PlayerObject::Update()
 			//自爆(デバッグ用やぶなか
 		if (((input->TriggerPadButton(BUTTON_A)) || input->TriggerKey(DIK_SPACE)) &&
 			attack.can &&
-			attackCount > 0 && !boostFlag)
+			attackCount > 0 && !boostFlag
+			&&velocity.Length() !=0.0f)
 		{
 			Audio::GetInstance()->LoopPlayWave(10, 5);
 			boostFlag = true;
 			//攻撃開始
 			attack.Start();
+
+			animationType = BOOST;
+			animationChangeFrag = true;
 
 			////破片生成
 			//for (int i = 0; i < DESTRUCT_POW; i++) {
@@ -257,18 +268,27 @@ void PlayerObject::Update()
 		//回収
 		if (input->TriggerPadButton(BUTTON_B)||
 			input->TriggerKey(DIK_Q)) {
-			if (recovery.Start()) {
-				Audio::GetInstance()->PlayWave(14);
-				for (int i = 0; i < Debris::debris.size(); i++) {
-					Debris::debris[i]->ReturnStart();
+			if (Debris::debris.size() != 0) {
+				if (recovery.Start()) {
+					Audio::GetInstance()->PlayWave(14);
+					for (int i = 0; i < Debris::debris.size(); i++) {
+						Debris::debris[i]->ReturnStart();
+
+						animationType = RETRIEVE;
+						animationChangeFrag = true;
+						recoveryEndTimer = 30;
+					}
+				}
+				else {
+					if (!dontRecovery) {
+						savePos = pos;
+					}
+					dontRecovery = true;
 				}
 			}
-			else {
-				if (!dontRecovery) {
-					savePos = pos;
-				}
-				dontRecovery = true;
-			}
+		}
+		else if (recoveryEndTimer >= 0) {
+			recoveryEndTimer--;
 		}
 	}
 	else if (endFlag)
@@ -353,6 +373,16 @@ void PlayerObject::Update()
 	boomParticle->Update();
 	refParticle->Update();
 	atkParticle->Update();*/
+	
+	if (animationChangeFrag) {
+		if (animationType == DEATH) {
+			objectData->PlayAnimation(animationType,false);
+		}
+		else{
+			objectData->PlayAnimation(animationType);
+		}
+		animationChangeFrag = false;
+	}
 }
 
 void PlayerObject::Draw() const
@@ -382,18 +412,8 @@ void PlayerObject::LustUpdate()
 	Vector3 hitPos = { 0,0,0 };
 	Vector3 moveVec = velocity + penalty;
 	Vector3 normal = { 0,0,0 };
-	//上下
-	if (MapChip::GetInstance()->CheckMapChipAreaToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
-		if (hitPos.x != 0) {
-			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
-		}
-		if (hitPos.z != 0) {
-			pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
-		}
-		normal.Normalize();
-		HitWall(hitPos, normal.Normal());
-		Audio::GetInstance()->PlayWave(17);
-	}
+
+	//マップチップ検出
 	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal,&oldPos)) {
 
 		if (hitPos.x != 0) {
@@ -404,7 +424,17 @@ void PlayerObject::LustUpdate()
 		}
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
-		Audio::GetInstance()->PlayWave(17);
+	}
+	//範囲外検出
+	else if (MapChip::GetInstance()->CheckMapChipAreaToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal)) {
+		if (hitPos.x != 0) {
+			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
+		}
+		if (hitPos.z != 0) {
+			pos.z = hitPos.z + toMapChipCollider->GetRadiusY() * normal.z;
+		}
+		normal.Normalize();
+		HitWall(hitPos, normal.Normal());
 	}
 
 	//角
@@ -436,13 +466,13 @@ void PlayerObject::LustUpdate()
 		debrisCooldown.Start();
 
 		//残骸のサイズ
-		float shotSize = energy / SHOT_ENERGY;
+		float shotSize = hp / SHOT_ENERGY;
 		Vector3 shotVec = -velocity.Normal();
 		//startVec = startVec + offset;
 
 		//Debrisのコンテナに追加
 		Debris::debris.push_back(new Debris(pos/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
-		energy -= shotSize;
+		hp -= shotSize;
 
 	}
 	debrisCooldown.Intervel();
@@ -504,7 +534,7 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 				info.collider->GetCollisionName() == "hitCollider" &&
 				(!debri->isFirstAttack || debri->state == Debris::RETURN)) {
 				//吸収
-				energy += debri->GetSize();
+				hp += debri->GetSize();
 				Audio::GetInstance()->PlayWave(13);
 			}
 
@@ -579,12 +609,15 @@ void PlayerObject::HitWall(
 	const Vector3& normal)
 {
 	Input* input = Input::GetInstance();
+	Vector3 oldVec = velocity;
 	velocity = CalcReflectVector(velocity, normal);
+	/*if (velocity.Length() >= 40 && oldVec.VDot(velocity) < 0.1f) {
+	}*/
 	if (attack.is) {
 		refParticle->AddRef(20, 40, pos, velocity);
 		input->GetInstance()->SetVibrationPower(65535);
-		if (isBounce) {
-			velocity *= 3.0f;
+		if (!isBounce) {
+			Audio::GetInstance()->PlayWave(17);
 			isBounce = true;
 		}
 	}
@@ -595,13 +628,16 @@ void PlayerObject::Damage(float damage)
 	//無敵だったらダメージを受けない
 	if (isInvincible) return;
 	//isInvincible = true;
-	energy -= damage;
+	hp -= damage;
 	invincibleCounter = 60;
 	Audio::GetInstance()->PlayWave(11);
 
 	//sizeが0になったら死亡処理
-	if (energy <= 0) {
-		energy = 0;
+	if (hp <= 0) {
+		hp = 0;
+
+		animationType = DEATH;
+		animationChangeFrag = true;
 	}
 
 	boomParticle->AddBoom(2, 10, pos);

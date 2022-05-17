@@ -4,6 +4,7 @@
 #include <DirectXMath.h>
 #include "PlayerObject.h"
 #include "EnemyManager.h"
+#include "FbxObject3d.h"
 
 class UserInterface
 {
@@ -14,17 +15,30 @@ public:
 	void Update();
 	void Draw() const;
 
+
 private:
-	//ウェーブ変更演出
+	//フレーム
+	std::unique_ptr<Sprite> frame;
+	//ステージテキスト
+	std::unique_ptr<Sprite> stageText;
+	//ステージ番号
+	std::unique_ptr<Sprite> stageNum[10];
+	//ウェーブテキスト
 	std::unique_ptr<Sprite> waveText;
-	std::unique_ptr<Sprite> wave[3];
+	//HPフレーム
+	std::unique_ptr<Sprite> hpFrame;
+	//HPゲージ
+	std::unique_ptr<Sprite> hpGauge;
+
+
+	//ウェーブ変更演出
 	std::unique_ptr<Sprite> moveWave;
-	//エネミーの数
-	std::unique_ptr<Sprite> enemy;
-	std::unique_ptr<Sprite> enemyWaveMax[3][10];
-	std::unique_ptr<Sprite> enemyResidue[3][10];
-	std::vector<int> enemyWaveCon;
-	std::vector<int> enemyWaveMaxCon;
+	
+	//左右のゲージ
+	std::unique_ptr<Sprite> boostFrame;		//ブーストフレーム
+	std::unique_ptr<Sprite> boostGauge;		//ブーストゲージ
+	std::unique_ptr<Sprite> kaisyuFrame;	//回収フレーム
+	std::unique_ptr<Sprite> kaisyuGauge;	//回収ゲージ
 
 	//ウェーブ数
 	std::unique_ptr<Sprite> waveNum[10];
@@ -32,33 +46,19 @@ private:
 	std::unique_ptr<Sprite> moveWaveNum[10];
 	std::unique_ptr<Sprite> moveWaveMaxNum[10];
 
-	std::unique_ptr<Sprite> energyNum[4][10];
-	std::vector<int> energyCon;
-
-	//HP
-	std::unique_ptr<Sprite> playerHp;
-	//体当たり回数
-	std::unique_ptr<Sprite> expGauge[4];
-
-	//回収
-	std::unique_ptr<Sprite> recoverFrame;
-	std::unique_ptr<Sprite> recoverGauge;
 	const int maxRecoverColorTimer = 30;
 	int recoverColorTimer;
 	XMFLOAT2 shake;
 
 	//チュートリアル
 	int tutorialNum;
-	std::unique_ptr<Sprite> boost[4];
-	std::unique_ptr<Sprite> end[2];
-	std::unique_ptr<Sprite> hp[2];
-	std::unique_ptr<Sprite> kaisyu[2];
-	std::unique_ptr<Sprite> enemy_t;
-	std::unique_ptr<Sprite> start;
+	std::unique_ptr<Sprite> text[18];
 
 	std::vector<std::unique_ptr<Sprite>> tutorialImag;
 
 
+	//ストップ用フラグ
+	int stopFrag[5];
 
 	//現在のウェーブ数
 	static int *nowWave;
@@ -73,5 +73,12 @@ private:
 
 	//カウンター
 	int *counter;
+
+	bool isMinimapDraw;
+	//ミニマップ
+	std::unique_ptr<Sprite> mapImag[MapChip::MAP_NAME::MAX];
+	std::unique_ptr<Sprite> playerPos;
+	std::unique_ptr<Sprite> enemysPos[100];
+
 };
 
