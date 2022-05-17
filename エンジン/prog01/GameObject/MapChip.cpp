@@ -87,7 +87,7 @@ void MapChip::CreateStage(MAP_NAME mapName)
 				break;
 
 			case 9:
-				startPos[mapName] = { 200.0f * x, 50.0f, -200.0f * z };
+				startPos[mapName] = { 200.0f * x, 0.0f, -200.0f * z };
 				break;
 
 			case 10:		//1はベースブロック

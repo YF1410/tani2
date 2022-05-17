@@ -45,7 +45,8 @@ public: // メンバ関数
 	void SelectEasing();
 	void InitializePosSize(int selectCount);
 	void UnlockStage(int unlockStageNum);
-	void selectSceneChange();
+	void SelectSceneChange();
+	void SpecifiedMove();
 
 private: // メンバ変数
 	//スプライト
@@ -95,12 +96,12 @@ private: // メンバ変数
 	XMFLOAT2 stage3Pos = { (WinApp::window_width / 2) + (offAmount * (selectCount + 3)),WinApp::window_height / 2 };
 	XMFLOAT2 stage4Pos = { (WinApp::window_width / 2) + (offAmount * (selectCount + 4)),WinApp::window_height / 2 };
 	XMFLOAT2 stage5Pos = { (WinApp::window_width / 2) + (offAmount * (selectCount + 5)),WinApp::window_height / 2 };
-	XMFLOAT2 saveTutorialPos = { 0,0 };
-	XMFLOAT2 saveStage1Pos = { 0,0 };
-	XMFLOAT2 saveStage2Pos = { 0,0 };
-	XMFLOAT2 saveStage3Pos = { 0,0 };
-	XMFLOAT2 saveStage4Pos = { 0,0 };
-	XMFLOAT2 saveStage5Pos = { 0,0 };
+	XMFLOAT2 saveTutorialPos =tutorialPos;
+	XMFLOAT2 saveStage1Pos = stage1Pos;
+	XMFLOAT2 saveStage2Pos = stage2Pos;
+	XMFLOAT2 saveStage3Pos = stage3Pos;
+	XMFLOAT2 saveStage4Pos = stage4Pos;
+	XMFLOAT2 saveStage5Pos = stage5Pos;
 	XMFLOAT2 tutorialSize = selectNumSize;
 	XMFLOAT2 stage1Size = defaultNumSize;
 	XMFLOAT2 stage2Size = defaultNumSize;
@@ -162,5 +163,12 @@ private: // メンバ変数
 
 	int pushSelectTimer = 0;
 	int maxPushSelectTimer = 20;
+
+	bool isUp = false;
+	int specifiedMoveTimer = 0;
+	int maxSpecifiedMoveTimer = 20;
+	float bounceAmount = 30.0f;
+	float specifiedBouncePosUp = WinApp::window_height / 2 + bounceAmount;
+	float specifiedBouncePosDown = WinApp::window_height / 2 - bounceAmount;
 };
 

@@ -29,9 +29,9 @@ SelectScene::SelectScene(int parameter) {
 	if (parameter == 5 && ClearConfirmation::GetInstance()->GetStage5Flag()) {
 		isUnlockStage = false;
 	}
-	//maxUnlockStage = 4;
-	//selectCount = 4;
-	//isUnlockStage = true;
+	/*maxUnlockStage = 4;
+	selectCount = 4;
+	isUnlockStage = true;*/
 }
 
 SelectScene::~SelectScene() {
@@ -112,7 +112,7 @@ void SelectScene::Update() {
 	}
 
 	if (nowSceneChange) {
-		selectSceneChange();
+		SelectSceneChange();
 	}
 
 	if ((input->TriggerRight() || input->TriggerPadStickRight() || input->TriggerKey(DIK_RIGHT) || input->TriggerKey(DIK_D)) 
@@ -121,6 +121,7 @@ void SelectScene::Update() {
 		selectCount++;
 		isNext = true;
 		isSelectEase = true;
+		isUp = false;
 		SavePosition();
 	}
 	else if ((input->TriggerLeft() || input->TriggerPadStickLeft() || input->TriggerKey(DIK_LEFT) || input->TriggerKey(DIK_A)) 
@@ -129,6 +130,7 @@ void SelectScene::Update() {
 		selectCount--;
 		isBack = true;
 		isSelectEase = true;
+		isUp = false;
 		SavePosition();
 	}
 
@@ -141,6 +143,9 @@ void SelectScene::Update() {
 
 	if (isSelectEase) {
 		SelectEasing();
+	}
+	if (!isUnlockStage && !nowSceneChange && !isSelectEase) {
+		SpecifiedMove();
 	}
 }
 
@@ -547,7 +552,7 @@ void SelectScene::UnlockStage(int unlockStageNum) {
 	}
 }
 
-void SelectScene::selectSceneChange() {
+void SelectScene::SelectSceneChange() {
 	if (pushSelectTimer < maxPushSelectTimer) {
 		pushSelectTimer++;
 	}
@@ -556,23 +561,121 @@ void SelectScene::selectSceneChange() {
 	if (selectCount == 0) {
 		tutorialSize = Ease(In, Back, eTime, selectNumSize, { 0,0 });
 		tutorial->SetSize(tutorialSize);
+		tutorial->SetPosition({ tutorialPos.x,WinApp::window_height / 2 });
 		if (pushSelectTimer >= maxPushSelectTimer) {
 			sceneChange.SceneChangeStart("GameScene", 0);
 		}
 	}
 	else if (selectCount == 1) {
-		sceneChange.SceneChangeStart("GameScene", 1);
+		stage1Size = Ease(In, Back, eTime, selectNumSize, { 0,0 });
+		stage1->SetSize(stage1Size);
+		stage1->SetPosition({ stage1Pos.x,WinApp::window_height / 2 });
+		if (pushSelectTimer >= maxPushSelectTimer) {
+			sceneChange.SceneChangeStart("GameScene", 1);
+		}
 	}
 	else if (selectCount == 2) {
-		sceneChange.SceneChangeStart("GameScene", 2);
+		stage2Size = Ease(In, Back, eTime, selectNumSize, { 0,0 });
+		stage2->SetSize(stage2Size);
+		stage2->SetPosition({ stage2Pos.x,WinApp::window_height / 2 });
+		if (pushSelectTimer >= maxPushSelectTimer) {
+			sceneChange.SceneChangeStart("GameScene", 2);
+		}
 	}
 	else if (selectCount == 3) {
-		sceneChange.SceneChangeStart("GameScene", 3);
+		stage3Size = Ease(In, Back, eTime, selectNumSize, { 0,0 });
+		stage3->SetSize(stage3Size);
+		stage3->SetPosition({ stage3Pos.x,WinApp::window_height / 2 });
+		if (pushSelectTimer >= maxPushSelectTimer) {
+			sceneChange.SceneChangeStart("GameScene", 3);
+		}
 	}
 	else if (selectCount == 4) {
-		sceneChange.SceneChangeStart("GameScene", 4);
+		stage4Size = Ease(In, Back, eTime, selectNumSize, { 0,0 });
+		stage4->SetSize(stage4Size);
+		stage4->SetPosition({ stage4Pos.x,WinApp::window_height / 2 });
+		if (pushSelectTimer >= maxPushSelectTimer) {
+			sceneChange.SceneChangeStart("GameScene", 4);
+		}
 	}
 	else if (selectCount == 5) {
-		sceneChange.SceneChangeStart("GameScene", 5);
+		stage5Size = Ease(In, Back, eTime, selectNumSize, { 0,0 });
+		stage5->SetSize(stage5Size);
+		stage5->SetPosition({ stage5Pos.x,WinApp::window_height / 2 });
+		if (pushSelectTimer >= maxPushSelectTimer) {
+			sceneChange.SceneChangeStart("GameScene", 5);
+		}
+	}
+}
+
+void SelectScene::SpecifiedMove() {
+	if (maxSpecifiedMoveTimer >= specifiedMoveTimer) {
+		specifiedMoveTimer++;
+		if (maxSpecifiedMoveTimer <= specifiedMoveTimer) {
+			specifiedMoveTimer = 0;
+			if (!isUp) {
+				isUp = true;
+			}
+			else if (isUp) {
+				isUp = false;
+			}
+		}
+	}
+
+	float eTime = (float)(specifiedMoveTimer / static_cast<double>(maxSpecifiedMoveTimer));
+
+	if (selectCount == 0) {
+		if (isUp) {
+			saveTutorialPos.y = Ease(In, ease::Quint, eTime, specifiedBouncePosDown, specifiedBouncePosUp);
+		}
+		else if (!isUp) {
+			saveTutorialPos.y = Ease(Out, ease::Quint, eTime, specifiedBouncePosUp, specifiedBouncePosDown);
+		}
+		tutorial->SetPosition({tutorialPos.x, saveTutorialPos.y });
+	}
+	else if (selectCount == 1) {
+		if (isUp) {
+			saveStage1Pos.y = Ease(In, ease::Quint, eTime, specifiedBouncePosDown, specifiedBouncePosUp);
+		}
+		else if (!isUp) {
+			saveStage1Pos.y = Ease(Out, ease::Quint, eTime, specifiedBouncePosUp, specifiedBouncePosDown);
+		}
+		stage1->SetPosition({ stage1Pos.x,saveStage1Pos.y });
+	}
+	else if (selectCount == 2) {
+		if (isUp) {
+			saveStage2Pos.y = Ease(In, ease::Quint, eTime, specifiedBouncePosDown, specifiedBouncePosUp);
+		}
+		else if (!isUp) {
+			saveStage2Pos.y = Ease(Out, ease::Quint, eTime, specifiedBouncePosUp, specifiedBouncePosDown);
+		}
+		stage2->SetPosition({ stage2Pos.x,saveStage2Pos.y });
+	}
+	else if (selectCount == 3) {
+		if (isUp) {
+			saveStage3Pos.y = Ease(In, ease::Quint, eTime, specifiedBouncePosDown, specifiedBouncePosUp);
+		}
+		else if (!isUp) {
+			saveStage3Pos.y = Ease(Out, ease::Quint, eTime, specifiedBouncePosUp, specifiedBouncePosDown);
+		}
+		stage3->SetPosition({ stage3Pos.x,saveStage3Pos.y });
+	}
+	else if (selectCount == 4) {
+		if (isUp) {
+			saveStage4Pos.y = Ease(In, ease::Quint, eTime, specifiedBouncePosDown, specifiedBouncePosUp);
+		}
+		else if (!isUp) {
+			saveStage4Pos.y = Ease(Out, ease::Quint, eTime, specifiedBouncePosUp, specifiedBouncePosDown);
+		}
+		stage4->SetPosition({ stage4Pos.x,saveStage4Pos.y });
+	}
+	else if (selectCount == 5) {
+		if (isUp) {
+			saveStage5Pos.y = Ease(In, ease::Quint, eTime, specifiedBouncePosDown, specifiedBouncePosUp);
+		}
+		else if (!isUp) {
+			saveStage5Pos.y = Ease(Out, ease::Quint, eTime, specifiedBouncePosUp, specifiedBouncePosDown);
+		}
+		stage5->SetPosition({ stage5Pos.x,saveStage5Pos.y });
 	}
 }
