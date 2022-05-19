@@ -20,6 +20,7 @@ void ObjFactory::Initialize()
 	LoadModel("stage2");
 	LoadModel("stage3");
 	LoadModel("stage4");
+	LoadModel("stage5");
 }
 
 void ObjFactory::Finalize()
