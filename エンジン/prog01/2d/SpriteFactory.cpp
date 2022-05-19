@@ -51,6 +51,18 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(10, L"Resources/Sprite/UI/gauge_01.png")) {
 		assert(0);
 	}
+	//Aボタン
+	if (!Sprite::LoadTexture(11, L"Resources/Sprite/UI/A.png")) {
+		assert(0);
+	}
+	//Bボタン
+	if (!Sprite::LoadTexture(12, L"Resources/Sprite/UI/B.png")) {
+		assert(0);
+	}
+	//RBボタン
+	if (!Sprite::LoadTexture(13, L"Resources/Sprite/UI/RB.png")) {
+		assert(0);
+	}
 
 	//ミニマップ
 	//エネミーの位置

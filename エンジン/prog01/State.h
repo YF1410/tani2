@@ -17,11 +17,11 @@ struct STATE
 		return false;
 	}
 
-	void Intervel() {
+	void Intervel(bool isReset = false) {
 		if (!can) {
 			if (timer <= 0) {
 				can = true;
-				is = false;
+				is = isReset;
 			}
 			else {
 				timer--;

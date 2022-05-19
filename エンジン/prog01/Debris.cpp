@@ -93,7 +93,9 @@ void Debris::Update()
 		break;
 	case Debris::RETURN:
 		if (velocity.Length() <= 200) {
-			velocity = Vector3(playerData->pos - pos).Normal() * 100;
+			Vector3 targetVec = playerData->pos - pos;
+			targetVec.y = 0;
+			velocity = targetVec.Normal() * 100;
 		}
 		//
 		if (returnTimer-- <= 0) {
@@ -110,7 +112,7 @@ void Debris::Update()
 
 	//ˆÚ“®—Ê‚ð“K‰ž
 	PosAddVelocity();
-
+	//pos.y = 0;
 
 }
 

@@ -25,12 +25,6 @@ UserInterface::~UserInterface()
 
 void UserInterface::Initialize()
 {
-	if (MapChip::GetInstance()->nowMap == MapChip::TUTORIAL) {
-		stopFrag = true;
-	}
-	else {
-		stopFrag = false;
-	}
 	//フレーム
 	frame = Sprite::Create(2, { 0,0 });
 	//ステージテキスト
@@ -92,6 +86,11 @@ void UserInterface::Initialize()
 		}
 	}
 
+	//ボタン
+	AButton = Sprite::Create(11, { (float)(WinApp::window_width / 2 -500),(float)(WinApp::window_height / 2+180) }, { 1,1,1,1 }, { 0.5f,0.5f });
+	BButton = Sprite::Create(12, { (float)(WinApp::window_width / 2 +500),(float)(WinApp::window_height / 2+180) }, { 1,1,1,1 }, { 0.5f,0.5f });
+	RBButton = Sprite::Create(13, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
+
 	
 	//ミニマップ
 	isMinimapDraw = false;
@@ -137,10 +136,7 @@ void UserInterface::Update()
 		isMinimapDraw = false;
 	}
 	if (isChangeWave) {
-		//最初の表示に待機時間を付ける
-		if (true) {
-
-		}
+		
 
 		//中央まで
 		if (moveWaveTimer <= 1.0f) {
@@ -183,30 +179,52 @@ void UserInterface::Update()
 	boostGaugeLength
 		});
 
-	//使えないとき
+	//回収が使えないとき
+	XMFLOAT2 kaisyuShake = { 0,0 };
 	if (player->dontRecovery) {
 		//recoverGauge.get()->SetColor({ 1,0,0,1 });
 		recoverColorTimer++;
 		if (recoverColorTimer >= maxRecoverColorTimer) {
 			player->dontRecovery = false;
 			recoverColorTimer = 0;
-			shake = { 0,0 };
-			//recoverGauge.get()->SetColor({ 1,1,1,1 });
 		}
 		else {
-			shake = {
+			kaisyuShake = {
 				(float)(rand() % (maxRecoverColorTimer - recoverColorTimer) - (maxRecoverColorTimer - recoverColorTimer)/2),
 				(float)(rand() % (maxRecoverColorTimer - recoverColorTimer) - (maxRecoverColorTimer - recoverColorTimer) / 2)
 			};
 		}
-		//recoverFrame.get()->SetPosition({ WinApp::window_width - 300+shake.x,290 +shake.y});
-		//recoverGauge.get()->SetPosition({ WinApp::window_width - 220+shake.x,290 +shake.y});
 	}
-	else {
-		//recoverGauge.get()->SetColor({ 1,1,1,1 });
-		//recoverFrame.get()->SetColor({ 1,1,1,1 });
+	kaisyuFrame.get()->SetPosition(
+		{ WinApp::window_width / 2 + 450 + kaisyuShake.x,
+		WinApp::window_height / 2 + kaisyuShake.y });
+	kaisyuGauge.get()->SetPosition(
+		{ WinApp::window_width / 2 + 450 + kaisyuShake.x,
+		WinApp::window_height / 2 + 40 + kaisyuShake.y });
 
+	//ブーストが使えないとき
+	XMFLOAT2 boostShake = { 0,0 };
+	if (player->dontBoost) {
+		//recoverGauge.get()->SetColor({ 1,0,0,1 });
+		recoverColorTimer++;
+		if (recoverColorTimer >= maxRecoverColorTimer) {
+			player->dontBoost = false;
+			recoverColorTimer = 0;
+		}
+		else {
+			boostShake = {
+				(float)(rand() % (maxRecoverColorTimer - recoverColorTimer) - (maxRecoverColorTimer - recoverColorTimer) / 2),
+				(float)(rand() % (maxRecoverColorTimer - recoverColorTimer) - (maxRecoverColorTimer - recoverColorTimer) / 2)
+			};
+		}
 	}
+	boostFrame.get()->SetPosition(
+		{ WinApp::window_width / 2 - 450 + boostShake.x,
+		WinApp::window_height / 2 + boostShake.y });
+	boostGauge.get()->SetPosition(
+		{ WinApp::window_width / 2 - 450 + boostShake.x,
+		WinApp::window_height / 2 + 40 + boostShake.y });
+
 
 	//たまった時
 	if (player->recovery.can) {
@@ -251,24 +269,9 @@ void UserInterface::Update()
 		}
 	}
 	//チュートリアル
-	if (stopFrag && MapChip::GetInstance()->nowMap == 0 && tutorialNum <= tutorialImag.size() - 1) {
-		if (*counter % 200 == 0 && tutorialNum < tutorialImag.size() - 1) {
-			if (tutorialNum == 5
-				|| tutorialNum == 12
-				) {
-				//停止無効
-				stopFrag = false;
-			}
-			else {
-				tutorialNum++;
-
-			}
-
-		}
-		else if (*counter % 200 == 0) {
-			tutorialImag[tutorialNum].get()->SetIsInvisible(true);
-			stopFrag = false;
-
+	if (MapChip::GetInstance()->nowMap == 0 && tutorialNum <= tutorialImag.size() - 1) {
+		if (*counter % 150 == 0) {
+			tutorialNum++;
 		}
 	}
 
@@ -290,8 +293,10 @@ void UserInterface::Draw() const
 
 	boostFrame.get()->Draw();
 	boostGauge.get()->Draw();
+	AButton.get()->Draw();
 	kaisyuFrame.get()->Draw();
 	kaisyuGauge.get()->Draw();
+	BButton.get()->Draw();
 	
 	moveWave.get()->Draw();
 	moveWaveNum[*nowWave + 1].get()->Draw();
@@ -310,8 +315,8 @@ void UserInterface::Draw() const
 	}
 
 
-	//チュートリアル
-	if (MapChip::GetInstance()->nowMap == 0 && stopFrag) {
+	//チュートリアルでのみ描画
+	if (MapChip::GetInstance()->nowMap == 0) {
 		tutorialImag[tutorialNum].get()->Draw();
 	}
 
