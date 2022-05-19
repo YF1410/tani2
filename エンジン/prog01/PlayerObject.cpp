@@ -148,10 +148,10 @@ void PlayerObject::Update()
 	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
-	if (attack.is && velocity.Length() >= 180) {
-		velocity = velocity.Normal() * 180;
+	if (attack.is && velocity.Length() >= 360) {
+		velocity = velocity.Normal() * 360;
 	}
-	if (attack.is && velocity.Length() < 160) {
+	if (attack.is && velocity.Length() < 120) {
 		attack.is = false;
 		isBounce = false;
 		animationType = MOVE;
