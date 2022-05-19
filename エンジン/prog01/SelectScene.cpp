@@ -121,7 +121,7 @@ void SelectScene::Update() {
 	}
 
 	if ((input->TriggerRight() || input->TriggerPadStickRight() || input->TriggerKey(DIK_RIGHT) || input->TriggerKey(DIK_D)) 
-		&& !isSelectEase && selectCount < maxUnlockStage && !isUnlockStage)
+		&& !isSelectEase && selectCount < maxUnlockStage && !isUnlockStage && !nowSceneChange)
 	{
 		selectCount++;
 		isNext = true;
@@ -130,7 +130,7 @@ void SelectScene::Update() {
 		SavePosition();
 	}
 	else if ((input->TriggerLeft() || input->TriggerPadStickLeft() || input->TriggerKey(DIK_LEFT) || input->TriggerKey(DIK_A)) 
-		&& !isSelectEase && selectCount > 0 && !isUnlockStage)
+		&& !isSelectEase && selectCount > 0 && !isUnlockStage && !nowSceneChange)
 	{
 		selectCount--;
 		isBack = true;

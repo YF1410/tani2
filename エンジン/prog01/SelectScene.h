@@ -151,7 +151,7 @@ private: // ƒƒ“ƒo•Ï”
 	int droplockEaseTimer = 0;
 	int maxDroplockEaseTimer = 120;
 	int unlockEaseTimer = 0;
-	int maxUnlockEaseTimer = 60;
+	int maxUnlockEaseTimer = 50;
 	bool isUnlockStage = false;
 
 	bool nowSceneChange = false;

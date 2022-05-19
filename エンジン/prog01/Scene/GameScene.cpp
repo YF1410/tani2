@@ -313,7 +313,9 @@ void GameScene::Update() {
 			//破片更新
 			Debris::StaticUpdate();
 			//エネミー更新
-			enemyManager.get()->Update();
+			if (!clearFlag && !gameOverFlag) {
+				enemyManager.get()->Update();
+			}
 
 			stageclearObject3d->Update();
 			nextStageObject3d->Update();
@@ -340,7 +342,9 @@ void GameScene::Update() {
 		//破片更新
 		Debris::StaticUpdate();
 		//エネミー更新
-		enemyManager.get()->Update();
+		if (!clearFlag && !gameOverFlag) {
+			enemyManager.get()->Update();
+		}
 
 		stageclearObject3d->Update();
 		nextStageObject3d->Update();
