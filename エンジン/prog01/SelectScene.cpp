@@ -98,7 +98,7 @@ void SelectScene::Initialize() {
 	stage5Chain = Sprite::Create(170, stage5Pos, color, anchorPoint);
 	stage5Chain->SetSize(stage5ChainSize);
 
-	Audio::GetInstance()->LoopPlayWave(1, 0.3f);
+	Audio::GetInstance()->LoopPlayWave(1, 0.5f);
 }
 
 void SelectScene::Finalize() {
