@@ -219,4 +219,7 @@ private: // メンバ変数
 
 	//BGMの切り替え
 	bool isChangeBGM = false;
+
+	//チュートリアルフラグ
+	bool tutorialFlag = false;
 };
