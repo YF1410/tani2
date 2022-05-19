@@ -25,6 +25,7 @@ UserInterface::~UserInterface()
 
 void UserInterface::Initialize()
 {
+	oldEnemySize = 0;
 	//フレーム
 	frame = Sprite::Create(2, { 0,0 });
 	//ステージテキスト
@@ -276,13 +277,35 @@ void UserInterface::Update()
 		}
 	}
 	//チュートリアル
-	if (MapChip::GetInstance()->nowMap == 0 && tutorialNum <= tutorialImag.size() - 1) {
-		if (*counter % 150 == 0) {
-			tutorialNum++;
+	if (tutorialNum <= tutorialImag.size() - 1) {
+		if (MapChip::GetInstance()->nowMap == 0) {
+			if (*counter % 150 == 0) {
+				tutorialNum++;
+			}
+		}
+
+		//Bボタンでブースト
+		if (player->animationType == PlayerObject::BOOST) {
+			checkFlag[0] = true;
+		}
+		//ブーストで敵を倒す
+		if (player->animationType == PlayerObject::BOOST&&
+			oldEnemySize > enemys->enemys[MapChip::GetInstance()->nowMap].size()
+			) {
+			checkFlag[1] = true;
+		}
+		//Aボタンで回収
+		if (player->animationType == PlayerObject::RETRIEVE) {
+			checkFlag[2] = true;
+		}
+		//RBボタンでマップ確認
+		if (isMinimapDraw) {
+			checkFlag[3] = true;
 		}
 	}
 
-	
+	oldEnemySize = enemys->enemys[MapChip::GetInstance()->nowMap].size();
+
 }
 
 void UserInterface::Draw() const
@@ -329,17 +352,10 @@ void UserInterface::Draw() const
 			tutorialImag[tutorialNum].get()->Draw();
 		}
 
-		if (true) {
-			check[0].get()->Draw();
-		}
-		if (true) {
-			check[1].get()->Draw();
-		}
-		if (true) {
-			check[2].get()->Draw();
-		}
-		if (true) {
-			check[3].get()->Draw();
+		for (int i = 0; i < 4; i++) {
+			if (checkFlag[i]) {
+				check[i].get()->Draw();
+			}
 		}
 	}
 
