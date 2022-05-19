@@ -40,7 +40,7 @@ GameScene::GameScene(int parameter) {
 	//カメラ生成
 	camera = std::make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 
-	Audio::GetInstance()->LoopPlayWave(parameter + 2, 0.5f);
+	Audio::GetInstance()->LoopPlayWave(parameter + 2, 0.3f);
 
 	// カメラ注視点をセット
 	camera->SetTarget(Vector3(playerObject.get()->GetPos() + targetDistanceDef));
@@ -231,7 +231,7 @@ void GameScene::Update() {
 		clearFlag = true;
 		if (!isChangeBGM) 		{
 			Audio::GetInstance()->LoopStopWave(1);
-			Audio::GetInstance()->LoopPlayWave(9, 0.5f);
+			Audio::GetInstance()->LoopPlayWave(9, 0.3f);
 			isChangeBGM = true;
 		}
 	}
@@ -239,7 +239,7 @@ void GameScene::Update() {
 		gameOverFlag = true;
 		if (!isChangeBGM) 		{
 			Audio::GetInstance()->LoopStopWave(1);
-			Audio::GetInstance()->LoopPlayWave(8, 0.5f);
+			Audio::GetInstance()->LoopPlayWave(8, 0.3f);
 			isChangeBGM = true;
 		}
 	}
@@ -390,7 +390,7 @@ void GameScene::LastUpdate() {
 		if (!isChangeBGM)
 		{
 			Audio::GetInstance()->LoopStopWave(1);
-			Audio::GetInstance()->LoopPlayWave(9, 0.5f);
+			Audio::GetInstance()->LoopPlayWave(9, 0.3f);
 			isChangeBGM = true;
 		}
 	}

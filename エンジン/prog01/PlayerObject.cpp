@@ -229,7 +229,7 @@ void PlayerObject::Update()
 				velocity.Length() != 0.0f)	{
 				Audio::GetInstance()->LoopStopWave(1);
 
-					Audio::GetInstance()->LoopPlayWave(10, 5);
+					Audio::GetInstance()->LoopPlayWave(10, 3);
 					boostFlag = true;
 					//UŒ‚ŠJn
 					attack.Start();
@@ -274,7 +274,7 @@ void PlayerObject::Update()
 		if (input->TriggerPadButton(BUTTON_B)||
 			input->TriggerKey(DIK_Q)) {
 			if (Debris::debris.size() != 0 && recovery.Start()) {
-				Audio::GetInstance()->PlayWave(14);
+				Audio::GetInstance()->PlayWave(14 , 0.5f);
 				for (int i = 0; i < Debris::debris.size(); i++) {
 					Debris::debris[i]->ReturnStart();
 
@@ -473,7 +473,7 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 				(!debri->isFirstAttack || debri->state == Debris::RETURN)) {
 				//‹zû
 				hp += debri->GetSize();
-				Audio::GetInstance()->PlayWave(13);
+				Audio::GetInstance()->PlayWave(13, 0.4f);
 			}
 			healChack = true;
 			healParticle1->AddHeal(3, 40, pos, velocity);
@@ -540,10 +540,7 @@ void PlayerObject::HitWall(
 	if (attack.is) {
 		refParticle->AddRef(20, 40, pos, velocity);
 		input->GetInstance()->SetVibrationPower(65535);
-		if (!isBounce) {
-			Audio::GetInstance()->PlayWave(17);
-			isBounce = true;
-		}
+		Audio::GetInstance()->PlayWave(17, 0.4f);
 	}
 }
 
@@ -561,7 +558,7 @@ void PlayerObject::Damage(float damage)
 	//isInvincible = true;
 	hp -= damage;
 	invincibleCounter = 60;
-	Audio::GetInstance()->PlayWave(11);
+	Audio::GetInstance()->PlayWave(11, 0.4f);
 
 	//size‚ª0‚É‚È‚Á‚½‚ç€–Sˆ—
 	if (hp <= 0) {
