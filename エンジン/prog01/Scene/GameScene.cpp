@@ -414,8 +414,8 @@ void GameScene::LastUpdate() {
 	sceneChange.Update();
 
 	//チュートリアルスキップ
-	if (Input::GetInstance()->PushPadButton(BUTTON_X) ||
-		Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+	if (Input::GetInstance()->PushPadButton(BUTTON_X) && tutorialFlag ||
+		Input::GetInstance()->TriggerKey(DIK_RETURN) && tutorialFlag) {
 		clearFlag = true;
 	}
 

@@ -91,6 +91,8 @@ void UserInterface::Initialize()
 			tutorialImag.push_back(std::move(text[i]));
 		}
 	}
+	//Xボタン長押しの時のUI
+	xButton = Sprite::Create(169, { WinApp::window_width / 2 - 60,WinApp::window_height / 2 + 200 });
 
 	
 	//ミニマップ
@@ -313,6 +315,10 @@ void UserInterface::Draw() const
 	//チュートリアル
 	if (MapChip::GetInstance()->nowMap == 0 && stopFrag) {
 		tutorialImag[tutorialNum].get()->Draw();
+	}
+	if (MapChip::GetInstance()->nowMap == 0)
+	{
+		xButton->Draw();
 	}
 
 
