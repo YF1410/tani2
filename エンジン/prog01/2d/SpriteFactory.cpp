@@ -256,6 +256,12 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(168, L"Resources/Sprite/tutorial/skipText.png")) {
 		assert(0);
 	}
+	if (!Sprite::LoadTexture(172, L"Resources/Sprite/tutorial/task.png")) {
+		assert(0);
+	}
+	if (!Sprite::LoadTexture(173, L"Resources/Sprite/tutorial/check.png")) {
+		assert(0);
+	}
 
 
 

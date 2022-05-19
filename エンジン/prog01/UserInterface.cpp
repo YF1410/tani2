@@ -84,11 +84,18 @@ void UserInterface::Initialize()
 			text[i] = Sprite::Create(150 + i/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
 			tutorialImag.push_back(std::move(text[i]));
 		}
+
+		//タスクリスト
+		taskList = Sprite::Create(172, { (float)(WinApp::window_width / 2) - 375,100 }, { 1,1,1,1 });
+		for (int i = 0; i < 4; i++) {
+			check[i] = Sprite::Create(173, { (float)(WinApp::window_width / 2) - 375,100 + (i * 32.0f) }, { 1,1,1,1 });
+		}
 	}
 
+
 	//ボタン
-	AButton = Sprite::Create(11, { (float)(WinApp::window_width / 2 -500),(float)(WinApp::window_height / 2+180) }, { 1,1,1,1 }, { 0.5f,0.5f });
-	BButton = Sprite::Create(12, { (float)(WinApp::window_width / 2 +500),(float)(WinApp::window_height / 2+180) }, { 1,1,1,1 }, { 0.5f,0.5f });
+	AButton = Sprite::Create(11, { (float)(WinApp::window_width / 2 -530),(float)(WinApp::window_height / 2+210) }, { 1,1,1,1 }, { 0.5f,0.5f });
+	BButton = Sprite::Create(12, { (float)(WinApp::window_width / 2 +530),(float)(WinApp::window_height / 2+210) }, { 1,1,1,1 }, { 0.5f,0.5f });
 	RBButton = Sprite::Create(13, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
 
 	
@@ -317,7 +324,23 @@ void UserInterface::Draw() const
 
 	//チュートリアルでのみ描画
 	if (MapChip::GetInstance()->nowMap == 0) {
-		tutorialImag[tutorialNum].get()->Draw();
+		taskList.get()->Draw();
+		if (tutorialNum != tutorialImag.size()) {
+			tutorialImag[tutorialNum].get()->Draw();
+		}
+
+		if (true) {
+			check[0].get()->Draw();
+		}
+		if (true) {
+			check[1].get()->Draw();
+		}
+		if (true) {
+			check[2].get()->Draw();
+		}
+		if (true) {
+			check[3].get()->Draw();
+		}
 	}
 
 

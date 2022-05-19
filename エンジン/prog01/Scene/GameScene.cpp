@@ -392,6 +392,12 @@ void GameScene::LastUpdate() {
 	if (Input::GetInstance()->PushPadButton(BUTTON_X) ||
 		Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 		clearFlag = true;
+		if (!isChangeBGM)
+		{
+			Audio::GetInstance()->LoopStopWave(1);
+			Audio::GetInstance()->LoopPlayWave(9, 0.5f);
+			isChangeBGM = true;
+		}
 	}
 
 }

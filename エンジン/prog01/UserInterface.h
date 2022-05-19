@@ -60,8 +60,9 @@ private:
 
 	std::vector<std::unique_ptr<Sprite>> tutorialImag;
 
-
-	//ストップ用フラグ
+	//タスク
+	std::unique_ptr<Sprite> taskList;
+	std::unique_ptr<Sprite> check[4];
 
 	//現在のウェーブ数
 	static int *nowWave;
