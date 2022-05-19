@@ -278,12 +278,12 @@ void GameScene::Update() {
 		//ストップ解除処理
 		if (ui.get()->tutorialNum == 5
 			&& EnemyManager::enemys->size() == 0
-			&& enemyManager.get()->spawnData[MapChip::GetInstance()->nowMap][0].size() == 0) 
+			&& enemyManager.get()->spawnData[MapChip::GetInstance()->nowMap][0].size() == 0)
 		{
 			ui.get()->stopFrag = true;
 			ui.get()->tutorialNum++;
 		}
-		if (ui.get()->tutorialNum == 12){
+		if (ui.get()->tutorialNum == 12) {
 			static bool push = false;
 			if (Input::GetInstance()->PushKey(DIK_Q)
 				|| Input::GetInstance()->TriggerPadButton(BUTTON_B)) {
@@ -306,25 +306,25 @@ void GameScene::Update() {
 			//エネミー更新
 			enemyManager.get()->Update();
 
-	stageclearObject3d->Update();
-	nextStageObject3d->Update();
-	clearEscapeObject3d->Update();
-	gameoverObject3d->Update();
-	retryObject3d->Update();
-	gameoverEscapeObject3d->Update();
-	recoveryEffectObject3d->Update();
-	recoveryEffect2Object3d->Update();
-	stageBGObject3d->Update();
-	//stageBG2Object3d->Update();
+			stageclearObject3d->Update();
+			nextStageObject3d->Update();
+			clearEscapeObject3d->Update();
+			gameoverObject3d->Update();
+			retryObject3d->Update();
+			gameoverEscapeObject3d->Update();
+			recoveryEffectObject3d->Update();
+			recoveryEffect2Object3d->Update();
+			stageBGObject3d->Update();
+			//stageBG2Object3d->Update();
 
-			//パーティクル全てのアップデート
+					//パーティクル全てのアップデート
 			ParticleManager::GetInstance()->Update();
 		}
 		else {
 			playerObject->StopState();
 		}
 	}
-	
+
 	//カウンターを加算
 	counter++;
 
@@ -356,6 +356,7 @@ void GameScene::LastUpdate() {
 		MapChip::GetInstance()->Adaptation();
 	}
 	//最終更新
+
 	ui.get()->Update();
 	//ここまで
 	//パーティクル全てのアップデート

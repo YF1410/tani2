@@ -36,7 +36,7 @@ public: // ÉÅÉìÉoä÷êî
 	void RandAdd(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
 	void Add(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
 	void AddHeal(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, Vector3 velocity = { 0,0,0 });
-	void AddBoom(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 });
+	void AddBoom(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 },float scale =1.0f);
 	void AddAttack(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, Vector3 velocity = { 0,0,0 },float rotation = 0.0f);
 	void AddRef(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, Vector3 velocity = { 0,0,0 });
 	void AddDefeat(int count = 10, int life = 60, XMFLOAT3 position = { 0,0,0 }, DEFEAT_TYPE defeatType = SHOCKWAVE);
