@@ -97,7 +97,7 @@ void ParticleEmitter::AddBoom(int count, int life, XMFLOAT3 position,float scale
 		accel.z = -(float)rand() / RAND_MAX * 0.5;
 
 		//’Ç‰Á
-		particleMan->Add(life, this->position, velocity, accel, scale, scale, s_color, e_color);
+		particleMan->Add(life, this->position, velocity, accel, s_scale * scale, s_scale * scale, s_color, e_color);
 	}
 }
 

@@ -151,7 +151,7 @@ void PlayerObject::Update()
 	if (attack.is && velocity.Length() >= 180) {
 		velocity = velocity.Normal() * 180;
 	}
-	if (attack.is && velocity.Length() < 100) {
+	if (attack.is && velocity.Length() < 160) {
 		attack.is = false;
 		isBounce = false;
 		animationType = MOVE;
@@ -569,7 +569,11 @@ void PlayerObject::Damage(float damage)
 
 		animationType = DEATH;
 		animationChangeFrag = true;
-	}
+		boomParticle->AddBoom(2, 10, pos,5);
 
-	boomParticle->AddBoom(2, 10, pos);
+	}
+	else {
+		boomParticle->AddBoom(2, 10, pos);
+
+	}
 }
