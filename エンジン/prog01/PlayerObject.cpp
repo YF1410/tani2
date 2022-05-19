@@ -36,14 +36,14 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	isBounce = false;
 
 	//ブロード
-	broadSphereCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f,0 }, scale.x * 180.0f);
+	broadSphereCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f - 200,0 }, scale.x * 180.0f);
 	SetBroadCollider(broadSphereCollider);
 	//押し返し用
-	pushBackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f,0 }, scale.x * 180.0f);
+	pushBackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f + -200,0 }, scale.x * 180.0f);
 	SetNarrowCollider(pushBackCollider);
 	//攻撃用
 	attackCount = 2;
-	attackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f,0 }, scale.x * 180.0f + 50.0f);
+	attackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f - 200,0 }, scale.x * 180.0f + 50.0f);
 	SetNarrowCollider(pushBackCollider);
 
 	//マップチップ用
@@ -68,7 +68,6 @@ void PlayerObject::Initialize()
 	//ポジション初期化
 	pos = startPos;
 	oldPos = pos;
-	savePos = startPos;
 
 	//攻撃関係
 	attack = {
@@ -134,6 +133,7 @@ void PlayerObject::Initialize()
 
 void PlayerObject::Update()
 {
+	pos.y = 200;
 	Input* input = Input::GetInstance();
 	healChack = false;
 	//旧ポジション
@@ -148,10 +148,10 @@ void PlayerObject::Update()
 	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
-	if (attack.is && velocity.Length() >= 180) {
-		velocity = velocity.Normal() * 180;
+	if (attack.is && velocity.Length() >= 360) {
+		velocity = velocity.Normal() * 360;
 	}
-	if (attack.is && velocity.Length() < 100) {
+	if (attack.is && velocity.Length() < 120) {
 		attack.is = false;
 		isBounce = false;
 		animationType = MOVE;
@@ -223,68 +223,68 @@ void PlayerObject::Update()
 			attack.can &&
 			attackCount > 0)*/
 			//自爆(デバッグ用やぶなか
-		if (((input->TriggerPadButton(BUTTON_A)) || input->TriggerKey(DIK_SPACE)) &&
-			attack.can &&
-			attackCount > 0 && !boostFlag
-			&&velocity.Length() !=0.0f)
-		{
-			Audio::GetInstance()->LoopPlayWave(10, 5);
-			boostFlag = true;
-			//攻撃開始
-			attack.Start();
+		if ((input->TriggerPadButton(BUTTON_A)) || input->TriggerKey(DIK_SPACE)) {
+			//attack.can &&
+			if (attackCount > 0 &&
+				velocity.Length() != 0.0f)	{
+				Audio::GetInstance()->LoopStopWave(1);
 
-			animationType = BOOST;
-			animationChangeFrag = true;
+					Audio::GetInstance()->LoopPlayWave(10, 5);
+					boostFlag = true;
+					//攻撃開始
+					attack.Start();
 
-			////破片生成
-			//for (int i = 0; i < DESTRUCT_POW; i++) {
-			//	Vector3 startVec;		//速度*向きベクトル
-			//	float shotRad;			//角度決定用
-			//	//発射スピード
-			//	float shotSpeed = rand() % 20 + energy / 500 * 30;
-			//	//残骸のサイズ
-			//	float shotSize = SHOT_ENERGY / DESTRUCT_POW;
+					animationType = BOOST;
+				animationChangeFrag = true;
 
-			//	//-15~15度で計算
-			//	shotRad = XMConvertToRadians(rand() % 90 - 45);
+				////破片生成
+				//for (int i = 0; i < DESTRUCT_POW; i++) {
+				//	Vector3 startVec;		//速度*向きベクトル
+				//	float shotRad;			//角度決定用
+				//	//発射スピード
+				//	float shotSpeed = rand() % 20 + energy / 500 * 30;
+				//	//残骸のサイズ
+				//	float shotSize = SHOT_ENERGY / DESTRUCT_POW;
 
-			//	startVec = -velocity.Normal();
+				//	//-15~15度で計算
+				//	shotRad = XMConvertToRadians(rand() % 90 - 45);
 
-			//	startVec.AddRotationY(shotRad);
-			//	//startVec = startVec + offset;
+				//	startVec = -velocity.Normal();
 
-			//	velocity += velocity.Normal() * 60;
-			//	//Debrisのコンテナに追加
-			//	Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
-			//}
-			//energy -= SHOT_ENERGY;
+				//	startVec.AddRotationY(shotRad);
+				//	//startVec = startVec + offset;
 
-			velocity += velocity.Normal() * 600;
-			//爆発終了
-			attackCount--;
-			attackGage.Start();
+				//	velocity += velocity.Normal() * 60;
+				//	//Debrisのコンテナに追加
+				//	Debris::debris.push_back(new Debris(pos, startVec * shotSpeed, shotSize));
+				//}
+				//energy -= SHOT_ENERGY;
+
+				velocity += velocity.Normal() * 600;
+				//爆発終了
+				attackCount--;
+				attackGage.Start();
+			}
+			else {
+				dontBoost = true;
+			}
 		}
 
 		//回収
 		if (input->TriggerPadButton(BUTTON_B)||
 			input->TriggerKey(DIK_Q)) {
-			if (Debris::debris.size() != 0) {
-				if (recovery.Start()) {
-					Audio::GetInstance()->PlayWave(14);
-					for (int i = 0; i < Debris::debris.size(); i++) {
-						Debris::debris[i]->ReturnStart();
+			if (Debris::debris.size() != 0 && recovery.Start()) {
+				Audio::GetInstance()->PlayWave(14);
+				for (int i = 0; i < Debris::debris.size(); i++) {
+					Debris::debris[i]->ReturnStart();
 
-						animationType = RETRIEVE;
-						animationChangeFrag = true;
-						recoveryEndTimer = 30;
-					}
+					animationType = RETRIEVE;
+					animationChangeFrag = true;
+					recoveryEndTimer = 30;
 				}
-				else {
-					if (!dontRecovery) {
-						savePos = pos;
-					}
-					dontRecovery = true;
-				}
+			}
+			else {
+				dontRecovery = true;
 			}
 		}
 		else if (recoveryEndTimer >= 0) {
@@ -332,7 +332,7 @@ void PlayerObject::Update()
 	}*/
 
 	//攻撃インターバル
-	attack.Intervel();
+	attack.Intervel(true);
 
 	//回収インターバル
 	recovery.Intervel();
@@ -437,7 +437,7 @@ void PlayerObject::LustUpdate()
 		//startVec = startVec + offset;
 
 		//Debrisのコンテナに追加
-		Debris::debris.push_back(new Debris(pos/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
+		Debris::debris.push_back(new Debris(pos - Vector3(0,200,0)/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
 		hp -= shotSize;
 
 	}
@@ -569,7 +569,11 @@ void PlayerObject::Damage(float damage)
 
 		animationType = DEATH;
 		animationChangeFrag = true;
-	}
+		boomParticle->AddBoom(2, 10, pos,5);
 
-	boomParticle->AddBoom(2, 10, pos);
+	}
+	else {
+		boomParticle->AddBoom(2, 10, pos);
+
+	}
 }

@@ -59,7 +59,6 @@ void GameObjCommon::PosAddVelocity()
 		velocity.y -= gravityPow;
 	}
 	pos += velocity;
-	savePos += velocity;
 
 	GameObjCommon::Update();
 

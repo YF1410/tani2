@@ -17,7 +17,6 @@ public:
 
 	//チュートリアル
 	int tutorialNum;
-	bool stopFrag;
 private:
 	//フレーム
 	std::unique_ptr<Sprite> frame;
@@ -42,6 +41,12 @@ private:
 	std::unique_ptr<Sprite> kaisyuFrame;	//回収フレーム
 	std::unique_ptr<Sprite> kaisyuGauge;	//回収ゲージ
 
+	//ボタン
+	std::unique_ptr<Sprite> AButton;		//回収ゲージ
+	std::unique_ptr<Sprite> BButton;		//回収ゲージ
+	std::unique_ptr<Sprite> RBButton;	//回収ゲージ
+
+
 	//ウェーブ数
 	std::unique_ptr<Sprite> waveNum[10];
 	std::unique_ptr<Sprite> waveMaxNum[10];
@@ -50,14 +55,16 @@ private:
 
 	const int maxRecoverColorTimer = 30;
 	int recoverColorTimer;
-	XMFLOAT2 shake;
 
 	std::unique_ptr<Sprite> text[18];
 
 	std::vector<std::unique_ptr<Sprite>> tutorialImag;
 
-
-	//ストップ用フラグ
+	//タスク
+	std::unique_ptr<Sprite> taskList;
+	std::unique_ptr<Sprite> check[4];
+	bool checkFlag[4];
+	int oldEnemySize;
 
 	//現在のウェーブ数
 	static int *nowWave;

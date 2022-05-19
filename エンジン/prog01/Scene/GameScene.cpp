@@ -281,8 +281,8 @@ void GameScene::Update() {
 		//ストップ解除処理
 		if (ui.get()->tutorialNum == 5
 			&& EnemyManager::enemys->size() == 0
-			&& enemyManager.get()->spawnData[MapChip::GetInstance()->nowMap][0].size() == 0) 		{
-			ui.get()->stopFrag = true;
+			&& enemyManager.get()->spawnData[MapChip::GetInstance()->nowMap][0].size() == 0)
+		{
 			ui.get()->tutorialNum++;
 		}
 		if (ui.get()->tutorialNum == 12) {
@@ -293,39 +293,34 @@ void GameScene::Update() {
 			}
 			if (playerObject.get()->healChack
 				&& push
-				) 			{
-				ui.get()->stopFrag = true;
+				)
+			{
 				ui.get()->tutorialNum++;
 			}
 		}
 
-		if (!ui.get()->stopFrag) {
-			//プレイヤー更新
-			playerObject->Update();
-			//破片更新
-			Debris::StaticUpdate();
-			//エネミー更新
-			if (!clearFlag && !gameOverFlag) {
-				enemyManager.get()->Update();
-			}
-
-			stageclearObject3d->Update();
-			nextStageObject3d->Update();
-			clearEscapeObject3d->Update();
-			gameoverObject3d->Update();
-			retryObject3d->Update();
-			gameoverEscapeObject3d->Update();
-			recoveryEffectObject3d->Update();
-			recoveryEffect2Object3d->Update();
-			stageBGObject3d->Update();
-			//stageBG2Object3d->Update();
-
-					//パーティクル全てのアップデート
-			ParticleManager::GetInstance()->Update();
+		//プレイヤー更新
+		playerObject->Update();
+		//破片更新
+		Debris::StaticUpdate();
+		//エネミー更新
+		if (!clearFlag && !gameOverFlag) {
+			enemyManager.get()->Update();
 		}
-		else {
-			playerObject->StopState();
-		}
+		stageclearObject3d->Update();
+		nextStageObject3d->Update();
+		clearEscapeObject3d->Update();
+		gameoverObject3d->Update();
+		retryObject3d->Update();
+		gameoverEscapeObject3d->Update();
+		recoveryEffectObject3d->Update();
+		recoveryEffect2Object3d->Update();
+		stageBGObject3d->Update();
+		//stageBG2Object3d->Update();
+
+		//パーティクル全てのアップデート
+		ParticleManager::GetInstance()->Update();
+		
 	}
 	else if (!tutorialFlag) 	{
 		//プレイヤー更新
@@ -363,26 +358,7 @@ void GameScene::LastUpdate() {
 	//ここから
 
 	MapChip::GetInstance()->Update();
-	if (MapChip::GetInstance()->nowMap == MapChip::TUTORIAL
-		&& !ui.get()->stopFrag) {
-		//全ての移動最終適応処理
-		playerObject.get()->Adaptation();
-		Debris::StaticAdaptation();
-		enemyManager.get()->Adaptation();
-		MapChip::GetInstance()->Adaptation();
-		// 全ての衝突をチェック
-		collisionManager->CheckBroadCollisions();
-
-		enemyManager.get()->FinalUpdate();
-		playerObject.get()->LustUpdate();
-		Debris::StaticLustUpdate();
-		//全ての移動最終適応処理
-		playerObject.get()->Adaptation();
-		Debris::StaticAdaptation();
-		enemyManager.get()->Adaptation();
-		MapChip::GetInstance()->Adaptation();
-	}
-	else if (!tutorialFlag) 	{
+	{
 		//全ての移動最終適応処理
 		playerObject.get()->Adaptation();
 		Debris::StaticAdaptation();
@@ -401,6 +377,7 @@ void GameScene::LastUpdate() {
 		MapChip::GetInstance()->Adaptation();
 	}
 	//最終更新
+
 	ui.get()->Update();
 	//ここまで
 	//パーティクル全てのアップデート
@@ -410,6 +387,12 @@ void GameScene::LastUpdate() {
 	//チュートリアルスキップ
 	if ((Input::GetInstance()->PushPadButton(BUTTON_X) || Input::GetInstance()->TriggerKey(DIK_RETURN)) && tutorialFlag) {
 		clearFlag = true;
+		if (!isChangeBGM)
+		{
+			Audio::GetInstance()->LoopStopWave(1);
+			Audio::GetInstance()->LoopPlayWave(9, 0.5f);
+			isChangeBGM = true;
+		}
 	}
 
 }

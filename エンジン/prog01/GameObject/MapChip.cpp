@@ -128,7 +128,7 @@ bool MapChip::CheckMapChipToBox2d(Box2DCollider *boxCollider, Vector3 *vel, Vect
 
 
 	//Å‘åŽŽs‰ñ”
-	const int MaxChecke = (int)(vel->Length())/chipSize + 1;
+	const int MaxChecke = (int)(vel->Length())/(chipSize/2) + 1;
 	std::vector<Vector3> boxCenter;
 	for (int i = 0; i < MaxChecke - 1; i++) {
 		boxCenter.push_back(Vector3(*oldPos + Vector3(vel->Normal() * (chipSize * i + chipSize))));

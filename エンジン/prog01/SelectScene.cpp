@@ -36,6 +36,8 @@ SelectScene::SelectScene(int parameter) {
 	maxUnlockStage = 5;
 	selectCount = 5;
 	isUnlockStage = true;
+
+	Input::GetInstance()->SetVibration(false);
 }
 
 SelectScene::~SelectScene() {

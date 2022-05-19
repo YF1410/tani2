@@ -52,6 +52,7 @@ public:
 	STATE recovery;
 	int recoveryEndTimer;
 	bool dontRecovery;
+	bool dontBoost;
 
 
 	//UŒ‚‰ñ”
