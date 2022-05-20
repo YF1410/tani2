@@ -129,10 +129,8 @@ private: // メンバ変数
 	int maxBoomFrame = 2;
 
 
-	int timer=0;
 	int maxTimer = 30;
-	int shakeCount = 201;
-	int attenuation = 0;
+	int shakeCount = 100;
 	XMFLOAT2 shake;
 	//動かなくするフラグ
 	bool endFlag = false;
@@ -141,6 +139,10 @@ private: // メンバ変数
 	//angleを保存
 	float saveAngle = 0.0f;
 	bool saveAngleFlag = false;
+
+	//シェイク相殺用
+	Vector3 savePos;
+	int shakeTime;
 	//リセットフラグ
 	bool resetFlag = false;
 };

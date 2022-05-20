@@ -270,7 +270,7 @@ bool MapChip::CheckMapChipToSphere2d(SphereCollider *sphereCollider, Vector3 *ve
 				for (int offset = -1; offset <= 1; offset += 2) {
 					Vector3 cornerPos = {
 						(float)(x * chipSize + (chipSize / 2) * offset),
-						0,
+						center.y,
 						(float)(-up * chipSize - (chipSize / 2))
 					};
 					Sphere mapChipSphere = {
@@ -295,7 +295,7 @@ bool MapChip::CheckMapChipToSphere2d(SphereCollider *sphereCollider, Vector3 *ve
 				for (int offset = -1; offset <= 1; offset += 2) {
 					Vector3 cornerPos = {
 						(float)(x * chipSize + (chipSize / 2) * offset),
-						0,
+						center.y,
 						(float)(-down * chipSize + (chipSize / 2))
 					};
 					Sphere mapChipSphere = {
@@ -318,7 +318,7 @@ bool MapChip::CheckMapChipToSphere2d(SphereCollider *sphereCollider, Vector3 *ve
 				for (int offset = -1; offset <= 1; offset += 2) {
 					Vector3 cornerPos = {
 						(float)(rig * chipSize - (chipSize / 2)),
-						0,
+						center.y,
 						(float)(-y * chipSize + (chipSize / 2) * offset),
 					};
 					Sphere mapChipSphere = {
@@ -341,7 +341,7 @@ bool MapChip::CheckMapChipToSphere2d(SphereCollider *sphereCollider, Vector3 *ve
 				for (int offset = -1; offset <= 1; offset += 2) {
 					Vector3 cornerPos = {
 						(float)(lef * chipSize + (chipSize / 2)),
-						0,
+						center.y,
 						(float)(-y * chipSize + (chipSize / 2) * offset),
 					};
 					Sphere mapChipSphere = {
