@@ -3,6 +3,7 @@
 
 BoundEnemy::BoundEnemy(XMFLOAT3 startPos, PlayerObject *targetPos):
 	Enemy(startPos,targetPos){
+	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_3));
 
 }
 

@@ -67,7 +67,7 @@ void PlayerObject::Initialize()
 	//ポジション初期化
 	pos = startPos;
 	oldPos = pos;
-
+	savePos = pos;
 	//攻撃関係
 	attack = {
 		true,
@@ -133,7 +133,9 @@ void PlayerObject::Initialize()
 
 void PlayerObject::Update()
 {
+	pos = savePos;
 	pos.y = 200;
+	velocity.y = 0;
 	Input* input = Input::GetInstance();
 	healChack = false;
 	//旧ポジション
@@ -317,20 +319,6 @@ void PlayerObject::Update()
 	}
 
 
-	/*if (dontRecovery) {
-		timer++;
-		if (timer >= maxTimer) {
-			timer = 0;
-			shake = { 0,0 };
-		}
-
-		shake = {
-			(float)((rand() % ((timer - maxTimer) - (timer - maxTimer) / 2)) * 5),
-			(float)((rand() % ((timer - maxTimer) - (timer - maxTimer) / 2)) * 5)
-		};
-
-		shakePos = { pos.x + shake.x ,shakePos.y,pos.z + shake.y };
-	}*/
 
 	//攻撃インターバル
 	attack.Intervel(true);
@@ -351,8 +339,7 @@ void PlayerObject::Update()
 		PosAddVelocity();
 	}
 	//移動量からブロードコライダーを更新
-	broadSphereCollider->SetRadius(/*velocity.Length() + pushBackCollider->GetRadius()*/scale.x * 120.0f);
-	toMapChipCollider->SetRadius(scale.x * 120.0f, scale.x * 120.0f);
+	//toMapChipCollider->SetRadius(scale.x * 120.0f, scale.x * 120.0f);
 
 
 	if (animationChangeFrag) {
@@ -427,27 +414,27 @@ void PlayerObject::LustUpdate()
 	}
 
 	//角
-	//else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
-		//Vector3 normal = { 0,0,0 };
-		//if (hitPos.x != 0) {
-		//	int vec = 1;	//向き
-		//	if (0 < velocity.x) {
-		//		vec = -1;
-		//	}
-		//	pos.x = hitPos.x;
-		//	normal.x = vec;
-		//}
-		//if (hitPos.z != 0) {
-		//	int vec = 1;	//向き
-		//	if (velocity.z < 0) {
-		//		vec = -1;
-		//	}
-		//	pos.z = hitPos.z;
-		//	normal.z = vec;
-		//}
-		//normal.Normalize();
-		//velocity = CalcWallScratchVector(velocity, normal);
-	//}
+	else if (MapChip::GetInstance()->CheckMapChipToSphere2d(broadSphereCollider, &velocity, &hitPos)) {
+		Vector3 normal = { 0,0,0 };
+		if (hitPos.x != 0) {
+			int vec = 1;	//向き
+			if (0 < velocity.x) {
+				vec = -1;
+			}
+			pos.x = hitPos.x;
+			normal.x = vec;
+		}
+		if (hitPos.z != 0) {
+			int vec = 1;	//向き
+			if (velocity.z < 0) {
+				vec = -1;
+			}
+			pos.z = hitPos.z;
+			normal.z = vec;
+		}
+		normal.Normalize();
+		velocity = CalcWallScratchVector(velocity, normal);
+	}
 
 
 	//移動中残骸生成
@@ -476,6 +463,18 @@ void PlayerObject::LustUpdate()
 	else if (!attack.is && !endFlag) {
 		input->GetInstance()->SetVibration(false);
 	}
+
+	//揺れ
+	savePos = pos;
+	if (dontBoost || dontRecovery) {
+		Vector3 shake = { 0,0,0 };
+		
+		shake.x = (rand() % (shakeCount) - (shakeCount / 2));//(rand() % (int)(Ease(In,Quad,(float)(shakeTimer /20),100,1)));
+		//shake.y = (rand() % (shakeCount - attenuation) - (shakeCount / 2));
+		shake.z = (rand() % (shakeCount) - (shakeCount / 2));//(rand() % (int)Ease(In, Quad, (float)(shakeTimer / 20), 100, 1));
+		pos += shake;
+	}
+	velocity.y = 0;
 
 }
 

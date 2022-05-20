@@ -10,7 +10,7 @@ public:
 	void Move() override;
 protected:
 	void HitPlayer(const CollisionInfo &info) override;
-	void HitDebri(const CollisionInfo &info) override {}
+	void HitDebri(const CollisionInfo &info) override;
 
 private:
 	std::unique_ptr<GameObjCommon> core;

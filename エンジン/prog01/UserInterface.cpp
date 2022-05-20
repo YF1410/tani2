@@ -81,7 +81,7 @@ void UserInterface::Initialize()
 	//チュートリアル
 	if (MapChip::GetInstance()->nowMap == 0) {
 		//説明
-		for (int i = 0; i < 18; i++) {
+		for (int i = 0; i < 14; i++) {
 			text[i] = Sprite::Create(150 + i/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
 			tutorialImag.push_back(std::move(text[i]));
 		}
@@ -321,7 +321,7 @@ void UserInterface::Update()
 			checkFlag[0] = true;
 		}
 		//ブーストで敵を倒す
-		if (player->animationType == PlayerObject::BOOST&&
+		if (/*player->animationType == PlayerObject::BOOST&&*/
 			oldEnemySize > enemys->enemys[MapChip::GetInstance()->nowMap].size()
 			) {
 			checkFlag[1] = true;
