@@ -148,10 +148,10 @@ void PlayerObject::Update()
 	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
-	if (attack.is && velocity.Length() >= 360) {
-		velocity = velocity.Normal() * 360;
+	if (attack.is && velocity.Length() >= 200) {
+		velocity = velocity.Normal() * 200;
 	}
-	if (attack.is && velocity.Length() < 120) {
+	if (attack.is && velocity.Length() < 100) {
 		attack.is = false;
 		isBounce = false;
 		animationType = MOVE;
@@ -260,7 +260,7 @@ void PlayerObject::Update()
 				//}
 				//energy -= SHOT_ENERGY;
 
-				velocity += velocity.Normal() * 600;
+				velocity += velocity.Normal() * 450;
 				//”š”­I—¹
 				attackCount--;
 				attackGage.Start();
