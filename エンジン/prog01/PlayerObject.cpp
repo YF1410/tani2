@@ -151,9 +151,10 @@ void PlayerObject::Update()
 	if (attack.is && velocity.Length() >= 200) {
 		velocity = velocity.Normal() * 200;
 	}
-	if (attack.is && velocity.Length() < 100) {
+	if (attack.is && velocity.Length() < 120 && !isHitStop) {
 		attack.is = false;
 		isBounce = false;
+		isFirstHitStop = false;
 		animationType = MOVE;
 		animationChangeFrag = true;
 	}
@@ -211,7 +212,7 @@ void PlayerObject::Update()
 		{
 			rotate.y = saveAngle;
 		}
-		else 
+		else
 		{
 			saveAngle = ConvertNormalToDeg(velocity.Normal(), Vector3{ 0,0,1 }).y + 180;
 			rotate.y = saveAngle;
@@ -226,15 +227,15 @@ void PlayerObject::Update()
 		if ((input->TriggerPadButton(BUTTON_A)) || input->TriggerKey(DIK_SPACE)) {
 			//attack.can &&
 			if (attackCount > 0 &&
-				velocity.Length() != 0.0f)	{
+				velocity.Length() != 0.0f) {
 				Audio::GetInstance()->LoopStopWave(1);
 
-					Audio::GetInstance()->LoopPlayWave(10, 3);
-					boostFlag = true;
-					//攻撃開始
-					attack.Start();
+				Audio::GetInstance()->LoopPlayWave(10, 3);
+				boostFlag = true;
+				//攻撃開始
+				attack.Start();
 
-					animationType = BOOST;
+				animationType = BOOST;
 				animationChangeFrag = true;
 
 				////破片生成
@@ -271,7 +272,7 @@ void PlayerObject::Update()
 		}
 
 		//回収
-		if (input->TriggerPadButton(BUTTON_B)||
+		if (input->TriggerPadButton(BUTTON_B) ||
 			input->TriggerKey(DIK_Q)) {
 			if (Debris::debris.size() != 0 && recovery.Start()) {
 				Audio::GetInstance()->PlayWave(14, 0.5f);
@@ -343,20 +344,42 @@ void PlayerObject::Update()
 	//サイズからスケールへ変換
 	//scale = ConvertSizeToScale(energy / 2.0f);
 	//移動量を適応
-	PosAddVelocity();
+	if (isHitStop) {
+		velocity = 0;
+	}
+	else if (!isHitStop) {
+		PosAddVelocity();
+	}
 	//移動量からブロードコライダーを更新
 	broadSphereCollider->SetRadius(/*velocity.Length() + pushBackCollider->GetRadius()*/scale.x * 120.0f);
 	toMapChipCollider->SetRadius(scale.x * 120.0f, scale.x * 120.0f);
 
-	
+
 	if (animationChangeFrag) {
 		if (animationType == DEATH) {
-			objectData->PlayAnimation(animationType,false);
+			objectData->PlayAnimation(animationType, false);
 		}
-		else{
+		else {
 			objectData->PlayAnimation(animationType);
 		}
 		animationChangeFrag = false;
+	}
+
+	if (isHitStop) {
+		hitStopCount++;
+		if (hitStopCount >= 7) {
+			hitStopCount = 0;
+			velocity = saveVelocity;
+			isHitStop = false;
+		}
+	}
+
+	if (isHitStopCoolDown) {
+		hitStopCoolDown--;
+		if (hitStopCoolDown <= 0) {
+			hitStopCoolDown = 9;
+			isHitStopCoolDown = false;
+		}
 	}
 }
 
@@ -380,7 +403,7 @@ void PlayerObject::LustUpdate()
 	Vector3 normal = { 0,0,0 };
 
 	//マップチップ検出
-	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal,&oldPos)) {
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal, &oldPos)) {
 
 		if (hitPos.x != 0) {
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
@@ -437,7 +460,7 @@ void PlayerObject::LustUpdate()
 		//startVec = startVec + offset;
 
 		//Debrisのコンテナに追加
-		Debris::debris.push_back(new Debris(pos - Vector3(0,200,0)/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
+		Debris::debris.push_back(new Debris(pos - Vector3(0, 200, 0)/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
 		hp -= shotSize;
 
 	}
@@ -489,6 +512,18 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 			Damage(enemy->CauseDamage());
 		}
 		//位置修正
+
+
+	/*if (velocity.Length() >= 40 && oldVec.VDot(velocity) < 0.1f) {
+	}*/
+		if (attack.is) {
+			if (!isHitStopCoolDown) {
+				saveVelocity = velocity;
+				isFirstHitStop = true;
+				isHitStop = true;
+				isHitStopCoolDown = true;
+			}
+		}
 
 		//攻撃中でなければ押し返し処理
 		if (!attack.is) {
@@ -542,7 +577,6 @@ void PlayerObject::HitWall(
 		input->GetInstance()->SetVibrationPower(65535);
 		Audio::GetInstance()->PlayWave(17, 0.4f);
 		if (!isBounce) {
-			
 			isBounce = true;
 		}
 	}
@@ -570,11 +604,9 @@ void PlayerObject::Damage(float damage)
 
 		animationType = DEATH;
 		animationChangeFrag = true;
-		boomParticle->AddBoom(2, 10, pos,5);
-
+		boomParticle->AddBoom(2, 10, pos, 5);
 	}
 	else {
 		boomParticle->AddBoom(2, 10, pos);
-
 	}
 }

@@ -111,9 +111,22 @@ void Debris::Update()
 	}
 
 	//ˆÚ“®—Ê‚ð“K‰ž
-	PosAddVelocity();
+	if (isHitStop) {
+		velocity = 0;
+	}
+	else if (!isHitStop) {
+		PosAddVelocity();
+	}
+	//PosAddVelocity();
 	//pos.y = 0;
 
+	if (isHitStop) {
+		hitStopCount++;
+		if (hitStopCount >= 5) {
+			hitStopCount = 0;
+			isHitStop = false;
+		}
+	}
 }
 
 void Debris::LustUpdate()

@@ -66,6 +66,9 @@ public:		//衝突時関係
 	//発射直後除外用
 	bool isFirstAttack;
 
+	bool isHitStop = false;
+	int hitStopCount = 0;
+
 	//回収用のポインター
 	static PlayerObject *playerData;
 	

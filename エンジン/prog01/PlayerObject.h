@@ -143,5 +143,11 @@ private: // メンバ変数
 	bool saveAngleFlag = false;
 	//リセットフラグ
 	bool resetFlag = false;
+	bool isHitStop = false;
+	int hitStopCount = 0;
+	bool isHitStopCoolDown = 0;
+	int hitStopCoolDown = 12;
+	bool isFirstHitStop = false;
+	Vector3 saveVelocity = {0,0,0};
 };
 

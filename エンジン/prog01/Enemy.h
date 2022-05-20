@@ -44,6 +44,8 @@ public:		//当たり判定関係
 
 	bool isAlive;
 
+	bool isHitStop;
+	int hitStopCount;
 
 	//コライダー
 	SphereCollider *broadSphereCollider;	//予測用コライダー
