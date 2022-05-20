@@ -236,10 +236,40 @@ void UserInterface::Update()
 		WinApp::window_height / 2 + 40 + boostShake.y });
 
 
-	//たまった時
+	//回収ゲージがたまった時
 	if (player->recovery.can) {
-		//recoverFrame.get()->SetColor({ 1,1,0.5f,1 });
-		//recoverGauge.get()->SetColor({ 1,1,0.5f,1 });
+		kaisyuFrame.get()->SetColor({ 1,1,1,1 });
+		kaisyuGauge.get()->SetColor({ 1,1,1,1 });
+	}
+	//回収ゲージがない時
+	else
+	{
+		kaisyuFrame.get()->SetColor({ 1,0,0,1 });
+		kaisyuGauge.get()->SetColor({ 1,0,0,1 });
+	}
+	//ブーストゲージが3の時
+	if (player->attackCount == 3)
+	{
+		boostFrame.get()->SetColor({ 1,1,1,1 });
+		boostGauge.get()->SetColor({ 1,1,1,1 });
+	}
+	//ブーストゲージが2の時
+	else if (player->attackCount == 2)
+	{
+		boostFrame.get()->SetColor({ 1,1,0,1 });
+		boostGauge.get()->SetColor({ 1,1,0,1 });
+	}
+	//ブーストゲージが1の時
+	else if (player->attackCount == 1)
+	{
+		boostFrame.get()->SetColor({ 1,0.5,0,1 });
+		boostGauge.get()->SetColor({ 1,0.5,0,1 });
+	}
+	//ブーストゲージがない時
+	else if (player->attackCount == 0)
+	{
+		boostFrame.get()->SetColor({ 1,0,0,1 });
+		boostGauge.get()->SetColor({ 1,0,0,1 });
 	}
 
 	//描画があるならミニマップを更新

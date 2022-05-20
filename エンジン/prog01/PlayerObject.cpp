@@ -42,7 +42,6 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	pushBackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f + -200,0 }, scale.x * 180.0f);
 	SetNarrowCollider(pushBackCollider);
 	//UŒ‚—p
-	attackCount = 2;
 	attackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f - 200,0 }, scale.x * 180.0f + 50.0f);
 	SetNarrowCollider(pushBackCollider);
 
@@ -76,6 +75,7 @@ void PlayerObject::Initialize()
 		30,
 		0
 	};
+	//UŒ‚—p
 	attackCount = 3;
 	//‰ñûŠÖŒW
 	recovery = {
