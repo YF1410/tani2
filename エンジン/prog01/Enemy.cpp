@@ -20,9 +20,9 @@ Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 	this->player = player;
 	maxHP = 100.0f;
 	HP = maxHP;
-	isBounce = true;
+	isBounce = false;
 	//HPbar生成
-	hpBer = new EnemyHp(HP, maxHP,pos);
+	hpBer = new EnemyHp(HP, maxHP, pos);
 
 
 	defScale = 2.5f;
@@ -53,7 +53,6 @@ void Enemy::Initialize() {
 }
 
 void Enemy::Update() {
-
 	//旧ポジション
 	oldPos = pos;
 	//移動量初期化
@@ -62,30 +61,34 @@ void Enemy::Update() {
 		//最高速度を超えていたら制限する
 		velocity = velocity.Normal() * maxMoveSpeed;
 	}
-	if (isInvincible && velocity.Length() > maxMoveSpeed * 10.0f){
+	if (isInvincible && velocity.Length() > maxMoveSpeed * 10.0f) {
 		velocity = velocity.Normal() * maxMoveSpeed * 4.0f;
 
 	}
 	penalty = { 0,0,0 };
 
 	//通常時処理（条件式があればフラグで管理する）
+	if (isHitStop) {
+		velocity = 0;
+	}
 	Move();
+
 
 	//共通処理
 	//無敵時間タイマーを管理
 	if (isInvincible) {
 		InvincibleTimer++;
 		//ここは後でアニメーションに変更する
-		if (InvincibleTimer <= 10) {
-			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), 1.0f, 3.0f)*defScale;
+		/*if (InvincibleTimer <= 10) {
+			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), 1.0f, 3.0f) * defScale;
 		}
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f  , 1.0f  ) * defScale;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f, 1.0f) * defScale;
 		}
 
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
 			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f, 0.0f) * defScale;
-		}
+		}*/
 		//タイマーが30になったら無敵を解除
 		if (InvincibleTimer >= 30) {
 			isInvincible = false;
@@ -107,6 +110,14 @@ void Enemy::Update() {
 	attack.Intervel();
 	//移動をいったん適応
 	PosAddVelocity();
+
+	if (isHitStop) {
+		hitStopCount++;
+		if (hitStopCount >= 20) {
+			hitStopCount = 0;
+			isHitStop = false;
+		}
+	}
 }
 
 void Enemy::LustUpdate() {
@@ -126,13 +137,13 @@ void Enemy::LustUpdate() {
 		}
 		normal.Normalize();
 		HitWall(hitPos, normal.Normal());
-	
+
 		//Reset
 		hitPos = { 0,0,0 };
 		moveVec = velocity + penalty;
 		normal = { 0,0,0 };
 	}
-	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal,&oldPos)) {
+	else if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal, &oldPos)) {
 
 		if (hitPos.x != 0) {
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
@@ -155,10 +166,10 @@ void Enemy::Draw() const
 	hpBer->Draw();
 }
 
-void Enemy::OnCollision(const CollisionInfo &info)
+void Enemy::OnCollision(const CollisionInfo& info)
 {
 	//ダイナミックキャスト用
-	Enemy *enemy;
+	Enemy* enemy;
 
 	//衝突したコライダーで分岐
 	switch (info.object->Tag)
@@ -172,7 +183,7 @@ void Enemy::OnCollision(const CollisionInfo &info)
 
 	case ENEMY:
 		//エネミー同士なら押し返しあう
-		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length()*0.2f;
+		penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.2f;
 		break;
 	default:
 		break;
@@ -204,6 +215,7 @@ void Enemy::Attack()
 
 void Enemy::Damage(float damage)
 {
+	isHitStop = true;
 	hpBer->HpDraw.Start();
 	//無敵時間中は処理を中断
 	if (isInvincible) { return; }
@@ -224,18 +236,18 @@ int Enemy::CauseDamage()
 	return attackPow;
 }
 
-void Enemy::HitWall(const XMVECTOR &hitPos, const Vector3 &normal)
+void Enemy::HitWall(const XMVECTOR& hitPos, const Vector3& normal)
 {
 	//反射
 	velocity = CalcWallScratchVector(velocity, normal);
 
 }
 
-void Enemy::HitPlayer(const CollisionInfo &info)
+void Enemy::HitPlayer(const CollisionInfo& info)
 {
-	PlayerObject *player;
+	PlayerObject* player;
 
-	player = dynamic_cast<PlayerObject *>(info.object);
+	player = dynamic_cast<PlayerObject*>(info.object);
 
 	//プレイヤーが攻撃状態なら
 	if (player->attack.is) {
@@ -249,12 +261,13 @@ void Enemy::HitPlayer(const CollisionInfo &info)
 	}
 }
 
-void Enemy::HitDebri(const CollisionInfo &info)
+void Enemy::HitDebri(const CollisionInfo& info)
 {
-	Debris *debri;
+	Debris* debri;
 	//デブリが攻撃状態ならダメージを受ける
-	debri = dynamic_cast<Debris *>(info.object);
+	debri = dynamic_cast<Debris*>(info.object);
 	if (debri->isAttack) {
+		debri->isHitStop = true;
 		Damage(debri->velocity.Length());
 	}
 }
