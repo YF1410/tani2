@@ -152,4 +152,3 @@ private: // ƒƒ“ƒo•Ï”
 	bool isFirstHitStop = false;
 	Vector3 saveVelocity = {0,0,0};
 };
-

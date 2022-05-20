@@ -111,6 +111,7 @@ void Debris::Update()
 	}
 
 	//移動量を適応
+	//ヒットストップ
 	if (isHitStop) {
 		velocity = 0;
 	}
@@ -120,6 +121,7 @@ void Debris::Update()
 	//PosAddVelocity();
 	//pos.y = 0;
 
+	//ヒットストップ
 	if (isHitStop) {
 		hitStopCount++;
 		if (hitStopCount >= 5) {

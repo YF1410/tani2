@@ -153,6 +153,7 @@ void PlayerObject::Update()
 	if (attack.is && velocity.Length() >= 200) {
 		velocity = velocity.Normal() * 200;
 	}
+	//ヒットストップ無いときにvelosity120未満になったら
 	if (attack.is && velocity.Length() < 120 && !isHitStop) {
 		attack.is = false;
 		isBounce = false;
@@ -351,7 +352,7 @@ void PlayerObject::Update()
 		}
 		animationChangeFrag = false;
 	}
-
+	//ヒットストップ
 	if (isHitStop) {
 		hitStopCount++;
 		if (hitStopCount >= 7) {
@@ -360,7 +361,7 @@ void PlayerObject::Update()
 			isHitStop = false;
 		}
 	}
-
+	//ヒットストップ(クールダウン
 	if (isHitStopCoolDown) {
 		hitStopCoolDown--;
 		if (hitStopCoolDown <= 0) {
@@ -516,6 +517,7 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 	/*if (velocity.Length() >= 40 && oldVec.VDot(velocity) < 0.1f) {
 	}*/
 		if (attack.is) {
+			//ヒットストップ
 			if (!isHitStopCoolDown) {
 				saveVelocity = velocity;
 				isFirstHitStop = true;
