@@ -27,12 +27,18 @@ void ModelManager::Initialize()
 	model[SLIME].get()->SetMetalness(0.2f);
 	model[SLIME].get()->SetSpecular(0.4f);
 	model[SLIME].get()->SetRoughness(0.4f);
-	model[SLIME].get()->SetAlpha(0.8f);
+	model[SLIME].get()->SetAlpha(0.6f);
 	model[SLIME].get()->TransferMaterial();
 	LoadModel(SLIME_BREAK, "slime"/*_break"*/ );
 	model[SLIME_BREAK].get()->SetBaseColor({ 1.0f,1.0f,0.0f});
 	LoadModel(SLIME_CORE,"core");
 
+	LoadModel(SHOTBOSS, "slime");
+	model[SHOTBOSS].get()->SetMetalness(0.2f);
+	model[SHOTBOSS].get()->SetSpecular(0.4f);
+	model[SHOTBOSS].get()->SetRoughness(0.4f);
+	model[SHOTBOSS].get()->SetAlpha(0.8f);
+	model[SHOTBOSS].get()->TransferMaterial();
 
 
 	LoadModel(ENEMY_ROBO_1, "robo_1"/*_break"*/);

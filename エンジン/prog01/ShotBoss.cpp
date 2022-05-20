@@ -115,7 +115,7 @@ void ShotBoss::Move()
 			new EnemyBullet(
 				Vector3(core.get()->pos.x,0, core.get()->pos.z),
 				shot,
-				ModelManager::SLIME)
+				ModelManager::SHOTBOSS)
 		);
 	}
 	attack.Intervel();

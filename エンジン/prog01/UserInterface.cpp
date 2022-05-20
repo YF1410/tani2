@@ -262,8 +262,8 @@ void UserInterface::Update()
 	//ブーストゲージが1の時
 	else if (player->attackCount == 1)
 	{
-		boostFrame.get()->SetColor({ 1,0.5,0,1 });
-		boostGauge.get()->SetColor({ 1,0.5,0,1 });
+		boostFrame.get()->SetColor({ 1,0.6,0,1 });
+		boostGauge.get()->SetColor({ 1,0.6,0,1 });
 	}
 	//ブーストゲージがない時
 	else if (player->attackCount == 0)
