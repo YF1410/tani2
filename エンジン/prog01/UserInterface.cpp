@@ -99,7 +99,8 @@ void UserInterface::Initialize()
 	//ボタン
 	AButton = Sprite::Create(11, { (float)(WinApp::window_width / 2 -530),(float)(WinApp::window_height / 2+210) }, { 1,1,1,1 }, { 0.5f,0.5f });
 	BButton = Sprite::Create(12, { (float)(WinApp::window_width / 2 +530),(float)(WinApp::window_height / 2+210) }, { 1,1,1,1 }, { 0.5f,0.5f });
-	RBButton = Sprite::Create(13, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
+	RBButton = Sprite::Create(13, { (float)(WinApp::window_width / 2 + 350),(float)(WinApp::window_height / 2 - 250) });
+	RBButton->SetSize({100,70});
 
 	
 	//ミニマップ
@@ -359,6 +360,7 @@ void UserInterface::Draw() const
 	kaisyuFrame.get()->Draw();
 	kaisyuGauge.get()->Draw();
 	BButton.get()->Draw();
+	RBButton->Draw();
 	
 	moveWave.get()->Draw();
 	moveWaveNum[*nowWave + 1].get()->Draw();

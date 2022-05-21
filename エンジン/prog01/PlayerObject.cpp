@@ -523,6 +523,7 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 				isFirstHitStop = true;
 				isHitStop = true;
 				isHitStopCoolDown = true;
+				Audio::GetInstance()->PlayWave(18, 0.5f);
 			}
 		}
 

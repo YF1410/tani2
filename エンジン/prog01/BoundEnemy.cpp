@@ -1,10 +1,12 @@
 #include "BoundEnemy.h"
+#include "Easing.h"
 #include "yMath.h"
 
 BoundEnemy::BoundEnemy(XMFLOAT3 startPos, PlayerObject *targetPos):
 	Enemy(startPos,targetPos){
 	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_3));
 	scale = { 1.5f,1.5f,1.5f };
+	startScale = scale.x;
 }
 
 void BoundEnemy::Update() {
@@ -35,16 +37,16 @@ void BoundEnemy::Update() {
 		InvincibleTimer++;
 
 		//ダメージ受けた時のもわっとでかくなるやつここから
-		/*if (InvincibleTimer <= 10) {
-			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), 1.0f, 3.0f) * defScale;
+		if (InvincibleTimer <= 10) {
+			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), 1.0f, 3.0f) * startScale;
 		}
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f, 1.0f) * defScale;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f, 1.0f) * startScale;
 		}
 
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f, 0.0f) * defScale;
-		}*/
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f, 0.0f) * startScale;
+		}
 		//ここまで
 		
 		//タイマーが30になったら無敵を解除

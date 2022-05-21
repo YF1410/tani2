@@ -33,9 +33,6 @@ SelectScene::SelectScene(int parameter) {
 	if (parameter == 5 && ClearConfirmation::GetInstance()->GetStage5Flag()) {
 		isUnlockStage = false;
 	}
-	maxUnlockStage = 5;
-	selectCount = 5;
-	isUnlockStage = true;
 
 	Input::GetInstance()->SetVibration(false);
 }

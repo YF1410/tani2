@@ -60,7 +60,7 @@ void SpriteFactory::Initialize()
 		assert(0);
 	}
 	//RBƒ{ƒ^ƒ“
-	if (!Sprite::LoadTexture(13, L"Resources/Sprite/UI/RB.png")) {
+	if (!Sprite::LoadTexture(13, L"Resources/Sprite/UI/RB_01.png")) {
 		assert(0);
 	}
 
