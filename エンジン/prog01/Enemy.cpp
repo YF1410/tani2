@@ -112,9 +112,9 @@ void Enemy::Update() {
 	PosAddVelocity();
 
 	if (isHitStop) {
-		hitStopCount++;
-		if (hitStopCount >= 20) {
-			hitStopCount = 0;
+		hitStopTimer++;
+		if (hitStopTimer >= 20) {
+			hitStopTimer = 0;
 			isHitStop = false;
 		}
 	}

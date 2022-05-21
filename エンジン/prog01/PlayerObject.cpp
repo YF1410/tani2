@@ -154,12 +154,12 @@ void PlayerObject::Update()
 	if (attack.is && velocity.Length() < 120 && !isHitStop) {
 		attack.is = false;
 		isBounce = false;
-		isFirstHitStop = false;
 		animationType = MOVE;
 		animationChangeFrag = true;
 	}
 	if (recoveryEndTimer == 0) {
-
+		hitStopCount = 0;
+		isFirstHitStop = false;
 		animationType = MOVE;
 		animationChangeFrag = true;
 	}
@@ -344,6 +344,18 @@ void PlayerObject::Update()
 	//サイズからスケールへ変換
 	//scale = ConvertSizeToScale(energy / 2.0f);
 	//移動量を適応
+
+	for (int i = 0; i < Debris::debris.size(); i++) {
+		//if (Debris::debris[i]->isHitStop && !isHitStopCoolDown && !isFirstHitStop) {
+		//上が初回だけヒットストップ入れる場合、下が3回までヒットストップ入れる場合
+		if (Debris::debris[i]->isHitStop && !isHitStopCoolDown && hitStopCount < 3) {
+			hitStopCount++;
+			saveVelocity = velocity;
+			isHitStop = true;
+			isHitStopCoolDown = true;
+			isFirstHitStop = true;
+		}
+	}
 	if (isHitStop) {
 		velocity = 0;
 	}
@@ -366,9 +378,9 @@ void PlayerObject::Update()
 	}
 
 	if (isHitStop) {
-		hitStopCount++;
-		if (hitStopCount >= 7) {
-			hitStopCount = 0;
+		hitStopTimer++;
+		if (hitStopTimer >= 7) {
+			hitStopTimer = 0;
 			velocity = saveVelocity;
 			isHitStop = false;
 		}

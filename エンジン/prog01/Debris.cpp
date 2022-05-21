@@ -4,8 +4,8 @@
 #include "SlimeMath.h"
 #include "MapChip.h"
 
-std::vector<Debris *> Debris::debris;
-PlayerObject *Debris::playerData;
+std::vector<Debris*> Debris::debris;
+PlayerObject* Debris::playerData;
 
 Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	GameObjCommon(
@@ -30,7 +30,7 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	isBoost = false;
 
 	////マップチップ用コライダー
-	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, scale.x * 150.0f, scale.x*150.0f);
+	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, scale.x * 150.0f, scale.x * 150.0f);
 	SetNarrowCollider(toMapChipCollider);
 
 	//押し返し判定用コライダー
@@ -44,7 +44,7 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	attackCollider->SetOffset({ 0,attackCollider->GetRadius(),0 });
 	SetNarrowCollider(attackCollider);
 
-	
+
 	exclusionList.push_back(DEBRIS);
 }
 
@@ -72,7 +72,7 @@ void Debris::Update()
 	}
 
 	if (!isAttack) {
-		size *=  0.995f;
+		size *= 0.995f;
 		scale *= 0.995f;
 		//scale = ConvertSizeToScale(size);
 
@@ -103,8 +103,8 @@ void Debris::Update()
 		}
 		break;
 	case Debris::SUCTION:
-			velocity *= 10;
-		
+		velocity *= 10;
+
 		break;
 	default:
 		break;
@@ -121,9 +121,9 @@ void Debris::Update()
 	//pos.y = 0;
 
 	if (isHitStop) {
-		hitStopCount++;
-		if (hitStopCount >= 5) {
-			hitStopCount = 0;
+		hitStopTimer++;
+		if (hitStopTimer >= 5) {
+			hitStopTimer = 0;
 			isHitStop = false;
 		}
 	}
@@ -138,7 +138,7 @@ void Debris::LustUpdate()
 	Vector3 moveVec = velocity + penalty;
 	Vector3 normal = { 0,0,0 };
 	//上下左右
-	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos,&normal,&oldPos)) {
+	if (MapChip::GetInstance()->CheckMapChipToBox2d(toMapChipCollider, &moveVec, &hitPos, &normal, &oldPos)) {
 		if (hitPos.x != 0) {
 			pos.x = hitPos.x + toMapChipCollider->GetRadiusX() * normal.x;
 		}
@@ -181,7 +181,7 @@ void Debris::VelocityReset()
 }
 
 
-void Debris::StaticInitialize(PlayerObject *player)
+void Debris::StaticInitialize(PlayerObject* player)
 {
 	playerData = player;
 }
@@ -234,7 +234,7 @@ void Debris::Finalize()
 	debris.clear();
 }
 
-void Debris::OnCollision(const CollisionInfo &info)
+void Debris::OnCollision(const CollisionInfo& info)
 {
 	Vector3 normal;
 	switch (info.object->Tag)
@@ -270,20 +270,19 @@ void Debris::ReturnStart()
 	returnTimer = 90;
 }
 
-void Debris::SuckedPlayer(const Vector3 &playerPos,const float &suckedRadius)
+void Debris::SuckedPlayer(const Vector3& playerPos, const float& suckedRadius)
 {
 	//移動開始
-	velocity += Vector3(playerPos- pos).Normal() * 3.0f;
+	velocity += Vector3(playerPos - pos).Normal() * 3.0f;
 }
 
-void Debris::HitWall(const XMVECTOR &hitPos, const Vector3 &normal)
+void Debris::HitWall(const XMVECTOR& hitPos, const Vector3& normal)
 {
 	velocity = CalcReflectVector(velocity, normal);
 	if (!isBoost) {
 		velocity *= 3.0f;
 		isBoost = true;
 	}
-
 }
 
 

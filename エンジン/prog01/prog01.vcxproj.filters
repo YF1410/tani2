@@ -287,9 +287,6 @@
     <ClCompile Include="AABBCollider.cpp">
       <Filter>エンジンシステム\Collision\Collider3d</Filter>
     </ClCompile>
-    <ClCompile Include="Debris.cpp">
-      <Filter>ゲームシステム\Player</Filter>
-    </ClCompile>
     <ClCompile Include="CheckBlock.cpp">
       <Filter>ゲームシステム\Stage</Filter>
     </ClCompile>
@@ -354,6 +351,9 @@
     </ClCompile>
     <ClCompile Include="3d\ObjFactory.cpp" />
     <ClCompile Include="ClearConfirmation.cpp" />
+    <ClCompile Include="Debris.cpp">
+      <Filter>ゲームシステム\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">

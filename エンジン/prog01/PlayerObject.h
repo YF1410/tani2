@@ -144,6 +144,7 @@ private: // メンバ変数
 	//リセットフラグ
 	bool resetFlag = false;
 	bool isHitStop = false;
+	int hitStopTimer = 0;
 	int hitStopCount = 0;
 	bool isHitStopCoolDown = 0;
 	int hitStopCoolDown = 12;
