@@ -149,11 +149,13 @@ void ShotBoss::HitDebri(const CollisionInfo &info)
 	debri->velocity += Vector3(info.reject).Normal() * debri->velocity.Length() * -0.5f;
 	debri->velocity.y = 0.0f;
 	//プレイヤーがコアと接触したらダメージ処理
-	if (debri->state == Debris::ATTACK) {
+	if (debri->state == Debris::ATTACK||
+		debri->state == Debris::RETURN) {
 		if (Collision::CheckSphere2Sphere(
 			*dynamic_cast<Sphere *>(debri->attackCollider),
 			*dynamic_cast<Sphere *>(coreCollider))
 			) {
+			//ダメージ
 			Damage(debri->velocity.Length());
 		}
 	}
