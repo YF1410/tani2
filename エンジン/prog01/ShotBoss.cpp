@@ -155,6 +155,7 @@ void ShotBoss::HitDebri(const CollisionInfo &info)
 			*dynamic_cast<Sphere *>(debri->attackCollider),
 			*dynamic_cast<Sphere *>(coreCollider))
 			) {
+			//ƒ_ƒ[ƒW
 			Damage(debri->velocity.Length());
 		}
 	}
