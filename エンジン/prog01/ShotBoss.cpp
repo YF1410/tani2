@@ -4,15 +4,21 @@
 #include "EnemyHelperManager.h"
 #include "EnemyBullet.h"
 
-ShotBoss::ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos) :
-	Enemy(startPos, targetPos) {
+ShotBoss::ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos,Camera *cam) :
+	Enemy(Vector3(Vector3(0,2000,0)+ Vector3(startPos)), targetPos) {
 	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::SLIME));
-	HP = 5000;
+	HP = 500;
 	maxHP = HP;
 	hpBer->offset = { 0,100,-1000 };
 	defScale = 5.0f;
 	scale = defScale;
 	isBounce = false;
+
+
+	this->startPos =startPos;
+	this->startPos.y = 120;
+	isSpawn = true;
+	this->cam = cam;
 
 	//当たり判定変更
 	float radius = 800;
@@ -30,6 +36,7 @@ ShotBoss::ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos) :
 
 	coreCollider = new SphereCollider("BroadSphere", XMVECTOR{ 0,100,0 }, 100);
 	core.get()->SetNarrowCollider(coreCollider);
+	core.get()->Adaptation();
 
 	//攻撃頻度
 	attack.interval = 20;
@@ -50,9 +57,34 @@ void ShotBoss::Update()
 	}
 	penalty = { 0,0,0 };
 
-	//通常時処理（条件式があればフラグで管理する）
-	Move();
+	//スポーン直後は演出をする
+	if (isSpawn) {
+		if (pos.y < startPos.y) {
+			pos.y = startPos.y;
+			if (startTimer < 30) {
+				spinVec.AddRotationY(Ease(In, Quart, float(startTimer / 30.0f), 0, 2.0f));
+			}
+			else {
+				spinVec.AddRotationY(Ease(Out, Quad, float((startTimer - 30) / 30.0f), 2.0f, 0.05f));
+			}
+			core.get()->pos = coreBasePos + spinVec * spinR * scale.x;
+			startTimer++;
+			cam->SetTarget(pos);
 
+			if (startTimer >= 60) {
+				isSpawn = false;
+			}
+		}
+		else {
+			velocity.y -= 0.9f;
+			cam->SetEye(Vector3(startPos+ Vector3(0, 100, -2500)));
+			cam->SetTarget(pos);
+		}
+	}
+	else{
+		//通常時処理（条件式があればフラグで管理する）
+		Move();
+	}
 	//共通処理
 	//無敵時間タイマーを管理
 	if (isInvincible) {
@@ -89,6 +121,8 @@ void ShotBoss::Update()
 	attack.Intervel();
 	//移動をいったん適応
 	PosAddVelocity();
+	coreBasePos = pos + offset;
+
 }
 
 void ShotBoss::Draw() const
@@ -99,7 +133,6 @@ void ShotBoss::Draw() const
 
 void ShotBoss::Move()
 {
-	coreBasePos = pos + offset;
 	spinVec.AddRotationY(0.05f);
 	core.get()->pos = coreBasePos + spinVec * spinR * scale.x;
 	core.get()->Update();

@@ -4,7 +4,7 @@ class ShotBoss :
 	public Enemy
 {
 public:
-	ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos);
+	ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos, Camera *cam);
 	void Update() override;
 	void Draw() const override;
 	void Move() override;
@@ -20,6 +20,12 @@ private:
 	//回転向き
 	Vector3 spinVec;
 	const float spinR = 80;
+
+	//スポーン直後
+	bool isSpawn;
+	Vector3 startPos;
+	Camera *cam;
+	int startTimer = 0;
 
 	SphereCollider *coreCollider;	//予測用コライダー
 

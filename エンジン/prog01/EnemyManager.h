@@ -17,6 +17,7 @@
 #include "GetawayEnemy.h"
 #include "RouteMoveEnemy.h"
 #include "ShotBoss.h"
+#include "Camera.h"
 
 #include "MapChip.h"
 
@@ -31,6 +32,8 @@ public:
 	void Adaptation();
 	void Draw();
 	void Finalize();
+
+	void SetCam(Camera *cam) { camera = cam; }
 
 	bool isEndFlag() { return endFlag; }
 
@@ -118,4 +121,6 @@ public:
 	bool endFlag = false;
 	ParticleEmitter* defeatParticle1;
 	ParticleEmitter* defeatParticle2;
+
+	Camera *camera;
 };
