@@ -81,7 +81,7 @@ void UserInterface::Initialize()
 	//チュートリアル
 	if (MapChip::GetInstance()->nowMap == 0) {
 		//説明
-		for (int i = 0; i < 18; i++) {
+		for (int i = 0; i < 14; i++) {
 			text[i] = Sprite::Create(150 + i/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
 			tutorialImag.push_back(std::move(text[i]));
 		}
@@ -99,7 +99,8 @@ void UserInterface::Initialize()
 	//ボタン
 	AButton = Sprite::Create(11, { (float)(WinApp::window_width / 2 -530),(float)(WinApp::window_height / 2+210) }, { 1,1,1,1 }, { 0.5f,0.5f });
 	BButton = Sprite::Create(12, { (float)(WinApp::window_width / 2 +530),(float)(WinApp::window_height / 2+210) }, { 1,1,1,1 }, { 0.5f,0.5f });
-	RBButton = Sprite::Create(13, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
+	RBButton = Sprite::Create(13, { (float)(WinApp::window_width / 2 + 350),(float)(WinApp::window_height / 2 - 250) });
+	RBButton->SetSize({100,70});
 
 	
 	//ミニマップ
@@ -236,10 +237,40 @@ void UserInterface::Update()
 		WinApp::window_height / 2 + 40 + boostShake.y });
 
 
-	//たまった時
+	//回収ゲージがたまった時
 	if (player->recovery.can) {
-		//recoverFrame.get()->SetColor({ 1,1,0.5f,1 });
-		//recoverGauge.get()->SetColor({ 1,1,0.5f,1 });
+		kaisyuFrame.get()->SetColor({ 1,1,1,1 });
+		kaisyuGauge.get()->SetColor({ 1,1,1,1 });
+	}
+	//回収ゲージがない時
+	else
+	{
+		kaisyuFrame.get()->SetColor({ 1,0,0,1 });
+		kaisyuGauge.get()->SetColor({ 1,0,0,1 });
+	}
+	//ブーストゲージが3の時
+	if (player->attackCount == 3)
+	{
+		boostFrame.get()->SetColor({ 1,1,1,1 });
+		boostGauge.get()->SetColor({ 1,1,1,1 });
+	}
+	//ブーストゲージが2の時
+	else if (player->attackCount == 2)
+	{
+		boostFrame.get()->SetColor({ 1,1,0,1 });
+		boostGauge.get()->SetColor({ 1,1,0,1 });
+	}
+	//ブーストゲージが1の時
+	else if (player->attackCount == 1)
+	{
+		boostFrame.get()->SetColor({ 1,0.6,0,1 });
+		boostGauge.get()->SetColor({ 1,0.6,0,1 });
+	}
+	//ブーストゲージがない時
+	else if (player->attackCount == 0)
+	{
+		boostFrame.get()->SetColor({ 1,0,0,1 });
+		boostGauge.get()->SetColor({ 1,0,0,1 });
 	}
 
 	//描画があるならミニマップを更新
@@ -279,29 +310,26 @@ void UserInterface::Update()
 		}
 	}
 	//チュートリアル
-	if (tutorialNum <= tutorialImag.size() - 1) {
-		if (MapChip::GetInstance()->nowMap == 0) {
-			if (*counter % 150 == 0) {
-				tutorialNum++;
-			}
+	if (MapChip::GetInstance()->nowMap == 0)
+	{
+		if (tutorialNum <= tutorialImag.size() - 1 &&  *counter % 150 == 0) {
+			tutorialNum++;
 		}
 
-		//Bボタンでブースト
+		//Aボタンでブースト
 		if (player->animationType == PlayerObject::BOOST) {
 			checkFlag[0] = true;
 		}
-		//ブーストで敵を倒す
-		if (player->animationType == PlayerObject::BOOST&&
-			oldEnemySize > enemys->enemys[MapChip::GetInstance()->nowMap].size()
-			) {
-			checkFlag[1] = true;
-		}
-		//Aボタンで回収
+		//Bボタンで回収
 		if (player->animationType == PlayerObject::RETRIEVE) {
-			checkFlag[2] = true;
+			checkFlag[1] = true;
 		}
 		//RBボタンでマップ確認
 		if (isMinimapDraw) {
+			checkFlag[2] = true;
+		}
+		//敵を倒す
+		if (oldEnemySize > enemys->enemys[MapChip::GetInstance()->nowMap].size()) {
 			checkFlag[3] = true;
 		}
 	}
@@ -329,6 +357,7 @@ void UserInterface::Draw() const
 	kaisyuFrame.get()->Draw();
 	kaisyuGauge.get()->Draw();
 	BButton.get()->Draw();
+	RBButton->Draw();
 	
 	moveWave.get()->Draw();
 	moveWaveNum[*nowWave + 1].get()->Draw();

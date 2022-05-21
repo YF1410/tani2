@@ -60,7 +60,7 @@ void SpriteFactory::Initialize()
 		assert(0);
 	}
 	//RBƒ{ƒ^ƒ“
-	if (!Sprite::LoadTexture(13, L"Resources/Sprite/UI/RB.png")) {
+	if (!Sprite::LoadTexture(13, L"Resources/Sprite/UI/RB_01.png")) {
 		assert(0);
 	}
 
@@ -239,18 +239,6 @@ void SpriteFactory::Initialize()
 		assert(0);
 	}
 	if (!Sprite::LoadTexture(163, L"Resources/Sprite/tutorial/14.png")) {
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(164, L"Resources/Sprite/tutorial/15.png")) {
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(165, L"Resources/Sprite/tutorial/16.png")) {
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(166, L"Resources/Sprite/tutorial/17.png")) {
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(167, L"Resources/Sprite/tutorial/18.png")) {
 		assert(0);
 	}
 	if (!Sprite::LoadTexture(168, L"Resources/Sprite/tutorial/skipText.png")) {

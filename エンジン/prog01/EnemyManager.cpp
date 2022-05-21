@@ -2,7 +2,6 @@
 #include "GameScene.h"
 #include "DebugText.h"
 
-
 std::vector<Enemy *> EnemyManager::enemys[MapChip::MAP_NAME::MAX];
 
 EnemyManager::EnemyManager(PlayerObject *player)
@@ -70,7 +69,9 @@ void EnemyManager::Update()
 		while (((int)GameScene::counter - waveStartTime) / 60 == spawnData[MapChip::GetInstance()->nowMap][nowWave][0]->time) {
 			//指定された数だけエネミーをスポーンさせる
 			for (int i = 0; i < spawnData[MapChip::GetInstance()->nowMap][nowWave][0]->num; i++) {
-				Vector3 spawnPos = spawnData[MapChip::GetInstance()->nowMap][nowWave][0]->pos + Vector3((rand() % 50 - 25),0, (rand() % 50 - 25));
+				//重なり防止
+				Vector3 spawnPos = spawnData[MapChip::GetInstance()->nowMap][nowWave][0]->pos + 
+					Vector3((rand() % 30 - 15),0, (rand() % 30 - 15));
 				switch (spawnData[MapChip::GetInstance()->nowMap][nowWave][0]->type)
 				{
 				case MIMIC:

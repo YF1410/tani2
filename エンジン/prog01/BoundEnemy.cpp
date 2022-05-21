@@ -1,8 +1,35 @@
 #include "BoundEnemy.h"
+#include "Easing.h"
 #include "yMath.h"
 
 BoundEnemy::BoundEnemy(XMFLOAT3 startPos, PlayerObject *targetPos):
 	Enemy(startPos,targetPos){
+	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_3));
+	scale = { 1.5f,1.5f,1.5f };
+	startScale = scale.x;
+}
+
+void BoundEnemy::Update() {
+	//旧ポジション
+	oldPos = pos;
+	//移動量初期化
+	VelocityReset(0.95f);
+	if (!isInvincible && velocity.Length() > maxMoveSpeed) {
+		//最高速度を超えていたら制限する
+		velocity = velocity.Normal() * maxMoveSpeed;
+	}
+	if (isInvincible && velocity.Length() > maxMoveSpeed * 10.0f) {
+		velocity = velocity.Normal() * maxMoveSpeed * 4.0f;
+
+	}
+	penalty = { 0,0,0 };
+
+	//通常時処理（条件式があればフラグで管理する）
+	if (isHitStop) {
+		velocity = 0;
+	}
+	Move();
+
 
 	//共通処理
 	//無敵時間タイマーを管理
@@ -60,7 +87,6 @@ void BoundEnemy::HitPlayer(const CollisionInfo &info)
 	//位置修正
 	penalty += Vector3(info.reject).Normal() * Vector3(info.reject).Length() * 0.4f;
 	penalty.y = 0;
-
 	//プレイヤーが攻撃状態なら
 	if (player->attack.is) {
 		//ダメージを受ける

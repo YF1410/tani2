@@ -6,6 +6,7 @@
 #include "Easing.h"
 #include "SlimeMath.h"
 #include "MapChip.h"
+#include "Audio.h"
 
 using namespace DirectX;
 
@@ -68,6 +69,7 @@ void Enemy::Update() {
 	penalty = { 0,0,0 };
 
 	//通常時処理（条件式があればフラグで管理する）
+	//ヒットストップ
 	if (isHitStop) {
 		velocity = 0;
 	}
@@ -78,8 +80,10 @@ void Enemy::Update() {
 	//無敵時間タイマーを管理
 	if (isInvincible) {
 		InvincibleTimer++;
+
+		//ダメージ受けた時のもわっとでかくなるやつここから
 		//ここは後でアニメーションに変更する
-		/*if (InvincibleTimer <= 10) {
+		if (InvincibleTimer <= 10) {
 			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), 1.0f, 3.0f) * defScale;
 		}
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
@@ -88,7 +92,9 @@ void Enemy::Update() {
 
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
 			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f, 0.0f) * defScale;
-		}*/
+		}
+		//ここまで
+
 		//タイマーが30になったら無敵を解除
 		if (InvincibleTimer >= 30) {
 			isInvincible = false;
@@ -111,6 +117,7 @@ void Enemy::Update() {
 	//移動をいったん適応
 	PosAddVelocity();
 
+	//ヒットストップ
 	if (isHitStop) {
 		hitStopTimer++;
 		if (hitStopTimer >= 20) {
@@ -267,6 +274,8 @@ void Enemy::HitDebri(const CollisionInfo& info)
 	//デブリが攻撃状態ならダメージを受ける
 	debri = dynamic_cast<Debris*>(info.object);
 	if (debri->isAttack) {
+		//ヒットストップ
+		Audio::GetInstance()->PlayWave(18, 0.5f);
 		debri->isHitStop = true;
 		Damage(debri->velocity.Length());
 	}

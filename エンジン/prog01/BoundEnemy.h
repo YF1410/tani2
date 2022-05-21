@@ -8,5 +8,8 @@ public:
 	BoundEnemy(XMFLOAT3 startPos, PlayerObject *targetPos);
 protected:
 	void HitPlayer(const CollisionInfo &info) override;
+	void Update() override;
+
+	float startScale;
 };
 

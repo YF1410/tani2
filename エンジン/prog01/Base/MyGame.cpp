@@ -38,6 +38,7 @@ void MyGame::Initialize()
 	Audio::GetInstance()->LoadWave(15, "Resources/Audio/SE/select_01.wav");   //選択時
 	Audio::GetInstance()->LoadWave(16, "Resources/Audio/SE/Select_02.wav");   //決定
 	Audio::GetInstance()->LoadWave(17, "Resources/Audio/SE/wall_01.wav");     //壁に当たった時
+	Audio::GetInstance()->LoadWave(18, "Resources/Audio/SE/hitStop.wav");     //ヒットストップ
 
 
 	SpriteFactory::GetInstance()->Initialize();

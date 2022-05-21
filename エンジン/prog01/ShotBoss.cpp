@@ -115,7 +115,7 @@ void ShotBoss::Move()
 			new EnemyBullet(
 				Vector3(core.get()->pos.x,0, core.get()->pos.z),
 				shot,
-				ModelManager::SLIME)
+				ModelManager::SHOTBOSS)
 		);
 	}
 	attack.Intervel();
@@ -137,6 +137,24 @@ void ShotBoss::HitPlayer(const CollisionInfo &info)
 			*dynamic_cast<Sphere *>(coreCollider))
 			) {
 			Damage(player->attackPow);
+		}
+	}
+}
+
+void ShotBoss::HitDebri(const CollisionInfo &info)
+{
+	Debris *debri;
+	debri = dynamic_cast<Debris *>(info.object);
+
+	debri->velocity += Vector3(info.reject).Normal() * debri->velocity.Length() * -0.5f;
+	debri->velocity.y = 0.0f;
+	//プレイヤーがコアと接触したらダメージ処理
+	if (debri->state == Debris::ATTACK) {
+		if (Collision::CheckSphere2Sphere(
+			*dynamic_cast<Sphere *>(debri->attackCollider),
+			*dynamic_cast<Sphere *>(coreCollider))
+			) {
+			Damage(debri->velocity.Length());
 		}
 	}
 }
