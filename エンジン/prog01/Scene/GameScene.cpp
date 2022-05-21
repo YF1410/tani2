@@ -230,12 +230,25 @@ void GameScene::Update() {
 
 	camera->Update();
 
-	if (enemyManager.get()->isEndFlag()) 	{
-		clearFlag = true;
-		if (!isChangeBGM) 		{
-			Audio::GetInstance()->LoopStopWave(1);
-			Audio::GetInstance()->LoopPlayWave(9, 0.3f);
-			isChangeBGM = true;
+	if (enemyManager.get()->isEndFlag()) {
+		if (ui->checkFlag[0] == true && ui->checkFlag[1] == true && ui->checkFlag[2] == true && ui->checkFlag[3] == true &&
+			tutorialFlag)
+		{
+			clearFlag = true;
+			if (!isChangeBGM) {
+				Audio::GetInstance()->LoopStopWave(1);
+				Audio::GetInstance()->LoopPlayWave(9, 0.3f);
+				isChangeBGM = true;
+			}
+		}
+		else if (!tutorialFlag)
+		{
+			clearFlag = true;
+			if (!isChangeBGM) {
+				Audio::GetInstance()->LoopStopWave(1);
+				Audio::GetInstance()->LoopPlayWave(9, 0.3f);
+				isChangeBGM = true;
+			}
 		}
 	}
 	else if (playerObject.get()->GetEnergy() <= 0) 	{

@@ -316,20 +316,20 @@ void UserInterface::Update()
 			tutorialNum++;
 		}
 
-		//Bボタンでブースト
+		//Aボタンでブースト
 		if (player->animationType == PlayerObject::BOOST) {
 			checkFlag[0] = true;
 		}
-		//敵を倒す
-		if (oldEnemySize > enemys->enemys[MapChip::GetInstance()->nowMap].size()) {
-			checkFlag[1] = true;
-		}
-		//Aボタンで回収
+		//Bボタンで回収
 		if (player->animationType == PlayerObject::RETRIEVE) {
-			checkFlag[2] = true;
+			checkFlag[1] = true;
 		}
 		//RBボタンでマップ確認
 		if (isMinimapDraw) {
+			checkFlag[2] = true;
+		}
+		//敵を倒す
+		if (oldEnemySize > enemys->enemys[MapChip::GetInstance()->nowMap].size()) {
 			checkFlag[3] = true;
 		}
 	}

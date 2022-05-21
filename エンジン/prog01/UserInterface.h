@@ -17,6 +17,7 @@ public:
 
 	//チュートリアル
 	int tutorialNum;
+	bool checkFlag[4];
 private:
 	//フレーム
 	std::unique_ptr<Sprite> frame;
@@ -63,7 +64,6 @@ private:
 	//タスク
 	std::unique_ptr<Sprite> taskList;
 	std::unique_ptr<Sprite> check[4];
-	bool checkFlag[4];
 	int oldEnemySize;
 
 	//現在のウェーブ数
