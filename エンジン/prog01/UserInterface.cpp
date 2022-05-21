@@ -310,21 +310,18 @@ void UserInterface::Update()
 		}
 	}
 	//チュートリアル
-	if (tutorialNum <= tutorialImag.size() - 1) {
-		if (MapChip::GetInstance()->nowMap == 0) {
-			if (*counter % 150 == 0) {
-				tutorialNum++;
-			}
+	if (MapChip::GetInstance()->nowMap == 0)
+	{
+		if (tutorialNum <= tutorialImag.size() - 1 &&  *counter % 150 == 0) {
+			tutorialNum++;
 		}
 
 		//Bボタンでブースト
 		if (player->animationType == PlayerObject::BOOST) {
 			checkFlag[0] = true;
 		}
-		//ブーストで敵を倒す
-		if (/*player->animationType == PlayerObject::BOOST&&*/
-			oldEnemySize > enemys->enemys[MapChip::GetInstance()->nowMap].size()
-			) {
+		//敵を倒す
+		if (oldEnemySize > enemys->enemys[MapChip::GetInstance()->nowMap].size()) {
 			checkFlag[1] = true;
 		}
 		//Aボタンで回収
