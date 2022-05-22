@@ -345,7 +345,15 @@ bool Input::TriggerPadStickLeft() {
 
 bool Input::TriggerUp()
 {
-	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_UP && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_UP)
+	// 角度を利用した方法
+	float mainRad = XMConvertToRadians((padData.rgdwPOV[0] / 100.0f));
+	float sabRad = XMConvertToRadians((padDataPre.rgdwPOV[0] / 100.0f));
+
+	float x = sinf(mainRad);
+	float y = cosf(mainRad);
+	float y2 = cosf(sabRad);
+
+	if (y > 0.01f && y2 < 0.01f)
 	{
 		return true;
 	}
@@ -355,7 +363,14 @@ bool Input::TriggerUp()
 
 bool Input::TriggerDown()
 {
-	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_DOWN && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_DOWN)
+	// 角度を利用した方法
+	float mainRad = XMConvertToRadians((padData.rgdwPOV[0] / 100.0f));
+	float sabRad = XMConvertToRadians((padDataPre.rgdwPOV[0] / 100.0f));
+
+	float y = cosf(mainRad);
+	float y2 = cosf(sabRad);
+
+	if (y < -0.7f && y2 > -0.7f)
 	{
 		return true;
 	}
@@ -365,7 +380,14 @@ bool Input::TriggerDown()
 
 bool Input::TriggerRight()
 {
-	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_RIGHT && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_RIGHT)
+	// 角度を利用した方法
+	float mainRad = XMConvertToRadians((padData.rgdwPOV[0] / 100.0f));
+	float sabRad = XMConvertToRadians((padDataPre.rgdwPOV[0] / 100.0f));
+
+	float x = sinf(mainRad);
+	float x2 = sinf(sabRad);
+
+	if (x > 0.01f && x2 < 0.01f)
 	{
 		return true;
 	}
@@ -375,7 +397,14 @@ bool Input::TriggerRight()
 
 bool Input::TriggerLeft()
 {
-	if (state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_LEFT && statePre.Gamepad.wButtons != XINPUT_GAMEPAD_DPAD_LEFT)
+	// 角度を利用した方法
+	float mainRad = XMConvertToRadians((padData.rgdwPOV[0] / 100.0f));
+	float sabRad = XMConvertToRadians((padDataPre.rgdwPOV[0] / 100.0f));
+
+	float x = sinf(mainRad);
+	float x2 = sinf(sabRad);
+
+	if (x < -0.8f && x2 > -0.8f)
 	{
 		return true;
 	}

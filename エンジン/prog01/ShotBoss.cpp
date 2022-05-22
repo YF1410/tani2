@@ -7,7 +7,7 @@
 ShotBoss::ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos,Camera *cam) :
 	Enemy(Vector3(Vector3(0,2000,0)+ Vector3(startPos)), targetPos) {
 	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::SLIME));
-	HP = 500;
+	HP = 1000;
 	maxHP = HP;
 	hpBer->offset = { 0,100,-1000 };
 	defScale = 5.0f;
@@ -61,7 +61,7 @@ void ShotBoss::Update()
 	if (isSpawn) {
 		if (pos.y < startPos.y) {
 			pos.y = startPos.y;
-			if (startTimer < 30) {
+			if (startTimer < 60) {
 				spinVec.AddRotationY(Ease(In, Quart, float(startTimer / 30.0f), 0, 2.0f));
 			}
 			else {
@@ -71,7 +71,7 @@ void ShotBoss::Update()
 			startTimer++;
 			cam->SetTarget(pos);
 
-			if (startTimer >= 60) {
+			if (startTimer >= 120) {
 				isSpawn = false;
 			}
 		}
