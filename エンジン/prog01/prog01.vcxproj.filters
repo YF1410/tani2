@@ -354,6 +354,7 @@
     </ClCompile>
     <ClCompile Include="3d\ObjFactory.cpp" />
     <ClCompile Include="ClearConfirmation.cpp" />
+    <ClCompile Include="MoveCheck.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -581,5 +582,6 @@
     </ClInclude>
     <ClInclude Include="3d\ObjFactory.h" />
     <ClInclude Include="ClearConfirmation.h" />
+    <ClInclude Include="MoveCheck.h" />
   </ItemGroup>
 </Project>

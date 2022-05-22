@@ -3,6 +3,7 @@
 #include "Collision.h"
 #include "EnemyHelperManager.h"
 #include "EnemyBullet.h"
+#include "MoveCheck.h"
 
 ShotBoss::ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos,Camera *cam) :
 	Enemy(Vector3(Vector3(0,2000,0)+ Vector3(startPos)), targetPos) {
@@ -70,9 +71,11 @@ void ShotBoss::Update()
 			core.get()->pos = coreBasePos + spinVec * spinR * scale.x;
 			startTimer++;
 			cam->SetTarget(pos);
+			MoveCheck::GetInstance()->SetMoveFlag(true);
 
 			if (startTimer >= 120) {
 				isSpawn = false;
+				MoveCheck::GetInstance()->SetMoveFlag(false);
 			}
 		}
 		else {
