@@ -71,11 +71,11 @@ void ShotBoss::Update()
 			core.get()->pos = coreBasePos + spinVec * spinR * scale.x;
 			startTimer++;
 			cam->SetTarget(pos);
-			MoveCheck::GetInstance()->SetMoveFlag(true);
+			MoveCheck::GetInstance()->SetMoveFlag(false);
 
 			if (startTimer >= 120) {
 				isSpawn = false;
-				MoveCheck::GetInstance()->SetMoveFlag(false);
+				MoveCheck::GetInstance()->SetMoveFlag(true);
 			}
 		}
 		else {
