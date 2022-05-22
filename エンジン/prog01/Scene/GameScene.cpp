@@ -401,13 +401,18 @@ void GameScene::LastUpdate() {
 	sceneChange.Update();
 
 	//チュートリアルスキップ
-	if ((Input::GetInstance()->PushPadButton(BUTTON_X) || Input::GetInstance()->TriggerKey(DIK_RETURN)) && tutorialFlag) {
-		clearFlag = true;
-		if (!isChangeBGM)
+	if ((Input::GetInstance()->PushPadButton(BUTTON_X) || Input::GetInstance()->TriggerKey(DIK_RETURN)) && tutorialFlag)
+	{
+		longPushTimer++;
+		if (longPushTimer >= 30)
 		{
-			Audio::GetInstance()->LoopStopWave(1);
-			Audio::GetInstance()->LoopPlayWave(9, 0.3f);
-			isChangeBGM = true;
+			clearFlag = true;
+			if (!isChangeBGM)
+			{
+				Audio::GetInstance()->LoopStopWave(1);
+				Audio::GetInstance()->LoopPlayWave(9, 0.3f);
+				isChangeBGM = true;
+			}
 		}
 	}
 

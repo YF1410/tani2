@@ -175,7 +175,7 @@ void PlayerObject::Update()
 		}
 	}
 
-	if (!endFlag || MoveCheck::GetInstance()->IsMoveFlag() == false)
+	if (!endFlag && MoveCheck::GetInstance()->IsMoveFlag())
 	{
 		//コントローラーでの移動(before
 		/*velocity.x += input->PadStickGradient().x * moveSpead;

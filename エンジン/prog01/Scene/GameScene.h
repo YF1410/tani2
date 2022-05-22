@@ -219,4 +219,6 @@ private: // メンバ変数
 
 	//チュートリアルフラグ
 	bool tutorialFlag = false;
+
+	int longPushTimer = 0;
 };
