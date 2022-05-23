@@ -38,6 +38,7 @@ public:		//当たり判定関係
 
 	//State
 	bool isInvincible;		//無敵状態か
+	bool isSpawn;
 
 	//プレイヤーが跳ね返るか否か
 	bool isBounce;
@@ -74,6 +75,7 @@ protected: // メンバ変数
 
 	//無敵時間
 	int InvincibleTimer;	//残り無敵時間
+	int spawnTimer;
 
 	//プレイヤーのポインタ
 	PlayerObject *player;
