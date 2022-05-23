@@ -18,6 +18,7 @@ Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 		startPos				//初期位置をセット
 	) {
 	isAlive = true;
+	isSpawn = true;
 	this->player = player;
 	maxHP = 100.0f;
 	HP = maxHP;
@@ -109,6 +110,28 @@ void Enemy::Update() {
 			else {
 				scale = defScale;
 			}
+		}
+	}
+
+	if (isSpawn) {
+		spawnTimer++;
+
+		if (spawnTimer <= 10) {
+			scale = Ease(In, Back, (float)(spawnTimer / 10.0f), 1.0f, 3.0f) * defScale;
+		}
+		if (10 < spawnTimer && spawnTimer <= 30 && HP > 0) {
+			scale = Ease(In, Back, (float)((spawnTimer - 10.0f) / 20.0f), 3.0f, 1.0f) * defScale;
+		}
+
+		if (10 < spawnTimer && spawnTimer <= 30 && HP <= 0) {
+			scale = Ease(In, Back, (float)((spawnTimer - 10.0f) / 20.0f), 3.0f, 0.0f) * defScale;
+		}
+		//ここまで
+
+		//タイマーが30になったら
+		if (spawnTimer >= 30) {
+			isSpawn = false;
+			scale = defScale;
 		}
 	}
 
