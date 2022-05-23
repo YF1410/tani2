@@ -316,10 +316,9 @@ void PlayerObject::Update()
 	if (!attack.is && boostFlag)
 	{
 		Audio::GetInstance()->LoopStopWave(1);
+		Audio::GetInstance()->PlayWave(19, 0.5f);
 		boostFlag = false;
 	}
-
-
 
 	//攻撃インターバル
 	attack.Intervel(true);
