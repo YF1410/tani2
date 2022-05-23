@@ -147,7 +147,11 @@ void PlayerObject::Update()
 
 	//ˆÚ“®—ÊŒ¸Šˆ—
 	VelocityReset(0.95f);
-	if (!attack.is && velocity.Length() >= 60) {
+	if (!attack.is && velocity.Length() >= 70) {
+		Audio::GetInstance()->PlayWave(19, 0.5f);
+		velocity = velocity.Normal() * 60;
+	}
+	else if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
 	if (attack.is && velocity.Length() >= 200) {
@@ -316,7 +320,6 @@ void PlayerObject::Update()
 	if (!attack.is && boostFlag)
 	{
 		Audio::GetInstance()->LoopStopWave(1);
-		Audio::GetInstance()->PlayWave(19, 0.5f);
 		boostFlag = false;
 	}
 
