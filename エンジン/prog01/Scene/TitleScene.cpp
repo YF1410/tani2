@@ -76,7 +76,7 @@ void TitleScene::Update() {
 	}
 
 	if ((input->TriggerUp() || input->TriggerDown() || input->TriggerPadStickUp() || input->TriggerPadStickDown()
-		|| input->TriggerKey(DIK_UP) || input->TriggerKey(DIK_DOWN) || input->TriggerKey(DIK_W) || input->TriggerKey(DIK_S)) && !isShake) {
+		|| input->TriggerKey(DIK_UP) || input->TriggerKey(DIK_DOWN) || input->TriggerKey(DIK_W) || input->TriggerKey(DIK_S)) && !isShake && !sceneChangeFlag) {
 		if (!flag) {
 			flag = true;
 			savePos = { 30,-7,0 };

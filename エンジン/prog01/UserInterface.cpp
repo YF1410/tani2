@@ -131,13 +131,16 @@ void UserInterface::Initialize()
 void UserInterface::Update()
 {
 	//ウェーブが更新されたら
-	if (oldWave != *nowWave) {
-		//イージング用にタイマーをセット
-		moveWaveTimer = 0.0f;
-		isChangeWave = true;
-	}
+	if (enemys->MAX_WAVE[MapChip::GetInstance()->nowMap] > *nowWave)
+	{
+		if (oldWave != *nowWave) {
+			//イージング用にタイマーをセット
+			moveWaveTimer = 0.0f;
+			isChangeWave = true;
+		}
 
-	oldWave = *nowWave;
+		oldWave = *nowWave;
+	}
 
 	if (Input::GetInstance()->PushKey(DIK_M) ||
 		Input::GetInstance()->LongPushPadButton(BUTTON_RIGHT_SHOULDER)) {
@@ -346,7 +349,7 @@ void UserInterface::Draw() const
 	stageText.get()->Draw();
 	stageNum[MapChip::GetInstance()->nowMap].get()->Draw();
 	waveText.get()->Draw();
-	waveNum[*nowWave + 1].get()->Draw();
+	waveNum[oldWave + 1].get()->Draw();
 	waveMaxNum[enemys->MAX_WAVE[MapChip::GetInstance()->nowMap]].get()->Draw();
 	hpFrame.get()->Draw();
 	hpGauge.get()->Draw();

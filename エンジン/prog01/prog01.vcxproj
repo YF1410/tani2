@@ -330,6 +330,7 @@
     <ClCompile Include="KiteEnemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MimicEnemy.cpp" />
+    <ClCompile Include="MoveCheck.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="RandomMoveEnemy.cpp" />
@@ -409,6 +410,7 @@
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="KiteEnemy.h" />
     <ClInclude Include="MimicEnemy.h" />
+    <ClInclude Include="MoveCheck.h" />
     <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="PointLight.h" />

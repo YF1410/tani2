@@ -39,7 +39,7 @@ GameScene::GameScene(int parameter) {
 
 	//カメラ生成
 	camera = std::make_unique<Camera>(WinApp::window_width, WinApp::window_height);
-
+	enemyManager.get()->SetCam(camera.get());
 	Audio::GetInstance()->LoopPlayWave(parameter + 2, 0.3f);
 
 	// カメラ注視点をセット
@@ -49,10 +49,10 @@ GameScene::GameScene(int parameter) {
 	//フラグリセット
 	isChangeBGM = false;
 
-	if (parameter == 0) 	{
+	if (parameter == 0) {
 		tutorialFlag = true;
 	}
-	else 	{
+	else {
 		tutorialFlag = false;
 	}
 }
@@ -251,9 +251,9 @@ void GameScene::Update() {
 			}
 		}
 	}
-	else if (playerObject.get()->GetEnergy() <= 0) 	{
+	else if (playerObject.get()->GetEnergy() <= 0) {
 		gameOverFlag = true;
-		if (!isChangeBGM) 		{
+		if (!isChangeBGM) {
 			Audio::GetInstance()->LoopStopWave(1);
 			Audio::GetInstance()->LoopPlayWave(8, 0.3f);
 			isChangeBGM = true;
@@ -336,9 +336,9 @@ void GameScene::Update() {
 
 		//パーティクル全てのアップデート
 		ParticleManager::GetInstance()->Update();
-		
+
 	}
-	else if (!tutorialFlag) 	{
+	else if (!tutorialFlag) {
 		//プレイヤー更新
 		playerObject->Update();
 		//破片更新
@@ -401,13 +401,18 @@ void GameScene::LastUpdate() {
 	sceneChange.Update();
 
 	//チュートリアルスキップ
-	if ((Input::GetInstance()->PushPadButton(BUTTON_X) || Input::GetInstance()->TriggerKey(DIK_RETURN)) && tutorialFlag) {
-		clearFlag = true;
-		if (!isChangeBGM)
+	if ((Input::GetInstance()->PushPadButton(BUTTON_X) || Input::GetInstance()->TriggerKey(DIK_RETURN)) && tutorialFlag)
+	{
+		longPushTimer++;
+		if (longPushTimer >= 30)
 		{
-			Audio::GetInstance()->LoopStopWave(1);
-			Audio::GetInstance()->LoopPlayWave(9, 0.3f);
-			isChangeBGM = true;
+			clearFlag = true;
+			if (!isChangeBGM)
+			{
+				Audio::GetInstance()->LoopStopWave(1);
+				Audio::GetInstance()->LoopPlayWave(9, 0.3f);
+				isChangeBGM = true;
+			}
 		}
 	}
 
@@ -462,7 +467,7 @@ void GameScene::Draw() {
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
-	if (!clearFlag && !gameOverFlag) 	{
+	if (!clearFlag && !gameOverFlag) {
 		ui.get()->Draw();
 	}
 
@@ -470,7 +475,7 @@ void GameScene::Draw() {
 	// デバッグテキストの描画
 	DebugText::GetInstance()->DrawAll(cmdList);
 
-	if (clearFlag || gameOverFlag) 	{
+	if (clearFlag || gameOverFlag) {
 		backSprite->Draw();
 	}
 
@@ -483,12 +488,12 @@ void GameScene::Draw() {
 
 	Object3d::PreDraw(cmdList);
 	//ここから下に書く
-	if (clearFlag) 	{
+	if (clearFlag) {
 		stageclearObject3d->Draw();
 		nextStageObject3d->Draw();
 		clearEscapeObject3d->Draw();
 	}
-	else if (gameOverFlag) 	{
+	else if (gameOverFlag) {
 		gameoverObject3d->Draw();
 		retryObject3d->Draw();
 		gameoverEscapeObject3d->Draw();
@@ -532,13 +537,13 @@ void GameScene::Select() {
 	}
 	if ((input->TriggerUp() || input->TriggerPadStickUp() || input->TriggerKey(DIK_W) || input->TriggerKey(DIK_UP)
 		|| input->TriggerDown() || input->TriggerPadStickDown() || input->TriggerKey(DIK_S) || input->TriggerKey(DIK_DOWN))
-		&& !isShake) 	{
-		if (!selectFlag) 		{
+		&& !isShake && !isSceneChange) {
+		if (!selectFlag) {
 			selectFlag = true;
 			saveNextStagePos = nextStagePos;
 			saveRetryPos = retryPos;
 		}
-		else if (selectFlag) 		{
+		else if (selectFlag) {
 			selectFlag = false;
 			saveClearEscapePos = clearEscapePos;
 			saveGameoverEscapePos = gameoverEscapePos;
@@ -547,31 +552,33 @@ void GameScene::Select() {
 		Audio::GetInstance()->PlayWave(15);
 	}
 
-	if (input->TriggerPadButton(BUTTON_A) || input->TriggerKey(DIK_SPACE)) 	{
+	if (input->TriggerPadButton(BUTTON_A) || input->TriggerKey(DIK_SPACE) && !isSceneChange) {
 		if (selectFlag) {
 			Audio::GetInstance()->PlayWave(16);
 			if (clearFlag) {
 				ClearConfirmation::GetInstance()->SetMaxUnlockStageNum(nowStageNum + 1);
+				isSceneChange = true;
 				sceneChange.SceneChangeStart("SelectScene", nowStageNum + 1);
 			}
 			else if (gameOverFlag) {
+				isSceneChange = true;
 				sceneChange.SceneChangeStart("GameScene", nowStageNum);
-
 			}
 		}
 
-		if (!selectFlag) 		{
+		if (!selectFlag) {
+			isSceneChange = true;
 			Audio::GetInstance()->PlayWave(16);
 			sceneChange.SceneChangeStart("TitleScene");
 			//exit(1);
 		}
 	}
 
-	if (clearFlag) 	{
+	if (clearFlag) {
 		sceneBouncePosDown = saveStageclearPos;
 		sceneBouncePosUp = saveStageclearPos;
 		sceneBouncePosUp += bounceAmount;
-		if (!selectFlag) 		{
+		if (!selectFlag) {
 			nextStageObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 			nextStageObject3d->SetScale(maxNextStageScale);
 			clearEscapeObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
@@ -603,7 +610,7 @@ void GameScene::Select() {
 			}
 			clearEscapeObject3d->SetPosition(selectBouncePos);
 		}
-		else if (selectFlag) 		{
+		else if (selectFlag) {
 			nextStageObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 			nextStageObject3d->SetScale(selectScale);
 			clearEscapeObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
@@ -637,11 +644,11 @@ void GameScene::Select() {
 		}
 		stageclearObject3d->SetPosition(sceneBouncePos);
 	}
-	if (gameOverFlag) 	{
+	if (gameOverFlag) {
 		sceneRotateLeft = saveGameoverRot;
 		sceneRotateRight = saveGameoverRot;
 		sceneRotateRight += rotateAmount;
-		if (!selectFlag) 		{
+		if (!selectFlag) {
 			retryObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 			retryObject3d->SetScale(maxRetryScale);
 			gameoverEscapeObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
@@ -694,7 +701,7 @@ void GameScene::Select() {
 
 			gameoverEscapeObject3d->SetPosition(selectBouncePos);
 		}
-		else if (selectFlag) 		{
+		else if (selectFlag) {
 			retryObject3d->SetColor({ 1.0f, 0.5f, 0.5f, 1.0f });
 			retryObject3d->SetScale(selectScale);
 			gameoverEscapeObject3d->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
@@ -874,24 +881,24 @@ void GameScene::OutBack() {
 void GameScene::Shake(Input* input) {
 	//input->SetVibrationPower(5000);
 
-	if (!selectFlag && isShake) 	{
+	if (!selectFlag && isShake) {
 		if (clearFlag) {
 			XMFLOAT3 shake = {};
 			shakeTimer++;
 
 			input->SetVibration(true);
 
-			if (shakeTimer > 0) 			{
+			if (shakeTimer > 0) {
 				shake.x = (rand() % (100 - attenuation) - 50) + saveClearEscapePos.x;
 				shake.y = saveClearEscapePos.y;
 				shake.z = (rand() % (100 - attenuation) - 50) + saveClearEscapePos.z;
 			}
 
-			if (shakeTimer >= attenuation * 2) 			{
+			if (shakeTimer >= attenuation * 2) {
 				attenuation += 1;
 				clearEscapeObject3d->SetPosition(shake);
 			}
-			else if (attenuation >= 6) 			{
+			else if (attenuation >= 6) {
 				shakeTimer = 0;
 				attenuation = 0;
 				isShake = false;
@@ -905,17 +912,17 @@ void GameScene::Shake(Input* input) {
 
 			input->SetVibration(true);
 
-			if (shakeTimer > 0) 			{
+			if (shakeTimer > 0) {
 				shake.x = (rand() % (100 - attenuation) - 50) + saveGameoverEscapePos.x;
 				shake.y = saveGameoverEscapePos.y;
 				shake.z = (rand() % (100 - attenuation) - 50) + saveGameoverEscapePos.z;
 			}
 
-			if (shakeTimer >= attenuation * 2) 			{
+			if (shakeTimer >= attenuation * 2) {
 				attenuation += 1;
 				gameoverEscapeObject3d->SetPosition(shake);
 			}
-			else if (attenuation >= 6) 			{
+			else if (attenuation >= 6) {
 				shakeTimer = 0;
 				attenuation = 0;
 				isShake = false;
@@ -924,23 +931,23 @@ void GameScene::Shake(Input* input) {
 			}
 		}
 	}
-	else if (selectFlag && isShake) 	{
+	else if (selectFlag && isShake) {
 		if (clearFlag) {
 			XMFLOAT3 shake = {};
 			shakeTimer++;
 			input->SetVibration(true);
 
-			if (shakeTimer > 0) 			{
+			if (shakeTimer > 0) {
 				shake.x = (rand() % (100 - attenuation) - 50) + saveNextStagePos.x;
 				shake.y = saveNextStagePos.y;
 				shake.z = (rand() % (100 - attenuation) - 50) + saveNextStagePos.z;
 			}
 
-			if (shakeTimer >= attenuation * 2) 			{
+			if (shakeTimer >= attenuation * 2) {
 				attenuation += 1;
 				nextStageObject3d->SetPosition(shake);
 			}
-			else if (attenuation >= 6) 			{
+			else if (attenuation >= 6) {
 				shakeTimer = 0;
 				attenuation = 0;
 				isShake = false;
@@ -953,17 +960,17 @@ void GameScene::Shake(Input* input) {
 			shakeTimer++;
 			input->SetVibration(true);
 
-			if (shakeTimer > 0) 			{
+			if (shakeTimer > 0) {
 				shake.x = (rand() % (100 - attenuation) - 50) + saveRetryPos.x;
 				shake.y = saveRetryPos.y;
 				shake.z = (rand() % (100 - attenuation) - 50) + saveRetryPos.z;
 			}
 
-			if (shakeTimer >= attenuation * 2) 			{
+			if (shakeTimer >= attenuation * 2) {
 				attenuation += 1;
 				retryObject3d->SetPosition(shake);
 			}
-			else if (attenuation >= 6) 			{
+			else if (attenuation >= 6) {
 				shakeTimer = 0;
 				attenuation = 0;
 				isShake = false;

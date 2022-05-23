@@ -11,7 +11,7 @@
 #include "Enemy.h"
 #include "ParticleManager.h"
 #include "Audio.h"
-
+#include "MoveCheck.h"
 
 using namespace DirectX;
 
@@ -175,7 +175,7 @@ void PlayerObject::Update()
 		}
 	}
 
-	if (!endFlag)
+	if (!endFlag && MoveCheck::GetInstance()->IsMoveFlag())
 	{
 		//コントローラーでの移動(before
 		/*velocity.x += input->PadStickGradient().x * moveSpead;

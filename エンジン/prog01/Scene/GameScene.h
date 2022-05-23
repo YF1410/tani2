@@ -208,6 +208,8 @@ private: // メンバ変数
 	bool clearFlag = false;
 	//ゲームオーバーフラグ
 	bool gameOverFlag = false;
+
+	bool isSceneChange = false;
 	//
 	bool selectFlag = true;
 	ScreenData gameOverScreen;
@@ -219,4 +221,6 @@ private: // メンバ変数
 
 	//チュートリアルフラグ
 	bool tutorialFlag = false;
+
+	int longPushTimer = 0;
 };

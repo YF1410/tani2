@@ -108,7 +108,7 @@ void EnemyManager::Update()
 					enemys[MapChip::GetInstance()->nowMap].push_back(new RouteMoveEnemy(spawnPos, player));
 					break;
 				case Boss:
-					enemys[MapChip::GetInstance()->nowMap].push_back(new ShotBoss(spawnPos, player));
+					enemys[MapChip::GetInstance()->nowMap].push_back(new ShotBoss(spawnPos, player,camera));
 					break;
 				default:
 					enemys[MapChip::GetInstance()->nowMap].push_back(new Enemy(spawnPos, player));
