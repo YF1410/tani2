@@ -9,7 +9,7 @@
 #include "State.h"
 #include "Debris.h"
 #include "EnemyHp.h"
-
+#include "Sprite.h"
 class Enemy :
 	public GameObjCommon
 {

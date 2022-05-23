@@ -85,7 +85,8 @@ private:
 	std::unique_ptr<Sprite> mapImag[MapChip::MAP_NAME::MAX];
 	std::unique_ptr<Sprite> xButton;
 	std::unique_ptr<Sprite> playerPos;
-	std::unique_ptr<Sprite> enemysPos[100];
+	std::unique_ptr<Sprite> enemysPos[50];
+	std::vector<std::unique_ptr<Sprite>> outEnemys;
 
 };
 

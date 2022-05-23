@@ -171,6 +171,7 @@ void Enemy::Draw() const
 {
 	GameObjCommon::Draw();
 	hpBer->Draw();
+
 }
 
 void Enemy::OnCollision(const CollisionInfo& info)
