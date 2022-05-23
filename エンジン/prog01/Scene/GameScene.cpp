@@ -552,7 +552,7 @@ void GameScene::Select() {
 		Audio::GetInstance()->PlayWave(15);
 	}
 
-	if (input->TriggerPadButton(BUTTON_A) || input->TriggerKey(DIK_SPACE) && !isSceneChange) {
+	if ((input->TriggerPadButton(BUTTON_A) || input->TriggerKey(DIK_SPACE)) && !isSceneChange) {
 		if (selectFlag) {
 			Audio::GetInstance()->PlayWave(16);
 			if (clearFlag) {
