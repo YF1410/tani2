@@ -147,7 +147,11 @@ void PlayerObject::Update()
 
 	//移動量減衰処理
 	VelocityReset(0.95f);
-	if (!attack.is && velocity.Length() >= 60) {
+	if (!attack.is && velocity.Length() >= 70) {
+		Audio::GetInstance()->PlayWave(19, 0.5f);
+		velocity = velocity.Normal() * 60;
+	}
+	else if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
 	if (attack.is && velocity.Length() >= 200) {
@@ -318,8 +322,6 @@ void PlayerObject::Update()
 		Audio::GetInstance()->LoopStopWave(1);
 		boostFlag = false;
 	}
-
-
 
 	//攻撃インターバル
 	attack.Intervel(true);

@@ -198,6 +198,8 @@ private:
 	TextureData roughnessTexture;
 	//シェーダの名前
 	std::wstring HLSLfName;
+	//法線テクスチャ
+	TextureData toonTexture;
 
 	// メッシュコンテナ
 	//std::vector<std::unique_ptr<Mesh>> meshes;

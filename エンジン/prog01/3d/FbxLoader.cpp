@@ -463,6 +463,9 @@ void FbxLoader::ParseMaterial(FbxModel* model, FbxNode* fbxNode)
 			}
 		}
 
+		// テクスチャ読み込み
+		LoadTexture(&model->toonTexture, baseDirectory + "toon.png");
+
 		// テクスチャがない場合は白テクスチャを貼る
 		if (!textureLoaded)
 		{
