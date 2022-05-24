@@ -73,6 +73,10 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(16, L"Resources/Sprite/UI/playerpos_01.png")) {
 		assert(0);
 	}
+	//‰f‚Á‚Ä‚¢‚È‚¢“G‚ÌˆÊ’u
+	if (!Sprite::LoadTexture(17, L"Resources/Sprite/UI/outEnemy.png")) {
+		assert(0);
+	}
 
 	//ƒ}ƒbƒv0
 	if (!Sprite::LoadTexture(20, L"Resources/Sprite/UI/00.png")) {

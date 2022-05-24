@@ -293,8 +293,11 @@ void UserInterface::Update()
 				angle.x * 300+(float)(WinApp::window_width / 2),
 				-angle.z * 200 +(float)(WinApp::window_height / 2) };
 			
-			std::unique_ptr<Sprite> temp = Sprite::Create(15, outPos, { 1,1,1,1 }, { 0.5f,0.5f });
+			std::unique_ptr<Sprite> temp = Sprite::Create(17, outPos, { 1,1,1,1 }, { 0.5f,0.5f });
 			temp.get()->SetScale(outScale);
+
+			
+			temp.get()->SetRotation(ConvertNormalToDeg(angle, Vector3(0, 0, -1)).y);
 			outEnemys.push_back(std::move(temp));
 		}
 	}

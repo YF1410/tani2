@@ -266,7 +266,7 @@ void PlayerObject::Update()
 				//}
 				//energy -= SHOT_ENERGY;
 
-				velocity += velocity.Normal() * 450;
+				velocity += velocity.Normal() * 300;
 				//îöî≠èIóπ
 				attackCount--;
 				attackGage.Start();
