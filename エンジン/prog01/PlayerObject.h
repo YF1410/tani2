@@ -46,7 +46,7 @@ public:
 		const XMVECTOR &hitPos,		//Õ“ËˆÊ’u
 		const Vector3 &normal);
 
-
+	float volume = 0.0f;
 
 	//‰ñûƒtƒ‰ƒO
 	STATE recovery;

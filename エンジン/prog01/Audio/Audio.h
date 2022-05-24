@@ -78,6 +78,7 @@ public: // ƒƒ“ƒoŠÖ”
 	void PlayWave(int soundNumber, float volume = 1.0f);
 	void LoopPlayWave(int soundNumber, float volume = 1.0f);
 	void LoopStopWave(int soundNumber = 0);
+	void LoopPlayWaveVolume(int soundNumber, float volume = 1.0f);
 
 private:
 	Audio();

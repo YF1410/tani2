@@ -178,3 +178,11 @@ void Audio::LoopStopWave(int soundNumber)
 		pSourceVoices.erase(pSourceVoices.begin() + soundNumber);
 	}
 }
+
+void Audio::LoopPlayWaveVolume(int soundNumber, float volume)
+{
+	if (pSourceVoices.size() != 0 && pSourceVoices.size() >= soundNumber + 1)
+	{
+		pSourceVoices[soundNumber]->SetVolume(volume);
+	}
+}
