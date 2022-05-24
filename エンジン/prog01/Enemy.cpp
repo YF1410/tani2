@@ -15,10 +15,11 @@ Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 		ModelManager::ENEMY_ROBO_1,	//エネミーモデルをセット
 		GameObjCommon::ENEMY,	//エネミーとして扱う
 		false,					//重力の影響を受ける
-		startPos				//初期位置をセット
+		Vector3(startPos.x, 2000, startPos.z)				//初期位置をセット
 	) {
 	isAlive = true;
 	isSpawn = true;
+	this->startPos = startPos;
 	this->player = player;
 	maxHP = 100.0f;
 	HP = maxHP;
@@ -36,6 +37,8 @@ Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 
 	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, radius, radius);
 	SetNarrowCollider(toMapChipCollider);
+
+	spawnTimer = 0.0f;
 
 	Initialize();
 }
@@ -85,14 +88,14 @@ void Enemy::Update() {
 		//ダメージ受けた時のもわっとでかくなるやつここから
 		//ここは後でアニメーションに変更する
 		if (InvincibleTimer <= 10) {
-			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), 1.0f, 3.0f) * defScale;
+			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), defScale, defScale * 1.5f) * defScale;
 		}
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f, 1.0f) * defScale;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale*1.5f, defScale) * defScale;
 		}
 
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), 3.0f, 0.0f) * defScale;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale * 1.5f, 0.0f) * defScale;
 		}
 		//ここまで
 
@@ -114,25 +117,15 @@ void Enemy::Update() {
 	}
 
 	if (isSpawn) {
-		spawnTimer++;
-
-		if (spawnTimer <= 10) {
-			scale = Ease(In, Back, (float)(spawnTimer / 10.0f), 1.0f, 3.0f) * defScale;
-		}
-		if (10 < spawnTimer && spawnTimer <= 30 && HP > 0) {
-			scale = Ease(In, Back, (float)((spawnTimer - 10.0f) / 20.0f), 3.0f, 1.0f) * defScale;
-		}
-
-		if (10 < spawnTimer && spawnTimer <= 30 && HP <= 0) {
-			scale = Ease(In, Back, (float)((spawnTimer - 10.0f) / 20.0f), 3.0f, 0.0f) * defScale;
-		}
-		//ここまで
-
-		//タイマーが30になったら
-		if (spawnTimer >= 30) {
+		pos.y = Ease(In, Cubic, spawnTimer, 2000, startPos.y);
+		spawnTimer += 0.02f;
+		if (spawnTimer > 1.0f) {
 			isSpawn = false;
-			scale = defScale;
+			pos.y = startPos.y;
+			spawnTimer = 1.0f;
 		}
+		objectData.get()->SetAlpha(spawnTimer);
+		
 	}
 
 	//攻撃インターバル処理

@@ -38,6 +38,7 @@ public:		//当たり判定関係
 
 	//State
 	bool isInvincible;		//無敵状態か
+	float spawnTimer;
 	bool isSpawn;
 
 	//プレイヤーが跳ね返るか否か
@@ -53,6 +54,7 @@ public:		//当たり判定関係
 	Box2DCollider *toMapChipCollider;		//マップチップ用コライダー
 
 protected: // メンバ変数
+	Vector3 startPos;
 	EnemyHp *hpBer;
 
 	//移動処理
@@ -75,7 +77,6 @@ protected: // メンバ変数
 
 	//無敵時間
 	int InvincibleTimer;	//残り無敵時間
-	int spawnTimer;
 
 	//プレイヤーのポインタ
 	PlayerObject *player;
