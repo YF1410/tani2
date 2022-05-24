@@ -147,11 +147,7 @@ void PlayerObject::Update()
 
 	//移動量減衰処理
 	VelocityReset(0.95f);
-	if (!attack.is && velocity.Length() >= 70) {
-		Audio::GetInstance()->PlayWave(19, 0.5f);
-		velocity = velocity.Normal() * 60;
-	}
-	else if (!attack.is && velocity.Length() >= 60) {
+	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
 	if (attack.is && velocity.Length() >= 200) {
@@ -237,6 +233,8 @@ void PlayerObject::Update()
 				velocity.Length() != 0.0f) {
 				Audio::GetInstance()->LoopStopWave(1);
 
+				volume = 3.0f;
+
 				Audio::GetInstance()->LoopPlayWave(10, 3);
 				boostFlag = true;
 				//攻撃開始
@@ -319,8 +317,13 @@ void PlayerObject::Update()
 
 	if (!attack.is && boostFlag)
 	{
-		Audio::GetInstance()->LoopStopWave(1);
-		boostFlag = false;
+		volume -= 0.1f;
+		Audio::GetInstance()->LoopPlayWaveVolume(1, volume);
+		if (volume <= 0.00f)
+		{
+			Audio::GetInstance()->LoopStopWave(1);
+			boostFlag = false;
+		}
 	}
 
 	//攻撃インターバル

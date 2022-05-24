@@ -60,6 +60,7 @@ void ShotBoss::Update()
 
 	//スポーン直後は演出をする
 	if (isSpawn) {
+		MoveCheck::GetInstance()->SetMoveFlag(false);
 		if (pos.y < startPos.y) {
 			pos.y = startPos.y;
 			if (startTimer < 60) {
@@ -71,7 +72,6 @@ void ShotBoss::Update()
 			core.get()->pos = coreBasePos + spinVec * spinR * scale.x;
 			startTimer++;
 			cam->SetTarget(pos);
-			MoveCheck::GetInstance()->SetMoveFlag(false);
 
 			if (startTimer >= 120) {
 				isSpawn = false;
