@@ -285,10 +285,10 @@ void UserInterface::Update()
 			Vector3 angle = enemyToPlayerLenght;
 			angle.Normalize();
 			float outScale = (enemyToPlayerLenght.Length() - 2000) / 2000;
-			if (outScale >= 1.0f) {
-				outScale = 1.0f;
+			if (outScale >= 0.5f) {
+				outScale =  0.5f;
 			}
-			outScale = 1.5f - outScale;
+			outScale = 1.0f - outScale;
 			XMFLOAT2 outPos = {
 				angle.x * 300+(float)(WinApp::window_width / 2),
 				-angle.z * 200 +(float)(WinApp::window_height / 2) };
