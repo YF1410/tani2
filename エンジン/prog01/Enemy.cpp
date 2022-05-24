@@ -44,6 +44,7 @@ Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 }
 
 Enemy::~Enemy() {
+	delete hpBer;
 }
 
 
