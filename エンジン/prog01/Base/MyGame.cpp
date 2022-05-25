@@ -39,7 +39,6 @@ void MyGame::Initialize()
 	Audio::GetInstance()->LoadWave(16, "Resources/Audio/SE/Select_02.wav");   //決定
 	Audio::GetInstance()->LoadWave(17, "Resources/Audio/SE/wall_01.wav");     //壁に当たった時
 	Audio::GetInstance()->LoadWave(18, "Resources/Audio/SE/hitStop.wav");     //ヒットストップ
-	Audio::GetInstance()->LoadWave(19, "Resources/Audio/SE/boostStop.wav");     //ブースト状態が解除された時
 
 	SpriteFactory::GetInstance()->Initialize();
 }
