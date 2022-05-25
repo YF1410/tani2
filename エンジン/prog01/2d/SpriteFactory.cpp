@@ -3,18 +3,12 @@
 void SpriteFactory::Initialize()
 {
 	// デバッグテキスト用テクスチャ読み込み
-	if (!Sprite::LoadTexture(0, L"Resources/debugfont.png"))
+	if (!Sprite::LoadTexture(0, L"Resources/Sprite/debugfont.png"))
 	{
 		assert(0);
 	}
 	// デバッグテキスト初期化
 	DebugText::GetInstance()->Initialize(0);
-
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(1, L"Resources/Sprite/APEX_01.png"))
-	{
-		assert(0);
-	}
 
 	//UI周り
 	//frame
@@ -248,7 +242,7 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(168, L"Resources/Sprite/tutorial/skipText.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(169, L"Resources/Sprite/end_02.png")) {
+	if (!Sprite::LoadTexture(169, L"Resources/Sprite/tutorial/end_02.png")) {
 		assert(0);
 	}
 	if (!Sprite::LoadTexture(172, L"Resources/Sprite/tutorial/task.png")) {
