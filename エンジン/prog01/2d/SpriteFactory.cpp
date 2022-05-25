@@ -243,6 +243,10 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(169, L"Resources/Sprite/tutorial/end_02.png")) {
 		assert(0);
 	}
+
+	if (!Sprite::LoadTexture(174, L"Resources/Sprite/tutorial/nextTex.png")) {
+		assert(0);
+	}
 	if (!Sprite::LoadTexture(172, L"Resources/Sprite/tutorial/task.png")) {
 		assert(0);
 	}
