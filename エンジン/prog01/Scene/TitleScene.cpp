@@ -52,7 +52,7 @@ void TitleScene::Initialize() {
 	camera->SetTarget({ 0, 0, 0 });
 	camera->SetEye({ 0,-10,-5 });
 	camera->SetUp({ 0,1,0 });
-	sceneChange.type = SceneChange::NOT;
+	sceneChange.type = SceneChange::FADE_IN;
 	//‚â‚Ô‚È‚©
 }
 
