@@ -92,7 +92,7 @@ void Enemy::Update() {
 			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), defScale, defScale * 1.5f) * defScale;
 		}
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale*1.5f, defScale) * defScale;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale * 1.5f, defScale) * defScale;
 		}
 
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
@@ -126,7 +126,7 @@ void Enemy::Update() {
 			spawnTimer = 1.0f;
 		}
 		objectData.get()->SetAlpha(spawnTimer);
-		
+
 	}
 
 	//攻撃インターバル処理
@@ -238,7 +238,7 @@ void Enemy::Attack()
 	}
 }
 
-void Enemy::Damage(float damage)
+void Enemy::Damage(float damage,bool isDebrisAttack)
 {
 	isHitStop = true;
 	hpBer->HpDraw.Start();
@@ -247,8 +247,11 @@ void Enemy::Damage(float damage)
 	hpBer->HpDraw.timer = hpBer->HpDraw.interval;
 	//ダメージを受ける
 	HP -= damage;
-	if (HP < 0) {
+	if (HP <= 0) {
 		HP = 0;
+		if (isDebrisAttack) {
+			isDead = true;
+		}
 	}
 	//無敵時間をセットする
 	isInvincible = true;
@@ -295,6 +298,6 @@ void Enemy::HitDebri(const CollisionInfo& info)
 		//ヒットストップ
 		Audio::GetInstance()->PlayWave(18, 0.5f);
 		debri->isHitStop = true;
-		Damage(debri->velocity.Length());
+		Damage(debri->velocity.Length(),true);
 	}
 }
