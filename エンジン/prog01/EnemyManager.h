@@ -127,7 +127,7 @@ public:
 	bool isCameraEasing = false;
 	int cameraTimer;
 	Vector3 eyeDistance = { 0,2700,-500 };
-	const Vector3 eyeDistanceDef = { 0,2300,-1200 };
+	const Vector3 eyeDistanceDef = { 0,2500,-1400 };
 	Vector3 targetDistance = { 0,0,100 };
 	const Vector3 targetDistanceDef = { 0,0,100 };
 };
