@@ -150,8 +150,8 @@ void PlayerObject::Update()
 	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
-	if (attack.is && velocity.Length() >= 200) {
-		velocity = velocity.Normal() * 200;
+	if (attack.is && velocity.Length() >= 150) {
+		velocity = velocity.Normal() * 150;
 	}
 	//ヒットストップ無いときにvelosity120未満になったら
 	if (attack.is && velocity.Length() < 120 && !isHitStop) {
@@ -266,7 +266,7 @@ void PlayerObject::Update()
 				//}
 				//energy -= SHOT_ENERGY;
 
-				velocity += velocity.Normal() * 300;
+				velocity += velocity.Normal() * 200;
 				//爆発終了
 				attackCount--;
 				attackGage.Start();
