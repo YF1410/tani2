@@ -81,7 +81,7 @@ void UserInterface::Initialize()
 	//チュートリアル
 	if (MapChip::GetInstance()->nowMap == 0) {
 		//説明
-		for (int i = 0; i < 14; i++) {
+		for (int i = 0; i < 13; i++) {
 			text[i] = Sprite::Create(150 + i/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
 			tutorialImag.push_back(std::move(text[i]));
 		}
@@ -341,11 +341,8 @@ void UserInterface::Update()
 	//チュートリアル
 	if (MapChip::GetInstance()->nowMap == 0)
 	{
-		if (tutorialNum <= tutorialImag.size() - 1 &&  Input::GetInstance()->TriggerRight()) {
+		if (tutorialNum <= tutorialImag.size() - 1 &&  Input::GetInstance()->TriggerPadButton(BUTTON_Y)) {
 			tutorialNum++;
-		}
-		if (tutorialNum > 0 && Input::GetInstance()->TriggerLeft()) {
-			tutorialNum--;
 		}
 
 		//Aボタンでブースト

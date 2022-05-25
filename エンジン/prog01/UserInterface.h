@@ -57,7 +57,7 @@ private:
 	const int maxRecoverColorTimer = 30;
 	int recoverColorTimer;
 
-	std::unique_ptr<Sprite> text[18];
+	std::unique_ptr<Sprite> text[14];
 
 	std::vector<std::unique_ptr<Sprite>> tutorialImag;
 

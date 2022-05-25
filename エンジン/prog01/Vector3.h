@@ -99,7 +99,11 @@ struct Vector3 : public XMFLOAT3 {
 			this->x * -sinf(angle)	+0			+this->z * cosf(angle)
 		};
 	}
-	void RotationZ(float angle) {
-
+	void AddRotationZ(float angle) {
+		*this = {
+			this->x * cosf(angle)	+ this->y * -sinf(angle)	+ 0,
+			this->x *sinf(angle)	+ this->y + cosf(angle)		+ 0,
+			0						+ 0							 + this->z 
+		};
 	}
 };
