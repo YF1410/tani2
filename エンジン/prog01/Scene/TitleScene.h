@@ -8,6 +8,7 @@
 #include "Sprite.h"
 #include "DebugText.h"
 #include "Object3d.h"
+#include "GameObjCommon.h"
 
 #include <memory>
 
@@ -58,11 +59,15 @@ private: // ƒƒ“ƒo•Ï”
 	std::unique_ptr<Object3d> startObject3d;
 	std::unique_ptr<Object3d> endObject3d;
 
+
+	std::unique_ptr<GameObjCommon> player;
+
 	bool flag = true;
 	bool isShake = false;
 	int shakeTimer = 0;
 	int attenuation = 0;
 	
+
 
 	XMFLOAT3 savePos = {};
 	bool sceneChangeFlag = false;

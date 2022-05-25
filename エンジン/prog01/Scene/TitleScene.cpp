@@ -3,6 +3,8 @@
 #include "ObjFactory.h"
 #include "Ease.h"
 #include "Audio.h"
+#include "ModelManager.h"
+#include "SlimeMath.h"
 
 TitleScene::~TitleScene() {
 	Finalize();
@@ -45,6 +47,16 @@ void TitleScene::Initialize() {
 	endObject3d->SetRotation({ -90,25,0 });
 	endObject3d->SetScale({ 10, 1, 5 });
 	endObject3d->SetPosition(endObjectPosition);
+
+	FbxObject3d::SetCamera(camera.get());
+	FbxObject3d::SetLight(light.get());
+	player = std::make_unique<GameObjCommon>(ModelManager::PLAYER, GameObjCommon::Notag, false, Vector3{ 0,0,100 }, Vector3{0.1f,0.1f,0.1f});
+	player.get()->velocity = { 1,1,0 };
+	player.get()->velocity.Normalize();
+	player.get()->velocity*= 0.5f;
+	player.get()->rotate.x = -45.0f;
+	player.get()->rotate.y = 180.0f;
+	player.get()->rotate.z = 90.0f;
 
 	Audio::GetInstance()->LoopPlayWave(0, 0.5f);
 
@@ -97,9 +109,29 @@ void TitleScene::Update() {
 
 	SpecifiedMove();
 
+
+	{
+		player.get()->PosAddVelocity();
+			if (player.get()->pos.x > 200) {
+			player.get()->velocity = CalcReflectVector(player.get()->velocity, { -1,0,0 });
+		}
+		if (player.get()->pos.x < -200) {
+			player.get()->velocity = CalcReflectVector(player.get()->velocity, { 1,0,0 });
+		}
+		if (player.get()->pos.y > 150) {
+			player.get()->velocity = CalcReflectVector(player.get()->velocity, { 0,-1,0 });
+		}
+		if (player.get()->pos.y < -150) {
+			player.get()->velocity = CalcReflectVector(player.get()->velocity, { 0,1,0 });
+		}
+		/*player.get()->rotate.z =
+			ConvertNormalToDeg(player.get()->velocity.Normal(), Vector3{ 0,1,0 }).z;*/
+	}
+
 	titleObject3d->Update();
 	startObject3d->Update();
 	endObject3d->Update();
+	player.get()->Adaptation();
 }
 
 void TitleScene::LastUpdate() {
@@ -121,6 +153,7 @@ void TitleScene::Draw() {
 #pragma endregion 背景スプライト描画
 #pragma region 3Dオブジェクト描画
 	// 3Dオブクジェクトの描画
+	player.get()->Draw();
 	Object3d::PreDraw(cmdList);
 	titleObject3d->Draw();
 	startObject3d->Draw();
