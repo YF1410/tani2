@@ -121,7 +121,7 @@ void ParticleEmitter::AddAttack(int count, int life, XMFLOAT3 position, Vector3 
 
 		//X,Y,Z全て[-5.0,+5.0]でランダムに分布
 		this->position.x = position.x;
-		//this->position.y = ((float)rand() / RAND_MAX * md_pos - md_pos / 2.0f) + position.y;
+		this->position.y = position.y;
 		this->position.z = position.z;
 		//X,Y,Z全て[-0.05,+0.05]でランダムに分布
 		this->velocity.x = -startVec.x;

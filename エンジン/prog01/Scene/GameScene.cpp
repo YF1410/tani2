@@ -21,7 +21,6 @@ using namespace DirectX;
 
 int GameScene::counter;
 
-
 GameScene::GameScene(int parameter) {
 	//ステージセット
 	nowStageNum = parameter;
@@ -208,27 +207,29 @@ void GameScene::Update() {
 
 	const float velocityOffset = 17.0f;
 	//カメラのイージング制御
-	Vector3 eyeOffset = Vector3(playerObject.get()->GetPos() +
-		eyeDistanceDef +
-		Vector3(0, debrisLengthMax * 0.7f, 0) +
-		//xz軸へのオフセット
-		playerObject.get()->velocity * velocityOffset
-	);
+	if (!enemyManager.get()->isCameraEasing) {
+		Vector3 eyeOffset = Vector3(playerObject.get()->GetPos() +
+			eyeDistanceDef +
+			Vector3(0, debrisLengthMax * 0.7f, 0) +
+			//xz軸へのオフセット
+			playerObject.get()->velocity * velocityOffset
+		);
 
-	eyeDistance = Ease(Out, Quad, 0.02f,
-		camera.get()->GetEye(),
-		eyeOffset);
-	camera->CameraMoveEyeVector(Vector3(eyeDistance - Vector3(camera.get()->GetEye())));
-	//プレイヤーの少し上を焦点にする
-	targetDistance = Ease(Out, Quad, 0.02f,
-		camera.get()->GetTarget(),
-		Vector3(playerObject.get()->GetPos() +
-			targetDistanceDef +
-			playerObject.get()->velocity * velocityOffset));
+		eyeDistance = Ease(Out, Quad, 0.02f,
+			camera.get()->GetEye(),
+			eyeOffset);
+		camera->CameraMoveEyeVector(Vector3(eyeDistance - Vector3(camera.get()->GetEye())));
+		//プレイヤーの少し上を焦点にする
+		targetDistance = Ease(Out, Quad, 0.02f,
+			camera.get()->GetTarget(),
+			Vector3(playerObject.get()->GetPos() +
+				targetDistanceDef +
+				playerObject.get()->velocity * velocityOffset));
 
-	camera->CameraMoveTargetVector(Vector3(targetDistance - Vector3(camera.get()->GetTarget())));
+		camera->CameraMoveTargetVector(Vector3(targetDistance - Vector3(camera.get()->GetTarget())));
 
-	camera->Update();
+		camera->Update();
+	}
 
 	if (enemyManager.get()->isEndFlag()) {
 		if (ui->checkFlag[0] == true && ui->checkFlag[1] == true && ui->checkFlag[2] == true && ui->checkFlag[3] == true &&
@@ -359,7 +360,7 @@ void GameScene::Update() {
 		stageBGObject3d->Update();
 		//stageBG2Object3d->Update();
 
-				//パーティクル全てのアップデート
+		//パーティクル全てのアップデート
 		ParticleManager::GetInstance()->Update();
 	}
 

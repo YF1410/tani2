@@ -48,11 +48,11 @@ public:		//当たり判定関係
 
 	bool isHitStop;
 	int hitStopTimer;
+	bool isDead = false;
 
 	//コライダー
 	SphereCollider *broadSphereCollider;	//予測用コライダー
 	Box2DCollider *toMapChipCollider;		//マップチップ用コライダー
-
 protected: // メンバ変数
 	Vector3 startPos;
 	EnemyHp *hpBer;
@@ -62,7 +62,7 @@ protected: // メンバ変数
 	virtual void Attack();
 	
 	//ダメージを受ける
-	virtual void Damage(float damage);
+	virtual void Damage(float damage,bool isDebrisAttack = false);
 
 	//移動系
 	float moveSpeed = 5.0f;			//移動量
