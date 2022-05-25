@@ -94,7 +94,8 @@ void UserInterface::Initialize()
 	}
 	//Xボタン長押しの時のUI
 	xButton = Sprite::Create(169, { WinApp::window_width - 280,WinApp::window_height / 2 + 210 });
-	yButton = Sprite::Create(174, { WinApp::window_width  - 300,WinApp::window_height / 2 + 220 });
+	nextYButton = Sprite::Create(174, { WinApp::window_width  - 300,WinApp::window_height / 2 + 220 });
+	endYButton = Sprite::Create(175, { WinApp::window_width - 300,WinApp::window_height / 2 + 220 });
 
 
 	//ボタン
@@ -429,7 +430,12 @@ void UserInterface::Draw() const
 	if (MapChip::GetInstance()->nowMap == 0)
 	{
 		xButton->Draw();
-		yButton->Draw();
+		if (tutorialNum < 12) {
+			nextYButton->Draw();
+		}
+		else if (tutorialNum == 12) {
+			endYButton->Draw();
+		}
 	}
 
 
