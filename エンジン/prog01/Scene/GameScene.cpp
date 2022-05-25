@@ -21,7 +21,6 @@ using namespace DirectX;
 
 int GameScene::counter;
 
-
 GameScene::GameScene(int parameter) {
 	//ステージセット
 	nowStageNum = parameter;
@@ -215,12 +214,12 @@ void GameScene::Update() {
 		playerObject.get()->velocity * velocityOffset
 	);
 
-	eyeDistance = Ease(Out, Quad, 0.05f,
+	eyeDistance = Ease(Out, Quad, 0.02f,
 		camera.get()->GetEye(),
 		eyeOffset);
 	camera->CameraMoveEyeVector(Vector3(eyeDistance - Vector3(camera.get()->GetEye())));
 	//プレイヤーの少し上を焦点にする
-	targetDistance = Ease(Out, Quad, 0.05f,
+	targetDistance = Ease(Out, Quad, 0.02f,
 		camera.get()->GetTarget(),
 		Vector3(playerObject.get()->GetPos() +
 			targetDistanceDef +
