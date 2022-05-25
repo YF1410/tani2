@@ -341,8 +341,11 @@ void UserInterface::Update()
 	//チュートリアル
 	if (MapChip::GetInstance()->nowMap == 0)
 	{
-		if (tutorialNum <= tutorialImag.size() - 1 &&  *counter % 150 == 0) {
+		if (tutorialNum <= tutorialImag.size() - 1 &&  Input::GetInstance()->TriggerRight()) {
 			tutorialNum++;
+		}
+		if (tutorialNum > 0 && Input::GetInstance()->TriggerLeft()) {
+			tutorialNum--;
 		}
 
 		//Aボタンでブースト

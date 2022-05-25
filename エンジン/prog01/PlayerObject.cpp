@@ -60,7 +60,7 @@ PlayerObject::~PlayerObject()
 void PlayerObject::Initialize()
 {
 	//サイズ初期化
-	maxHp = 500.0f;
+	maxHp = 1.0f;
 	hp = maxHp;
 	//サイズ初期化
 	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
@@ -141,12 +141,12 @@ void PlayerObject::Update()
 	//旧ポジション
 	oldPos = pos;
 	//スケールから移動量決定
-	moveSpead = 7.5f;
+	moveSpead = 5.5f;
 	//ペナルティリセット
 	penalty = { 0,0,0 };
 
 	//移動量減衰処理
-	VelocityReset(0.95f);
+	VelocityReset(0.96f);
 	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
@@ -266,7 +266,7 @@ void PlayerObject::Update()
 				//}
 				//energy -= SHOT_ENERGY;
 
-				velocity += velocity.Normal() * 300;
+				velocity += velocity.Normal() * 200;
 				//爆発終了
 				attackCount--;
 				attackGage.Start();
@@ -514,6 +514,9 @@ void PlayerObject::OnCollision(const CollisionInfo& info)
 				(!debri->isFirstAttack || debri->state == Debris::RETURN)) {
 				//吸収
 				hp += debri->GetSize();
+				if (hp > maxHp) {
+					hp = maxHp;
+				}
 				Audio::GetInstance()->PlayWave(13, 0.4f);
 			}
 			healChack = true;
