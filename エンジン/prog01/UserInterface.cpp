@@ -33,7 +33,7 @@ void UserInterface::Initialize()
 	//ステージ番号
 	for (int i = 0; i < 10; i++) {
 		stageNum[i] = Sprite::Create(100 + i,
-			{ WinApp::window_width / 2 + 40 ,5    }, { 1,1,1,1 }, { 0,1.0f });
+			{ WinApp::window_width / 2 + 40 ,55    }, { 1,1,1,1 }, { 0,1.0f });
 		stageNum[i].get()->SetSize({ 50,50 });
 	}
 	//ウェーブテキスト
