@@ -54,9 +54,9 @@ void TitleScene::Initialize() {
 	player.get()->velocity = { 1,1,0 };
 	player.get()->velocity.Normalize();
 	player.get()->velocity*= 0.5f;
-	player.get()->rotate.x = -45.0f;
-	player.get()->rotate.y = 180.0f;
-	player.get()->rotate.z = 90.0f;
+	//player.get()->rotate.x = -45.0f;
+	//player.get()->rotate.y = 180.0f;
+	//player.get()->rotate.z = 90.0f;
 
 	Audio::GetInstance()->LoopPlayWave(0, 0.5f);
 
