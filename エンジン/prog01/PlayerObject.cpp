@@ -329,9 +329,6 @@ void PlayerObject::Update()
 	//攻撃インターバル
 	attack.Intervel(true);
 
-	//回収インターバル
-	recovery.Intervel();
-
 	//攻撃力更新
 	attackPow = velocity.Length();
 
@@ -483,6 +480,9 @@ void PlayerObject::LustUpdate()
 		input->GetInstance()->SetVibration(false);
 	}
 
+	//回収インターバル
+	recovery.Intervel();
+
 	//揺れ
 	savePos = pos;
 	if (dontBoost || dontRecovery) {
@@ -596,7 +596,7 @@ void PlayerObject::HitWall(
 	/*if (velocity.Length() >= 40 && oldVec.VDot(velocity) < 0.1f) {
 	}*/
 	if (attack.is) {
-		refParticle->AddRef(20, 60, pos, velocity);
+		refParticle->AddRef(20, 60, pos, normal);
 		input->GetInstance()->SetVibrationPower(65535);
 		Audio::GetInstance()->PlayWave(17, 0.4f);
 		if (!isBounce) {

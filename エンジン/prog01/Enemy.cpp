@@ -82,6 +82,36 @@ void Enemy::Update() {
 
 
 	//共通処理
+	
+
+	if (isSpawn) {
+		pos.y = Ease(In, Cubic, spawnTimer, 2000, startPos.y);
+		spawnTimer += 0.02f;
+		if (spawnTimer > 1.0f) {
+			isSpawn = false;
+			pos.y = startPos.y;
+			spawnTimer = 1.0f;
+		}
+		objectData.get()->SetAlpha(spawnTimer);
+
+	}
+
+	//攻撃インターバル処理
+	attack.Intervel();
+	//移動をいったん適応
+	PosAddVelocity();
+
+	//ヒットストップ
+	if (isHitStop) {
+		hitStopTimer++;
+		if (hitStopTimer >= 20) {
+			hitStopTimer = 0;
+			isHitStop = false;
+		}
+	}
+}
+
+void Enemy::LustUpdate() {
 	//無敵時間タイマーを管理
 	if (isInvincible) {
 		InvincibleTimer++;
@@ -116,35 +146,6 @@ void Enemy::Update() {
 			}
 		}
 	}
-
-	if (isSpawn) {
-		pos.y = Ease(In, Cubic, spawnTimer, 2000, startPos.y);
-		spawnTimer += 0.02f;
-		if (spawnTimer > 1.0f) {
-			isSpawn = false;
-			pos.y = startPos.y;
-			spawnTimer = 1.0f;
-		}
-		objectData.get()->SetAlpha(spawnTimer);
-
-	}
-
-	//攻撃インターバル処理
-	attack.Intervel();
-	//移動をいったん適応
-	PosAddVelocity();
-
-	//ヒットストップ
-	if (isHitStop) {
-		hitStopTimer++;
-		if (hitStopTimer >= 20) {
-			hitStopTimer = 0;
-			isHitStop = false;
-		}
-	}
-}
-
-void Enemy::LustUpdate() {
 
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();

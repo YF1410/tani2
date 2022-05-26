@@ -271,9 +271,10 @@ void GameScene::Update() {
 		recoveryEffect2Object3d->SetScale(Ease(Out, Quint, eTime, { 3000.0f,1.0f,3000.0f }, { 1.0f,1.0f,1.0f }));
 		recoveryEffectObject3d->SetPosition({ playerObject.get()->GetPos().x,playerObject.get()->GetPos().y + 50.0f,playerObject.get()->GetPos().z });
 		recoveryEffect2Object3d->SetPosition({ playerObject.get()->GetPos().x,playerObject.get()->GetPos().y + 60.0f,playerObject.get()->GetPos().z });
-		recoveryEffectObject3d->SetRotation({ 0, static_cast<float>(12 * playerObject.get()->recovery.timer),0 });
-		recoveryEffect2Object3d->SetRotation({ 0, static_cast<float>(4 * playerObject.get()->recovery.timer),0 });
 	}
+
+	recoveryEffectObject3d->SetRotation({ 0, static_cast<float>(12 * playerObject.get()->recovery.timer),0 });
+	recoveryEffect2Object3d->SetRotation({ 0, static_cast<float>(4 * playerObject.get()->recovery.timer),0 });
 
 	playerObject->SetEndFlag(clearFlag, gameOverFlag);
 	if (clearFlag) {
@@ -316,14 +317,17 @@ void GameScene::Update() {
 			}
 		}
 
-		//プレイヤー更新
-		playerObject->Update();
+		if (!enemyManager.get()->isCameraEasing) {
+			//プレイヤー更新
+			playerObject->Update();
+			//エネミー更新
+			if (!clearFlag && !gameOverFlag) {
+				enemyManager.get()->Update();
+			}
+		}
+
 		//破片更新
 		Debris::StaticUpdate();
-		//エネミー更新
-		if (!clearFlag && !gameOverFlag) {
-			enemyManager.get()->Update();
-		}
 		stageclearObject3d->Update();
 		nextStageObject3d->Update();
 		clearEscapeObject3d->Update();
@@ -340,15 +344,18 @@ void GameScene::Update() {
 
 	}
 	else if (!tutorialFlag) {
-		//プレイヤー更新
-		playerObject->Update();
-		//破片更新
-		Debris::StaticUpdate();
-		//エネミー更新
-		if (!clearFlag && !gameOverFlag) {
-			enemyManager.get()->Update();
+
+		if (!enemyManager.get()->isCameraEasing) {
+			//プレイヤー更新
+			playerObject->Update();
+			//エネミー更新
+			if (!clearFlag && !gameOverFlag) {
+				enemyManager.get()->Update();
+			}
 		}
 
+		//破片更新
+		Debris::StaticUpdate();
 		stageclearObject3d->Update();
 		nextStageObject3d->Update();
 		clearEscapeObject3d->Update();
