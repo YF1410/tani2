@@ -134,6 +134,7 @@ void UserInterface::Initialize()
 		outEnemys[i] = Sprite::Create(17, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) },
 			{ 1,1,1,1 }, { 0.5f,0.5f });
 		outEnemys[i].get()->SetScale(0.5f);
+		outEnemys[i].get()->SetColor({1,1,1,0.5f});
 
 	}
 
@@ -296,6 +297,7 @@ void UserInterface::Update()
 
 	//ŠO‘¤‚Ì“G
 	outCount = 0;
+	
 	for (int i = 0; i < enemys->enemys[MapChip::GetInstance()->nowMap].size(); i++) {
 		Vector3 enemyToPlayerLenght = Vector3(enemys->enemys[MapChip::GetInstance()->nowMap][i]->pos - player->pos);
 		if (enemyToPlayerLenght.Length() >= 2000) {

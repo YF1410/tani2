@@ -190,7 +190,7 @@ void BoundEnemy::HitPlayer(const CollisionInfo &info)
 
 		Vector3 nextPos = info.inter + Vector3(pos - info.object->pos).Normal() * (broadSphereCollider->GetRadius() /*+ player->broadSphereCollider->GetRadius()*/);
 		nextPos.y = 0;
-		velocity = CalcReflectVector(velocity, Vector3(pos - player->pos).Normal())* 100.0f;
+		velocity = CalcReflectVector(velocity, Vector3(pos - player->pos).Normal())* 1.0f;
 		velocity.y = 0;
 		pos = nextPos;
 	}

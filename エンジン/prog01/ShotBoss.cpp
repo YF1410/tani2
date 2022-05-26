@@ -35,7 +35,7 @@ ShotBoss::ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos,Camera *cam) :
 	spinVec = { 1,0,0 };
 
 
-	coreCollider = new SphereCollider("BroadSphere", XMVECTOR{ 0,100,0 }, 100);
+	coreCollider = new SphereCollider("BroadSphere", XMVECTOR{ 0,100,0 }, 200);
 	core.get()->SetNarrowCollider(coreCollider);
 	core.get()->Adaptation();
 

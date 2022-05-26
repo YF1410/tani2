@@ -220,6 +220,7 @@ void FbxLoader::ParseMeshFaces(FbxModel* model, FbxMesh* fbxMesh)
 	FbxVector4* pCoord = fbxMesh->GetControlPoints();
 
 	int indexCount = 0;
+	//controlPointsData.clear();
 	controlPointsData.resize(fbxMesh->GetControlPointsCount());
 
 	// 面ごとの情報読み取り

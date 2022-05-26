@@ -118,14 +118,14 @@ void Enemy::LustUpdate() {
 		//ダメージ受けた時のもわっとでかくなるやつここから
 		//ここは後でアニメーションに変更する
 		if (InvincibleTimer <= 10) {
-			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), defScale, defScale * 1.5f) * defScale;
+			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), defScale, defScale + 1.5f) /** defScale*/;
 		}
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale * 1.5f, defScale) * defScale;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale + 1.5f, defScale) /** defScale*/;
 		}
 
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale * 1.5f, 0.0f) * defScale;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale + 1.5f, 0.0f) /** defScale*/;
 		}
 		//ここまで
 
