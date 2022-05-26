@@ -75,9 +75,14 @@ void Enemy::Update() {
 
 	//通常時処理（条件式があればフラグで管理する）
 	//ヒットストップ
-	if (!isHitStop) {
-		Move();
+	if (isHitStop) {
+		velocity = 0;
 	}
+	Move();
+
+
+	//共通処理
+
 
 	if (isSpawn) {
 		pos.y = Ease(In, Cubic, spawnTimer, 2000, startPos.y);
@@ -107,10 +112,6 @@ void Enemy::Update() {
 }
 
 void Enemy::LustUpdate() {
-
-
-
-	//共通処理
 	//無敵時間タイマーを管理
 	if (isInvincible) {
 		InvincibleTimer++;
@@ -118,14 +119,14 @@ void Enemy::LustUpdate() {
 		//ダメージ受けた時のもわっとでかくなるやつここから
 		//ここは後でアニメーションに変更する
 		if (InvincibleTimer <= 10) {
-			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), defScale, defScale + 1.5f) /** defScale*/;
+			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), defScale, defScale + 1.5f);
 		}
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale + 1.5f, defScale) /** defScale*/;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale + 1.5f, defScale);
 		}
 
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale + 1.5f, 0.0f) /** defScale*/;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale + 1.5f, 0.0f);
 		}
 		//ここまで
 
@@ -145,7 +146,6 @@ void Enemy::LustUpdate() {
 			}
 		}
 	}
-
 
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();

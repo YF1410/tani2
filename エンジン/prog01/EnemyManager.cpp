@@ -137,6 +137,18 @@ void EnemyManager::Update()
 		}
 	}
 
+	
+	//更新
+	for (int i = 0; i < enemys[MapChip::GetInstance()->nowMap].size(); i++) {
+		enemys[MapChip::GetInstance()->nowMap][i]->Update();
+	}
+	//DebugText::GetInstance()->VariablePrint(0, 120, "EnemyCount", enemys.size(), 3);
+	defeatParticle1->Update();
+	defeatParticle2->Update();
+}
+
+void EnemyManager::FinalUpdate()
+{
 	//削除
 	for (int i = enemys[MapChip::GetInstance()->nowMap].size() - 1; i >= 0; i--) {
 		if (enemys[MapChip::GetInstance()->nowMap][i]->isDead && enemys[MapChip::GetInstance()->nowMap][i]->isAlive) {
@@ -149,26 +161,10 @@ void EnemyManager::Update()
 				enemys[MapChip::GetInstance()->nowMap][i]->velocity * velocityOffset
 			);
 
-			//eyeDistance = Ease(Out, Quad, 0.05f,
-			//	camera->GetEye(),
-			//	eyeOffset);
-			//camera->CameraMoveEyeVector(Vector3(eyeDistance - Vector3(camera->GetEye())));
-			////プレイヤーの少し上を焦点にする
-			//targetDistance = Ease(Out, Quad, 0.05f,
-			//	camera->GetTarget(),
-			//	Vector3(enemys[MapChip::GetInstance()->nowMap][i]->pos +
-			//		targetDistanceDef +
-			//		enemys[MapChip::GetInstance()->nowMap][i]->velocity * velocityOffset));
-
-			//camera->CameraMoveTargetVector(Vector3(targetDistance - Vector3(camera->GetTarget())));
-
-			//camera->Update();
-
-
 			cameraTimer++;
 			if (cameraTimer <= 15) {
-				eyeDistance = Ease(Out, Quad, (float)(cameraTimer / 15.0f),camera->GetEye(),eyeOffset);
-				targetDistance = Ease(Out, Quad, (float)(cameraTimer / 15.0f),camera->GetTarget(),
+				eyeDistance = Ease(Out, Quad, (float)(cameraTimer / 15.0f), camera->GetEye(), eyeOffset);
+				targetDistance = Ease(Out, Quad, (float)(cameraTimer / 15.0f), camera->GetTarget(),
 					Vector3(enemys[MapChip::GetInstance()->nowMap][i]->pos +
 						targetDistanceDef +
 						enemys[MapChip::GetInstance()->nowMap][i]->velocity * velocityOffset));
@@ -193,17 +189,6 @@ void EnemyManager::Update()
 			enemys[MapChip::GetInstance()->nowMap].erase(enemys[MapChip::GetInstance()->nowMap].begin() + i);
 		}
 	}
-	//更新
-	for (int i = 0; i < enemys[MapChip::GetInstance()->nowMap].size(); i++) {
-		enemys[MapChip::GetInstance()->nowMap][i]->Update();
-	}
-	//DebugText::GetInstance()->VariablePrint(0, 120, "EnemyCount", enemys.size(), 3);
-	defeatParticle1->Update();
-	defeatParticle2->Update();
-}
-
-void EnemyManager::FinalUpdate()
-{
 	for (int i = 0; i < enemys[MapChip::GetInstance()->nowMap].size(); i++) {
 		enemys[MapChip::GetInstance()->nowMap][i]->LustUpdate();
 	}
