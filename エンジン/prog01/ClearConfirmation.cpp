@@ -6,7 +6,7 @@ ClearConfirmation* ClearConfirmation::GetInstance() {
 }
 
 void ClearConfirmation::SetMaxUnlockStageNum(int _unlockStageNum) {
-	if (maxUnlockStageNum < _unlockStageNum) {
+	if (maxUnlockStageNum < _unlockStageNum && _unlockStageNum <= 5) {
 		maxUnlockStageNum = _unlockStageNum;
 	}
 }

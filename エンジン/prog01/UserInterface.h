@@ -84,7 +84,8 @@ private:
 	//ミニマップ
 	std::unique_ptr<Sprite> mapImag[MapChip::MAP_NAME::MAX];
 	std::unique_ptr<Sprite> xButton;
-	std::unique_ptr<Sprite> yButton;
+	std::unique_ptr<Sprite> nextYButton;
+	std::unique_ptr<Sprite> endYButton;
 	std::unique_ptr<Sprite> playerPos;
 	std::unique_ptr<Sprite> enemysPos[50];
 	int outCount;
