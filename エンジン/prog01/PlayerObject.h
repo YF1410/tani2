@@ -14,10 +14,13 @@ class PlayerObject :
 {
 public:
 	enum ANIMATION_TYPE {
+		RETRIEVE,
 		BOOST,
 		DEATH,
+		NEUTRAL,
 		MOVE,
-		RETRIEVE
+		MAX
+
 	}animationType;
 	bool animationChangeFrag;
 

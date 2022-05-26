@@ -16,8 +16,8 @@ ModelManager *ModelManager::GetIns()
 
 void ModelManager::Initialize()
 {
-	LoadModel(DEFAULT_BLOCK, "testBlock");
 	LoadModel(PLAYER, "player");
+	LoadModel(DEFAULT_BLOCK, "testBlock");
 	
 
 
