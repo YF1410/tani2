@@ -11,7 +11,7 @@ RandomMoveEnemy::RandomMoveEnemy(XMFLOAT3 startPos, PlayerObject *targetPos):
 	velocity.x = 1;
 	homing = false;
 	homingRange = 2500;
-	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_7));
+	//objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_7));
 }
 
 void RandomMoveEnemy::Move()

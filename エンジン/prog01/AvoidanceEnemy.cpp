@@ -9,7 +9,7 @@ AvoidanceEnemy::AvoidanceEnemy(XMFLOAT3 startPos, PlayerObject *targetPos):
 		0
 	};
 	avoidanceRange = 1500.0f;
-	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_3));
+	//objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_3));
 }
 
 void AvoidanceEnemy::Move()

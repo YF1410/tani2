@@ -17,6 +17,7 @@ ModelManager *ModelManager::GetIns()
 void ModelManager::Initialize()
 {
 	LoadModel(PLAYER, "player");
+	LoadModel(DEBRI, "debris");
 	LoadModel(DEFAULT_BLOCK, "testBlock");
 	
 

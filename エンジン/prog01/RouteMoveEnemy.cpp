@@ -6,7 +6,7 @@ RouteMoveEnemy::RouteMoveEnemy(XMFLOAT3 startPos, PlayerObject* targetPos) :
 	homingRange = 500;
 	moveDistance = 50;
 	defaultPos = pos;
-	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_7));
+	//objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_7));
 }
 
 void RouteMoveEnemy::Move() {

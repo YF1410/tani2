@@ -9,7 +9,7 @@ PlayerObject* Debris::playerData;
 
 Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	GameObjCommon(
-		ModelManager::SLIME_BREAK,
+		ModelManager::DEBRI,
 		GameObjCommon::DEBRIS,
 		false,
 		startPos
@@ -22,6 +22,7 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 {
 	//サイズからスケールへコンバート
 	scale = 1.0f/*= ConvertSizeToScale(size)*/;
+	rotate = { (float)(rand() % 361) ,(float)(rand() % 361) ,(float)(rand() % 361) };
 	//初期加速度セット
 	velocity = startVec;
 	//最初から攻撃状態

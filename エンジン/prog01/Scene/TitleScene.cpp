@@ -54,7 +54,7 @@ void TitleScene::Initialize() {
 	player.get()->velocity = { 1,1,0 };
 	player.get()->velocity.Normalize();
 	player.get()->velocity*= 0.5f;
-	//player.get()->rotate.x = -45.0f;
+	player.get()->rotate.x = -50.0f;
 	//player.get()->rotate.y = 180.0f;
 	//player.get()->rotate.z = 90.0f;
 
@@ -124,8 +124,8 @@ void TitleScene::Update() {
 		if (player.get()->pos.y < -150) {
 			player.get()->velocity = CalcReflectVector(player.get()->velocity, { 0,1,0 });
 		}
-		/*player.get()->rotate.z =
-			ConvertNormalToDeg(player.get()->velocity.Normal(), Vector3{ 0,1,0 }).z;*/
+		player.get()->rotate.z += 1;
+			/*ConvertNormalToDeg(player.get()->velocity.Normal(), Vector3{ 0,1,0 }).z;*/
 	}
 
 	titleObject3d->Update();
