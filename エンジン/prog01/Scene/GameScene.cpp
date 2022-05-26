@@ -403,7 +403,7 @@ void GameScene::LastUpdate() {
 	sceneChange.Update();
 
 	//チュートリアルスキップ
-	if ((Input::GetInstance()->PushPadButton(BUTTON_X) || Input::GetInstance()->TriggerKey(DIK_RETURN)))// && tutorialFlag)
+	if ((Input::GetInstance()->PushPadButton(BUTTON_X) || Input::GetInstance()->TriggerKey(DIK_RETURN)) && !gameOverFlag && !clearFlag)// && tutorialFlag)
 	{
 		longPushTimer++;
 		if (longPushTimer >= 30)
