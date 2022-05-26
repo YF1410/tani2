@@ -16,7 +16,7 @@ public:
 	void Draw() const;
 
 	//チュートリアル
-	int tutorialNum;
+	static int tutorialNum;
 	bool checkFlag[4];
 private:
 	//フレーム
@@ -88,7 +88,8 @@ private:
 	std::unique_ptr<Sprite> endYButton;
 	std::unique_ptr<Sprite> playerPos;
 	std::unique_ptr<Sprite> enemysPos[50];
-	std::vector<std::unique_ptr<Sprite>> outEnemys;
+	int outCount;
+	std::unique_ptr<Sprite> outEnemys[50];
 
 };
 

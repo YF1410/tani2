@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "DebugText.h"
 #include "Easing.h"
+#include "UserInterface.h"
 
 std::vector<Enemy *> EnemyManager::enemys[MapChip::MAP_NAME::MAX];
 
@@ -52,6 +53,16 @@ void EnemyManager::Initialize()
 
 void EnemyManager::Update()
 {
+	if (MapChip::GetInstance()->nowMap == MapChip::TUTORIAL) {
+		if (UserInterface::tutorialNum < 13) {
+			return;
+
+		}
+		else {
+			waveStartTime = GameScene::counter;
+
+		}
+	}
 	//ウェーブ進行
 	if (enemys[MapChip::GetInstance()->nowMap].size() == 0 && spawnData[MapChip::GetInstance()->nowMap][nowWave].size() == 0) {
 		if (nowWave < MAX_WAVE[MapChip::GetInstance()->nowMap]) {

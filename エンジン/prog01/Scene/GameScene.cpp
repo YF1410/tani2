@@ -39,7 +39,6 @@ GameScene::GameScene(int parameter) {
 	//カメラ生成
 	camera = std::make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 	enemyManager.get()->SetCam(camera.get());
-	Audio::GetInstance()->LoopPlayWave(parameter + 2, 0.3f);
 
 	// カメラ注視点をセット
 	camera->SetTarget(Vector3(playerObject.get()->GetPos() + targetDistanceDef));
@@ -50,9 +49,11 @@ GameScene::GameScene(int parameter) {
 
 	if (parameter == 0) {
 		tutorialFlag = true;
+		Audio::GetInstance()->LoopPlayWave(2, 0.3f);
 	}
 	else {
 		tutorialFlag = false;
+		Audio::GetInstance()->LoopPlayWave(7, 0.3f);
 	}
 }
 
@@ -402,7 +403,7 @@ void GameScene::LastUpdate() {
 	sceneChange.Update();
 
 	//チュートリアルスキップ
-	if ((Input::GetInstance()->PushPadButton(BUTTON_X) || Input::GetInstance()->TriggerKey(DIK_RETURN)))// && tutorialFlag)
+	if ((Input::GetInstance()->PushPadButton(BUTTON_X) || Input::GetInstance()->TriggerKey(DIK_RETURN)) && !gameOverFlag && !clearFlag)// && tutorialFlag)
 	{
 		longPushTimer++;
 		if (longPushTimer >= 30)

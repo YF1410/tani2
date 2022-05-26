@@ -22,10 +22,6 @@ void MyGame::Initialize()
 	Audio::GetInstance()->LoadWave(0, "Resources/Audio/BGM/title_01.wav");    //タイトル
 	Audio::GetInstance()->LoadWave(1, "Resources/Audio/BGM/select_01.wav");   //セレクトシーン
 	Audio::GetInstance()->LoadWave(2, "Resources/Audio/BGM/tutorial_01.wav"); //ステージ0
-	Audio::GetInstance()->LoadWave(3, "Resources/Audio/BGM/game_01.wav");     //ステージ1
-	Audio::GetInstance()->LoadWave(4, "Resources/Audio/BGM/game_02.wav");     //ステージ2
-	Audio::GetInstance()->LoadWave(5, "Resources/Audio/BGM/game_03.wav");     //ステージ3
-	Audio::GetInstance()->LoadWave(6, "Resources/Audio/BGM/game_04.wav");     //ステージ4
 	Audio::GetInstance()->LoadWave(7, "Resources/Audio/BGM/game_05.wav");     //ステージ5
 	Audio::GetInstance()->LoadWave(8, "Resources/Audio/BGM/gameover_01.wav"); //ゲームオー`バー
 	Audio::GetInstance()->LoadWave(9, "Resources/Audio/BGM/clear_01.wav");    //クリア

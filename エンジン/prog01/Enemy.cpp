@@ -12,7 +12,7 @@ using namespace DirectX;
 
 Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 	GameObjCommon(
-		ModelManager::ENEMY_ROBO_1,	//エネミーモデルをセット
+		ModelManager::ENEMY_ROBO_5,	//エネミーモデルをセット
 		GameObjCommon::ENEMY,	//エネミーとして扱う
 		false,					//重力の影響を受ける
 		Vector3(startPos.x, 2000, startPos.z)				//初期位置をセット
@@ -28,7 +28,7 @@ Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 	hpBer = new EnemyHp(HP, maxHP, pos);
 
 
-	defScale = 2.5f;
+	defScale = 1.5f;
 	scale = defScale;
 	//当たり判定初期化
 	float radius = 100;
@@ -75,46 +75,8 @@ void Enemy::Update() {
 
 	//通常時処理（条件式があればフラグで管理する）
 	//ヒットストップ
-	if (isHitStop) {
-		velocity = 0;
-	}
-	Move();
-
-
-	//共通処理
-	//無敵時間タイマーを管理
-	if (isInvincible) {
-		InvincibleTimer++;
-
-		//ダメージ受けた時のもわっとでかくなるやつここから
-		//ここは後でアニメーションに変更する
-		if (InvincibleTimer <= 10) {
-			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), defScale, defScale * 1.5f) * defScale;
-		}
-		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale * 1.5f, defScale) * defScale;
-		}
-
-		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale * 1.5f, 0.0f) * defScale;
-		}
-		//ここまで
-
-		//タイマーが30になったら無敵を解除
-		if (InvincibleTimer >= 30) {
-			isInvincible = false;
-			//HPが0以下になったら死亡状態へ以降
-			if (HP <= 0) {
-				isAlive = false;
-				//一定の確率でアイテムドロップ
-				if (rand() % 101 <= 30) {
-					Debris::debris.push_back(new Debris(pos, { 0,0,0 }, 5));
-				}
-			}
-			else {
-				scale = defScale;
-			}
-		}
+	if (!isHitStop) {
+		Move();
 	}
 
 	if (isSpawn) {
@@ -145,6 +107,45 @@ void Enemy::Update() {
 }
 
 void Enemy::LustUpdate() {
+
+
+
+	//共通処理
+	//無敵時間タイマーを管理
+	if (isInvincible) {
+		InvincibleTimer++;
+
+		//ダメージ受けた時のもわっとでかくなるやつここから
+		//ここは後でアニメーションに変更する
+		if (InvincibleTimer <= 10) {
+			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), defScale, defScale + 1.5f) /** defScale*/;
+		}
+		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale + 1.5f, defScale) /** defScale*/;
+		}
+
+		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale + 1.5f, 0.0f) /** defScale*/;
+		}
+		//ここまで
+
+		//タイマーが30になったら無敵を解除
+		if (InvincibleTimer >= 30) {
+			isInvincible = false;
+			//HPが0以下になったら死亡状態へ以降
+			if (HP <= 0) {
+				isAlive = false;
+				//一定の確率でアイテムドロップ
+				if (rand() % 101 <= 30) {
+					Debris::debris.push_back(new Debris(pos, { 0,0,0 }, 5));
+				}
+			}
+			else {
+				scale = defScale;
+			}
+		}
+	}
+
 
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();
