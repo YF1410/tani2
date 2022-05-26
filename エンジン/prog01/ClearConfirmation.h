@@ -31,15 +31,15 @@ public:
 
 private: // メンバ変数
 	//ステージ1フラグ
-	bool stage1Flag = false;
+	bool stage1Flag = true;
 	//ステージ2フラグ
-	bool stage2Flag = false;
+	bool stage2Flag = true;
 	//ステージ3フラグ
-	bool stage3Flag = false;
+	bool stage3Flag = true;
 	//ステージ4フラグ
-	bool stage4Flag = false;
+	bool stage4Flag = true;
 	//ステージ5フラグ
-	bool stage5Flag = false;
+	bool stage5Flag = true;
 	//前ステージの場所
-	int maxUnlockStageNum = -1;
+	int maxUnlockStageNum = 5;
 };
