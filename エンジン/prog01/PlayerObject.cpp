@@ -150,8 +150,8 @@ void PlayerObject::Update()
 	if (!attack.is && velocity.Length() >= 60) {
 		velocity = velocity.Normal() * 60;
 	}
-	if (attack.is && velocity.Length() >= 200) {
-		velocity = velocity.Normal() * 200;
+	if (attack.is && velocity.Length() >= 150) {
+		velocity = velocity.Normal() * 150;
 	}
 	//ヒットストップ無いときにvelosity120未満になったら
 	if (attack.is && velocity.Length() < 120 && !isHitStop) {
@@ -475,7 +475,7 @@ void PlayerObject::LustUpdate()
 	Input* input = Input::GetInstance();
 	Vector3 beforePos = pos + velocity;
 	if (attack.is && !endFlag) {
-		atkParticle->AddAttack(3, 20, pos, velocity, (atan2(pos.z - beforePos.z, pos.x - beforePos.x) + 3.14 / 2));
+		atkParticle->AddAttack(3, 20,{ pos.x,pos.y - 20.0f,pos.z }, velocity, (atan2(pos.z - beforePos.z, pos.x - beforePos.x) + 3.14 / 2));
 		input->GetInstance()->SetVibration(true);
 		input->GetInstance()->SetVibrationPower(10000);
 	}
@@ -596,7 +596,7 @@ void PlayerObject::HitWall(
 	/*if (velocity.Length() >= 40 && oldVec.VDot(velocity) < 0.1f) {
 	}*/
 	if (attack.is) {
-		refParticle->AddRef(20, 40, pos, velocity);
+		refParticle->AddRef(20, 60, pos, velocity);
 		input->GetInstance()->SetVibrationPower(65535);
 		Audio::GetInstance()->PlayWave(17, 0.4f);
 		if (!isBounce) {

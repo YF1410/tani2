@@ -6,6 +6,7 @@
 
 int *UserInterface::nowWave;
 int UserInterface::oldWave;
+int UserInterface::tutorialNum;
 bool UserInterface::isChangeWave;
 float UserInterface::moveWaveTimer;
 float UserInterface::movePosX;
@@ -25,6 +26,7 @@ UserInterface::~UserInterface()
 
 void UserInterface::Initialize()
 {
+	tutorialNum = 0;
 	oldEnemySize = 0;
 	//フレーム
 	frame = Sprite::Create(2, { 0,0 });
@@ -93,8 +95,8 @@ void UserInterface::Initialize()
 		}
 	}
 	//Xボタン長押しの時のUI
-	xButton = Sprite::Create(169, { WinApp::window_width - 280,WinApp::window_height / 2 + 210 });
-	yButton = Sprite::Create(174, { WinApp::window_width  - 300,WinApp::window_height / 2 + 220 });
+	xButton = Sprite::Create(168, { WinApp::window_width - 300,WinApp::window_height / 2 + 180 });
+	yButton = Sprite::Create(174, { WinApp::window_width  - 310,WinApp::window_height / 2 + 220 });
 
 
 	//ボタン
@@ -119,7 +121,21 @@ void UserInterface::Initialize()
 		enemysPos[i].get()->SetScale(0.5f);
 
 	}
-	
+	//敵
+	for (int i = 0; i < 50; i++) {
+		enemysPos[i] = Sprite::Create(15, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) },
+			{ 1,1,1,1 }, { 0.5f,0.5f });
+		enemysPos[i].get()->SetScale(0.5f);
+
+	}
+
+	//外側の敵
+	for (int i = 0; i < 50; i++) {
+		outEnemys[i] = Sprite::Create(17, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) },
+			{ 1,1,1,1 }, { 0.5f,0.5f });
+		outEnemys[i].get()->SetScale(0.5f);
+
+	}
 
 	//回収
 	recoverColorTimer = 0;
@@ -278,28 +294,29 @@ void UserInterface::Update()
 		boostGauge.get()->SetColor({ 1,0,0,1 });
 	}
 
-	//範囲外エネミーの更新
-	outEnemys.clear();
+	//外側の敵
+	outCount = 0;
 	for (int i = 0; i < enemys->enemys[MapChip::GetInstance()->nowMap].size(); i++) {
 		Vector3 enemyToPlayerLenght = Vector3(enemys->enemys[MapChip::GetInstance()->nowMap][i]->pos - player->pos);
 		if (enemyToPlayerLenght.Length() >= 2000) {
 			Vector3 angle = enemyToPlayerLenght;
 			angle.Normalize();
+			outEnemys[outCount].get()->SetRotation(ConvertNormalToDeg(angle, Vector3(0, 0, -1)).y);
+
 			float outScale = (enemyToPlayerLenght.Length() - 2000) / 2000;
 			if (outScale >= 0.5f) {
 				outScale =  0.5f;
 			}
 			outScale = 1.0f - outScale;
+			outEnemys[outCount].get()->SetScale(outScale);
+			
 			XMFLOAT2 outPos = {
 				angle.x * 300+(float)(WinApp::window_width / 2),
 				-angle.z * 200 +(float)(WinApp::window_height / 2) };
 			
-			std::unique_ptr<Sprite> temp = Sprite::Create(17, outPos, { 1,1,1,1 }, { 0.5f,0.5f });
-			temp.get()->SetScale(outScale);
+			outEnemys[outCount].get()->SetPosition(outPos);
 
-			
-			temp.get()->SetRotation(ConvertNormalToDeg(angle, Vector3(0, 0, -1)).y);
-			outEnemys.push_back(std::move(temp));
+			outCount++;
 		}
 	}
 
@@ -397,8 +414,8 @@ void UserInterface::Draw() const
 	//recoverFrame.get()->Draw();
 
 	//範囲外描画
-	if (outEnemys.size() != 0) {
-		for (int i = 0; i < outEnemys.size(); i++) {
+	if (outCount != 0) {
+		for (int i = 0; i < outCount; i++) {
 			outEnemys[i].get()->Draw();
 		}
 	}

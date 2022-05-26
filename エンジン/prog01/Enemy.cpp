@@ -12,7 +12,7 @@ using namespace DirectX;
 
 Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 	GameObjCommon(
-		ModelManager::ENEMY_ROBO_1,	//エネミーモデルをセット
+		ModelManager::ENEMY_ROBO_5,	//エネミーモデルをセット
 		GameObjCommon::ENEMY,	//エネミーとして扱う
 		false,					//重力の影響を受ける
 		Vector3(startPos.x, 2000, startPos.z)				//初期位置をセット
@@ -28,7 +28,7 @@ Enemy::Enemy(XMFLOAT3 startPos, PlayerObject* player) :
 	hpBer = new EnemyHp(HP, maxHP, pos);
 
 
-	defScale = 2.5f;
+	defScale = 1.5f;
 	scale = defScale;
 	//当たり判定初期化
 	float radius = 100;
@@ -75,10 +75,39 @@ void Enemy::Update() {
 
 	//通常時処理（条件式があればフラグで管理する）
 	//ヒットストップ
-	if (isHitStop) {
-		velocity = 0;
+	if (!isHitStop) {
+		Move();
 	}
-	Move();
+
+	if (isSpawn) {
+		pos.y = Ease(In, Cubic, spawnTimer, 2000, startPos.y);
+		spawnTimer += 0.02f;
+		if (spawnTimer > 1.0f) {
+			isSpawn = false;
+			pos.y = startPos.y;
+			spawnTimer = 1.0f;
+		}
+		objectData.get()->SetAlpha(spawnTimer);
+
+	}
+
+	//攻撃インターバル処理
+	attack.Intervel();
+	//移動をいったん適応
+	PosAddVelocity();
+
+	//ヒットストップ
+	if (isHitStop) {
+		hitStopTimer++;
+		if (hitStopTimer >= 20) {
+			hitStopTimer = 0;
+			isHitStop = false;
+		}
+	}
+}
+
+void Enemy::LustUpdate() {
+
 
 
 	//共通処理
@@ -92,7 +121,7 @@ void Enemy::Update() {
 			scale = Ease(In, Back, (float)(InvincibleTimer / 10.0f), defScale, defScale * 1.5f) * defScale;
 		}
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP > 0) {
-			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale*1.5f, defScale) * defScale;
+			scale = Ease(In, Back, (float)((InvincibleTimer - 10.0f) / 20.0f), defScale * 1.5f, defScale) * defScale;
 		}
 
 		if (10 < InvincibleTimer && InvincibleTimer <= 30 && HP <= 0) {
@@ -117,34 +146,6 @@ void Enemy::Update() {
 		}
 	}
 
-	if (isSpawn) {
-		pos.y = Ease(In, Cubic, spawnTimer, 2000, startPos.y);
-		spawnTimer += 0.02f;
-		if (spawnTimer > 1.0f) {
-			isSpawn = false;
-			pos.y = startPos.y;
-			spawnTimer = 1.0f;
-		}
-		objectData.get()->SetAlpha(spawnTimer);
-		
-	}
-
-	//攻撃インターバル処理
-	attack.Intervel();
-	//移動をいったん適応
-	PosAddVelocity();
-
-	//ヒットストップ
-	if (isHitStop) {
-		hitStopTimer++;
-		if (hitStopTimer >= 20) {
-			hitStopTimer = 0;
-			isHitStop = false;
-		}
-	}
-}
-
-void Enemy::LustUpdate() {
 
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();
@@ -238,7 +239,7 @@ void Enemy::Attack()
 	}
 }
 
-void Enemy::Damage(float damage)
+void Enemy::Damage(float damage,bool isDebrisAttack)
 {
 	isHitStop = true;
 	hpBer->HpDraw.Start();
@@ -247,8 +248,11 @@ void Enemy::Damage(float damage)
 	hpBer->HpDraw.timer = hpBer->HpDraw.interval;
 	//ダメージを受ける
 	HP -= damage;
-	if (HP < 0) {
+	if (HP <= 0) {
 		HP = 0;
+		if (isDebrisAttack) {
+			isDead = true;
+		}
 	}
 	//無敵時間をセットする
 	isInvincible = true;
@@ -295,6 +299,6 @@ void Enemy::HitDebri(const CollisionInfo& info)
 		//ヒットストップ
 		Audio::GetInstance()->PlayWave(18, 0.5f);
 		debri->isHitStop = true;
-		Damage(debri->velocity.Length());
+		Damage(debri->velocity.Length(),true);
 	}
 }

@@ -3,18 +3,12 @@
 void SpriteFactory::Initialize()
 {
 	// デバッグテキスト用テクスチャ読み込み
-	if (!Sprite::LoadTexture(0, L"Resources/debugfont.png"))
+	if (!Sprite::LoadTexture(0, L"Resources/Sprite/debugfont.png"))
 	{
 		assert(0);
 	}
 	// デバッグテキスト初期化
 	DebugText::GetInstance()->Initialize(0);
-
-	// テクスチャ読み込み
-	if (!Sprite::LoadTexture(1, L"Resources/Sprite/APEX_01.png"))
-	{
-		assert(0);
-	}
 
 	//UI周り
 	//frame
@@ -99,9 +93,6 @@ void SpriteFactory::Initialize()
 	}
 
 	//sceneの画像
-	if (!Sprite::LoadTexture(33, L"Resources/Sprite/stageSelect.png")) {
-		assert(0);
-	}
 
 	if (!Sprite::LoadTexture(35, L"Resources/Sprite/stageBackGround.png")) {
 		assert(0);
@@ -112,18 +103,6 @@ void SpriteFactory::Initialize()
 
 	//クリア、ゲームオーバー時の画像
 	if (!Sprite::LoadTexture(40, L"Resources/Sprite/back.png"))
-	{
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(43, L"Resources/Sprite/nextstage.png"))
-	{
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(44, L"Resources/Sprite/retry.png"))
-	{
-		assert(0);
-	}
-	if (!Sprite::LoadTexture(45, L"Resources/Sprite/escape.png"))
 	{
 		assert(0);
 	}
@@ -246,10 +225,7 @@ void SpriteFactory::Initialize()
 	if (!Sprite::LoadTexture(168, L"Resources/Sprite/tutorial/skipText.png")) {
 		assert(0);
 	}
-	if (!Sprite::LoadTexture(169, L"Resources/Sprite/end_02.png")) {
-		assert(0);
-	}
-
+	
 	if (!Sprite::LoadTexture(174, L"Resources/Sprite/tutorial/nextTex.png")) {
 		assert(0);
 	}

@@ -1,6 +1,8 @@
 #include "EnemyManager.h"
 #include "GameScene.h"
 #include "DebugText.h"
+#include "Easing.h"
+#include "UserInterface.h"
 
 std::vector<Enemy *> EnemyManager::enemys[MapChip::MAP_NAME::MAX];
 
@@ -51,6 +53,16 @@ void EnemyManager::Initialize()
 
 void EnemyManager::Update()
 {
+	if (MapChip::GetInstance()->nowMap == MapChip::TUTORIAL) {
+		if (UserInterface::tutorialNum < 13) {
+			return;
+
+		}
+		else {
+			waveStartTime = GameScene::counter;
+
+		}
+	}
 	//ウェーブ進行
 	if (enemys[MapChip::GetInstance()->nowMap].size() == 0 && spawnData[MapChip::GetInstance()->nowMap][nowWave].size() == 0) {
 		if (nowWave < MAX_WAVE[MapChip::GetInstance()->nowMap]) {
@@ -127,7 +139,54 @@ void EnemyManager::Update()
 
 	//削除
 	for (int i = enemys[MapChip::GetInstance()->nowMap].size() - 1; i >= 0; i--) {
+		if (enemys[MapChip::GetInstance()->nowMap][i]->isDead && enemys[MapChip::GetInstance()->nowMap][i]->isAlive) {
+			isCameraEasing = true;
+			const float velocityOffset = 17.0f;
+			//カメラのイージング制御
+			Vector3 eyeOffset = Vector3(enemys[MapChip::GetInstance()->nowMap][i]->pos +
+				eyeDistanceDef +
+				//xz軸へのオフセット
+				enemys[MapChip::GetInstance()->nowMap][i]->velocity * velocityOffset
+			);
+
+			//eyeDistance = Ease(Out, Quad, 0.05f,
+			//	camera->GetEye(),
+			//	eyeOffset);
+			//camera->CameraMoveEyeVector(Vector3(eyeDistance - Vector3(camera->GetEye())));
+			////プレイヤーの少し上を焦点にする
+			//targetDistance = Ease(Out, Quad, 0.05f,
+			//	camera->GetTarget(),
+			//	Vector3(enemys[MapChip::GetInstance()->nowMap][i]->pos +
+			//		targetDistanceDef +
+			//		enemys[MapChip::GetInstance()->nowMap][i]->velocity * velocityOffset));
+
+			//camera->CameraMoveTargetVector(Vector3(targetDistance - Vector3(camera->GetTarget())));
+
+			//camera->Update();
+
+
+			cameraTimer++;
+			if (cameraTimer <= 15) {
+				eyeDistance = Ease(Out, Quad, (float)(cameraTimer / 15.0f),camera->GetEye(),eyeOffset);
+				targetDistance = Ease(Out, Quad, (float)(cameraTimer / 15.0f),camera->GetTarget(),
+					Vector3(enemys[MapChip::GetInstance()->nowMap][i]->pos +
+						targetDistanceDef +
+						enemys[MapChip::GetInstance()->nowMap][i]->velocity * velocityOffset));
+			}
+			if (15 < cameraTimer && cameraTimer <= 20) {
+				eyeDistance = eyeOffset;
+				targetDistance = Vector3(enemys[MapChip::GetInstance()->nowMap][i]->pos +
+					targetDistanceDef +
+					enemys[MapChip::GetInstance()->nowMap][i]->velocity * velocityOffset);
+			}
+
+			camera->CameraMoveEyeVector(Vector3(eyeDistance - Vector3(camera->GetEye())));
+			camera->CameraMoveTargetVector(Vector3(targetDistance - Vector3(camera->GetTarget())));
+			camera->Update();
+		}
 		if (!enemys[MapChip::GetInstance()->nowMap][i]->isAlive) {
+			isCameraEasing = false;
+			cameraTimer = 0;
 			defeatParticle1->AddDefeat(1, 40, enemys[MapChip::GetInstance()->nowMap][i]->pos, ParticleEmitter::SHOCKWAVE);
 			defeatParticle2->AddDefeat(3, 40, enemys[MapChip::GetInstance()->nowMap][i]->pos, ParticleEmitter::STAR);
 			delete enemys[MapChip::GetInstance()->nowMap][i];

@@ -4,7 +4,7 @@
 
 BoundEnemy::BoundEnemy(XMFLOAT3 startPos, PlayerObject *targetPos):
 	Enemy(startPos,targetPos){
-	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_3));
+	objectData.get()->SetModel(ModelManager::GetIns()->GetModel(ModelManager::ENEMY_ROBO_8));
 	scale = { 1.5f,1.5f,1.5f };
 	defScale = 1.5f;
 	startScale = scale.x;
