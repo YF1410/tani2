@@ -95,7 +95,7 @@ void UserInterface::Initialize()
 		}
 	}
 	//Xƒ{ƒ^ƒ“’·‰Ÿ‚µ‚ÌŽž‚ÌUI
-	xButton = Sprite::Create(169, { WinApp::window_width - 280,WinApp::window_height / 2 + 210 });
+	xButton = Sprite::Create(168, { WinApp::window_width - 280,WinApp::window_height / 2 + 180 });
 	nextYButton = Sprite::Create(174, { WinApp::window_width  - 300,WinApp::window_height / 2 + 220 });
 	endYButton = Sprite::Create(175, { WinApp::window_width - 300,WinApp::window_height / 2 + 220 });
 
