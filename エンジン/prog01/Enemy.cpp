@@ -246,6 +246,11 @@ void Enemy::Damage(float damage,bool isDebrisAttack)
 	//無敵時間中は処理を中断
 	if (isInvincible) { return; }
 	hpBer->HpDraw.timer = hpBer->HpDraw.interval;
+
+	if (isDebrisAttack) {
+		Audio::GetInstance()->PlayWave(18, 0.5f);
+	}
+
 	//ダメージを受ける
 	HP -= damage;
 	if (HP <= 0) {
@@ -297,7 +302,6 @@ void Enemy::HitDebri(const CollisionInfo& info)
 	debri = dynamic_cast<Debris*>(info.object);
 	if (debri->isAttack) {
 		//ヒットストップ
-		//Audio::GetInstance()->PlayWave(18, 0.5f);
 		debri->isHitStop = true;
 		Damage(debri->velocity.Length(),true);
 	}
