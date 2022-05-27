@@ -297,7 +297,7 @@ void Enemy::HitDebri(const CollisionInfo& info)
 	debri = dynamic_cast<Debris*>(info.object);
 	if (debri->isAttack) {
 		//ヒットストップ
-		Audio::GetInstance()->PlayWave(18, 0.5f);
+		//Audio::GetInstance()->PlayWave(18, 0.5f);
 		debri->isHitStop = true;
 		Damage(debri->velocity.Length(),true);
 	}

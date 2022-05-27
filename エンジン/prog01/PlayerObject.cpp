@@ -114,7 +114,7 @@ void PlayerObject::Initialize()
 	boomParticle->SetStartScale(300.0f);
 	boomParticle->SetCenter(500.0f);
 
-	refParticle = refParticle->Create();
+	refParticle = refParticle->Create(L"reflect");
 	refParticle->SetStartScale(300.0f);
 	refParticle->SetCenter(400.0f);
 
@@ -233,7 +233,7 @@ void PlayerObject::Update()
 				velocity.Length() != 0.0f) {
 				Audio::GetInstance()->LoopStopWave(1);
 
-				volume = 3.0f;
+				volume = 2.5f;
 
 				Audio::GetInstance()->LoopPlayWave(10, 3);
 				boostFlag = true;
@@ -595,10 +595,24 @@ void PlayerObject::HitWall(
 	velocity = CalcReflectVector(velocity, normal);
 	/*if (velocity.Length() >= 40 && oldVec.VDot(velocity) < 0.1f) {
 	}*/
+
 	if (attack.is) {
-		refParticle->AddRef(20, 60, pos, normal);
+		float refRotation = 0;
+		if (normal.x == -1.0f) {
+			refRotation = 90.0f;
+		}
+		else if (normal.x == 1.0f) {
+			refRotation = 270.0f;
+		}
+		else if (normal.z == -1.0f) {
+			refRotation = 180.0f;
+		}
+		else if (normal.z == 1.0f) {
+			refRotation = 0.0f;
+		}
+		refParticle->AddRef(1, 25, pos,normal, refRotation);
 		input->GetInstance()->SetVibrationPower(65535);
-		Audio::GetInstance()->PlayWave(17, 0.4f);
+		Audio::GetInstance()->PlayWave(17, 0.9f);
 		if (!isBounce) {
 			isBounce = true;
 		}
