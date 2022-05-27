@@ -28,7 +28,7 @@ void MyGame::Initialize()
 	//SE(10～16)
 	Audio::GetInstance()->LoadWave(10, "Resources/Audio/SE/boost.wav");     //ブースト状態
 	Audio::GetInstance()->LoadWave(11, "Resources/Audio/SE/damage_01.wav");   //ダメージ1
-	Audio::GetInstance()->LoadWave(12, "Resources/Audio/SE/damage_02.wav");   //ダメージ2
+	Audio::GetInstance()->LoadWave(12, "Resources/Audio/SE/BoostUnavailable.wav");   //出来ない時の音
 	Audio::GetInstance()->LoadWave(13, "Resources/Audio/SE/heal_01.wav");     //回復
 	Audio::GetInstance()->LoadWave(14, "Resources/Audio/SE/recovery_01.wav"); //回収
 	Audio::GetInstance()->LoadWave(15, "Resources/Audio/SE/select_01.wav");   //選択時
