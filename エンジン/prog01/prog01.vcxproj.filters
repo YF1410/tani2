@@ -107,9 +107,6 @@
     <Filter Include="ゲームシステム\Enemy\Boss">
       <UniqueIdentifier>{944d6421-40ad-44c5-888c-6595dda3ab25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="エンジンシステム\FPS">
-      <UniqueIdentifier>{91410388-7b63-483a-9adb-5d9ae3cded48}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\FBX.hlsli">
@@ -152,18 +149,6 @@
     </FxCompile>
     <FxCompile Include="Resources\shaders\SpriteVS.hlsl">
       <Filter>シェーダーファイル\Sprite</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\PBRFBXVS.hlsl">
-      <Filter>シェーダーファイル\FBX</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\PBRFBXPS.hlsl">
-      <Filter>シェーダーファイル\FBX</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\ToonMapPS.hlsl">
-      <Filter>シェーダーファイル\FBX</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\ToonMapVS.hlsl">
-      <Filter>シェーダーファイル\FBX</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
