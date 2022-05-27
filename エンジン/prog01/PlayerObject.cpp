@@ -273,6 +273,7 @@ void PlayerObject::Update()
 			}
 			else {
 				dontBoost = true;
+				Audio::GetInstance()->PlayWave(12, 0.4f);
 			}
 		}
 
@@ -291,6 +292,7 @@ void PlayerObject::Update()
 			}
 			else {
 				dontRecovery = true;
+				Audio::GetInstance()->PlayWave(12, 0.4f);
 			}
 		}
 		else if (recoveryEndTimer >= 0) {
