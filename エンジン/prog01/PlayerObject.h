@@ -124,7 +124,9 @@ private: // ƒƒ“ƒo•Ï”
 	ParticleEmitter* healParticle2;
 	ParticleEmitter* boomParticle;
 	ParticleEmitter* refParticle;
+	ParticleEmitter* refParticle2;
 	ParticleEmitter* atkParticle;
+	bool refParticleFlag = false;
 
 	int nowBoomFrame = 0;
 	bool isHealFrameIncrease = false;

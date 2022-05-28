@@ -118,6 +118,10 @@ void PlayerObject::Initialize()
 	refParticle->SetStartScale(300.0f);
 	refParticle->SetCenter(400.0f);
 
+	refParticle2 = refParticle2->Create(L"reflect");
+	refParticle2->SetStartScale(300.0f);
+	refParticle2->SetCenter(400.0f);
+
 	atkParticle = atkParticle->Create(L"attack");
 	atkParticle->SetStartScale(300.0f);
 	atkParticle->SetCenter(400.0f);
@@ -128,6 +132,7 @@ void PlayerObject::Initialize()
 	ParticleManager::GetInstance()->SetParticleEmitter(healParticle2);
 	ParticleManager::GetInstance()->SetParticleEmitter(boomParticle);
 	ParticleManager::GetInstance()->SetParticleEmitter(refParticle);
+	ParticleManager::GetInstance()->SetParticleEmitter(refParticle2);
 	ParticleManager::GetInstance()->SetParticleEmitter(atkParticle);
 }
 
@@ -612,7 +617,18 @@ void PlayerObject::HitWall(
 		else if (normal.z == 1.0f) {
 			refRotation = 0.0f;
 		}
-		refParticle->AddRef(1, 25, pos,normal, refRotation);
+
+		if (!refParticleFlag)
+		{
+			refParticle->AddRef(1, 25, pos, normal, refRotation);
+			refParticleFlag = true;
+		}
+		else if (refParticleFlag)
+		{
+			refParticle2->AddRef(1, 25, pos, normal, refRotation);
+			refParticleFlag = false;
+		}
+
 		input->GetInstance()->SetVibrationPower(65535);
 		Audio::GetInstance()->PlayWave(17, 0.9f);
 		if (!isBounce) {
