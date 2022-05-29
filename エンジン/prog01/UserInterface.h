@@ -31,6 +31,7 @@ private:
 	std::unique_ptr<Sprite> hpFrame;
 	//HPゲージ
 	std::unique_ptr<Sprite> hpGauge;
+	std::unique_ptr<Sprite> hpGaugeDamage;
 
 
 	//ウェーブ変更演出
@@ -91,5 +92,14 @@ private:
 	int outCount;
 	std::unique_ptr<Sprite> outEnemys[50];
 
+
+	//Hpbarの長さ
+	float hpGaugeLength;
+	float hpGaugeDamageLength;
+	float oldHp;
+	float saveHp;
+	int scaleResetCount;
+	const int scaleResetTime = 60;
+	bool isDamageReset;
 };
 

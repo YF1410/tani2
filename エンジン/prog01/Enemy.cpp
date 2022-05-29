@@ -109,6 +109,12 @@ void Enemy::Update() {
 			isHitStop = false;
 		}
 	}
+	if (velocity.Length() <= 1.0f) {
+		rotate.y = ConvertNormalToDeg(Vector3(player->GetPos() - pos).Normal(), Vector3{ 0,0,1 }).y + 180;
+	}
+	else {
+		rotate.y = ConvertNormalToDeg(velocity.Normal(), Vector3{ 0,0,1 }).y + 180;
+	}
 }
 
 void Enemy::LustUpdate() {

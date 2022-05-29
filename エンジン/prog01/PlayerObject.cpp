@@ -365,15 +365,6 @@ void PlayerObject::Update()
 	//toMapChipCollider->SetRadius(scale.x * 120.0f, scale.x * 120.0f);
 
 
-	if (animationChangeFrag) {
-		if (animationType == DEATH) {
-			objectData->PlayAnimation(animationType, false);
-		}
-		else {
-			objectData->PlayAnimation(animationType);
-		}
-		animationChangeFrag = false;
-	}
 	//ヒットストップ
 	if (isHitStop) {
 		hitStopTimer++;
@@ -502,6 +493,16 @@ void PlayerObject::LustUpdate()
 	}
 	velocity.y = 0;
 
+
+	if (animationChangeFrag) {
+		if (animationType == DEATH) {
+			objectData->PlayAnimation(animationType, false);
+		}
+		else {
+			objectData->PlayAnimation(animationType);
+		}
+		animationChangeFrag = false;
+	}
 }
 
 
