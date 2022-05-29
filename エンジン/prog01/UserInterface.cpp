@@ -26,6 +26,7 @@ UserInterface::~UserInterface()
 
 void UserInterface::Initialize()
 {
+	//hpGaugeLength = 309.0f;
 	tutorialNum = 0;
 	oldEnemySize = 0;
 	//ƒtƒŒ[ƒ€
@@ -193,11 +194,24 @@ void UserInterface::Update()
 	}
 	
 	//HpƒQ[ƒW‚ÌŠgk
-	float hpGaugeLength = player->hp / player->maxHp *309.0f;
+	hpGaugeLength =
+		Ease(In, Linear, 0.5f, hpGaugeLength,
+		player->hp / player->maxHp *309.0f);
 	hpGauge.get()->SetSize({
 		hpGaugeLength, 38
 		});
-
+	//F•ÏX
+	if (hpGaugeLength < 309.0f *0.4f) {
+		//Ô
+		hpGauge.get()->SetColor({ 1,0,0,1 });
+	}
+	else if (hpGaugeLength < 309.0f * 0.6f) {
+		//‰©F
+		hpGauge.get()->SetColor({ 1,1,0,1 });
+	}
+	else {
+		hpGauge.get()->SetColor({ 0,1,1,1 });
+	}
 
 	//‰ñûƒQ[ƒW‚ÌŠgk
 	float kaisyuGaugeLength = (float)((player->recovery.interval - player->recovery.timer) / (float)player->recovery.interval * 162.0f);

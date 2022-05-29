@@ -91,5 +91,8 @@ private:
 	int outCount;
 	std::unique_ptr<Sprite> outEnemys[50];
 
+
+	//Hpbar‚Ì’·‚³
+	float hpGaugeLength;
 };
 
