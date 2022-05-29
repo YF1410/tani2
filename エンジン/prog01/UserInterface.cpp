@@ -3,6 +3,7 @@
 #include "Easing.h"
 #include "DebugText.h"
 #include "Input.h"
+#include "Debris.h"
 
 int *UserInterface::nowWave;
 int UserInterface::oldWave;
@@ -57,7 +58,7 @@ void UserInterface::Initialize()
 	hpFrame = Sprite::Create(6, { WinApp::window_width / 2,WinApp::window_height-30 }, { 1,1,1,1 }, { 0.5f, 1.0f });
 	//hpGauge
 	hpGauge = Sprite::Create(7, { WinApp::window_width / 2 - 309.0f / 2,WinApp::window_height - 60 }, { 1,1,1,1 }, { 0.0f, 0.5f });
-	hpGaugeDamage = Sprite::Create(7, { WinApp::window_width / 2 - 309.0f / 2,WinApp::window_height - 60 }, { 1,1,1,1 }, { 0.0f, 0.5f });
+	hpGaugeDamage = Sprite::Create(7, { WinApp::window_width / 2 - 309.0f / 2,WinApp::window_height - 60 }, { 2,1,0,1 }, { 0.0f, 0.5f });
 
 	//ブーストフレーム
 	boostFrame = Sprite::Create(8, { WinApp::window_width / 2 - 450,WinApp::window_height / 2 }, { 1,1,1,1 }, { 0.5f, 0.5f });
@@ -222,10 +223,15 @@ void UserInterface::Update()
 		//ダメージゲージの長さを調整
 	}
 	//一定時間変動がなければ長さを0にする
-	if (scaleResetCount >= scaleResetTime) {
+	if (scaleResetCount >= scaleResetTime && Debris::debris.size() <= 0) {
 		isDamageReset = true;
 		hpGaugeDamageLength =
 			Ease(In, Linear, 0.3f, saveHp, hpGaugeLength);
+	}
+	else if (Debris::debris.size() >= 1)
+	{
+		//ここで回復した時のMAXHPの処理を書け
+		//hpGaugeDamageLength;
 	}
 
 	hpGauge.get()->SetSize({
