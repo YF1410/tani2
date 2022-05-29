@@ -156,7 +156,7 @@ void ParticleEmitter::AddRef(int count, int life, XMFLOAT3 position, Vector3 vel
 		//X,Y,Z全て[-5.0,+5.0]でランダムに分布
 		this->position.x = position.x;
 		this->position.y = position.y - 50.0f;
-		this->position.z = position.z - 50.0f;
+		this->position.z = position.z - 100.0f;
 		//X,Y,Z全て[-0.05,+0.05]でランダムに分布
 		this->velocity.x = velocity.x * 2.0f;
 		//velocity.y = startVec.y;
@@ -166,7 +166,7 @@ void ParticleEmitter::AddRef(int count, int life, XMFLOAT3 position, Vector3 vel
 		accel.z = -(float)rand() / RAND_MAX * 0.5;*/
 
 		//追加
-		particleMan->Add(life, this->position, this->velocity , { 0,0,0 }, s_scale, 600.0f, s_color, e_color, XMConvertToRadians(rotation));
+		particleMan->Add(life, this->position, this->velocity , { 0,0,0 }, 700.0f, s_scale, s_color, e_color, XMConvertToRadians(rotation));
 	}
 	camera->SetShakeFlag(true, 151);
 }

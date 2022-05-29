@@ -611,12 +611,12 @@ void PlayerObject::HitWall(
 
 		if (!refParticleFlag)
 		{
-			refParticle->AddRef(1, 60, pos, velocity.Normal(), refRotation);
+			refParticle->AddRef(1, 30, Vector3(pos + velocity/4), velocity.Normal(), refRotation);
 			refParticleFlag = true;
 		}
 		else if (refParticleFlag)
 		{
-			refParticle2->AddRef(1, 60, pos, velocity.Normal(), refRotation);
+			refParticle2->AddRef(1, 30, Vector3(pos + velocity/4), velocity.Normal(), refRotation);
 			refParticleFlag = false;
 		}
 

@@ -454,9 +454,10 @@ void GameScene::Draw() {
 #pragma region 3Dオブジェクト(FBX)描画
 	//testStage->Draw(DirectXCommon::GetInstance()->GetCommandList());
 	EnemyHelperManager::GetIns()->Draw();
-	MapChip::GetInstance()->Draw();
 	Debris::StaticDraw();
 	playerObject->Draw();
+	ParticleManager::GetInstance()->Draw(cmdList);
+	MapChip::GetInstance()->Draw();
 	enemyManager.get()->Draw();
 
 	Object3d::PreDraw(cmdList);
@@ -467,7 +468,6 @@ void GameScene::Draw() {
 	Object3d::PostDraw();
 
 #pragma endregion 3Dオブジェクト(FBX)描画
-	ParticleManager::GetInstance()->Draw(cmdList);
 
 #pragma region パーティクル
 
