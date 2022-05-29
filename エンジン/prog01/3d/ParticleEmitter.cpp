@@ -140,18 +140,18 @@ void ParticleEmitter::AddAttack(int count, int life, XMFLOAT3 position, Vector3 
 void ParticleEmitter::AddRef(int count, int life, XMFLOAT3 position, Vector3 velocity, float rotation) {
 	for (int i = 0; i < count; i++) {
 
-		Vector3 startVec;		//速度*向きベクトル
-		float shotRad;			//角度決定
+		//Vector3 startVec;		//速度*向きベクトル
+		//float shotRad;			//角度決定
 
-		//発射スピード
-		float shotSpeed = (rand() % 20) * 3;
+		////発射スピード
+		//float shotSpeed = (rand() % 20) * 3;
 
-		//-15~15度で計算
-		shotRad = XMConvertToRadians(rand() % 90 - 45);
+		////-15~15度で計算
+		//shotRad = XMConvertToRadians(rand() % 90 - 45);
 
-		startVec = velocity.Normal() * shotSpeed;
+		//startVec = velocity.Normal() * shotSpeed;
 
-		startVec.AddRotationY(shotRad);
+		//startVec.AddRotationY(shotRad);
 
 		//X,Y,Z全て[-5.0,+5.0]でランダムに分布
 		this->position.x = position.x;

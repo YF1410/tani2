@@ -606,27 +606,17 @@ void PlayerObject::HitWall(
 
 	if (attack.is) {
 		float refRotation = 0;
-		if (normal.x == -1.0f) {
-			refRotation = 90.0f;
-		}
-		else if (normal.x == 1.0f) {
-			refRotation = 270.0f;
-		}
-		else if (normal.z == -1.0f) {
-			refRotation = 180.0f;
-		}
-		else if (normal.z == 1.0f) {
-			refRotation = 0.0f;
-		}
+		
+		refRotation = XMConvertToDegrees(atan2((pos.z + velocity.z) - pos.z, (pos.x + velocity.x) - pos.x)) - 90.0f;
 
 		if (!refParticleFlag)
 		{
-			refParticle->AddRef(1, 25, pos, normal, refRotation);
+			refParticle->AddRef(1, 60, pos, velocity.Normal(), refRotation);
 			refParticleFlag = true;
 		}
 		else if (refParticleFlag)
 		{
-			refParticle2->AddRef(1, 25, pos, normal, refRotation);
+			refParticle2->AddRef(1, 60, pos, velocity.Normal(), refRotation);
 			refParticleFlag = false;
 		}
 
