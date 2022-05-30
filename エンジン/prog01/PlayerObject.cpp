@@ -21,7 +21,7 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 		GameObjCommon::PLAYER,	//プレイヤーとして扱う
 		false,					//重力の影響を受ける
 		startPos,
-		{ 1,1,1 },
+		{ 0.8f,0.8f,0.8f },
 		{ 1,1,1 },
 		true
 	)

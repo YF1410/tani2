@@ -102,5 +102,9 @@ private:
 	const int scaleResetTime = 30;
 	bool isDamageReset;
 	float resetEase = 0.0f;
+
+	//Xボタンのタイマー
+	bool isXButtonFlag = false;
+	int xButtonFlagTimer = 0;
 };
 

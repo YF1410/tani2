@@ -14,11 +14,11 @@ class PlayerObject :
 {
 public:
 	enum ANIMATION_TYPE {
-		RETRIEVE,
 		BOOST,
 		DEATH,
-		NEUTRAL,
 		MOVE,
+		RETRIEVE,
+		NEUTRAL,
 		MAX
 
 	}animationType;

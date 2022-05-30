@@ -50,7 +50,7 @@ void TitleScene::Initialize() {
 
 	FbxObject3d::SetCamera(camera.get());
 	FbxObject3d::SetLight(light.get());
-	player = std::make_unique<GameObjCommon>(ModelManager::PLAYER, GameObjCommon::Notag, false, Vector3{ 0,0,100 }, Vector3{0.1f,0.1f,0.1f});
+	player = std::make_unique<GameObjCommon>(ModelManager::PLAYER, GameObjCommon::Notag, false, Vector3{ 0,0,100 }, Vector3{0.06f,0.06f,0.06f});
 	player.get()->velocity = { 1,1,0 };
 	player.get()->velocity.Normalize();
 	player.get()->velocity*= 0.5f;

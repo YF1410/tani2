@@ -100,7 +100,8 @@ void UserInterface::Initialize()
 		}
 	}
 	//Xƒ{ƒ^ƒ“’·‰Ÿ‚µ‚ÌŽž‚ÌUI
-	xButton = Sprite::Create(168, { WinApp::window_width - 280,WinApp::window_height / 2 + 180 });
+	xButton = Sprite::Create(168, { WinApp::window_width / 2 - 80,WinApp::window_height / 2 + 280 });
+	xButton->SetColor({ 1,1,1,0.5f });
 	nextYButton = Sprite::Create(174, { WinApp::window_width  - 300,WinApp::window_height / 2 + 220 });
 	endYButton = Sprite::Create(175, { WinApp::window_width - 300,WinApp::window_height / 2 + 220 });
 
@@ -448,6 +449,22 @@ void UserInterface::Update()
 		if (oldEnemySize > enemys->enemys[MapChip::GetInstance()->nowMap].size()) {
 			checkFlag[3] = true;
 		}
+
+		if (tutorialNum >= tutorialImag.size())
+		{
+			if (isXButtonFlag && xButtonFlagTimer >= 60)
+			{
+				xButtonFlagTimer = 0;
+				isXButtonFlag = false;
+			}
+			else if (!isXButtonFlag && xButtonFlagTimer >= 30)
+			{
+				xButtonFlagTimer = 0;
+				isXButtonFlag = true;
+			}
+
+			xButtonFlagTimer++;
+		}
 	}
 
 	oldEnemySize = enemys->enemys[MapChip::GetInstance()->nowMap].size();
@@ -515,7 +532,11 @@ void UserInterface::Draw() const
 	}
 	if (MapChip::GetInstance()->nowMap == 0)
 	{
-		xButton->Draw();
+		if (isXButtonFlag)
+		{
+			xButton->Draw();
+		}
+
 		if (tutorialNum < 12) {
 			nextYButton->Draw();
 		}
