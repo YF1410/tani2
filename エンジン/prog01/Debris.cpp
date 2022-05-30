@@ -73,12 +73,14 @@ void Debris::Update()
 	}
 
 	if (!isAttack) {
-		size *= 0.995f;
+		damage = size - (size * 0.995f);
+		size -= damage;
 		scale *= 0.995f;
 		//scale = ConvertSizeToScale(size);
 
 	}
 	if (scale.x < 0.5f) {
+		damage = size;
 		isAlive = false;
 	}
 
@@ -130,11 +132,11 @@ void Debris::Update()
 			isHitStop = false;
 		}
 	}
+
 }
 
 void Debris::LustUpdate()
 {
-
 	//マップチップとの当たり判定
 	toMapChipCollider->Update();
 	Vector3 hitPos = { 0,0,0 };
@@ -191,6 +193,7 @@ void Debris::StaticInitialize(PlayerObject* player)
 
 void Debris::StaticUpdate()
 {
+
 	//削除
 	for (int i = debris.size() - 1; i >= 0; i--) {
 		if (!debris[i]->isAlive) {
@@ -206,6 +209,7 @@ void Debris::StaticUpdate()
 
 void Debris::StaticLustUpdate()
 {
+	
 	//更新
 	for (int i = 0; i < debris.size(); i++) {
 		debris[i]->LustUpdate();
@@ -291,11 +295,4 @@ void Debris::HitWall(const XMVECTOR& hitPos, const Vector3& normal)
 
 void Debris::Damage(float damage)
 {
-	size -= damage;
-	//Sizeが0以下になったら死亡状態へ以降
-	if (size < 0) {
-		isAlive = false;
-	}
-	else {
-	}
 }
