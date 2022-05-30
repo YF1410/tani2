@@ -227,32 +227,30 @@ void UserInterface::Update()
 
 	//デブリのサイズ差を減少
 	
-	for (int i = 0; i < Debris::debris.size(); i++) {
+	/*for (int i = 0; i < Debris::debris.size(); i++) {
 		saveHp -=
 			Debris::debris[i]->damage / player->maxHp * 309.0f;
-	}
-	if (Debris::debris.size() != 0) {
+	}*/
+	/*if (Debris::debris.size() != 0) {
 		resetEase = 0.0f;
-	}
+	}*/
 
 	//一定時間変動がなければ長さを0にする
-	if (scaleResetCount >= scaleResetTime && Debris::debris.size() == 0) {
+	if (scaleResetCount >= scaleResetTime ) {
 		if (resetEase >= 1.0f) {
 			resetEase = 1.0f;
 			isDamageReset = true;
 		}
 		else {
-			resetEase += 0.01f;
+			float time = (saveHp - hpGaugeLength) / 1000.0f;
+			resetEase += time;
+
 		}
-		hpGaugeDamageLength =
-			Ease(In, Linear, resetEase, saveHp, hpGaugeLength);
 
-	}
-	else {
 		hpGaugeDamageLength =
-			Ease(In, Linear, 0.2f, hpGaugeDamageLength, saveHp);
-
+			Ease(Out, Circ, resetEase, saveHp, hpGaugeLength);
 	}
+
 
 
 	hpGauge.get()->SetSize({

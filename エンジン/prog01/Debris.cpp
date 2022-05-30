@@ -15,7 +15,6 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 		startPos
 	),
 	size(size),
-	startSize(size),
 	isAlive(true),
 	isAttack(true),
 	isFirstAttack(true),
@@ -240,24 +239,6 @@ void Debris::Finalize()
 		delete a;
 	}
 	debris.clear();
-}
-
-float Debris::GetTotarStartSize()
-{
-	float total = 0.0f;
-	for (int i = 0; i < debris.size(); i++) {
-		total += debris[i]->startSize;
-	}
-	return total;
-}
-
-float Debris::GetTotarNowSize()
-{
-	float total = 0.0f;
-	for (int i = 0; i < debris.size(); i++) {
-		total += debris[i]->size;
-	}
-	return total;
 }
 
 void Debris::OnCollision(const CollisionInfo& info)

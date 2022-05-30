@@ -27,9 +27,6 @@ public:
 	static void StaticDraw();
 	static void Finalize();
 
-	static float GetTotarStartSize();
-	static float GetTotarNowSize();
-
 
 public:
 	enum STATE {
@@ -96,7 +93,6 @@ private:
 
 	//”’l“I‚È‘å‚«‚³
 	float size;
-	float startSize;
 
 	//‚¢‚Â‚Ü‚Å–ß‚é—Í‚ğ‚Â‚©
 	int returnTimer;
