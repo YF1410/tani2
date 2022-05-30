@@ -99,7 +99,7 @@ private:
 	float oldHp;
 	float saveHp;
 	int scaleResetCount;
-	const int scaleResetTime = 20;
+	const int scaleResetTime = 60;
 	bool isDamageReset;
 	float resetEase = 0.0f;
 };

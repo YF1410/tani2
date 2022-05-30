@@ -219,21 +219,9 @@ void UserInterface::Update()
 	//HP変動があるので長さを調整
 	else {
 		scaleResetCount = 0;
-		if (resetEase == 1.0f) {
 			resetEase = 0.0f;
-		}
-		//ダメージゲージの長さを調整
+			saveHp = hpGaugeDamageLength;
 	}
-
-	//デブリのサイズ差を減少
-	
-	/*for (int i = 0; i < Debris::debris.size(); i++) {
-		saveHp -=
-			Debris::debris[i]->damage / player->maxHp * 309.0f;
-	}*/
-	/*if (Debris::debris.size() != 0) {
-		resetEase = 0.0f;
-	}*/
 
 	//一定時間変動がなければ長さを0にする
 	if (scaleResetCount >= scaleResetTime ) {
@@ -244,7 +232,6 @@ void UserInterface::Update()
 		else {
 			float time = (saveHp - hpGaugeLength) / 1000.0f;
 			resetEase += time;
-
 		}
 
 		hpGaugeDamageLength =
