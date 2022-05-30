@@ -460,7 +460,7 @@ void PlayerObject::LustUpdate()
 	}
 
 
-	//移動中残像生成
+	//移動中残骸生成
 	if (attack.is && afterImageCooldown.can) {
 		std::unique_ptr<FbxObject3d> temp = FbxObject3d::Create(ModelManager::GetIns()->GetModel(ModelManager::PLAYER), true);
 		temp.get()->SetPosition(Vector3(Vector3{ 2500,0,0 }+ pos));
@@ -484,23 +484,6 @@ void PlayerObject::LustUpdate()
 		afterImage[i].get()->Update();
 	}
 
-
-
-	//移動中残骸生成
-	if (attack.is && debrisCooldown.can) {
-		debrisCooldown.Start();
-
-		//残骸のサイズ
-		float shotSize = hp / SHOT_ENERGY;
-		Vector3 shotVec = -velocity.Normal();
-		//startVec = startVec + offset;
-
-		//Debrisのコンテナに追加
-		Debris::debris.push_back(new Debris(pos - Vector3(0, 200, 0)/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
-		hp -= shotSize;
-
-	}
-	debrisCooldown.Intervel();
 
 	Input* input = Input::GetInstance();
 	Vector3 beforePos = pos + velocity;

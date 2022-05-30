@@ -12,7 +12,7 @@ cbuffer cbuff0 : register(b0)
 cbuffer skinning:register(b3)
 {
 	matrix matSkinning[MAX_BONES];
-	float3 color;
+	float4 color;
 };
 
 //バーテックスバッファーの入力
