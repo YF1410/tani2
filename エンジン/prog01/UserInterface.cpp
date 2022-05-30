@@ -3,6 +3,7 @@
 #include "Easing.h"
 #include "DebugText.h"
 #include "Input.h"
+#include "Debris.h"
 
 int *UserInterface::nowWave;
 int UserInterface::oldWave;
@@ -28,6 +29,7 @@ void UserInterface::Initialize()
 {
 	hpGaugeLength = 309.0f;
 	hpGaugeDamageLength = 309.0f;
+	saveHp = hpGaugeDamageLength;
 	tutorialNum = 0;
 	oldEnemySize = 0;
 	//フレーム
@@ -57,7 +59,7 @@ void UserInterface::Initialize()
 	hpFrame = Sprite::Create(6, { WinApp::window_width / 2,WinApp::window_height-30 }, { 1,1,1,1 }, { 0.5f, 1.0f });
 	//hpGauge
 	hpGauge = Sprite::Create(7, { WinApp::window_width / 2 - 309.0f / 2,WinApp::window_height - 60 }, { 1,1,1,1 }, { 0.0f, 0.5f });
-	hpGaugeDamage = Sprite::Create(7, { WinApp::window_width / 2 - 309.0f / 2,WinApp::window_height - 60 }, { 1,1,1,1 }, { 0.0f, 0.5f });
+	hpGaugeDamage = Sprite::Create(7, { WinApp::window_width / 2 - 309.0f / 2,WinApp::window_height - 60 }, { 2,1,0,1 }, { 0.0f, 0.5f });
 
 	//ブーストフレーム
 	boostFrame = Sprite::Create(8, { WinApp::window_width / 2 - 450,WinApp::window_height / 2 }, { 1,1,1,1 }, { 0.5f, 0.5f });
@@ -205,8 +207,6 @@ void UserInterface::Update()
 		Ease(In, Linear, 0.5f, hpGaugeLength,
 		player->hp / player->maxHp *309.0f);
 
-
-
 	//HPの変動検出
 	//変動なし
 	if (oldHp == player->hp) {
@@ -219,14 +219,39 @@ void UserInterface::Update()
 	//HP変動があるので長さを調整
 	else {
 		scaleResetCount = 0;
+		if (resetEase == 1.0f) {
+			resetEase = 0.0f;
+		}
 		//ダメージゲージの長さを調整
 	}
+
+	//デブリのサイズ差を減少
+	
+	/*for (int i = 0; i < Debris::debris.size(); i++) {
+		saveHp -=
+			Debris::debris[i]->damage / player->maxHp * 309.0f;
+	}*/
+	/*if (Debris::debris.size() != 0) {
+		resetEase = 0.0f;
+	}*/
+
 	//一定時間変動がなければ長さを0にする
-	if (scaleResetCount >= scaleResetTime) {
-		isDamageReset = true;
+	if (scaleResetCount >= scaleResetTime ) {
+		if (resetEase >= 1.0f) {
+			resetEase = 1.0f;
+			isDamageReset = true;
+		}
+		else {
+			float time = (saveHp - hpGaugeLength) / 1000.0f;
+			resetEase += time;
+
+		}
+
 		hpGaugeDamageLength =
-			Ease(In, Linear, 0.3f, saveHp, hpGaugeLength);
+			Ease(Out, Circ, resetEase, saveHp, hpGaugeLength);
 	}
+
+
 
 	hpGauge.get()->SetSize({
 		hpGaugeLength, 38
