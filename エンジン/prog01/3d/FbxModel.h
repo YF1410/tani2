@@ -136,6 +136,7 @@ public:
 	void SetSpecular(float _specular) { specular = _specular;TransferMaterial(); }
 	void SetRoughness(float _roughness) { roughness = _roughness;TransferMaterial(); }
 	void SetAlpha(float _alpha) { alpha = _alpha;TransferMaterial(); }
+	float GetAlpha() {return alpha; }
 	//頂点情報の取得
 	std::vector<VertexPosNormalUvSkin> *GetVertices() { return &vertices; }
 	//インデックスの取得

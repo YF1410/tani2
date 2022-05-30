@@ -97,6 +97,13 @@ void PlayerObject::Initialize()
 		5,
 		0
 	};
+	afterImageCooldown = {
+		true,
+		false,
+		3,
+		0
+	};
+
 
 	//アニメーション開始
 	animationType = MOVE;
@@ -387,11 +394,13 @@ void PlayerObject::Update()
 void PlayerObject::Draw() const
 {
 	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
-	Object3d::PreDraw(cmdList);
-
-	Object3d::PostDraw();
+	
+	for (int i = 0; i < afterImage.size(); i++) {
+		afterImage[i].get()->Draw(cmdList);
+	}
 
 	GameObjCommon::Draw();
+
 
 }
 
@@ -452,20 +461,27 @@ void PlayerObject::LustUpdate()
 
 
 	//移動中残骸生成
-	if (attack.is && debrisCooldown.can) {
-		debrisCooldown.Start();
-
-		//残骸のサイズ
-		float shotSize = hp / SHOT_ENERGY;
-		Vector3 shotVec = -velocity.Normal();
-		//startVec = startVec + offset;
-
-		//Debrisのコンテナに追加
-		Debris::debris.push_back(new Debris(pos - Vector3(0, 200, 0)/* + offsetS + offsetF * scale.x*/, shotVec * 20.0f, shotSize));
-		hp -= shotSize;
+	if (attack.is && afterImageCooldown.can) {
+		std::unique_ptr<FbxObject3d> temp = FbxObject3d::Create(ModelManager::GetIns()->GetModel(ModelManager::PLAYER), true);
+		temp.get()->SetPosition(Vector3(Vector3{ 2500,0,0 }+ pos));
+		temp.get()->SetRotation(rotate);
+		afterImage.push_back(std::move(temp));
 
 	}
-	debrisCooldown.Intervel();
+	afterImageCooldown.Intervel();
+
+	for (int i = afterImage.size() - 1; i >= 0; i--) {
+		if (afterImage[i]->GetAlpha() <= 0.02f ) {
+			afterImage[i].reset();
+			afterImage.erase(afterImage.begin() + i);
+		}
+	}
+
+	for (int i = 0; i < afterImage.size(); i++) {
+		//afterImage[i].get()->SetAlpha(afterImage[i].get()->GetAlpha() - 0.02f);
+		afterImage[i].get()->Update();
+	}
+
 
 	Input* input = Input::GetInstance();
 	Vector3 beforePos = pos + velocity;

@@ -71,6 +71,10 @@ public:
 	//デブリ生成
 	STATE debrisCooldown;
 
+	//残像生成
+	STATE afterImageCooldown;
+	std::vector<std::unique_ptr<FbxObject3d>> afterImage;
+
 	//コライダー
 	SphereCollider *broadSphereCollider;	//ブロード
 	SphereCollider *pushBackCollider;	//押し返し用

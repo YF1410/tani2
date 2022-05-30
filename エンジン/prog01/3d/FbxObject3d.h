@@ -119,6 +119,7 @@ public: // メンバ関数
 	XMMATRIX GetMatWorld() { return matWorld; }
 
 	void SetAlpha(float _alpha) { model->SetAlpha(_alpha); }
+	float GetAlpha() { return model->GetAlpha(); }
 
 	// スケールの設定
 	void SetColor(XMFLOAT3 color) { this->color = color; }
