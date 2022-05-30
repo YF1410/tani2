@@ -220,7 +220,14 @@ void UserInterface::Update()
 	else {
 		scaleResetCount = 0;
 			resetEase = 0.0f;
-			saveHp = hpGaugeDamageLength;
+			if (hpGaugeDamageLength > hpGaugeLength) {
+				saveHp = hpGaugeDamageLength;
+			}
+			else {
+				saveHp = hpGaugeLength;
+				hpGaugeDamageLength = hpGaugeLength;
+
+			}
 	}
 
 	//ˆê’èŽžŠÔ•Ï“®‚ª‚È‚¯‚ê‚Î’·‚³‚ð0‚É‚·‚é
