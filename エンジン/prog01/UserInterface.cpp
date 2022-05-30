@@ -223,15 +223,10 @@ void UserInterface::Update()
 		//ダメージゲージの長さを調整
 	}
 	//一定時間変動がなければ長さを0にする
-	if (scaleResetCount >= scaleResetTime && Debris::debris.size() <= 0) {
+	if (scaleResetCount >= scaleResetTime) {
 		isDamageReset = true;
 		hpGaugeDamageLength =
 			Ease(In, Linear, 0.3f, saveHp, hpGaugeLength);
-	}
-	else if (Debris::debris.size() >= 1)
-	{
-		//ここで回復した時のMAXHPの処理を書け
-		//hpGaugeDamageLength;
 	}
 
 	hpGauge.get()->SetSize({
