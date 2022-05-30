@@ -47,12 +47,12 @@ void UserInterface::Initialize()
 	//ウェーブ数
 	for (int i = 0; i < 10; i++) {
 		waveNum[i] = Sprite::Create(100 + i,
-			{ WinApp::window_width / 2 -10 ,110 }, { 1,1,1,1 }, { 0,1.0f });
+			{ WinApp::window_width / 2 + 10 ,110 }, { 1,1,1,1 }, { 0,1.0f });
 		waveNum[i].get()->SetSize({ 80,80 });
 	}
 	for (int i = 0; i < 10; i++) {
 		waveMaxNum[i] = Sprite::Create(100 + i,
-			{ WinApp::window_width / 2 + 60,110 }, { 1,1,1,1 }, { 0,1.0f });
+			{ WinApp::window_width / 2 + 80,110 }, { 1,1,1,1 }, { 0,1.0f });
 		waveMaxNum[i].get()->SetSize({ 80,80 });
 	}
 	//HPフレーム
@@ -104,14 +104,12 @@ void UserInterface::Initialize()
 	nextYButton = Sprite::Create(174, { WinApp::window_width  - 300,WinApp::window_height / 2 + 220 });
 	endYButton = Sprite::Create(175, { WinApp::window_width - 300,WinApp::window_height / 2 + 220 });
 
-
 	//ボタン
-	AButton = Sprite::Create(11, { (float)(WinApp::window_width / 2 -530),(float)(WinApp::window_height / 2+210) }, { 1,1,1,1 }, { 0.5f,0.5f });
-	BButton = Sprite::Create(12, { (float)(WinApp::window_width / 2 +530),(float)(WinApp::window_height / 2+210) }, { 1,1,1,1 }, { 0.5f,0.5f });
+	AButton = Sprite::Create(11, { (float)(WinApp::window_width / 2 -510),(float)(WinApp::window_height / 2+230) }, { 1,1,1,1 }, { 0.5f,0.5f });
+	BButton = Sprite::Create(12, { (float)(WinApp::window_width / 2 +510),(float)(WinApp::window_height / 2+230) }, { 1,1,1,1 }, { 0.5f,0.5f });
 	RBButton = Sprite::Create(13, { (float)(WinApp::window_width / 2 + 350),(float)(WinApp::window_height / 2 - 250) });
 	RBButton->SetSize({100,70});
 
-	
 	//ミニマップ
 	isMinimapDraw = false;
 	for (int i = 0; i < MapChip::MAP_NAME::MAX; i++) {
@@ -195,12 +193,9 @@ void UserInterface::Update()
 		moveWave.get()->SetPosition({ movePosX,WinApp::window_height/2 });
 	}
 	for (int i = 0; i < 10; i++) {
-		moveWaveNum[i].get()->SetPosition({ movePosX + 50,WinApp::window_height / 2 });
-		moveWaveMaxNum[i].get()->SetPosition({ movePosX + 200,WinApp::window_height / 2 });
+		moveWaveNum[i].get()->SetPosition({ movePosX + 100,WinApp::window_height / 2 });
+		moveWaveMaxNum[i].get()->SetPosition({ movePosX + 250,WinApp::window_height / 2 });
 	}
-	
-
-
 
 	//Hpゲージの拡縮
 	hpGaugeLength =
