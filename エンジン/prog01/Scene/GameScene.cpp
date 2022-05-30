@@ -294,7 +294,7 @@ void GameScene::Update() {
 	}
 
 	//Select();
-
+	//ここでポジションろーてアルファいじる
 	if (playerObject.get()->attack.is) {
 		afterimageTimer--;
 		if (afterimageTimer <= 0) {
