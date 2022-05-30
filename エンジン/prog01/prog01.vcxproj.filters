@@ -340,6 +340,7 @@
       <Filter>ゲームシステム\Player</Filter>
     </ClCompile>
     <ClCompile Include="MoveCheck.cpp" />
+    <ClCompile Include="PlayerAfterimage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h">
@@ -568,5 +569,6 @@
     <ClInclude Include="3d\ObjFactory.h" />
     <ClInclude Include="ClearConfirmation.h" />
     <ClInclude Include="MoveCheck.h" />
+    <ClInclude Include="PlayerAfterimage.h" />
   </ItemGroup>
 </Project>

@@ -98,6 +98,11 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelSphere;
 
 	std::unique_ptr<PlayerObject> playerObject;
+	std::unique_ptr<PlayerObject> playerAfterimage1;
+	std::unique_ptr<PlayerObject> playerAfterimage2;
+	bool afterimageflag;
+	int afterimageTimer;
+
 	//エネミーマネージャー
 	std::unique_ptr<EnemyManager> enemyManager;
 	//UI

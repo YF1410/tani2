@@ -10,6 +10,7 @@
 #include "SceneManager.h"
 #include "ModelManager.h"
 #include "Debris.h"
+#include "PlayerAfterimage.h"
 #include "MapChip.h"
 #include "Easing.h"
 #include "EnemyHelperManager.h"
@@ -30,7 +31,9 @@ GameScene::GameScene(int parameter) {
 
 
 	//プレイヤー生成
-	playerObject = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos());
+	playerObject = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos(),false);
+	playerAfterimage1 = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos(), true);
+	playerAfterimage2 = std::make_unique<PlayerObject>(MapChip::GetInstance()->GetStartPos(), true);
 	enemyManager = std::make_unique<EnemyManager>(playerObject.get());
 	//UI生成
 	ui = std::make_unique<UserInterface>(&enemyManager->nowWave, playerObject.get(), enemyManager.get(), &counter);
@@ -93,6 +96,9 @@ void GameScene::Initialize() {
 
 	//プレイヤーの初期化
 	playerObject->Initialize();
+	playerAfterimage1->Initialize();
+	playerAfterimage2->Initialize();
+
 
 	//エネミーにプレイヤーの情報を渡す
 	enemyManager.get()->Initialize();
@@ -182,7 +188,9 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Finalize() {
+
 	Debris::Finalize();
+	PlayerAfterimage::Finalize();
 	ParticleManager::GetInstance()->Finalize();
 }
 
@@ -287,6 +295,20 @@ void GameScene::Update() {
 
 	//Select();
 
+	if (playerObject.get()->attack.is) {
+		afterimageTimer--;
+		if (afterimageTimer <= 0) {
+			if (afterimageflag) {
+				playerAfterimage1.get()->pos = playerObject.get()->GetPos();
+				afterimageflag = false;
+			}
+			else {
+				playerAfterimage2.get()->pos = playerObject.get()->GetPos();
+				afterimageflag = true;
+			}
+		}
+	}
+
 	//ライト更新
 	light->Update();
 
@@ -321,6 +343,8 @@ void GameScene::Update() {
 		if (!enemyManager.get()->isCameraEasing) {
 			//プレイヤー更新
 			playerObject->Update();
+			playerAfterimage1->Update();
+			playerAfterimage2->Update();
 			//エネミー更新
 			if (!clearFlag && !gameOverFlag) {
 				enemyManager.get()->Update();
@@ -329,6 +353,7 @@ void GameScene::Update() {
 
 		//破片更新
 		Debris::StaticUpdate();
+		PlayerAfterimage::StaticUpdate();
 		stageclearObject3d->Update();
 		nextStageObject3d->Update();
 		clearEscapeObject3d->Update();
@@ -349,6 +374,8 @@ void GameScene::Update() {
 		if (!enemyManager.get()->isCameraEasing) {
 			//プレイヤー更新
 			playerObject->Update();
+			playerAfterimage1->Update();
+			playerAfterimage2->Update();
 			//エネミー更新
 			if (!clearFlag && !gameOverFlag) {
 				enemyManager.get()->Update();
@@ -357,6 +384,7 @@ void GameScene::Update() {
 
 		//破片更新
 		Debris::StaticUpdate();
+		PlayerAfterimage::StaticUpdate();
 		stageclearObject3d->Update();
 		nextStageObject3d->Update();
 		clearEscapeObject3d->Update();
@@ -386,6 +414,8 @@ void GameScene::LastUpdate() {
 	{
 		//全ての移動最終適応処理
 		playerObject.get()->Adaptation();
+		playerAfterimage1.get()->Adaptation();
+		playerAfterimage2.get()->Adaptation();
 		Debris::StaticAdaptation();
 		enemyManager.get()->Adaptation();
 		MapChip::GetInstance()->Adaptation();
@@ -394,9 +424,14 @@ void GameScene::LastUpdate() {
 
 		enemyManager.get()->FinalUpdate();
 		playerObject.get()->LustUpdate();
+		playerAfterimage1.get()-> LustUpdate();
+		playerAfterimage2.get()-> LustUpdate();
 		Debris::StaticLustUpdate();
+		PlayerAfterimage::StaticLustUpdate();
 		//全ての移動最終適応処理
 		playerObject.get()->Adaptation();
+		playerAfterimage1.get()->Adaptation();
+		playerAfterimage2.get()->Adaptation();
 		Debris::StaticAdaptation();
 		enemyManager.get()->Adaptation();
 		MapChip::GetInstance()->Adaptation();
@@ -456,7 +491,12 @@ void GameScene::Draw() {
 	EnemyHelperManager::GetIns()->Draw();
 	MapChip::GetInstance()->Draw();
 	Debris::StaticDraw();
+	PlayerAfterimage::StaticDraw();
 	playerObject->Draw();
+	if (playerObject->attack.is) {
+		playerAfterimage1.get()->Draw();
+		playerAfterimage2.get()->Draw();
+	}
 	enemyManager.get()->Draw();
 
 	Object3d::PreDraw(cmdList);

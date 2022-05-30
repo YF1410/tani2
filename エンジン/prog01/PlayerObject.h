@@ -24,7 +24,7 @@ public:
 	}animationType;
 	bool animationChangeFrag;
 
-	PlayerObject(XMFLOAT3 startPos);
+	PlayerObject(XMFLOAT3 startPos,bool isAfterimage);
 	~PlayerObject();
 	//‰Šú‰»
 	void Initialize() override;
@@ -57,6 +57,8 @@ public:
 	bool dontRecovery;
 	bool dontBoost;
 
+	bool isAfterimage;
+	float alpha;
 
 	//UŒ‚‰ñ”
 	int attackCount;
@@ -157,4 +159,5 @@ private: // ƒƒ“ƒo•Ï”
 	int hitStopCoolDown = 12;
 	bool isFirstHitStop = false;
 	Vector3 saveVelocity = {0,0,0};
+	bool isWallBoost = false;
 };
