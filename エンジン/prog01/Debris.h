@@ -27,6 +27,10 @@ public:
 	static void StaticDraw();
 	static void Finalize();
 
+	static float GetTotarStartSize();
+	static float GetTotarNowSize();
+
+
 public:
 	enum STATE {
 		NOUPDATE,		//画面外等アップデートをしない状態
@@ -85,12 +89,14 @@ public:		//衝突時関係
 	//衝突用
 	//ダメージを受ける
 	void Damage(float damage);
+	float damage;
 private:
 	//空気抵抗
 	Vector3 airResistance;
 
 	//数値的な大きさ
 	float size;
+	float startSize;
 
 	//いつまで戻る力を持つか
 	int returnTimer;
@@ -100,5 +106,6 @@ private:
 
 	Box2DCollider *toMapChipCollider;			//マップチップ計算用
 	bool isBoost;
+
 };
 

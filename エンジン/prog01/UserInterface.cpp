@@ -3,6 +3,7 @@
 #include "Easing.h"
 #include "DebugText.h"
 #include "Input.h"
+#include "Debris.h"
 
 int *UserInterface::nowWave;
 int UserInterface::oldWave;
@@ -28,6 +29,7 @@ void UserInterface::Initialize()
 {
 	hpGaugeLength = 309.0f;
 	hpGaugeDamageLength = 309.0f;
+	saveHp = hpGaugeDamageLength;
 	tutorialNum = 0;
 	oldEnemySize = 0;
 	//フレーム
@@ -205,8 +207,6 @@ void UserInterface::Update()
 		Ease(In, Linear, 0.5f, hpGaugeLength,
 		player->hp / player->maxHp *309.0f);
 
-
-
 	//HPの変動検出
 	//変動なし
 	if (oldHp == player->hp) {
@@ -219,14 +219,41 @@ void UserInterface::Update()
 	//HP変動があるので長さを調整
 	else {
 		scaleResetCount = 0;
+		if (resetEase == 1.0f) {
+			resetEase = 0.0f;
+		}
 		//ダメージゲージの長さを調整
 	}
-	//一定時間変動がなければ長さを0にする
-	if (scaleResetCount >= scaleResetTime) {
-		isDamageReset = true;
-		hpGaugeDamageLength =
-			Ease(In, Linear, 0.3f, saveHp, hpGaugeLength);
+
+	//デブリのサイズ差を減少
+	
+	for (int i = 0; i < Debris::debris.size(); i++) {
+		saveHp -=
+			Debris::debris[i]->damage / player->maxHp * 309.0f;
 	}
+	if (Debris::debris.size() != 0) {
+		resetEase = 0.0f;
+	}
+
+	//一定時間変動がなければ長さを0にする
+	if (scaleResetCount >= scaleResetTime && Debris::debris.size() == 0) {
+		if (resetEase >= 1.0f) {
+			resetEase = 1.0f;
+			isDamageReset = true;
+		}
+		else {
+			resetEase += 0.01f;
+		}
+		hpGaugeDamageLength =
+			Ease(In, Linear, resetEase, saveHp, hpGaugeLength);
+
+	}
+	else {
+		hpGaugeDamageLength =
+			Ease(In, Linear, 0.2f, hpGaugeDamageLength, saveHp);
+
+	}
+
 
 	hpGauge.get()->SetSize({
 		hpGaugeLength, 38

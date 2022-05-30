@@ -101,5 +101,6 @@ private:
 	int scaleResetCount;
 	const int scaleResetTime = 60;
 	bool isDamageReset;
+	float resetEase = 0.0f;
 };
 
