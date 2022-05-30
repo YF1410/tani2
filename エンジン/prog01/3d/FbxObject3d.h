@@ -113,6 +113,9 @@ public: // メンバ関数
 	//ビルボード設定
 	void SetBillboard(bool isBillboard) { this->isBillboard = isBillboard; }
 
+	//アニメーションを止めるか
+	void SetIsPlay(bool _isPlay) { isPlay = _isPlay; }
+
 	XMMATRIX GetMatWorld() { return matWorld; }
 
 	void SetAlpha(float _alpha) { model->SetAlpha(_alpha); }
