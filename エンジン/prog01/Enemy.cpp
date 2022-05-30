@@ -140,7 +140,7 @@ void Enemy::LustUpdate() {
 		if (InvincibleTimer >= 30) {
 			isInvincible = false;
 			//HPが0以下になったら死亡状態へ以降
-			if (HP <= 0) {
+			if (HP < 1.0f) {
 				isAlive = false;
 				//一定の確率でアイテムドロップ
 				if (rand() % 101 <= 30) {
