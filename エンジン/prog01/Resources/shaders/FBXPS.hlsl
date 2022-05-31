@@ -25,5 +25,5 @@ float4 main(VSOutput input) : SV_TARGET
 		shadecolor += float4(brightness, brightness, brightness, 1.0f);
 	}
 	//陰影とテクスチャの色を合成
-    return (shadecolor * texcolor) * color;
+	return (shadecolor * texcolor) * color;
 }

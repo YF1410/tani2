@@ -466,6 +466,7 @@ void PlayerObject::LustUpdate()
 		temp.get()->SetPosition(Vector3(Vector3{ 2500,0,0 }+ pos));
 		temp.get()->SetScale(scale);
 		temp.get()->SetRotation(rotate);
+		temp.get()->SetColor({ 1, 1, 1, 0.6f });
 		temp.get()->PlayAnimation(BOOST);
 		afterImage.push_back(std::move(temp));
 
