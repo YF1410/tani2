@@ -166,7 +166,7 @@ void PlayerObject::Update()
 		velocity = velocity.Normal() * 150;
 	}
 	//ヒットストップ無いときにvelosity120未満になったら
-	if (attack.is && velocity.Length() < 120 && !isHitStop) {
+	if (animationType == BOOST && velocity.Length() < 120 && !isHitStop) {
 		attack.is = false;
 		isBounce = false;
 		animationType = MOVE;
@@ -341,7 +341,7 @@ void PlayerObject::Update()
 	}
 
 	//攻撃インターバル
-	attack.Intervel(true);
+	attack.Intervel(false);
 
 	//攻撃力更新
 	attackPow = velocity.Length();
@@ -399,9 +399,6 @@ void PlayerObject::Draw() const
 	for (int i = 0; i < afterImage.size(); i++) {
 		afterImage[i].get()->Draw(cmdList);
 	}
-
-
-
 }
 
 void PlayerObject::LustUpdate()
@@ -466,6 +463,7 @@ void PlayerObject::LustUpdate()
 		temp.get()->SetPosition(Vector3(Vector3{ 2500,0,0 }+ pos));
 		temp.get()->SetScale(scale);
 		temp.get()->SetRotation(rotate);
+		temp.get()->SetColor({1,1,1,0.8f});
 		temp.get()->PlayAnimation(BOOST);
 		afterImage.push_back(std::move(temp));
 
@@ -483,6 +481,9 @@ void PlayerObject::LustUpdate()
 		XMFLOAT4 color = afterImage[i].get()->GetColor();
 		color.w -= 0.1f;
 		afterImage[i].get()->SetColor(color);
+		Vector3 scale = afterImage[i].get()->GetScale();
+		scale += {0.05f, 0.05f, 0.05f};
+		afterImage[i].get()->SetScale(scale);
 		afterImage[i].get()->Update();
 	}
 
