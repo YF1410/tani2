@@ -30,6 +30,7 @@ ShotBoss::ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos,Camera *cam) :
 
 	core = std::make_unique<GameObjCommon>(ModelManager::SLIME_CORE, ENEMY, false, Vector3{ 0,0,0 }, Vector3{ 2,2,2 });
 	core.get()->scale = 5.0f;
+	core.get()->GetObjectDate()->SetColor({ 3,1,1,1 });
 	offset = { 0,50,0 };
 	coreBasePos = pos + offset;
 	spinVec = { 1,0,0 };
@@ -38,7 +39,7 @@ ShotBoss::ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos,Camera *cam) :
 	coreCollider = new SphereCollider("BroadSphere", XMVECTOR{ 0,100,0 }, 200);
 	core.get()->SetNarrowCollider(coreCollider);
 	core.get()->Adaptation();
-
+	objectData.get()->SetColor({ 1,1,1,0.5f });
 	//çUåÇïpìx
 	attack.interval = 20;
 }
