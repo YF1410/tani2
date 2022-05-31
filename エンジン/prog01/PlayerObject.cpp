@@ -166,7 +166,7 @@ void PlayerObject::Update()
 		velocity = velocity.Normal() * 150;
 	}
 	//ヒットストップ無いときにvelosity120未満になったら
-	if (attack.is && velocity.Length() < 100 && !isHitStop) {
+	if (attack.is && velocity.Length() < 120 && !isHitStop) {
 		attack.is = false;
 		isBounce = false;
 		animationType = MOVE;
