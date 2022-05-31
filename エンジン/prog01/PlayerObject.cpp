@@ -166,7 +166,7 @@ void PlayerObject::Update()
 		velocity = velocity.Normal() * 150;
 	}
 	//ヒットストップ無いときにvelosity120未満になったら
-	if (animationType == BOOST && velocity.Length() < 120 && !isHitStop) {
+	if (animationType == BOOST && velocity.Length() < 100 && !isHitStop) {
 		attack.is = false;
 		isBounce = false;
 		animationType = MOVE;
@@ -341,7 +341,8 @@ void PlayerObject::Update()
 	}
 
 	//攻撃インターバル
-	attack.Intervel(false);
+	
+	attack.Intervel(true);
 
 	//攻撃力更新
 	attackPow = velocity.Length();
