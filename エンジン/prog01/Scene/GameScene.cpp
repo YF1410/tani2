@@ -87,7 +87,7 @@ void GameScene::Initialize() {
 	light->SetPointLightActive(0, false);
 	light->SetPointLightActive(1, false);
 	light->SetPointLightActive(2, false);
-	light->SetCircleShadowActive(0, true);
+	light->SetCircleShadowActive(0, false);
 
 	light->SetDirLightDir(0, Vector3(0, -1, +0.4).Normal());
 

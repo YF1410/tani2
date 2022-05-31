@@ -42,7 +42,7 @@ public: // サブクラス
 	struct ConstBufferDataSkin
 	{
 		XMMATRIX bones[MAX_BONES];
-		XMFLOAT3 color;
+		XMFLOAT4 color;
 	};
 
 	struct Animation
@@ -120,8 +120,11 @@ public: // メンバ関数
 
 	void SetAlpha(float _alpha) { model->SetAlpha(_alpha); }
 
-	// スケールの設定
-	void SetColor(XMFLOAT3 color) { this->color = color; }
+	float GetAlpha() { return model->GetAlpha(); }
+
+	//カラーの設定
+	void SetColor(XMFLOAT4 color) { this->color = color; }
+	XMFLOAT4 GetColor() { return color; }
 
 protected: // メンバ変数
 	// 定数バッファ
@@ -157,7 +160,7 @@ protected: // メンバ変数
 	//アニメーションの保存
 	std::vector<Animation> animationData;
 
-	XMFLOAT3 color = { 1,1,1 };
+	XMFLOAT4 color = { 1,1,1,1 };
 
 	//クラス名(デバック用)
 	const char *name = nullptr;

@@ -14,10 +14,10 @@ class PlayerObject :
 {
 public:
 	enum ANIMATION_TYPE {
-		BOOST,
-		DEATH,
-		MOVE,
-		RETRIEVE,
+		BOOST = 0,
+		DEATH = 1,
+		MOVE = 2,
+		RETRIEVE = 3,
 		NEUTRAL,
 		MAX
 
@@ -70,6 +70,10 @@ public:
 
 	//デブリ生成
 	STATE debrisCooldown;
+
+	//残像生成
+	STATE afterImageCooldown;
+	std::vector<std::unique_ptr<FbxObject3d>> afterImage;
 
 	//コライダー
 	SphereCollider *broadSphereCollider;	//ブロード

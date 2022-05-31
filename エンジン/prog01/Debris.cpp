@@ -31,17 +31,17 @@ Debris::Debris(Vector3 startPos, Vector3 startVec, float size) :
 	isBoost = false;
 
 	////マップチップ用コライダー
-	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 }, scale.x * 150.0f, scale.x * 150.0f);
+	toMapChipCollider = new Box2DCollider("toMapChip", { 0,0,0 },  150.0f, 150.0f);
 	SetNarrowCollider(toMapChipCollider);
 
 	//押し返し判定用コライダー
 	hitCollider = new SphereCollider("hitCollider");
-	hitCollider->SetRadius(scale.x * 120.0f);
+	hitCollider->SetRadius(120.0f);
 	hitCollider->SetOffset({ 0,hitCollider->GetRadius(),0 });
 	SetBroadCollider(hitCollider);
 	//攻撃判定用コライダー
 	attackCollider = new SphereCollider("attackCollider");
-	attackCollider->SetRadius(scale.x * 150.0f);
+	attackCollider->SetRadius(180.0f);
 	attackCollider->SetOffset({ 0,attackCollider->GetRadius(),0 });
 	SetNarrowCollider(attackCollider);
 
