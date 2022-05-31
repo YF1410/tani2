@@ -60,7 +60,7 @@ PlayerObject::~PlayerObject()
 void PlayerObject::Initialize()
 {
 	//サイズ初期化
-	maxHp = 1.0f;
+	maxHp = 500.0f;
 	hp = maxHp;
 	//サイズ初期化
 	toMapChipCollider->SetRadius( 180.0f, 180.0f);
