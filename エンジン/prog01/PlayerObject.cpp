@@ -396,9 +396,7 @@ void PlayerObject::Draw() const
 	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
 	
 	GameObjCommon::Draw();
-	for (int i = 0; i < afterImage.size(); i++) {
-		afterImage[i].get()->Draw(cmdList);
-	}
+	
 }
 
 void PlayerObject::LustUpdate()
@@ -461,10 +459,11 @@ void PlayerObject::LustUpdate()
 	if (attack.is && afterImageCooldown.can) {
 		std::unique_ptr<FbxObject3d> temp = FbxObject3d::Create(ModelManager::GetIns()->GetModel(ModelManager::PLAYER), true);
 		temp.get()->SetPosition(Vector3(Vector3{ 2500,0,0 }+ pos));
-		temp.get()->SetScale(scale);
+		temp.get()->SetScale(Vector3(scale * 0.8f));
 		temp.get()->SetRotation(rotate);
 		temp.get()->SetColor({1,1,1,0.8f});
-		temp.get()->PlayAnimation(BOOST);
+		temp.get()->PlayAnimation(BOOST,true);
+		temp.get()->SetAnimationCurrentTime(objectData.get()->GetAnimationCurrentTime());
 		afterImage.push_back(std::move(temp));
 
 	}
@@ -482,7 +481,7 @@ void PlayerObject::LustUpdate()
 		color.w -= 0.1f;
 		afterImage[i].get()->SetColor(color);
 		Vector3 scale = afterImage[i].get()->GetScale();
-		scale += {0.05f, 0.05f, 0.05f};
+		scale += {0.02f, 0.02f, 0.02f};
 		afterImage[i].get()->SetScale(scale);
 		afterImage[i].get()->Update();
 	}

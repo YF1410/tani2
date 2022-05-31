@@ -116,11 +116,16 @@ public: // メンバ関数
 	//アニメーションを止めるか
 	void SetIsPlay(bool _isPlay) { isPlay = _isPlay; }
 
+	void SetAnimationCurrentTime(FbxTime currentTime) {	this->currentTime = currentTime; }
+	FbxTime GetAnimationCurrentTime() { return currentTime; }
+
 	XMMATRIX GetMatWorld() { return matWorld; }
 
 	void SetAlpha(float _alpha) { model->SetAlpha(_alpha); }
 
 	float GetAlpha() { return model->GetAlpha(); }
+
+
 
 	//カラーの設定
 	void SetColor(XMFLOAT4 color) { this->color = color; }
