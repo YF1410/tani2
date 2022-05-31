@@ -469,6 +469,10 @@ void GameScene::Draw() {
 #pragma endregion 3Dオブジェクト(FBX)描画
 	ParticleManager::GetInstance()->Draw(cmdList);
 
+	for (int i = 0; i < playerObject.get()->afterImage.size(); i++) {
+		playerObject.get()->afterImage[i].get()->Draw(cmdList);
+	}
+
 #pragma region パーティクル
 
 #pragma endregion パーティクル
