@@ -58,9 +58,8 @@ private:
 	const int maxRecoverColorTimer = 30;
 	int recoverColorTimer;
 
-	std::unique_ptr<Sprite> text[14];
-
 	std::vector<std::unique_ptr<Sprite>> tutorialImag;
+	std::unique_ptr<Sprite> background;
 
 	//É^ÉXÉN
 	std::unique_ptr<Sprite> taskList;

@@ -87,11 +87,27 @@ void UserInterface::Initialize()
 
 	//チュートリアル
 	if (MapChip::GetInstance()->nowMap == 0) {
+		std::unique_ptr<Sprite> text[14];
 		//説明
+		text[0] = Sprite::Create(150/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
+		text[1] = Sprite::Create(151/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2 - 310),(float)(WinApp::window_height / 2 + 50) });
+		text[2] = Sprite::Create(152/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2 - 325),(float)(WinApp::window_height / 2 + 50) });
+		text[3] = Sprite::Create(153/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2 - 330),(float)(WinApp::window_height / 2 + 50) });
+		text[4] = Sprite::Create(154/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2 - 390),(float)(WinApp::window_height / 2 + 100) });
+		text[5] = Sprite::Create(155/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2 - 300),(float)(WinApp::window_height / 2 + 50) });
+		text[6] = Sprite::Create(156/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2 - 300),(float)(WinApp::window_height / 2 + 50) });
+		text[7] = Sprite::Create(157/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2 - 320),(float)(WinApp::window_height / 2 + 110) });
+		text[8] = Sprite::Create(158/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2 - 260),(float)(WinApp::window_height / 2 + 50) });
+		text[9] = Sprite::Create(159/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2 - 280),(float)(WinApp::window_height / 2 + 50) });
+		text[10] = Sprite::Create(160/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
+		text[11] = Sprite::Create(161/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
+		text[12] = Sprite::Create(162/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
 		for (int i = 0; i < 13; i++) {
-			text[i] = Sprite::Create(150 + i/*+MapChip::GetInstance()->nowMap*/, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
 			tutorialImag.push_back(std::move(text[i]));
 		}
+
+		background = Sprite::Create(40, { (float)(WinApp::window_width / 2),(float)(WinApp::window_height / 2) }, { 1,1,1,1 }, { 0.5f,0.5f });
+		background->SetColor({ 1,1,1,0.5f });
 
 		//タスクリスト
 		taskList = Sprite::Create(172, { (float)(WinApp::window_width / 2) - 375,100 }, { 1,1,1,1 });
@@ -521,6 +537,7 @@ void UserInterface::Draw() const
 	if (MapChip::GetInstance()->nowMap == 0) {
 		taskList.get()->Draw();
 		if (tutorialNum != tutorialImag.size()) {
+			background->Draw();
 			tutorialImag[tutorialNum].get()->Draw();
 		}
 
