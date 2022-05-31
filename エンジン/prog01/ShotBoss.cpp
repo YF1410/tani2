@@ -39,7 +39,7 @@ ShotBoss::ShotBoss(XMFLOAT3 startPos, PlayerObject *targetPos,Camera *cam) :
 	coreCollider = new SphereCollider("BroadSphere", XMVECTOR{ 0,100,0 }, 200);
 	core.get()->SetNarrowCollider(coreCollider);
 	core.get()->Adaptation();
-	objectData.get()->SetColor({ 1,1,1,0.5f });
+	objectData.get()->SetColor({ 1,1,1,0.3f });
 	//UŒ‚•p“x
 	attack.interval = 20;
 }
