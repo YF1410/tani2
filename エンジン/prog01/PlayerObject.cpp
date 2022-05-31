@@ -60,7 +60,7 @@ PlayerObject::~PlayerObject()
 void PlayerObject::Initialize()
 {
 	//サイズ初期化
-	maxHp = 500.0f;
+	maxHp = 1.0f;
 	hp = maxHp;
 	//サイズ初期化
 	toMapChipCollider->SetRadius( 180.0f, 180.0f);
@@ -169,13 +169,17 @@ void PlayerObject::Update()
 	if (attack.is && velocity.Length() < 120 && !isHitStop) {
 		attack.is = false;
 		isBounce = false;
-		animationType = MOVE;
+		if (animationType != DEATH) {
+			animationType = MOVE;
+		}
 		animationChangeFrag = true;
 	}
 	if (recoveryEndTimer == 0) {
 		hitStopCount = 0;
 		isFirstHitStop = false;
-		animationType = MOVE;
+		if (animationType != DEATH) {
+			animationType = MOVE;
+		}
 		animationChangeFrag = true;
 	}
 
@@ -696,9 +700,11 @@ void PlayerObject::Damage(float damage)
 	//sizeが0になったら死亡処理
 	if (hp <= 0) {
 		hp = 0;
+		if (animationType != DEATH) {
+			animationChangeFrag = true;
+			animationType = DEATH;
+		}
 
-		animationType = DEATH;
-		animationChangeFrag = true;
 		boomParticle->AddBoom(2, 10, pos, 5);
 	}
 	else {
