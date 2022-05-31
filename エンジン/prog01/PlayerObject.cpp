@@ -166,7 +166,7 @@ void PlayerObject::Update()
 		velocity = velocity.Normal() * 150;
 	}
 	//ヒットストップ無いときにvelosity120未満になったら
-	if (animationType == BOOST && velocity.Length() < 100 && !isHitStop) {
+	if (attack.is && velocity.Length() < 100 && !isHitStop) {
 		attack.is = false;
 		isBounce = false;
 		animationType = MOVE;
@@ -463,7 +463,7 @@ void PlayerObject::LustUpdate()
 		temp.get()->SetScale(Vector3(scale * 0.8f));
 		temp.get()->SetRotation(rotate);
 		temp.get()->SetColor({1,1,1,0.6f});
-		temp.get()->PlayAnimation(BOOST,true);
+		//temp.get()->PlayAnimation(BOOST,true);
 		temp.get()->SetAnimationCurrentTime(objectData.get()->GetAnimationCurrentTime());
 		afterImage.push_back(std::move(temp));
 
@@ -639,6 +639,7 @@ void PlayerObject::HitWall(
 	Input* input = Input::GetInstance();
 	Vector3 oldVec = velocity;
 	velocity = CalcReflectVector(velocity, normal);
+	velocity *=3.0f;
 	/*if (velocity.Length() >= 40 && oldVec.VDot(velocity) < 0.1f) {
 	}*/
 
