@@ -103,7 +103,7 @@ struct CircleShadow
 	uint active;
 };
 
-cbuffer cbuff2 : register(b2)
+cbuffer dirLights : register(b2)
 {
 	float3 ambientColor;
 	DirLight dirLights[DIRLIGHT_NUM];

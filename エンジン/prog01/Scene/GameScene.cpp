@@ -82,12 +82,12 @@ void GameScene::Initialize() {
 	Object3d::SetLight(light.get());
 	FbxObject3d::SetLight(light.get());
 	light->SetDirLightActive(0, true);
-	light->SetDirLightActive(1, false);
+	light->SetDirLightActive(1, true);
 	light->SetDirLightActive(2, false);
 	light->SetPointLightActive(0, false);
 	light->SetPointLightActive(1, false);
 	light->SetPointLightActive(2, false);
-	light->SetCircleShadowActive(0, true);
+	light->SetCircleShadowActive(0, false);
 
 	light->SetDirLightDir(0, Vector3(0, -1, +0.4).Normal());
 

@@ -21,8 +21,8 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 		GameObjCommon::PLAYER,	//プレイヤーとして扱う
 		false,					//重力の影響を受ける
 		startPos,
-		{ 1,1,1 },
-		{ 1,1,1 },
+		{ 0.7f,0.7f,0.7f },
+		{ 0,0,0},
 		true
 	)
 {
@@ -36,13 +36,13 @@ PlayerObject::PlayerObject(XMFLOAT3 startPos) :
 	isBounce = false;
 
 	//ブロード
-	broadSphereCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f - 200,0 }, scale.x * 180.0f);
+	broadSphereCollider = new SphereCollider("hitCollider", { 0, 180.0f - 200,0 }, 180.0f);
 	SetBroadCollider(broadSphereCollider);
 	//押し返し用
-	pushBackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f + -200,0 }, scale.x * 180.0f);
+	pushBackCollider = new SphereCollider("hitCollider", { 0,180.0f + -200,0 }, 180.0f);
 	SetNarrowCollider(pushBackCollider);
 	//攻撃用
-	attackCollider = new SphereCollider("hitCollider", { 0,scale.x * 180.0f - 200,0 }, scale.x * 180.0f + 50.0f);
+	attackCollider = new SphereCollider("hitCollider", { 0,180.0f - 200,0 }, 180.0f + 50.0f);
 	SetNarrowCollider(pushBackCollider);
 
 	//マップチップ用
@@ -63,7 +63,7 @@ void PlayerObject::Initialize()
 	maxHp = 500.0f;
 	hp = maxHp;
 	//サイズ初期化
-	toMapChipCollider->SetRadius(scale.x * 180.0f, scale.z * 180.0f);
+	toMapChipCollider->SetRadius( 180.0f, 180.0f);
 	//ポジション初期化
 	pos = startPos;
 	oldPos = pos;
@@ -100,7 +100,7 @@ void PlayerObject::Initialize()
 	afterImageCooldown = {
 		true,
 		false,
-		3,
+		4,
 		0
 	};
 
@@ -464,7 +464,9 @@ void PlayerObject::LustUpdate()
 	if (attack.is && afterImageCooldown.can) {
 		std::unique_ptr<FbxObject3d> temp = FbxObject3d::Create(ModelManager::GetIns()->GetModel(ModelManager::PLAYER), true);
 		temp.get()->SetPosition(Vector3(Vector3{ 2500,0,0 }+ pos));
+		temp.get()->SetScale(scale);
 		temp.get()->SetRotation(rotate);
+		temp.get()->PlayAnimation(BOOST);
 		afterImage.push_back(std::move(temp));
 
 	}
@@ -479,7 +481,7 @@ void PlayerObject::LustUpdate()
 
 	for (int i = 0; i < afterImage.size(); i++) {
 		XMFLOAT4 color = afterImage[i].get()->GetColor();
-		color.w -= 0.2f;
+		color.w -= 0.1f;
 		afterImage[i].get()->SetColor(color);
 		afterImage[i].get()->Update();
 	}
