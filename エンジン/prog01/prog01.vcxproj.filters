@@ -568,5 +568,16 @@
     <ClInclude Include="3d\ObjFactory.h" />
     <ClInclude Include="ClearConfirmation.h" />
     <ClInclude Include="MoveCheck.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="prog01.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\icon\Icon.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
   </ItemGroup>
 </Project>

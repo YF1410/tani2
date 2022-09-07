@@ -1,4 +1,6 @@
 #include "WinApp.h"
+#include "resource.h"
+
 
 const wchar_t WinApp::windowClassName[] = L"DESPLASH";
 
@@ -22,6 +24,8 @@ void WinApp::CreateGameWindow()
 	wndClass.lpszClassName = windowClassName; // ウィンドウクラス名
 	wndClass.hInstance = GetModuleHandle(nullptr); // ウィンドウハンドル
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW); // カーソル指定
+	wndClass.hIcon = LoadIcon(wndClass.hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	wndClass.hIconSm = LoadIcon(wndClass.hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
 	RegisterClassEx(&wndClass); // ウィンドウクラスをOSに登録
 
